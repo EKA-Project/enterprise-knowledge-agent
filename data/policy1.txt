@@ -1,0 +1,3 @@
+Employees are entitled to 20 days of paid leave per year.
+Leave requests must be submitted at least 3 days in advance.
+Unused leave does not carry over to the next calendar year.
