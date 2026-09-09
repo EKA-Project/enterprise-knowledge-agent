@@ -1,0 +1,361 @@
+/* =========================================================
+   Custom visual effects that Tailwind cannot express cleanly.
+   Organized by feature: background glows, brand mark, hero
+   controls, central illustration, floating cards, avatars,
+   ambient dots, theme toggle, and responsive tweaks.
+   ========================================================= */
+
+
+/* ---------- Background glows ---------- */
+/* Soft blurred circles placed behind the hero layout to create
+   an ambient, colorful backdrop. */
+.page-glow {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.page-glow--mint {
+  top: 80px;
+  right: -170px;
+  width: 510px;
+  height: 510px;
+  background: rgba(196, 244, 239, 0.42);
+}
+
+.page-glow--lavender {
+  bottom: -130px;
+  left: -75px;
+  width: 280px;
+  height: 280px;
+  background: rgba(222, 223, 255, 0.46);
+}
+
+
+/* ---------- Brand mark (leaf logo) ---------- */
+/* Rounded badge containing a hand-built leaf shape: a curved
+   border, a center vein, and a small stem. */
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 10px;
+  background: #89e5db;
+  box-shadow: 0 9px 20px rgba(21, 175, 158, 0.18);
+}
+
+.brand-mark span {
+  position: relative;
+  display: block;
+  width: 14px;
+  height: 18px;
+  border: 2px solid #146a73;
+  border-radius: 100% 0 100% 0;
+  transform: rotate(45deg);
+}
+
+.brand-mark span::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 1px;
+  width: 10px;
+  height: 2px;
+  background: #146a73;
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+
+.brand-mark span::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -3px;
+  width: 7px;
+  height: 2px;
+  border-radius: 2px;
+  background: #146a73;
+  transform: rotate(-45deg);
+}
+
+
+/* ---------- Small labels & action icons ---------- */
+/* Tiny status dot and circular play button used inside the
+   Tailwind content blocks in the hero. */
+.eyebrow-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #30c7b6;
+  box-shadow: 0 0 0 5px rgba(48, 199, 182, 0.11);
+}
+
+.play-icon {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  padding-left: 2px;
+  border-radius: 50%;
+  color: #24bdae;
+  background: #d4f7f1;
+  font-size: 9px;
+}
+
+
+/* ---------- Central illustration: orbits, core, shadow ---------- */
+/* Layered rings, a glowing blurred shadow, and the central
+   "core" card with a gradient icon tile and caption text.
+   Kept as custom CSS because the transforms compose into a
+   single illustrated object. */
+.orbit {
+  position: absolute;
+  top: 118px;
+  left: 50%;
+  width: 455px;
+  height: 240px;
+  border: 1px solid rgba(150, 220, 216, 0.52);
+  border-radius: 50%;
+  transform: translateX(-42%) rotate(18deg);
+}
+
+.orbit--two {
+  border-color: rgba(170, 190, 232, 0.5);
+  transform: translateX(-42%) rotate(-25deg);
+}
+
+.orbit--three {
+  width: 365px;
+  height: 300px;
+  border-color: rgba(193, 230, 226, 0.45);
+  transform: translateX(-46%) rotate(65deg);
+}
+
+.core-shadow {
+  position: absolute;
+  top: 180px;
+  left: 50%;
+  width: 270px;
+  height: 170px;
+  transform: translateX(-47%);
+  border-radius: 50%;
+  background: rgba(179, 238, 232, 0.4);
+  filter: blur(28px);
+}
+
+.core {
+  position: absolute;
+  z-index: 2;
+  top: 128px;
+  left: 50%;
+  width: 230px;
+  height: 230px;
+  transform: translateX(-45%) rotate(-4deg);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 70px;
+  background: rgba(242, 253, 252, 0.66);
+  box-shadow:
+    0 30px 45px rgba(91, 185, 182, 0.16),
+    inset 0 0 36px rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.core-gradient-img {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 46px auto 0;
+  border-radius: 43px;
+  object-fit: cover;
+  box-shadow: 0 16px 25px rgba(60, 194, 191, 0.28);
+  transform: rotate(4deg) scale(1.5);
+}
+
+.core-label,
+.core-subtitle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: rotate(4deg);
+}
+
+.core-label {
+  bottom: 22px;
+  color: #277478;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.core-subtitle {
+  bottom: 11px;
+  color: #91a8ab;
+  font-size: 7px;
+}
+
+
+/* ---------- Floating knowledge cards ---------- */
+/* Glass-style cards positioned around the central illustration,
+   each with an icon tile, title/subtitle text, and a trailing
+   accent value. */
+.floating-card {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 216px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 12px 26px rgba(87, 147, 158, 0.12);
+}
+
+.floating-card strong,
+.floating-card small {
+  display: block;
+}
+
+.floating-card strong {
+  color: #425b68;
+  font-size: 11px;
+}
+
+.floating-card small {
+  margin-top: 4px;
+  color: #9bacb1;
+  font-size: 8px;
+}
+
+.floating-card b {
+  margin-left: auto;
+  color: #46c3b2;
+}
+
+.floating-card--docs {
+  top: 91px;
+  left: 8%;
+}
+
+.floating-card--ask {
+  right: 0;
+  bottom: 112px;
+  min-width: 166px;
+}
+
+.card-icon {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 11px;
+  font-size: 19px;
+}
+
+.card-icon--mint {
+  color: #36bcae;
+  background: #d9f7f0;
+}
+
+.card-icon--lilac {
+  color: #9b8bd4;
+  background: #eee7ff;
+}
+
+
+/* ---------- Trust avatars & ambient dots ---------- */
+/* Small overlapping circular avatars plus decorative dots
+   scattered around the page for texture. */
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  margin-right: -4px;
+  border: 2px solid #f4f9fb;
+  border-radius: 50%;
+  color: #54717c;
+  background: #c3eef0;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.avatar--one {
+  background: #d9c7f4;
+}
+
+.avatar--three {
+  background: #f2cfb6;
+}
+
+.avatar--four {
+  background: #b9eadc;
+}
+
+.ambient-dot {
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  border: 5px solid #c5f3ed;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(195, 244, 238, 0.23);
+}
+
+.ambient-dot--top {
+  top: 226px;
+  right: 18%;
+}
+
+.ambient-dot--middle {
+  top: 604px;
+  left: 54%;
+}
+
+.ambient-dot--bottom {
+  top: 370px;
+  right: 11%;
+  width: 16px;
+  height: 16px;
+  border-color: #e1d6fa;
+}
+
+
+/* ---------- Theme toggle button ---------- */
+/* Fixed floating button in the corner for switching themes. */
+.theme-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 5;
+  width: 45px;
+  height: 45px;
+  border: 0;
+  border-radius: 14px;
+  color: #62bcb8;
+  background: white;
+  box-shadow: 0 8px 23px rgba(75, 141, 150, 0.13);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+/* ---------- Responsive: small screens ---------- */
+/* Widens the hero artwork on narrow viewports so the
+   composition stays centered and the floating cards stay
+   visible near the edges. */
+@media (max-width: 450px) {
+  .hero-art {
+    width: 125%;
+    margin-left: -12.5%;
+  }
+
+  .floating-card--docs {
+    left: 2%;
+  }
+
+  .floating-card--ask {
+    right: 1%;
+  }
+}
