@@ -5,8 +5,8 @@
 
 
 import { Link } from 'react-router-dom';
-import ekaLogo from '../assets/images/eka_logo.jpeg';
-import '../styles/landing.css';
+import ekaLogo from '../../assets/images/eka_logo.jpeg';
+import '../../styles/landing.css';
 
 export default function LandingPage() {
   return (
