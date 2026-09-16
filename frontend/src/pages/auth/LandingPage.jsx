@@ -42,6 +42,24 @@ function AvatarStack() {
   );
 }
 
+ // floating card component for hero section
+
+function FloatingCard({ icon, iconBg, title, subtitle, showCheck, position }) {
+  return (
+    <div className={`absolute ${position} bg-white rounded-2xl shadow-md px-4 py-3 flex items-center gap-3`}>
+      <span className={`w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center`}>
+        {icon}
+      </span>
+      <div>
+        <p className="text-sm font-semibold text-ink">{title}</p>
+        <p className="text-xs text-muted">{subtitle}</p>
+      </div>
+      {showCheck && <span className="text-primary ml-2">✓</span>}
+    </div>
+  );
+}
+
+
 
 export default function LandingPage() {
   return (
