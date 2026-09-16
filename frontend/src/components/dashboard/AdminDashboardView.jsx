@@ -22,7 +22,7 @@ export default function AdminDashboardView() {
       {/* Header */}
       <div style={{ marginBottom: '28px' }}>
         <p style={{ fontSize: '12px', textTransform: 'uppercase', color: '#7A8B8E', fontWeight: '600' }}>Monday, 24 November</p>
-        <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: '42px', color: '#173B3F', margin: '8px 0' }}>A good morning, Maya.</h1>
+        <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: '42px', color: '#173B3F', margin: '8px 0' }}>Good morning, Maya.</h1>
         <p style={{ color: '#7A8B8E', fontSize: '14px' }}>Here's what's happening across your team's memory.</p>
       </div>
 
@@ -40,7 +40,7 @@ export default function AdminDashboardView() {
         ))}
       </div>
 
-      {/* Two-column layout: Recent Questions (left) + Placeholder (right) */}
+      {/* Two-column layout: Recent Questions + Knowledge panel */}
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
 
         {/* LEFT: Recent Questions */}
@@ -52,30 +52,49 @@ export default function AdminDashboardView() {
           <div style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', overflow: 'hidden' }}>
             {questions.map((q, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '18px 24px', borderBottom: i < questions.length - 1 ? '1px solid #F0EDE4' : 'none', cursor: 'pointer' }}>
-                {/* Numbered index (01, 02, ...) */}
                 <div style={{ fontFamily: 'Fraunces, serif', color: '#A0B0B3', fontSize: '14px', width: '24px' }}>
                   {String(i + 1).padStart(2, '0')}
                 </div>
-                {/* Question + meta */}
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '14px', fontWeight: '500', color: '#173B3F' }}>{q.q}</div>
                   <div style={{ fontSize: '12px', color: '#7A8B8E', marginTop: '4px' }}>{q.u} · {q.t} · {q.src} sources</div>
                 </div>
-                {/* Arrow */}
                 <div style={{ color: '#A0B0B3' }}>↗</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT: Placeholder for next commit */}
+        {/* RIGHT: Knowledge panel (Coverage chart + Quote card) */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
             <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '22px', color: '#173B3F' }}>Your knowledge</h3>
             <button style={{ background: 'none', border: 'none', color: '#7A8B8E', fontSize: '13px', cursor: 'pointer', fontWeight: '500' }}>Browse →</button>
           </div>
-          <div style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', padding: '24px' }}>
-            <p style={{ color: '#7A8B8E', fontSize: '14px' }}>Coverage chart coming next.</p>
+
+          {/* Coverage card with donut chart */}
+          <div style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', padding: '24px', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div>
+                <div style={{ fontSize: '10px', textTransform: 'uppercase', color: '#A0B0B3', fontWeight: '600', marginBottom: '4px' }}>Coverage</div>
+                <div style={{ fontFamily: 'Fraunces, serif', fontSize: '28px', color: '#173B3F' }}>74%</div>
+              </div>
+              {/* Donut chart — pure CSS using conic-gradient */}
+              <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'conic-gradient(#2E7D5B 0% 74%, #E8EDEB 74% 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#fff', position: 'absolute' }}></div>
+                <div style={{ position: 'relative', fontFamily: 'Fraunces, serif', fontSize: '16px', color: '#173B3F' }}>74%</div>
+              </div>
+            </div>
+            <p style={{ fontSize: '13px', color: '#7A8B8E', lineHeight: '1.5', marginBottom: '16px' }}>Most active in <b>Product</b> and <b>People Ops</b>.</p>
+            <button style={{ width: '100%', padding: '10px', background: 'transparent', border: '1px solid #E6E3D8', borderRadius: '8px', color: '#173B3F', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>Improve coverage →</button>
+          </div>
+
+          {/* Quote card */}
+          <div style={{ background: '#FBFAF6', border: '1px solid #E6E3D8', borderLeft: '4px solid #F3C543', borderRadius: '16px', padding: '20px' }}>
+            <div style={{ fontSize: '12px', color: '#7A8B8E', marginBottom: '8px' }}>💡 Worth a look</div>
+            <p style={{ fontFamily: 'Fraunces, serif', fontSize: '16px', color: '#173B3F', lineHeight: '1.5' }}>
+              "How do we talk about the thing we're building?"
+            </p>
           </div>
         </div>
 
