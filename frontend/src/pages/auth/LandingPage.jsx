@@ -7,6 +7,41 @@
 import { Link } from 'react-router-dom';
 import ekaLogo from '../../assets/images/eka_logo.jpeg';
 import '../../styles/landing.css';
+import ekaBrain from '../../assets/images/eka_brain.jpeg';
+
+//hero section small component 
+
+function AvatarStack() {
+  const avatars = [
+    { initials: 'AM', color: 'bg-purple-400' },
+    { initials: 'JR', color: 'bg-blue-400' },
+    { initials: 'SK', color: 'bg-orange-400' },
+  ];
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex -space-x-2">
+        {avatars.map((a) => (
+          <span
+            key={a.initials}
+            className={`w-8 h-8 rounded-full ${a.color} border-2 border-bg flex items-center justify-center text-[11px] font-semibold text-white`}
+          >
+            {a.initials}
+          </span>
+        ))}
+        <span className="w-8 h-8 rounded-full bg-white border-2 border-bg flex items-center justify-center text-[11px] font-semibold text-muted">
+          +8
+        </span>
+      </div>
+      <p className="text-sm text-muted">
+        Trusted by curious teams
+        <br />
+        <span className="font-semibold text-ink">across 12 countries</span>
+      </p>
+    </div>
+  );
+}
+
 
 export default function LandingPage() {
   return (
@@ -46,8 +81,8 @@ export default function LandingPage() {
         </div>
       </header>
       {/* =================== End Navbar =================== */}
-
-      {/* Hero, HeroVisual, PreviewBanner sections will go here next */}
+      
+     
 
     </div>
   );
