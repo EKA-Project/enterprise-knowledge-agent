@@ -113,15 +113,19 @@ function HeroVisual() {
   return (
     <div className="relative h-[480px] flex items-center justify-center">
 
-      {/* Decorative background blobs */}
-      <div className="absolute -top-10 -right-10 w-72 h-72 bg-mint/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-200/40 rounded-full blur-2xl" />
+      {/* Decorative background blobs — soft but visible */}
+      <div className="absolute -top-10 -right-10 w-72 h-72 bg-mint/25 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-200/30 rounded-full blur-2xl" />
 
-      {/* Central gradient card */}
-      <div className="relative w-56 h-56 rounded-[2.5rem] bg-gradient-to-br from-teal-300 to-teal-600 flex flex-col items-center justify-center shadow-xl">
+      {/* Orbit rings — centered behind the card using top-1/2 left-1/2 + translate */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full border border-teal-700/15" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] rounded-full border border-teal-700/10" />
+
+     {/* Central gradient card */}
+      <div className="relative w-56 h-56 rounded-[2.5rem] bg-gradient-to-br from-teal-200 via-cyan-200 to-blue-300 flex flex-col items-center justify-center shadow-lg">
         <img src={ekaBrain} alt="" className="w-16 h-16 object-contain mb-2" />
-        <p className="text-white font-semibold text-sm">EKA</p>
-        <p className="text-white/80 text-xs">intelligence layer</p>
+        <p className="text-ink font-semibold text-sm">EKA</p>
+        <p className="text-muted text-xs">intelligence layer</p>
       </div>
 
       <FloatingCard
@@ -144,10 +148,23 @@ function HeroVisual() {
   );
 }
 
+// Combines both leftpart and rightpart into the two-column section layout.
+
+function Hero() {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="max-w-[1280px] mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+        <HeroContent />
+        <HeroVisual />
+      </div>
+    </section>
+  );
+}
+
 
 export default function LandingPage() {
   return (
-    <div>
+    <div className="bg-bg min-h-screen">
 
       {/* ===================== Navbar ===================== */}
       <header className="sticky top-0 z-40 bg-bg border-b border-border">
@@ -160,8 +177,8 @@ export default function LandingPage() {
               alt="EKA"
               className="w-8 h-8 rounded-lg object-cover"
             />
-            <span>EKA.</span>
-          </Link>
+            <span className="text-ink font-bold">EKA</span>
+          </Link> 
 
           {/* Right side actions */}
           <div className="flex items-center gap-4">
@@ -184,7 +201,7 @@ export default function LandingPage() {
       </header>
       {/* =================== End Navbar =================== */}
       
-     
+     <Hero/>
 
     </div>
   );
