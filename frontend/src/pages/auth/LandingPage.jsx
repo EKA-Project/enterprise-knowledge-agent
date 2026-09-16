@@ -59,6 +59,90 @@ function FloatingCard({ icon, iconBg, title, subtitle, showCheck, position }) {
   );
 }
 
+// hero content main 
+// Left half of the Hero section: eyebrow badge, headline, subtext, CTAs, trust row.
+function HeroContent() {
+  return (
+    <div>
+      {/* Eyebrow badge */}
+      <div className="inline-flex items-center gap-2 text-xs font-semibold text-primary mb-6">
+        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+        Knowledge in motion
+      </div>
+
+      {/* Headline */}
+      <h1 className="text-5xl md:text-6xl font-bold text-ink leading-tight mb-6">
+        Your company's
+        <br />
+        <span className="text-primary">knowledge, alive.</span>
+      </h1>
+
+      {/* Subtext */}
+      <p className="text-muted text-lg leading-relaxed max-w-md mb-8">
+        EKA connects every document, decision and discovery into one
+        intelligent space — so your team can move with clarity.
+      </p>
+
+      {/* CTA row */}
+      <div className="flex items-center gap-6 mb-10">
+        <Link
+          to="/signup"
+          className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3.5 rounded-full transition-colors"
+        >
+          Bring EKA to life
+          <span aria-hidden="true">→</span>
+        </Link>
+
+        <button className="inline-flex items-center gap-3 text-ink font-medium">
+          <span className="w-9 h-9 rounded-full bg-mint/40 flex items-center justify-center">
+            <span aria-hidden="true">▶</span>
+          </span>
+          See the workspace
+        </button>
+      </div>
+
+      <AvatarStack />
+    </div>
+  );
+}
+
+// Right half of the Hero section: decorative blobs, central brain card,
+
+// and two floating info cards built from the reusable FloatingCard piece.
+function HeroVisual() {
+  return (
+    <div className="relative h-[480px] flex items-center justify-center">
+
+      {/* Decorative background blobs */}
+      <div className="absolute -top-10 -right-10 w-72 h-72 bg-mint/30 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-200/40 rounded-full blur-2xl" />
+
+      {/* Central gradient card */}
+      <div className="relative w-56 h-56 rounded-[2.5rem] bg-gradient-to-br from-teal-300 to-teal-600 flex flex-col items-center justify-center shadow-xl">
+        <img src={ekaBrain} alt="" className="w-16 h-16 object-contain mb-2" />
+        <p className="text-white font-semibold text-sm">EKA</p>
+        <p className="text-white/80 text-xs">intelligence layer</p>
+      </div>
+
+      <FloatingCard
+        icon="📄"
+        iconBg="bg-mint/40 text-primary"
+        title="42 documents"
+        subtitle="all knowledge connected"
+        showCheck
+        position="top-6 left-0"
+      />
+
+      <FloatingCard
+        icon="💬"
+        iconBg="bg-purple-100 text-purple-500"
+        title="Ask anything"
+        subtitle="answers with context"
+        position="bottom-8 right-0"
+      />
+    </div>
+  );
+}
 
 
 export default function LandingPage() {
