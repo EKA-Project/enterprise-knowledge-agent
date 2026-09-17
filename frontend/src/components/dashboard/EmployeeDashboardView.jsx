@@ -9,6 +9,14 @@ export default function EmployeeDashboardView() {
     { label: 'Team Activity', value: '12', trend: 'new this week', icon: '☺' },
   ];
 
+  // This employee's recent questions
+  const questions = [
+    { q: 'What is our parental leave policy?', t: '2 hours ago', src: 3 },
+    { q: 'How do I request API access?', t: 'Yesterday', src: 2 },
+    { q: 'Where is the onboarding checklist?', t: 'Yesterday', src: 1 },
+    { q: 'What are the Q4 team priorities?', t: 'Mon, 25 Nov', src: 4 },
+  ];
+
   return (
     <div style={{ padding: '32px' }}>
       {/* Header — personal greeting */}
@@ -18,8 +26,8 @@ export default function EmployeeDashboardView() {
         <p style={{ color: '#7A8B8E', fontSize: '14px' }}>Here's what's happening with your knowledge workspace.</p>
       </div>
 
-      {/* Stat Cards Grid — 4 personal stat cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+      {/* Stat Cards Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '28px' }}>
         {stats.map((stat, i) => (
           <div key={i} style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', padding: '24px' }}>
             <div style={{ fontSize: '22px', color: '#173B3F', marginBottom: '16px' }}>{stat.icon}</div>
@@ -30,6 +38,44 @@ export default function EmployeeDashboardView() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Two-column layout: My questions (left) + Placeholder (right) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+
+        {/* LEFT: My recent questions */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
+            <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '22px', color: '#173B3F' }}>My recent questions</h3>
+            <button style={{ background: 'none', border: 'none', color: '#7A8B8E', fontSize: '13px', cursor: 'pointer', fontWeight: '500' }}>View all →</button>
+          </div>
+          <div style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', overflow: 'hidden' }}>
+            {questions.map((q, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '18px 24px', borderBottom: i < questions.length - 1 ? '1px solid #F0EDE4' : 'none', cursor: 'pointer' }}>
+                {/* Question icon */}
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F0F5F4', color: '#173B3F', display: 'grid', placeItems: 'center', fontSize: '14px', flexShrink: 0 }}>✧</div>
+                {/* Question text + meta */}
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '14px', fontWeight: '500', color: '#173B3F' }}>{q.q}</div>
+                  <div style={{ fontSize: '12px', color: '#7A8B8E', marginTop: '4px' }}>{q.t} · {q.src} sources</div>
+                </div>
+                {/* Arrow */}
+                <div style={{ color: '#A0B0B3' }}>↗</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT: Placeholder — will be filled in Commit 3 */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
+            <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '22px', color: '#173B3F' }}>Quick actions</h3>
+          </div>
+          <div style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', padding: '24px' }}>
+            <p style={{ color: '#7A8B8E', fontSize: '14px' }}>Quick actions coming next.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   );
