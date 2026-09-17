@@ -1,0 +1,130 @@
+:root {
+  --ink: #102b3d;
+  --muted: #6f8390;
+  --teal: #0e9d92;
+  --paper: #f4f9fb;
+}
+
+/* ==========================================================================
+   Auth shell — two-column split screen
+   ========================================================================== */
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ==========================================================================
+   Left panel — brand/illustration side
+   ========================================================================== */
+
+.auth-brand-panel {
+  position: relative;
+  padding: 40px 56px;
+  background: linear-gradient(135deg, #eafaf6 0%, #eef1fb 100%);
+  overflow: hidden;
+}
+
+.auth-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.auth-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 140px 0 16px;
+  color: #398b8e;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.35px;
+}
+
+.auth-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+
+.auth-headline {
+  margin: 0 0 16px;
+  font-size: 40px;
+  line-height: 1.15;
+  font-weight: 700;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+}
+
+.auth-subtext {
+  max-width: 380px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+    //Left panel illustration
+ 
+.auth-illustration {
+  position: relative;
+  height: 280px;
+  margin-top: 40px;
+}
+.auth-orbit {
+  position: absolute;
+  top: 40px;
+  left: 30px;
+  width: 320px;
+  height: 220px;
+  border: 1px solid rgba(100, 130, 140, 0.25);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+.auth-core {
+  position: absolute;
+  top: 90px;
+  left: 90px;
+  width: 80px;
+  height: 80px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #5de0cf, #a1d8f1);
+  box-shadow: 0 16px 25px rgba(60, 194, 191, 0.28);
+  display: grid;
+  place-items: center;
+}
+
+.auth-core svg {
+  width: 30px;
+  height: 30px;
+}
+
+.auth-tag {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: white;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.auth-tag--docs {
+  top: 0;
+  left: 0;
+}
+
+.auth-tag--learning {
+  bottom: 20px;
+  left: 130px;
+}
