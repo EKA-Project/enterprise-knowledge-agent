@@ -40,7 +40,7 @@ export default function EmployeeDashboardView() {
         ))}
       </div>
 
-      {/* Two-column layout: My questions (left) + Placeholder (right) */}
+      {/* Two-column layout: My questions (left) + Quick actions (right) */}
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
 
         {/* LEFT: My recent questions */}
@@ -52,27 +52,44 @@ export default function EmployeeDashboardView() {
           <div style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', overflow: 'hidden' }}>
             {questions.map((q, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '18px 24px', borderBottom: i < questions.length - 1 ? '1px solid #F0EDE4' : 'none', cursor: 'pointer' }}>
-                {/* Question icon */}
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#F0F5F4', color: '#173B3F', display: 'grid', placeItems: 'center', fontSize: '14px', flexShrink: 0 }}>✧</div>
-                {/* Question text + meta */}
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '14px', fontWeight: '500', color: '#173B3F' }}>{q.q}</div>
                   <div style={{ fontSize: '12px', color: '#7A8B8E', marginTop: '4px' }}>{q.t} · {q.src} sources</div>
                 </div>
-                {/* Arrow */}
                 <div style={{ color: '#A0B0B3' }}>↗</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT: Placeholder — will be filled in Commit 3 */}
+        {/* RIGHT: Quick actions panel */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
             <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: '22px', color: '#173B3F' }}>Quick actions</h3>
           </div>
-          <div style={{ background: '#fff', border: '1px solid #E6E3D8', borderRadius: '16px', padding: '24px' }}>
-            <p style={{ color: '#7A8B8E', fontSize: '14px' }}>Quick actions coming next.</p>
+
+          {/* Ask EKA card — prominent dark CTA */}
+          <div style={{ background: '#173B3F', borderRadius: '16px', padding: '24px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '32px', marginBottom: '12px', color: '#fff' }}>✧</div>
+            <div style={{ fontFamily: 'Fraunces, serif', fontSize: '20px', color: '#fff', marginBottom: '8px' }}>Ask EKA</div>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.5', marginBottom: '16px' }}>
+              Get grounded answers from your organisation's knowledge base.
+            </p>
+            <button style={{ width: '100%', padding: '12px', background: '#F3C543', border: 'none', borderRadius: '10px', color: '#173B3F', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>
+              + Start new question
+            </button>
+          </div>
+
+          {/* Browse documents card */}
+          <div style={{ background: '#FBFAF6', border: '1px solid #E6E3D8', borderLeft: '4px solid #F3C543', borderRadius: '16px', padding: '20px' }}>
+            <div style={{ fontSize: '12px', color: '#7A8B8E', marginBottom: '8px' }}>📚 Browse documents</div>
+            <p style={{ fontSize: '13px', color: '#173B3F', lineHeight: '1.5' }}>
+              Explore the 8,942 documents in your knowledge base.
+            </p>
+            <button style={{ marginTop: '12px', background: 'none', border: 'none', color: '#173B3F', fontSize: '13px', fontWeight: '600', cursor: 'pointer', padding: 0 }}>
+              Browse →
+            </button>
           </div>
         </div>
 
