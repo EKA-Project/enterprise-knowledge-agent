@@ -1,12 +1,12 @@
 import React from 'react';
-// Import the Admin Dashboard component
-import AdminDashboardView from './components/dashboard/AdminDashboardView';
+// Import the Employee Dashboard component
+import EmployeeDashboardView from './components/dashboard/EmployeeDashboardView';
 
-// Root App component — renders the Admin Dashboard
+// Root App component — renders the Employee Dashboard
 export default function App() {
   return (
     <div>
-      <AdminDashboardView />
+      <EmployeeDashboardView />
     </div>
   );
 }
