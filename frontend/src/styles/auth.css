@@ -295,6 +295,7 @@
   font-weight: 700;
   cursor: pointer;
   color: white;
+  text-decoration: none;
 }
 
 .option-card-btn--teal {
@@ -325,7 +326,6 @@
 }
 
 /*Responsive*/
-
 @media (max-width: 900px) {
   .auth-shell {
     grid-template-columns: 1fr;

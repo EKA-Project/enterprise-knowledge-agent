@@ -16,6 +16,7 @@ function OptionCard({
   note,
   buttonLabel,
   buttonClass,
+  to,
 }) 
 {
   return (
@@ -27,10 +28,10 @@ function OptionCard({
       <div className="option-card-note">
         {noteIcon} {note}
       </div>
-      <button className={`option-card-btn ${buttonClass}`}>
+      <Link to={to}  className={`option-card-btn ${buttonClass}`}>
         {buttonLabel}
         <span aria-hidden="true">→</span>
-      </button>
+      </Link>
     </div>
   );
 }
@@ -61,6 +62,7 @@ export default function SignupChoicePage() {
             note="Use an invitation or Enterprise ID"
             buttonLabel="Join an Enterprise"
             buttonClass="option-card-btn--teal"
+            to="/signup/join"
           />
           <OptionCard
             iconClass="option-card-icon--violet"
@@ -73,6 +75,7 @@ export default function SignupChoicePage() {
             note="Full administrative control & RBAC"
             buttonLabel="Create an Enterprise"
             buttonClass="option-card-btn--dark"
+            to="/signup/create"
           />
           <p className="auth-footer">
             Already have an account? <Link to="/login">Sign in</Link>
