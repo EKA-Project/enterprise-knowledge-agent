@@ -59,3 +59,35 @@ function InvitationCard() {
     </div>
   );
 }
+export default function EmployeeInvitePreviewPage() {
+  return (
+    <div className="auth-shell">
+      <AuthBackground />
+
+      <div className="auth-form-panel">
+        <div className="auth-card">
+          <InviteStepIndicator />
+
+          <div className="auth-badge">📄 OFFICIAL INVITATION</div>
+          <h2 className="auth-title">You're invited to join EKA</h2>
+          <p className="auth-description">
+            Review your organization and role details before activating your account.
+          </p>
+
+          <InvitationCard />
+
+          <button className="option-card-btn option-card-btn--teal">
+            Accept Invitation
+            <span aria-hidden="true">→</span>
+          </button>
+
+          <button className="option-card-btn option-card-btn--outline">
+            Use a different invitation
+          </button>
+
+          <p className="auth-page-footer">© 2026 EKA Technologies. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
