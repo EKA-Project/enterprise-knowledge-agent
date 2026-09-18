@@ -44,6 +44,7 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.35px;
+  text-transform: uppercase;
 }
 
 .auth-eyebrow-dot {
@@ -55,7 +56,7 @@
 
 .auth-headline {
   margin: 0 0 16px;
-  font-size: 40px;
+  font-size: 38px;
   line-height: 1.15;
   font-weight: 700;
   font-family: Georgia, "Times New Roman", serif;
@@ -69,40 +70,53 @@
   line-height: 1.6;
 }
 
-    //Left panel illustration
- 
+/* ==========================================================================
+   Left panel illustration
+   ========================================================================== */
+
 .auth-illustration {
   position: relative;
-  height: 280px;
+  height: 260px;
   margin-top: 40px;
 }
+
 .auth-orbit {
   position: absolute;
-  top: 40px;
-  left: 30px;
-  width: 320px;
+  top: 50%;
+  left: 140px;
+  width: 340px;
   height: 220px;
-  border: 1px solid rgba(100, 130, 140, 0.25);
+  border: 1px solid rgba(100, 130, 140, 0.3);
   border-radius: 50%;
-  transform: rotate(-12deg);
+}
+
+.auth-orbit--one {
+  transform: translate(-50%, -50%) rotate(-16deg);
+}
+
+.auth-orbit--two {
+  transform: translate(-50%, -50%) rotate(16deg);
+  border-color: rgba(150, 170, 220, 0.28);
 }
 
 .auth-core {
   position: absolute;
-  top: 90px;
-  left: 90px;
+  top: 85px;
+  left: 100px;
   width: 80px;
-  height: 80px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #5de0cf, #a1d8f1);
+  height: 40px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #cbeae6, #a1d8f1);
   box-shadow: 0 16px 25px rgba(60, 194, 191, 0.28);
   display: grid;
   place-items: center;
 }
 
-.auth-core svg {
-  width: 30px;
-  height: 30px;
+.auth-core img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  mix-blend-mode: plus-darker;
 }
 
 .auth-tag {
@@ -125,6 +139,201 @@
 }
 
 .auth-tag--learning {
-  bottom: 20px;
-  left: 130px;
+  bottom: 15px;
+  left: 145px;
+}
+
+/* ==========================================================================
+   Right panel — form/card side
+   ========================================================================== */
+
+.auth-form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f9fa;
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 540px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(15, 40, 45, 0.08);
+  padding: 28px 32px;
+}
+
+.auth-card-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.auth-card-brand img {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.auth-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #e6f7f4;
+  color: var(--teal);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+
+.auth-title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.auth-description {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   Option card (Join / Create an Enterprise)
+   ========================================================================== */
+
+.option-card {
+  position: relative;
+  border: 1px solid #e5eaea;
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+
+.option-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.option-card-icon--mint {
+  background: #dff5f1;
+  color: var(--teal);
+}
+
+.option-card-icon--violet {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.option-card-tag {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+}
+
+.option-card-tag--mint {
+  background: #dff5f1;
+  color: var(--teal);
+}
+
+.option-card-tag--violet {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.option-card h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.option-card p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.option-card-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.option-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: white;
+}
+
+.option-card-btn--teal {
+  background: var(--teal);
+}
+
+.option-card-btn--teal:hover {
+  background: #0b7a72;
+}
+
+.option-card-btn--dark {
+  background: var(--ink);
+}
+
+.option-card-btn--dark:hover {
+  background: #081722;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.auth-footer a {
+  color: var(--teal);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+  .auth-brand-panel {
+    display: none;
+  }
 }
