@@ -79,9 +79,9 @@ function InvitationForm({ selected, setSelected }) {
         <span aria-hidden="true">→</span>
       </button>
 
-      <p className="auth-footer">
-        <Link to="#">✉️ Have an invitation email instead?</Link>
-      </p>
+    <p className="auth-footer">
+        <Link to="/signup/invite-preview">✉️ Have an invitation email instead?</Link>
+    </p>
     </>
   );
 }
