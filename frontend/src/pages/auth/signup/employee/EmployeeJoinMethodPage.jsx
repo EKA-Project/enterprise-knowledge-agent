@@ -34,3 +34,72 @@ function VerificationHeader() {
     </>
   );
 }
+// ===================== Component 2: Invitation form =====================
+// Radio cards, invitation code input, submit button, footer link
+function InvitationForm({ selected, setSelected }) {
+  return (
+    <>
+      <div
+        className={`radio-card ${selected === 'invitation' ? 'selected' : ''}`}
+        onClick={() => setSelected('invitation')}
+      >
+        <span className="radio-dot">
+          {selected === 'invitation' && <span className="radio-dot-fill" />}
+        </span>
+        <div>
+          <div className="radio-card-title">
+            Have an invitation?
+            <span className="tag">Recommended</span>
+          </div>
+          <p>Instant access via your unique one-time invitation code or email link.</p>
+        </div>
+      </div>
+
+      <div
+        className={`radio-card ${selected === 'enterprise-id' ? 'selected' : ''}`}
+        onClick={() => setSelected('enterprise-id')}
+      >
+        <span className="radio-dot">
+          {selected === 'enterprise-id' && <span className="radio-dot-fill" />}
+        </span>
+        <div>
+          <div className="radio-card-title">Don't have an invitation?</div>
+          <p>Join using your organization's unique Enterprise ID (requires admin approval).</p>
+        </div>
+      </div>
+
+      <div className="auth-field">
+        <label htmlFor="invite-code">Invitation Code</label>
+        <input id="invite-code" type="text" placeholder="INV-NSTAR-9482" />
+      </div>
+      <p className="auth-field-hint">Codes are sent to your work inbox by your enterprise administrator.</p>
+
+      <button className="option-card-btn option-card-btn--teal">
+        Continue with Invitation
+        <span aria-hidden="true">→</span>
+      </button>
+
+      <p className="auth-footer">
+        <Link to="#">✉️ Have an invitation email instead?</Link>
+      </p>
+    </>
+  );
+}
+
+// ===================== Page =====================
+export default function EmployeeJoinMethodPage() {
+  const [selected, setSelected] = useState('invitation');
+
+  return (
+    <div className="auth-shell">
+      <AuthBackground />
+
+      <div className="auth-form-panel">
+        <div className="auth-card">
+          <VerificationHeader />
+          <InvitationForm selected={selected} setSelected={setSelected} />
+        </div>
+      </div>
+    </div>
+  );
+} 
