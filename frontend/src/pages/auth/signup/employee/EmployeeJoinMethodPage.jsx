@@ -37,6 +37,16 @@ function VerificationHeader() {
 // ===================== Component 2: Invitation form =====================
 // Radio cards, invitation code input, submit button, footer link
 function InvitationForm({ selected, setSelected }) {
+  const isInvitation = selected === 'invitation';
+
+  const destination = isInvitation ? '/signup/invite-preview' : '/signup/enterprise-found';
+  const buttonLabel = isInvitation ? 'Continue with Invitation' : 'Find Enterprise';
+  const fieldLabel = isInvitation ? 'Invitation Code' : 'Enterprise Code';
+  const fieldPlaceholder = isInvitation ? 'INV-NSTAR-9482' : 'EKA-7K29F';
+  const fieldHint = isInvitation
+    ? "Codes are sent to your work inbox by your enterprise administrator."
+    : "Ask your admin for your organization's unique Enterprise ID.";
+
   return (
     <>
       <div
@@ -69,23 +79,18 @@ function InvitationForm({ selected, setSelected }) {
       </div>
 
       <div className="auth-field">
-        <label htmlFor="invite-code">Invitation Code</label>
-        <input id="invite-code" type="text" placeholder="INV-NSTAR-9482" />
+        <label htmlFor="invite-code">{fieldLabel}</label>
+        <input id="invite-code" type="text" placeholder={fieldPlaceholder} />
       </div>
-      <p className="auth-field-hint">Codes are sent to your work inbox by your enterprise administrator.</p>
+      <p className="auth-field-hint">{fieldHint}</p>
 
-      <button className="option-card-btn option-card-btn--teal">
-        Continue with Invitation
+      <Link to={destination} className="option-card-btn option-card-btn--teal">
+        {buttonLabel}
         <span aria-hidden="true">→</span>
-      </button>
-
-    <p className="auth-footer">
-        <Link to="/signup/invite-preview">✉️ Have an invitation email instead?</Link>
-    </p>
+      </Link>
     </>
   );
 }
-
 // ===================== Page =====================
 export default function EmployeeJoinMethodPage() {
   const [selected, setSelected] = useState('invitation');
