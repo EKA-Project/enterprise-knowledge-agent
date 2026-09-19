@@ -643,3 +643,63 @@
   color: var(--teal);
   font-family: "Courier New", monospace;
 }
+
+/* ==========================================================================
+   Request sent page — centered layout, status states, demo action box
+   ========================================================================== */
+
+.auth-card--centered {
+  text-align: center;
+}
+
+.status-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+  font-size: 22px;
+}
+
+.status-icon-circle--pending {
+  background: #fff3dc;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.status-badge--pending {
+  background: #fff3dc;
+  color: #b8760a;
+}
+
+.info-box {
+  text-align: left;
+  border: 1px solid #e5eaea;
+  border-radius: 14px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.info-box-title {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.info-box-text {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
