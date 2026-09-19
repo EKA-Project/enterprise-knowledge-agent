@@ -616,3 +616,30 @@
   font-size: 11.5px;
   color: #94a3b8;
 }
+/* ==========================================================================
+   Enterprise found page — small additions
+   ========================================================================== */
+
+.step-num--current {
+  background: var(--teal);
+  color: white;
+}
+
+.invite-card--simple {
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.invite-card-header--no-border {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.invite-enterprise-id {
+  margin: 2px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal);
+  font-family: "Courier New", monospace;
+}
