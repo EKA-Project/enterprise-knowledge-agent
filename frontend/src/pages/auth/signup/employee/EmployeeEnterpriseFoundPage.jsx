@@ -62,10 +62,10 @@ export default function EmployeeEnterpriseFoundPage() {
           </div>
           <p className="auth-field-hint">Must match your organization's verified email domain.</p>
 
-          <button className="option-card-btn option-card-btn--teal">
+          <Link to="/signup/request-sent" className="option-card-btn option-card-btn--teal">
             Request to Join
             <span aria-hidden="true">→</span>
-          </button>
+          </Link>
 
           <p className="auth-page-footer">© 2026 EKA Technologies. All rights reserved.</p>
         </div>

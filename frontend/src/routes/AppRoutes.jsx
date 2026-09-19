@@ -14,6 +14,7 @@ export default function AppRoutes() {
       <Route path="/signup/Join" element={<EmployeeJoinMethodPage />} />
       <Route path="/signup/invite-preview" element={<EmployeeInvitePreviewPage />} />
       <Route path="/signup/enterprise-found" element={<EmployeeEnterpriseFoundPage />} />
+
     </Routes>
   );
 }
