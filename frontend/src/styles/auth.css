@@ -819,3 +819,27 @@
   color: var(--teal);
   font-weight: 600;
 }
+/* ==========================================================================
+   Assigned role box (Admin Account page)
+   ========================================================================== */
+
+.assigned-role-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border: 1px solid #e5eaea;
+  border-radius: 12px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.assigned-role-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #7c3aed;
+  font-size: 11px;
+  font-weight: 700;
+}
