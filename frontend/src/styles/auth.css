@@ -873,3 +873,76 @@
   outline: none;
   border-color: var(--teal);
 }
+/* ==========================================================================
+   Enterprise ID box (Admin Enterprise Profile / ready page)
+   ========================================================================== */
+
+.enterprise-id-box {
+  text-align: center;
+  border: 1px solid #cdeee6;
+  background: #eafaf6;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.enterprise-id-label {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--teal);
+  text-transform: uppercase;
+}
+
+.enterprise-id-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.enterprise-id-value {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: white;
+  border: 1px solid #cdeee6;
+  font-family: "Courier New", monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: 1px;
+}
+
+.copy-id-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid #cdeee6;
+  background: white;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.copy-id-btn:hover {
+  background: #f4fbfa;
+}
+
+.enterprise-id-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.success-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.success-value--accent {
+  color: var(--teal);
+}
