@@ -75,7 +75,7 @@ export default function SignupChoicePage() {
             note="Full administrative control & RBAC"
             buttonLabel="Create an Enterprise"
             buttonClass="option-card-btn--dark"
-            to="/signup/create"
+            to="/signup/admin/account"
           />
           <p className="auth-footer">
             Already have an account? <Link to="/login">Sign in</Link>
