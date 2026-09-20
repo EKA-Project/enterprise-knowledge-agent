@@ -6,6 +6,7 @@ import EmployeeJoinMethodPage from '../pages/auth/signup/employee/EmployeeJoinMe
 import EmployeeInvitePreviewPage from '../pages/auth/signup/employee/EmployeeInvitePreviewPage';
 import EmployeeEnterpriseFoundPage from '../pages/auth/signup/employee/EmployeeEnterpriseFoundPage';
 import EmployeePendingApprovalPage from '../pages/auth/signup/employee/EmployeePendingApprovalPage';
+import EmployeeCreateAccountPage from '../pages/auth/signup/employee/EmployeeCreateAccountPage';
 export default function AppRoutes() {
   return (
     <Routes>
@@ -15,6 +16,7 @@ export default function AppRoutes() {
       <Route path="/signup/invite-preview" element={<EmployeeInvitePreviewPage />} />
       <Route path="/signup/enterprise-found" element={<EmployeeEnterpriseFoundPage />} />
       <Route path="/signup/request-sent" element={<EmployeePendingApprovalPage />} />
+      <Route path="/signup/create-account" element={<EmployeeCreateAccountPage />} />
     </Routes>
   );
 }
