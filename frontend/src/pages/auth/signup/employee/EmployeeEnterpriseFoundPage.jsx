@@ -1,21 +1,34 @@
+import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
+import BackLink from '../../../../components/common/BackLink';
 import '../../../../styles/auth.css';
-// ===================== Component: FoundStepIndicator =====================
-function FoundStepIndicator() {
+
+const NO_INVITE_STEPS = [
+  { label: 'Verify', done: 'Verified' },
+  { label: 'Found' },
+  { label: 'Create Account' },
+  { label: 'Approval' },
+];
+
+function StepIndicator({ steps, current }) {
   return (
     <div className="step-indicator">
-      <div className="step active">
-        <span className="step-num step-num--check">✓</span> Found
-      </div>
-      <span className="step-arrow">→</span>
-      <div className="step active">
-        <span className="step-num step-num--current">2</span> Request
-      </div>
-      <span className="step-arrow">→</span>
-      <div className="step">
-        <span className="step-num">3</span> Approval
-      </div>
+      {steps.map((step, i) => (
+        <Fragment key={step.label}>
+          <div className={`step ${i <= current ? 'active' : ''}`}>
+            <span
+              className={`step-num ${
+                i < current ? 'step-num--check' : i === current ? 'step-num--current' : ''
+              }`}
+            >
+              {i < current ? '✓' : i + 1}
+            </span>
+            {i < current && step.done ? step.done : step.label}
+          </div>
+          {i < steps.length - 1 && <span className="step-arrow">→</span>}
+        </Fragment>
+      ))}
     </div>
   );
 }
@@ -41,32 +54,26 @@ export default function EmployeeEnterpriseFoundPage() {
 
       <div className="auth-form-panel">
         <div className="auth-card">
-          <FoundStepIndicator />
+        <StepIndicator steps={NO_INVITE_STEPS} current={1} />
+
+          <div className="auth-context-row">
+            <BackLink>← Back</BackLink>
+        </div>
 
           <div className="auth-badge">🏢 ENTERPRISE FOUND</div>
           <h2 className="auth-title">Enterprise found</h2>
           <p className="auth-description">
             Your request will be sent to an administrator for approval.
           </p>
-
-          <EnterpriseCard />
-
-          <div className="auth-field">
-            <label htmlFor="full-name">Your Full Name</label>
-            <input id="full-name" type="text" placeholder="Alex Morgan" />
-          </div>
-
-          <div className="auth-field">
-            <label htmlFor="work-email">Your Work Email</label>
-            <input id="work-email" type="email" placeholder="alex.morgan@northstar.studio" />
-          </div>
-          <p className="auth-field-hint">Must match your organization's verified email domain.</p>
-
-          <Link to="/signup/request-sent" className="option-card-btn option-card-btn--teal">
-            Request to Join
-            <span aria-hidden="true">→</span>
-          </Link>
-
+            <EnterpriseCard />
+           <Link
+                to="/signup/create-account"
+                state={{ flow: 'enterprise-id' }}
+                className="option-card-btn option-card-btn--teal"
+                >
+                Create Account
+                <span aria-hidden="true">→</span>
+            </Link>
           <p className="auth-page-footer">© 2026 EKA Technologies. All rights reserved.</p>
         </div>
       </div>

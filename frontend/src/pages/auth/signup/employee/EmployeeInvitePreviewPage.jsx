@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
+import BackLink from '../../../../components/common/BackLink';
 import '../../../../styles/auth.css';
 // header section
 function InviteStepIndicator() {
@@ -10,11 +11,7 @@ function InviteStepIndicator() {
       </div>
       <span className="step-arrow">→</span>
       <div className="step">
-        <span className="step-num">2</span> Account
-      </div>
-      <span className="step-arrow">→</span>
-      <div className="step">
-        <span className="step-num">3</span> Ready
+        <span className="step-num step-num--current">2</span> Ready
       </div>
     </div>
   );
@@ -59,6 +56,7 @@ function InvitationCard() {
     </div>
   );
 }
+//complete page component
 export default function EmployeeInvitePreviewPage() {
   return (
     <div className="auth-shell">
@@ -67,6 +65,10 @@ export default function EmployeeInvitePreviewPage() {
       <div className="auth-form-panel">
         <div className="auth-card">
           <InviteStepIndicator />
+
+          <div className="auth-context-row">
+            <BackLink>← Back</BackLink>
+          </div>
 
           <div className="auth-badge">📄 OFFICIAL INVITATION</div>
           <h2 className="auth-title">You're invited to join EKA</h2>
@@ -81,9 +83,6 @@ export default function EmployeeInvitePreviewPage() {
             <span aria-hidden="true">→</span>
           </button>
 
-          <button className="option-card-btn option-card-btn--outline">
-            Use a different invitation
-          </button>
 
           <p className="auth-page-footer">© 2026 EKA Technologies. All rights reserved.</p>
         </div>

@@ -1,29 +1,52 @@
-import { useState } from 'react';
+import { useState,Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
+import BackLink from '../../../../components/common/BackLink';
 import '../../../../styles/auth.css';
+
+const NO_INVITE_STEPS = [
+  { label: 'Verify', done: 'Verified' },
+  { label: 'Found' },
+  { label: 'Create Account' },
+  { label: 'Approval' },
+];
+
+function StepIndicator({ steps, current }) {
+  return (
+    <div className="step-indicator">
+      {steps.map((step, i) => (
+        <Fragment key={step.label}>
+          <div className={`step ${i <= current ? 'active' : ''}`}>
+            <span
+              className={`step-num ${
+                i < current ? 'step-num--check' : i === current ? 'step-num--current' : ''
+              }`}
+            >
+              {i < current ? '✓' : i + 1}
+            </span>
+            {i < current && step.done ? step.done : step.label}
+          </div>
+          {i < steps.length - 1 && <span className="step-arrow">→</span>}
+        </Fragment>
+      ))}
+    </div>
+  );
+}
 
 // ===================== Component 1: Header section =====================
 // Step indicator, back-to-choice row, title, description
-function VerificationHeader() {
+function VerificationHeader({ selected }) {
+  const steps =
+    selected === 'invitation'
+      ? [{ label: 'Verify', done: 'Verified' }, { label: 'Ready' }]
+      : NO_INVITE_STEPS;
+
   return (
     <>
-      <div className="step-indicator">
-        <div className="step active">
-          <span className="step-num">1</span> Verification
-        </div>
-        <span className="step-arrow">→</span>
-        <div className="step">
-          <span className="step-num">2</span> Account
-        </div>
-        <span className="step-arrow">→</span>
-        <div className="step">
-          <span className="step-num">3</span> Ready
-        </div>
-      </div>
-
+      <StepIndicator steps={steps} current={0} />
+      
       <div className="auth-context-row">
-        <Link to="/signup">← Back to role choice</Link>
+        <BackLink>← Back to role choice</BackLink>
         <span className="auth-context-badge">👤 EMPLOYEE ONBOARDING</span>
       </div>
 
@@ -98,10 +121,11 @@ export default function EmployeeJoinMethodPage() {
   return (
     <div className="auth-shell">
       <AuthBackground />
+      
 
       <div className="auth-form-panel">
         <div className="auth-card">
-          <VerificationHeader />
+           <VerificationHeader selected={selected} />
           <InvitationForm selected={selected} setSelected={setSelected} />
         </div>
       </div>
