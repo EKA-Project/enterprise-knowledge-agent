@@ -946,3 +946,53 @@
 .success-value--accent {
   color: var(--teal);
 }
+/* ==========================================================================
+   Login page — social buttons, demo personas
+   ========================================================================== */
+
+.forgot-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 16px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: #94a3b8;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5eaea;
+}
+
+.social-login-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.social-login-btn {
+  padding: 10px;
+  border: 1px solid #e5eaea;
+  border-radius: 10px;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.social-login-btn:hover {
+  background: #f7f9fa;
+}
