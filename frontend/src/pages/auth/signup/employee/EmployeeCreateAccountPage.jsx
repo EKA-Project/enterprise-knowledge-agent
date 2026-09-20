@@ -38,3 +38,103 @@ function StepIndicator({ steps, current }) {
     </div>
   );
 }
+// complete page component
+export default function EmployeeCreateAccountPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const flow = location.state?.flow || 'invitation';
+  const steps = flow === 'enterprise-id' ? NO_INVITE_STEPS : INVITE_STEPS;
+  const current = flow === 'enterprise-id' ? 2 : 1;
+
+  function handleCreateAccount() {
+    navigate('/signup/request-sent');
+  }
+
+  return (
+    <div className="auth-shell">
+      <AuthBackground />
+
+      <div className="auth-form-panel">
+        <div className="auth-card">
+          <StepIndicator steps={steps} current={current} />
+
+          <div className="auth-context-row">
+            <BackLink>← Back</BackLink>
+            <span className="auth-context-badge">👤 EMPLOYEE ACCOUNT</span>
+          </div>
+
+          <h2 className="auth-title">Create your EKA account</h2>
+          <p className="auth-description">Set up your secure access credentials.</p>
+
+          <WorkspaceCard />
+
+          <div className="auth-field">
+            <label htmlFor="full-name">Full Name</label>
+            <input id="full-name" type="text" defaultValue="Alex Morgan" />
+          </div>
+
+          <div className="auth-field">
+            <div className="auth-field-label-row">
+              <label htmlFor="work-email">Work Email</label>
+              {flow === 'invitation' && (
+                <span className="prefilled-badge">🔒 Pre-filled from invitation</span>
+              )}
+            </div>
+            <input
+              id="work-email"
+              type="email"
+              defaultValue="alex.morgan@northstar.studio"
+            />
+          </div>
+
+          <div className="password-fields-row">
+            <div className="auth-field">
+              <label htmlFor="password">Password</label>
+              <div className="password-input-wrap">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••••••••"
+                />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label="Toggle password visibility"
+                >
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <div className="auth-field">
+              <label htmlFor="confirm-password">Confirm Password</label>
+              <input id="confirm-password" type="password" placeholder="••••••••••••••" />
+            </div>
+          </div>
+
+          <div className="password-strength-bar password-strength-bar--segmented">
+            <span className="password-strength-segment password-strength-segment--filled" />
+            <span className="password-strength-segment password-strength-segment--filled" />
+            <span className="password-strength-segment password-strength-segment--filled" />
+          </div>
+          <p className="password-strength-label">Strong enterprise password ✓</p>
+
+          <label className="terms-checkbox-row">
+            <input type="checkbox" defaultChecked />
+            <span>
+              I agree to EKA's <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>.
+            </span>
+          </label>
+
+          <button onClick={handleCreateAccount} className="option-card-btn option-card-btn--teal">
+            Send Request
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
