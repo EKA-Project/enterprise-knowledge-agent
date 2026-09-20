@@ -8,6 +8,7 @@ import EmployeeEnterpriseFoundPage from '../pages/auth/signup/employee/EmployeeE
 import EmployeePendingApprovalPage from '../pages/auth/signup/employee/EmployeePendingApprovalPage';
 import EmployeeCreateAccountPage from '../pages/auth/signup/employee/EmployeeCreateAccountPage';
 import AdminAccountPage from '../pages/auth/signup/admin/AdminAccountPage';
+import AdminEnterpriseInitializedPage from '../pages/auth/signup/admin/AdminEnterpriseInitializedPage';
 export default function AppRoutes() {
   return (
     <Routes>
@@ -19,6 +20,7 @@ export default function AppRoutes() {
       <Route path="/signup/request-sent" element={<EmployeePendingApprovalPage />} />
       <Route path="/signup/create-account" element={<EmployeeCreateAccountPage />} />
       <Route path="/signup/admin/account" element={<AdminAccountPage />} />
+      <Route path="/signup/admin/enterprise" element={<AdminEnterpriseInitializedPage />} />
     </Routes>
   );
 }
