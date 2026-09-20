@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
 import BackLink from '../../../../components/common/BackLink';
 import '../../../../styles/auth.css';
-// ===================== Component 1: Step Indicator  Header=====================
+
 const INVITE_STEPS = [
   { label: 'Verify', done: 'Verified' },
   { label: 'Account' },
@@ -16,7 +16,7 @@ const NO_INVITE_STEPS = [
   { label: 'Create Account' },
   { label: 'Approval' },
 ];
-// ===================== Component 2: Step Indicator =====================
+
 function StepIndicator({ steps, current }) {
   return (
     <div className="step-indicator">
@@ -38,7 +38,22 @@ function StepIndicator({ steps, current }) {
     </div>
   );
 }
-// complete page component
+
+function WorkspaceCard() {
+  return (
+    <div className="invite-card invite-card--simple">
+      <div className="invite-card-header invite-card-header--no-border">
+        <span className="invite-avatar">NS</span>
+        <div>
+          <p className="invite-label">Joining Workspace</p>
+          <p className="invite-company-name">Northstar Studio</p>
+        </div>
+        <span className="workspace-role-badge">🔒 Engineering · Employee</span>
+      </div>
+    </div>
+  );
+}
+
 export default function EmployeeCreateAccountPage() {
   const navigate = useNavigate();
   const location = useLocation();
