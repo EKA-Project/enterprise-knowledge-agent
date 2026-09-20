@@ -10,10 +10,12 @@ import EmployeeCreateAccountPage from '../pages/auth/signup/employee/EmployeeCre
 import AdminAccountPage from '../pages/auth/signup/admin/AdminAccountPage';
 import AdminEnterpriseInitializedPage from '../pages/auth/signup/admin/AdminEnterpriseInitializedPage';
 import AdminEnterpriseProfilePage from '../pages/auth/signup/admin/AdminEnterpriseProfilePage';
+import LoginPage from '../pages/auth/LoginPage';
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
       {<Route path="/signup" element={<SignupChoicePage />} /> }
       <Route path="/signup/Join" element={<EmployeeJoinMethodPage />} />
       <Route path="/signup/invite-preview" element={<EmployeeInvitePreviewPage />} />
