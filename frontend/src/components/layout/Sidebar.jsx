@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom'
-import navigation from './navigation.js'
+import { NavLink } from "react-router-dom";
+import navigation from "./navigation.js";
 
 function Sidebar() {
   return (
@@ -11,14 +11,18 @@ function Sidebar() {
 
           {/* Each navigation item becomes a React Router link. */}
           {items.map((item) => (
-            <NavLink key={item.path} to={item.path}>
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
               {item.label}
             </NavLink>
           ))}
         </section>
       ))}
     </aside>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;
