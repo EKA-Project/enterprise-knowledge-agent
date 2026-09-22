@@ -1,12 +1,22 @@
 import { NavLink } from 'react-router-dom'
+import navigation from './navigation.js'
 
 function Sidebar() {
   return (
     <aside>
-      {/* NavLink changes the URL without reloading the application. */}
-      <NavLink to="/">Dashboard</NavLink>
+      {/* Render each navigation section from the navigation configuration. */}
+      {Object.entries(navigation).map(([sectionName, items]) => (
+        <section key={sectionName}>
+          <h2>{sectionName}</h2>
 
-      <NavLink to="/ask-eka">Ask EKA</NavLink>
+          {/* Each navigation item becomes a React Router link. */}
+          {items.map((item) => (
+            <NavLink key={item.path} to={item.path}>
+              {item.label}
+            </NavLink>
+          ))}
+        </section>
+      ))}
     </aside>
   )
 }
