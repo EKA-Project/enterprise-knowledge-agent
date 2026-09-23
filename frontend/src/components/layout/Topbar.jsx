@@ -10,6 +10,36 @@ const routeMetadata = {
     title: "Ask EKA",
     metadata: "NEURAL RAG / 100% ISOLATED",
   },
+
+  "/knowledge-base": {
+    title: "Knowledge Base",
+    metadata: "INSTITUTIONAL PLAYBOOKS / 6 CATEGORIES",
+  },
+
+  "/documents": {
+    title: "Documents",
+    metadata: "INGESTION REPOSITORY / 24 DOCS",
+  },
+
+  "/semantic-search": {
+    title: "Semantic Search",
+    metadata: "CONCEPT & INTENT DISCOVERY",
+  },
+
+  "/analytics": {
+    title: "Knowledge Analytics",
+    metadata: "DOCUMENT INTELLIGENCE & AUDIT",
+  },
+
+  "/organization": {
+    title: "User Management",
+    metadata: "ORGANIZATION GOVERNANCE & RBAC",
+  },
+
+  "/settings": {
+    title: "Settings",
+    metadata: "NORTHSTAR STUDIO / 24.11.2026",
+  },
 };
 
 function Topbar() {
