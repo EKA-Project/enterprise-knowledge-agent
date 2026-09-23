@@ -79,13 +79,13 @@ function Topbar() {
       Ask EKA, notifications, and user menu here in later steps.
     */}
       <div className="flex items-center">
-        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-slate-100 p-0.5">
+        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-white p-0.5">
           {roles.map((role) => (
             <button
               key={role}
               type="button"
               onClick={() => setActiveRole(role)}
-              className={`rounded-full border-0 px-2.5 py-1 text-[0.72rem] font-semibold ${activeRole === role ? "bg-slate-900 text-white" : "bg-transparent text-slate-500"}`}
+              className={`rounded-full border-0 px-[0.65rem] py-[0.28rem] text-[0.72rem] font-semibold ${activeRole === role ? "bg-slate-900 font-bold text-white" : "bg-transparent text-slate-500"}`}
             >
               {role}
             </button>
