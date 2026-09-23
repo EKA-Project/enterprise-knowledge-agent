@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import { UserRound, UsersRound, ShieldCheck } from "lucide-react";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -42,7 +43,11 @@ const routeMetadata = {
     metadata: "NORTHSTAR STUDIO / 24.11.2026",
   },
 };
-const roles = ["Employee", "Manager", "Admin"];
+const roles = [
+  { name: "Employee", icon: UserRound },
+  { name: "Manager", icon: UsersRound },
+  { name: "Admin", icon: ShieldCheck },
+];
 
 function Topbar() {
   const location = useLocation();
@@ -79,17 +84,22 @@ function Topbar() {
       Ask EKA, notifications, and user menu here in later steps.
     */}
       <div className="flex items-center">
-        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-white p-0.5">
-          {roles.map((role) => (
-            <button
-              key={role}
-              type="button"
-              onClick={() => setActiveRole(role)}
-              className={`rounded-full border-0 px-[0.65rem] py-[0.28rem] text-[0.72rem] font-semibold ${activeRole === role ? "bg-slate-900 font-bold text-white" : "bg-transparent text-slate-500"}`}
-            >
-              {role}
-            </button>
-          ))}
+       <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-white p-0.5">
+          {roles.map((role) => {
+            const RoleIcon = role.icon;
+
+            return (
+              <button
+                key={role.name}
+                type="button"
+                onClick={() => setActiveRole(role.name)}
+                className={`flex cursor-pointer items-center justify-center gap-1 rounded-full border-0 px-2 py-1 text-[0.68rem] font-semibold leading-none transition-all duration-200 ease-out ${activeRole === role.name ? 'bg-slate-900 font-bold text-white' : 'bg-transparent text-slate-500'}`}
+              >
+                <RoleIcon size={11} strokeWidth={2} />
+                {role.name}
+              </button>
+            );
+          })}
         </div>
       </div>
     </header>
