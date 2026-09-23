@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -41,9 +42,11 @@ const routeMetadata = {
     metadata: "NORTHSTAR STUDIO / 24.11.2026",
   },
 };
+const roles = ["Employee", "Manager", "Admin"];
 
 function Topbar() {
   const location = useLocation();
+  const [activeRole, setActiveRole] = useState("Employee");
 
   // Find metadata for the currently active route.
   const currentRoute = routeMetadata[location.pathname];
@@ -75,7 +78,20 @@ function Topbar() {
       We will gradually add the role selector, search, upload,
       Ask EKA, notifications, and user menu here in later steps.
     */}
-      <div>{/* Topbar controls will be added here later. */}</div>
+      <div className="flex items-center">
+        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-slate-100 p-0.5">
+          {roles.map((role) => (
+            <button
+              key={role}
+              type="button"
+              onClick={() => setActiveRole(role)}
+              className={`rounded-full border-0 px-2.5 py-1 text-[0.72rem] font-semibold ${activeRole === role ? "bg-slate-900 text-white" : "bg-transparent text-slate-500"}`}
+            >
+              {role}
+            </button>
+          ))}
+        </div>
+      </div>
     </header>
   );
 }
