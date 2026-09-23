@@ -329,3 +329,12 @@
 .brand-logo:hover .brand-dot {
   transform: translateY(-2px) scale(1.2);
 }
+
+
+/* TOP BAR  */
+.topbar-page-title {
+  font-family: var(--font-serif);
+}
+.topbar-metadata {
+  font-family: var(--font-mono);
+}
