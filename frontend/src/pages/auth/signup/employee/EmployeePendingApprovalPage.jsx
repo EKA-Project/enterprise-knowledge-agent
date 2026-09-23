@@ -7,7 +7,7 @@ import '../../../../styles/auth.css';
 const NO_INVITE_STEPS = [
   { label: 'Verify', done: 'Verified' },
   { label: 'Found' },
-  { label: 'Create Account & Request' },
+  { label: 'Create Account' },
   { label: 'Approval' },
 ];
 
