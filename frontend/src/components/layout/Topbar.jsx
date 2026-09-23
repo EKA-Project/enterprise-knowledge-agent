@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
-  '/': {
+  '/dashboard': {
     title: 'Overview',
     metadata: 'NORTHSTAR STUDIO / 24.11.2026',
   },

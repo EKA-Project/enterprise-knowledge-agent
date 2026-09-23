@@ -4,17 +4,23 @@ import Topbar from "./Topbar.jsx";
 
 function AppLayout() {
   return (
-    <div>
-      {/* Sidebar and Topbar stay mounted across page navigation. */}
+    <div className="grid min-h-screen grid-cols-[15rem_1fr]">
+      {/* Sidebar occupies the first grid column. */}
       <Sidebar />
-      <Topbar />
 
-      {/* Only the content inside Outlet changes between routes. */}
-      <main>
-        <Outlet />
-      </main>
+      {/* Everything on the right side of the sidebar. */}
+      <div className="flex min-w-0 flex-col">
+        {/* Persistent top header. */}
+        <Topbar />
+
+        {/* Only this area changes between routes. */}
+        <main className="min-w-0 flex-1">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }
 
 export default AppLayout;
+
