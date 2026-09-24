@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Upload } from "lucide-react";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -106,6 +106,15 @@ function Topbar() {
         >
           <Search size={14} strokeWidth={2} />
           <span>Search</span>
+        </button>
+
+        {/* Upload control */}
+        <button
+          type="button"
+          className="flex h-7 cursor-pointer items-center gap-1.5 rounded-full border border-slate-900 bg-white px-4 text-[0.75rem] font-semibold text-slate-900 transition-colors duration-200 hover:bg-slate-50"
+        >
+          <Upload size={14} strokeWidth={2} />
+          <span>Upload</span>
         </button>
       </div>
     </header>
