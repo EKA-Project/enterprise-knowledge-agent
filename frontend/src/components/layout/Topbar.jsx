@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Search, UserRound, UsersRound, ShieldCheck } from "lucide-react";
+import { Search } from "lucide-react";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -44,9 +44,9 @@ const routeMetadata = {
   },
 };
 const roles = [
-  { name: "Employee", icon: UserRound },
-  { name: "Manager", icon: UsersRound },
-  { name: "Admin", icon: ShieldCheck },
+  { name: "Admin", icon: "🛡️" },
+  { name: "Manager", icon: "👔" },
+  { name: "Employee", icon: "👤" },
 ];
 
 function Topbar() {
@@ -85,22 +85,18 @@ function Topbar() {
     */}
       <div className="flex items-center gap-3">
         {/* Role switcher */}
-        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-white p-0.5">
-          {roles.map((role) => {
-            const RoleIcon = role.icon;
-
-            return (
-              <button
-                key={role.name}
-                type="button"
-                onClick={() => setActiveRole(role.name)}
-                className={`flex cursor-pointer items-center justify-center gap-1 rounded-full border-0 px-2 py-1 text-[0.68rem] font-semibold leading-none transition-all duration-200 ease-out ${activeRole === role.name ? "bg-slate-900 font-bold text-white" : "bg-transparent text-slate-500"}`}
-              >
-                <RoleIcon size={11} strokeWidth={2} />
-                {role.name}
-              </button>
-            );
-          })}
+        <div className="inline-flex items-center gap-[2px] rounded-full border border-slate-300 bg-[#eef2f6] p-[2px]">
+          {roles.map((role) => (
+            <button
+              key={role.name}
+              type="button"
+              onClick={() => setActiveRole(role.name)}
+              className={`flex cursor-pointer items-center gap-1 rounded-full px-2.5 py-1 text-[11px] transition-all duration-150 ${activeRole === role.name ? "bg-[#1e293b] font-bold text-white shadow-sm" : "bg-transparent font-semibold text-slate-500 hover:text-slate-800"}`}
+            >
+              <span>{role.icon}</span>
+              <span>{role.name}</span>
+            </button>
+          ))}
         </div>
 
         {/* Search control */}
