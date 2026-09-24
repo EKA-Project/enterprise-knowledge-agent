@@ -2,6 +2,8 @@ import { useState, Fragment } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
 import BackLink from '../../../../components/common/BackLink';
+import PasswordInput from '../../../../components/auth/PasswordInput';
+import PasswordStrength from '../../../../components/auth/PasswordStrength';
 import '../../../../styles/auth.css';
 
 const INVITE_STEPS = [
@@ -58,6 +60,7 @@ export default function EmployeeCreateAccountPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState('');
 
   const flow = location.state?.flow || 'invitation';
   const steps = flow === 'enterprise-id' ? NO_INVITE_STEPS : INVITE_STEPS;
@@ -107,21 +110,15 @@ export default function EmployeeCreateAccountPage() {
           <div className="password-fields-row">
             <div className="auth-field">
               <label htmlFor="password">Password</label>
-              <div className="password-input-wrap">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••••••••"
-                />
-                <button
-                  type="button"
-                  className="password-toggle-btn"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label="Toggle password visibility"
-                >
-                  👁️
-                </button>
-              </div>
+              <PasswordInput
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+                placeholder="••••••••••••••"
+              />
+              <PasswordStrength password={password} />
             </div>
 
             <div className="auth-field">
@@ -130,13 +127,7 @@ export default function EmployeeCreateAccountPage() {
             </div>
           </div>
 
-          <div className="password-strength-bar password-strength-bar--segmented">
-            <span className="password-strength-segment password-strength-segment--filled" />
-            <span className="password-strength-segment password-strength-segment--filled" />
-            <span className="password-strength-segment password-strength-segment--filled" />
-          </div>
-          <p className="password-strength-label">Strong enterprise password ✓</p>
-
+          
           <label className="terms-checkbox-row">
             <input type="checkbox" defaultChecked />
             <span>

@@ -2,6 +2,8 @@ import { useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
 import BackLink from '../../../../components/common/BackLink';
+import PasswordInput from '../../../../components/auth/PasswordInput';
+import PasswordStrength from '../../../../components/auth/PasswordStrength';
 import '../../../../styles/auth.css';
 // Admin account creation steps
 const ADMIN_STEPS = [
@@ -35,6 +37,7 @@ function StepIndicator({ steps, current }) {
 export default function AdminAccountPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState('');
 
   function handleContinue() {
     navigate('/signup/admin/enterprise');
@@ -68,24 +71,18 @@ export default function AdminAccountPage() {
             <input id="work-email" type="email" defaultValue="maya@northstar.studio" />
           </div>
 
-          <div className="password-fields-row">
+                   <div className="password-fields-row">
             <div className="auth-field">
               <label htmlFor="password">Password</label>
-              <div className="password-input-wrap">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••••••••"
-                />
-                <button
-                  type="button"
-                  className="password-toggle-btn"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label="Toggle password visibility"
-                >
-                  👁️
-                </button>
-              </div>
+              <PasswordInput
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+                placeholder="••••••••••••••"
+              />
+              <PasswordStrength password={password} />
             </div>
 
             <div className="auth-field">
@@ -93,14 +90,6 @@ export default function AdminAccountPage() {
               <input id="confirm-password" type="password" placeholder="••••••••••••••" />
             </div>
           </div>
-
-          <div className="password-strength-bar--segmented">
-            <span className="password-strength-segment password-strength-segment--filled" />
-            <span className="password-strength-segment password-strength-segment--filled" />
-            <span className="password-strength-segment password-strength-segment--filled" />
-          </div>
-          <p className="password-strength-label">Strong enterprise passphrase ✓</p>
-
           <div className="assigned-role-box">
             <span>Assigned Role:</span>
             <span className="assigned-role-badge">🛡️ Enterprise Administrator</span>
