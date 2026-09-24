@@ -12,6 +12,7 @@ import AdminEnterpriseInitializedPage from '../pages/auth/signup/admin/AdminEnte
 import AdminEnterpriseProfilePage from '../pages/auth/signup/admin/AdminEnterpriseProfilePage';
 import LoginPage from '../pages/auth/LoginPage';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
+import AdminInviteMembersPage from '../pages/auth/signup/admin/AdminInviteMembersPage';
 
 export default function AppRoutes() {
   return (
@@ -28,6 +29,7 @@ export default function AppRoutes() {
       <Route path="/signup/admin/enterprise" element={<AdminEnterpriseInitializedPage />} />
       <Route path="/signup/admin/confirmation" element={<AdminEnterpriseProfilePage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/signup/admin/invite" element={<AdminInviteMembersPage />} />
     </Routes>
   );
 }

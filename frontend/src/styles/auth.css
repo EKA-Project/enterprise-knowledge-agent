@@ -1050,3 +1050,109 @@
   font-size: 11.5px;
   margin-top: 8px;
 }
+/* ==========================================================================
+   Invite members page — email chips, add input, role dropdown
+   ========================================================================== */
+
+.invite-members-box {
+  border: 1px solid #e5eaea;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.invite-email-input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.invite-email-input-row input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #dfe6e6;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.invite-email-input-row input:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+.add-email-btn {
+  padding: 0 18px;
+  border: 1px solid var(--teal);
+  border-radius: 10px;
+  background: white;
+  color: var(--teal);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-email-btn:hover {
+  background: #eafaf6;
+}
+
+.email-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eef1f1;
+}
+
+.email-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 14px;
+  border: 1px solid #e5eaea;
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+.email-chip button {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f4f4;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.email-chip button:hover {
+  background: #e5eaea;
+}
+
+.default-role-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.default-role-row select {
+  padding: 10px 14px;
+  border: 1px solid #dfe6e6;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  background: white;
+}
+
+.invite-tip {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 16px;
+}
