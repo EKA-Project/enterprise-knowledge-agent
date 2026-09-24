@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Search, Upload } from "lucide-react";
+import { Search, Upload, Bell } from "lucide-react";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -85,7 +85,7 @@ function Topbar() {
     */}
       <div className="flex items-center gap-3">
         {/* Role switcher */}
-        <div className="inline-flex items-center gap-[2px] rounded-full border border-slate-300 bg-[#eef2f6] p-[2px]">
+        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-[#eef2f6] p-0.5">
           {roles.map((role) => (
             <button
               key={role.name}
@@ -124,6 +124,17 @@ function Topbar() {
         >
           <span>+</span>
           <span>Ask EKA</span>
+        </button>
+
+        {/* Notification control for the persistent application shell. */}
+        <button
+          type="button"
+          className="relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-slate-900 transition-colors duration-200 hover:bg-slate-100"
+        >
+          <Bell size={18} strokeWidth={2} />
+
+          {/* Small indicator showing that notifications are available. */}
+          <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
         </button>
       </div>
     </header>
