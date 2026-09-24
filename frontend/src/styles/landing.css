@@ -1,4 +1,3 @@
-
 @import "tailwindcss";
 
 :root {
@@ -18,7 +17,6 @@ html {
 
 body {
   min-height: 100vh;
-  margin: 0;
   overflow-x: hidden;
   color: var(--ink);
   background: var(--paper);
@@ -159,7 +157,9 @@ button {
   box-shadow: 0 11px 22px rgba(12, 151, 140, 0.21);
   font-size: 12px;
   font-weight: 800;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .button:hover {
@@ -213,7 +213,7 @@ button {
   box-shadow: 0 0 0 5px rgba(48, 199, 182, 0.11);
 }
 
-h1 {
+.auth-shell h1 {
   margin: 0;
   font-size: clamp(43px, 5.2vw, 72px);
   line-height: 1.07;
@@ -221,7 +221,7 @@ h1 {
   font-weight: 500;
 }
 
-h1 em {
+.auth-shell h1 em {
   color: var(--teal);
   font-style: normal;
   font-weight: 700;
