@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import ekaLogo from '../../assets/images/eka_logo.jpeg';
+import ekaBrain from '../../assets/images/eka_brain.jpeg';
 import '../../styles/auth.css';
 
 function ForgotPasswordIllustration() {
