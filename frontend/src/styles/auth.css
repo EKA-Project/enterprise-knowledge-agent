@@ -1031,3 +1031,22 @@
 .social-login-btn svg {
   flex-shrink: 0;
 }
+
+/* ==========================================================================
+   Forgot Password page — accent headline, prototype notice
+   ========================================================================== */
+
+.auth-headline--accent {
+  color: var(--teal);
+  font-style: italic;
+}
+
+.prototype-notice {
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #f7f9fa;
+  color: var(--muted);
+  font-size: 11.5px;
+  margin-top: 8px;
+}
