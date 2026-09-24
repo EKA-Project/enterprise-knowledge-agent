@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { UserRound, UsersRound, ShieldCheck } from "lucide-react";
+import { Search, UserRound, UsersRound, ShieldCheck } from "lucide-react";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -83,8 +83,9 @@ function Topbar() {
       We will gradually add the role selector, search, upload,
       Ask EKA, notifications, and user menu here in later steps.
     */}
-      <div className="flex items-center">
-       <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-white p-0.5">
+      <div className="flex items-center gap-3">
+        {/* Role switcher */}
+        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-white p-0.5">
           {roles.map((role) => {
             const RoleIcon = role.icon;
 
@@ -93,7 +94,7 @@ function Topbar() {
                 key={role.name}
                 type="button"
                 onClick={() => setActiveRole(role.name)}
-                className={`flex cursor-pointer items-center justify-center gap-1 rounded-full border-0 px-2 py-1 text-[0.68rem] font-semibold leading-none transition-all duration-200 ease-out ${activeRole === role.name ? 'bg-slate-900 font-bold text-white' : 'bg-transparent text-slate-500'}`}
+                className={`flex cursor-pointer items-center justify-center gap-1 rounded-full border-0 px-2 py-1 text-[0.68rem] font-semibold leading-none transition-all duration-200 ease-out ${activeRole === role.name ? "bg-slate-900 font-bold text-white" : "bg-transparent text-slate-500"}`}
               >
                 <RoleIcon size={11} strokeWidth={2} />
                 {role.name}
@@ -101,6 +102,15 @@ function Topbar() {
             );
           })}
         </div>
+
+        {/* Search control */}
+        <button
+          type="button"
+          className="flex h-7 cursor-pointer items-center gap-1.5 rounded-full border border-slate-900 bg-white px-4 text-[0.75rem] font-semibold text-slate-900 transition-colors duration-200 hover:bg-slate-50"
+        >
+          <Search size={14} strokeWidth={2} />
+          <span>Search</span>
+        </button>
       </div>
     </header>
   );
