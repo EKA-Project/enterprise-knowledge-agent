@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Search, Upload, Bell } from "lucide-react";
+import { Search, Upload, Bell, ChevronDown } from "lucide-react";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -135,6 +135,18 @@ function Topbar() {
 
           {/* Small indicator showing that notifications are available. */}
           <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        </button>
+
+        {/* User identity control for the persistent application shell. */}
+        <button
+          type="button"
+          className="flex cursor-pointer items-center gap-2 border-0 bg-transparent"
+        >
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#fca311] text-[0.75rem] font-bold text-white">
+            ER
+          </span>
+
+          <ChevronDown size={12} strokeWidth={2} />
         </button>
       </div>
     </header>
