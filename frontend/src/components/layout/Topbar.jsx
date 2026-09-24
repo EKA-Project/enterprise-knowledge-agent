@@ -116,6 +116,15 @@ function Topbar() {
           <Upload size={14} strokeWidth={2} />
           <span>Upload</span>
         </button>
+
+        {/* Ask EKA opens the primary EKA interaction from the persistent Topbar. */}
+        <button
+          type="button"
+          className="flex h-7 cursor-pointer items-center gap-1 rounded-full border border-slate-900 bg-slate-900 px-4 text-[0.75rem] font-semibold text-white transition-colors duration-200 hover:bg-slate-800"
+        >
+          <span>+</span>
+          <span>Ask EKA</span>
+        </button>
       </div>
     </header>
   );
