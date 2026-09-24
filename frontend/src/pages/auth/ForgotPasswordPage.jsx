@@ -42,3 +42,46 @@ function ForgotPasswordLeftPanel() {
     </div>
   );
 }
+ // right panel for forgot password page
+ function RecoveryForm() {
+  return (
+    <>
+      <div className="auth-card-brand">
+        <img src={ekaLogo} alt="EKA" />
+        EKA.
+      </div>
+
+      <div className="auth-badge">🔑 RECOVERY</div>
+      <h2 className="auth-title">Reset Password</h2>
+      <p className="auth-description">Enter corporate email to receive your security code.</p>
+
+      <div className="auth-field">
+        <label htmlFor="corporate-email">Corporate Email</label>
+        <input id="corporate-email" type="email" defaultValue="maya@northstar.studio" />
+      </div>
+
+      <button className="option-card-btn option-card-btn--teal">
+        Send Recovery Token
+        <span aria-hidden="true">→</span>
+      </button>
+
+      <p className="auth-footer">
+        <Link to="/login">← Return to Sign in</Link>
+      </p>
+    </>
+  );
+}
+//default export for forgot password page
+export default function ForgotPasswordPage() {
+  return (
+    <div className="auth-shell">
+      <ForgotPasswordLeftPanel />
+
+      <div className="auth-form-panel">
+        <div className="auth-card">
+          <RecoveryForm />
+        </div>
+      </div>
+    </div>
+  );
+}
