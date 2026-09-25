@@ -82,3 +82,9 @@ export const recentlySurfacedDocs = [
     status: 'indexed',
   },
 ];
+// Guides shown in the "Pinned guides" list
+export const pinnedGuides = [
+  { id: 'guide-1', title: 'The Northstar handbook' },
+  { id: 'guide-2', title: 'Working agreements' },
+  { id: 'guide-3', title: 'How we make decisions' },
+];
