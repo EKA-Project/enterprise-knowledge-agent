@@ -1,0 +1,19 @@
+/*
+  Gently scales the intelligence point in and out.
+  Keeps the motion subtle so the orb doesn't distract from the EKA core.
+*/
+@keyframes orbPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Applies the subtle pulse to an intelligence point */
+.orbit-orb-pulse {
+  animation: orbPulse 3s ease-in-out infinite alternate;
+}
