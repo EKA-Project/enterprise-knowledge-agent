@@ -1,6 +1,7 @@
 /*
-  Gently scales the intelligence point in and out.
-  Keeps the motion subtle so the orb doesn't distract from the EKA core.
+  Gently scales each intelligence point in and out.
+  Keeps the motion subtle so the orbs don't distract
+  from the EKA intelligence core.
 */
 @keyframes orbPulse {
   0%,
@@ -13,7 +14,90 @@
   }
 }
 
-/* Applies the subtle pulse to an intelligence point */
+/* Applies the subtle pulse to all intelligence points */
 .orbit-orb-pulse {
   animation: orbPulse 3s ease-in-out infinite alternate;
+}
+
+
+/*
+  PRIMARY ORBIT
+  --------------------------------------------------
+  Matches the visible primary orbit:
+  rotateX(68deg) rotateY(-18deg)
+
+  Starts at 0° and moves clockwise.
+*/
+@keyframes orbitPrimary {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.orbit-rotation-primary {
+  animation: orbitPrimary 12s linear infinite;
+}
+
+
+/*
+  SECONDARY ORBIT
+  --------------------------------------------------
+  Starts at 120° and moves counter-clockwise.
+*/
+@keyframes orbitSecondary {
+  from {
+    transform: rotate(120deg);
+  }
+
+  to {
+    transform: rotate(-240deg);
+  }
+}
+
+.orbit-rotation-secondary {
+  animation: orbitSecondary 15s linear infinite;
+}
+
+
+/*
+  TERTIARY ORBIT
+  --------------------------------------------------
+  Starts at 230° and moves clockwise.
+*/
+@keyframes orbitTertiary {
+  from {
+    transform: rotate(230deg);
+  }
+
+  to {
+    transform: rotate(590deg);
+  }
+}
+
+.orbit-rotation-tertiary {
+  animation: orbitTertiary 18s linear infinite;
+}
+
+
+/*
+  ORBIT PLANES
+  --------------------------------------------------
+  These define the 3D angle of each orbit.
+  They are separate from the movement animations.
+*/
+
+.primary-orbit-plane {
+  transform: rotateX(68deg) rotateY(-18deg);
+}
+
+.secondary-orbit-plane {
+  transform: rotateX(58deg) rotateY(22deg);
+}
+
+.tertiary-orbit-plane {
+  transform: rotateX(63deg) rotateY(2deg);
 }

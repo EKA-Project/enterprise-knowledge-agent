@@ -11,15 +11,41 @@ function SplashScreen() {
     <div className="min-h-screen flex flex-col items-center justify-center">
       {/* Intelligence visual */}
       <div className="relative flex items-center justify-center">
-        {/* Primary orbit — wider frame around EKA */}
+        {/* Primary orbit — main outer intelligence path */}
         <div className="absolute w-115 h-115 rounded-full border border-emerald-400/40 transform-[rotateX(68deg)_rotateY(-18deg)]"></div>
 
-        {/* Secondary orbit — wider inner orbit */}
-        <div className="absolute w-92.5 h-92.5 rounded-full border border-sky-400/25 transform-[rotateX(58deg)_rotateY(28deg)]"></div>
+        {/* Secondary orbit — crosses the primary at a different plane */}
+        <div className="absolute w-92.5 h-92.5 rounded-full border border-sky-400/25 transform-[rotateX(58deg)_rotateY(22deg)]"></div>
 
-        {/* Small intelligence point on the primary orbit */}
-        <div className="absolute w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)] translate-x-57.5 -translate-y-2"></div>
+        {/* Tertiary orbit — darker central depth layer */}
+        <div className="absolute w-105 h-105 rounded-full border border-slate-500/20 transform-[rotateX(63deg)_rotateY(2deg)]"></div>
 
+        {/* Green intelligence point — follows the primary orbit */}
+        <div className="absolute w-115 h-115 rounded-full primary-orbit-plane">
+          <div className="absolute inset-0 rounded-full orbit-rotation-primary">
+            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)] orbit-orb-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Blue intelligence point — follows the secondary orbit */}
+        <div className="absolute w-92.5 h-92.5 rounded-full secondary-orbit-plane">
+          <div className="absolute inset-0 rounded-full orbit-rotation-secondary">
+            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
+              <div className="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.7)] orbit-orb-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Purple intelligence point — follows the tertiary orbit */}
+        <div className="absolute w-105 h-105 rounded-full tertiary-orbit-plane">
+          <div className="absolute inset-0 rounded-full orbit-rotation-tertiary">
+            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
+              <div className="w-2 h-2 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.7)] orbit-orb-pulse"></div>
+            </div>
+          </div>
+        </div>
         {/* EKA intelligence core */}
         <img
           src={ekaBrain}
