@@ -85,16 +85,20 @@ function Topbar() {
     */}
       <div className="flex items-center gap-3">
         {/* Role switcher */}
-        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-300 bg-[#eef2f6] p-0.5">
+        <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-600 bg-[#eef2f6] p-0.5">
           {roles.map((role) => (
             <button
               key={role.name}
               type="button"
               onClick={() => setActiveRole(role.name)}
-              className={`flex cursor-pointer items-center gap-1 rounded-full px-2.5 py-1 text-[11px] transition-all duration-150 ${activeRole === role.name ? "bg-[#1e293b] font-bold text-white shadow-sm" : "bg-transparent font-semibold text-slate-500 hover:text-slate-800"}`}
+              className={`flex cursor-pointer items-center gap-0.5 rounded-full px-2.5 py-1 transition-all duration-150 ${
+                activeRole === role.name
+                  ? "bg-[#1e293b] font-bold text-white shadow-sm"
+                  : "bg-transparent font-semibold text-slate-500 hover:text-slate-800"
+              }`}
             >
-              <span>{role.icon}</span>
-              <span>{role.name}</span>
+              <span className="text-[10px] leading-none">{role.icon}</span>
+              <span className="text-[11px]">{role.name}</span>
             </button>
           ))}
         </div>
@@ -102,28 +106,28 @@ function Topbar() {
         {/* Search control */}
         <button
           type="button"
-          className="flex h-7 cursor-pointer items-center gap-1.5 rounded-full border border-slate-900 bg-white px-4 text-[0.75rem] font-semibold text-slate-900 transition-colors duration-200 hover:bg-slate-50"
+          className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-slate-900 bg-white px-4 py-1 text-[11px] font-semibold text-slate-900 transition-colors duration-200 hover:bg-slate-50"
         >
           <Search size={14} strokeWidth={2} />
-          <span>Search</span>
+          <span className="text-[12px] font-bold">Search</span>
         </button>
 
         {/* Upload control */}
         <button
           type="button"
-          className="flex h-7 cursor-pointer items-center gap-1.5 rounded-full border border-slate-900 bg-white px-4 text-[0.75rem] font-semibold text-slate-900 transition-colors duration-200 hover:bg-slate-50"
+          className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-slate-900 bg-white px-4 py-1 text-[11px] font-semibold text-slate-900 transition-colors duration-200 hover:bg-slate-50"
         >
           <Upload size={14} strokeWidth={2} />
-          <span>Upload</span>
+          <span className="text-[12px] font-bold">Upload</span>
         </button>
 
-        {/* Ask EKA opens the primary EKA interaction from the persistent Topbar. */}
+        {/* Ask EKA control */}
         <button
           type="button"
-          className="flex h-7 cursor-pointer items-center gap-1 rounded-full border border-slate-900 bg-slate-900 px-4 text-[0.75rem] font-semibold text-white transition-colors duration-200 hover:bg-slate-800"
+          className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-slate-900 bg-slate-900 px-4 py-1 text-[11px] font-semibold text-white transition-colors duration-200 hover:bg-slate-800"
         >
-          <span>+</span>
-          <span>Ask EKA</span>
+          <span className="text-[12px] ">+</span>
+          <span className="text-[12px] font-bold">Ask EKA</span>
         </button>
 
         {/* Notification control for the persistent application shell. */}

@@ -569,7 +569,7 @@ button {
     padding-bottom: 0;
   }
 
-  h1 {
+  .auth-shell h1 {
     font-size: clamp(42px, 12vw, 64px);
     letter-spacing: -2.5px;
   }
