@@ -46,6 +46,43 @@ function SplashScreen() {
             </div>
           </div>
         </div>
+
+        {/* Connected knowledge indicator */}
+        <div className="absolute top-8 -left-38 z-20">
+          <div className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white/80 px-5 py-2.5 shadow-lg backdrop-blur-md">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500">
+              <span className="text-sm font-semibold">42</span>
+            </div>
+
+            <div>
+              <div className="text-sm font-medium text-slate-800">
+                42 documents
+              </div>
+              <div className="text-[10px] lowercase tracking-wider text-emerald-500">
+                All knowledge connected ✓
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Ask anything indicator */}
+        <div className="absolute bottom-8 -right-38 z-20">
+          <div className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white/80 px-5 py-2.5 shadow-lg backdrop-blur-md">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-500">
+              <span className="text-sm">✦</span>
+            </div>
+
+            <div>
+              <div className="text-sm font-medium text-slate-800">
+                Ask anything
+              </div>
+              <div className="text-[10px] lowercase tracking-wider text-slate-700">
+                Answers with context
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* EKA intelligence core */}
         <img
           src={ekaBrain}
