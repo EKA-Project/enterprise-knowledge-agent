@@ -7,11 +7,6 @@
   --font-sans: "Plus Jakarta Sans", -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-
-  /* ==========================================================================
-   ATMOSPHERE 14: Sky Blue Clarity (Minimal Morning Sky, Azure & Slate Ink)
-   Eye-Comfort Light Canvas + Deep Midnight Sky Sidebar + Luminous Azure Accents
-   ========================================================================== */
   /* Sidebar Palette (Deep Midnight Sky / Celestial Blue) */
   --sidebar-bg: #0c233c;
   --sidebar-text: #e0f2fe;
@@ -30,17 +25,17 @@
   --bg-glass: rgba(240, 246, 252, 0.94);
 
   /* Primary & Accent Tones (Calm Sky Blue 600 & Vivid Sky Azure) */
-  --primary: #0284c7;
-  --primary-hover: #0369a1;
+  --primary: #0a75aa;
+  --primary-hover: #4eb4eb;
   --primary-light: #e0f2fe;
   --primary-glow: rgba(2, 132, 199, 0.18);
   --primary-contrast: #ffffff;
 
-  --accent-gold: #38bdf8;
-  --accent-gold-hover: #0ea5e9;
-  --accent-coral: #0284c7;
-  --accent-sage: #e0f2fe;
-  --accent-sage-text: #0369a1;
+  --accent-highlight: #38bdf8;
+  --accent-highlight-hover: #0ea5e9;
+  --accent-secondary: #0284c7;
+  --accent-chip: #e0f2fe;
+  --accent-chip-text: #0369a1;
 
   /* Borders & Dividers (Ultra-Soft Sky Tinted Lines) */
   --border-subtle: #d9eaf5;
@@ -71,6 +66,16 @@
   --highlight-text: #082035;
   --highlight-border: #0284c7;
   --highlight-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+}
 
-
+/* Status Semantic Palette */
+:root {
+  --status-success: #15803d;
+  --status-success-bg: #dcfce7;
+  --status-warning: #b45309;
+  --status-warning-bg: #fef3c7;
+  --status-danger: #b91c1c;
+  --status-danger-bg: #fee2e2;
+  --status-info: #0369a1;
+  --status-info-bg: #e0f2fe;
 }
