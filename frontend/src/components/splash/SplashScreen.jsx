@@ -1,5 +1,6 @@
 import ekaBrain from "../../assets/images/eka_brain_bg.png";
 import "../../styles/splash.css";
+import { useEffect, useState } from "react";
 // SplashScreen is responsible only for displaying
 // the initial EKA loading experience.
 //
@@ -7,8 +8,42 @@ import "../../styles/splash.css";
 // will be handled by App.jsx.
 
 function SplashScreen() {
+  const [phase, setPhase] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPhase((currentPhase) => {
+        if (currentPhase === 3) {
+          return 3;
+        }
+
+        return currentPhase + 1;
+      });
+    }, 1500);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const phases = [
+    {
+      text: "Establishing secure pipeline",
+      progress: "0%",
+    },
+    {
+      text: "Verifying organization SSO",
+      progress: "33%",
+    },
+    {
+      text: "Optimizing knowledge layer",
+      progress: "66%",
+    },
+    {
+      text: "System ready",
+      progress: "100%",
+    },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_50%_45%,rgba(16,185,129,0.10),transparent_45%),linear-gradient(135deg,#f0fdf4_0%,#ffffff_45%,#f0fdfa_100%)]">
       {/* Intelligence visual */}
       <div className="relative flex items-center justify-center">
         {/* Primary orbit — main outer intelligence path */}
@@ -94,21 +129,29 @@ function SplashScreen() {
       {/* Loading information positioned near the bottom */}
       <div className="absolute bottom-8 flex flex-col items-center">
         {/* EKA brand identity */}
-        <div className="text-5xl font-semibold tracking-wide">eka.</div>
+        <div
+          className="text-4xl font-semibold tracking-wide"
+          style={{ fontFamily: "var(--font-serif)" }}
+        >
+          eka.
+        </div>
 
         {/* Describes the EKA intelligence layer */}
         <div className="text-xs tracking-[0.3em] uppercase">
           INTELLIGENCE LAYER
         </div>
 
-        {/* Shows initialization progress */}
+        {/* Initialization progress */}
         <div className="mt-4 w-64 h-1 rounded-full bg-slate-200 overflow-hidden">
-          <div className="h-full w-1/2 rounded-full bg-sky-500"></div>
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-sky-500 via-emerald-400 to-pink-500 transition-all duration-700"
+            style={{ width: phases[phase].progress }}
+          ></div>
         </div>
 
-        {/* Current initialization status */}
-        <div className="mt-3 text-[10px] tracking-[0.25em] uppercase text-slate-500">
-          Initializing EKA...
+        {/* Current initialization stage */}
+        <div className="mt-3 text-[8px] tracking-[0.15em] uppercase text-slate-500">
+          {phases[phase].text}
         </div>
       </div>
     </div>
