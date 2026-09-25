@@ -54,3 +54,31 @@ export const knowledgeCategories = [
     updatedLabel: 'Updated this week',
   },
 ];
+
+// Documents shown in the "Recently surfaced" list
+export const recentlySurfacedDocs = [
+  {
+    id: 'doc-1',
+    title: 'Q4 2024 Product Strategy',
+    fileType: 'PDF',
+    updatedLabel: 'Updated today, 9:42 am',
+    size: '2.4 MB',
+    status: 'indexed',
+  },
+  {
+    id: 'doc-2',
+    title: 'Remote work principles',
+    fileType: 'DOCX',
+    updatedLabel: 'Updated yesterday',
+    size: '840 KB',
+    status: 'indexed',
+  },
+  {
+    id: 'doc-3',
+    title: 'Customer interview synthesis',
+    fileType: 'PDF',
+    updatedLabel: 'Updated nov 18, 2024',
+    size: '5.1 MB',
+    status: 'indexed',
+  },
+];
