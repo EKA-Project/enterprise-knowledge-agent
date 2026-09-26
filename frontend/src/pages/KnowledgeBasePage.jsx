@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { Search, LayoutGrid } from 'lucide-react';
+import TopicFilterPills from '../components/knowledge/TopicFilterPills.jsx';
+import { topicFilters } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
 
 // Knowledge Base landing page — browse the collective knowledge, filter by
@@ -6,6 +9,10 @@ import '../styles/knowledge.css';
 // Note: page title/subtitle are NOT rendered here — Topbar already shows
 // them based on the current route (see routeMetadata in Topbar.jsx).
 export default function KnowledgeBasePage() {
+  // Active topic filter — lifted up here so the category grid (next step)
+  // can also read/react to it.
+  const [activeTopic, setActiveTopic] = useState('all');
+
   return (
     <div className="px-6 py-6">
       {/* Hero section */}
@@ -40,6 +47,14 @@ export default function KnowledgeBasePage() {
           className="w-full border-0 bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
         />
       </div>
+      {/* Topic filter pills */}
+        <TopicFilterPills
+          topics={topicFilters}
+          activeTopic={activeTopic}
+          onChange={setActiveTopic}
+        />
     </div>
   );
 }
+
+     

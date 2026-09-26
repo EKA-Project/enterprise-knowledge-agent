@@ -99,3 +99,17 @@ export const pinnedGuides = [
   { id: 'guide-2', title: 'Working agreements' },
   { id: 'guide-3', title: 'How we make decisions' },
 ];
+
+
+// Topic pills shown above the category grid.
+// Note: "Company foundations" intentionally has no filter pill — the
+// reference design only shows 5 topic pills even though there are
+// 6 category cards below.
+export const topicFilters = [
+  { id: 'all', label: 'All topics' },
+  { id: 'people-culture', label: 'People & Culture' },
+  { id: 'product-engineering', label: 'Product & Engineering' },
+  { id: 'finance-legal', label: 'Finance & Legal' },
+  { id: 'sales-marketing', label: 'Sales & Marketing' },
+  { id: 'security-it', label: 'Security & IT' },
+];
