@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout.jsx";
 import { AuthProvider } from "../context/AuthContext.jsx";
+import RoleGuard from "../components/common/RoleGuard.jsx";
 
 // Auth pages
 import LandingPage from "../pages/auth/LandingPage";
@@ -71,8 +72,8 @@ function AppRoutes() {
         <Route path="/knowledge-base" element={<h1>Knowledge Base</h1>} />
         <Route path="/documents" element={<h1>Documents</h1>} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
-        <Route path="/analytics" element={<h1>Analytics</h1>} />
-        <Route path="/organization" element={<h1>Organization</h1>} />
+        <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
+        <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
         <Route path="/settings" element={<h1>Settings</h1>} />
       </Route>
     </Routes>
