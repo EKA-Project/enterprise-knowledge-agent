@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout.jsx";
+import { AuthProvider } from "../context/AuthContext.jsx";
 
 // Auth pages
 import LandingPage from "../pages/auth/LandingPage";
@@ -17,7 +18,7 @@ import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMembersPage";
 
 // EKA pages
-
+import Dashboard from "../pages/DashboardPage.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
@@ -64,8 +65,8 @@ function AppRoutes() {
       />
 
       {/* EKA application */}
-      <Route element={<AppLayout />}>
-        <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+      <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<h1>Knowledge Base</h1>} />
         <Route path="/documents" element={<h1>Documents</h1>} />

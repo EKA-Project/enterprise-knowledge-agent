@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useContext } from "react";
 import { Search, Upload, Bell, ChevronDown } from "lucide-react";
+import AuthContext from "../../context/AuthContext.jsx";
 
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
@@ -46,7 +47,7 @@ const roles = [
 
 function Topbar() {
   const location = useLocation();
-  const [activeRole, setActiveRole] = useState("Employee");
+  const { activeRole, setActiveRole } = useContext(AuthContext);
 
   const currentRoute = routeMetadata[location.pathname];
 
