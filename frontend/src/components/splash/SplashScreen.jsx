@@ -90,7 +90,10 @@ function SplashScreen({ onComplete }) {
     // SPLASH SCREEN CONTAINER
     // ============================================================
 
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_50%_45%,rgba(16,185,129,0.10),transparent_45%),linear-gradient(135deg,#f0fdf4_0%,#ffffff_45%,#f0fdfa_100%)]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_50%_45%,rgba(16,185,129,0.08),transparent_45%),linear-gradient(135deg,#eef8f7_0%,#f8fafc_38%,#f1f7f8_70%,#eaf7f5_100%)]">
+      {/* Decorative background glows */}
+      <div className="page-glow page-glow--mint" />
+      <div className="page-glow page-glow--lavender" />
       {/* ========================================================
           INTELLIGENCE VISUAL
           Contains the orbit system, information cards,
@@ -105,13 +108,13 @@ function SplashScreen({ onComplete }) {
         -------------------------------------------------------- */}
 
         {/* Primary orbit */}
-        <div className="absolute w-115 h-115 rounded-full border border-emerald-400/40 transform-[rotateX(68deg)_rotateY(-18deg)]"></div>
+        <div className="absolute w-115 h-115 rounded-full border border-emerald-400/60 transform-[rotateX(68deg)_rotateY(-18deg)]"></div>
 
         {/* Secondary orbit */}
-        <div className="absolute w-92.5 h-92.5 rounded-full border border-sky-400/25 transform-[rotateX(58deg)_rotateY(22deg)]"></div>
+        <div className="absolute w-92.5 h-92.5 rounded-full border border-sky-400/45 transform-[rotateX(58deg)_rotateY(22deg)]"></div>
 
         {/* Tertiary orbit */}
-        <div className="absolute w-105 h-105 rounded-full border border-slate-500/20 transform-[rotateX(63deg)_rotateY(2deg)]"></div>
+        <div className="absolute w-105 h-105 rounded-full border border-slate-500/40 transform-[rotateX(63deg)_rotateY(2deg)]"></div>
 
         {/* --------------------------------------------------------
             INTELLIGENCE POINTS
