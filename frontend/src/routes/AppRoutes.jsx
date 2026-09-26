@@ -18,7 +18,7 @@ import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMembersPage";
 
 // EKA pages
-import Dashboard from "../pages/DashboardPage.jsx";
+import Dashboard from "../pages/Dashboard.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
