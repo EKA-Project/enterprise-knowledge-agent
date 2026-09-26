@@ -3,12 +3,23 @@
 // would return, so swapping this for a real fetch later won't require
 // changing the components that consume it.
 
+
+// Icon components imported directly (same pattern as navigation.js),
+// so each category object can hold the icon as a component reference.
+import {
+  Users,
+  SlidersHorizontal,
+  FileText,
+  Tag,
+  ShieldCheck,
+  BookOpen,
+} from 'lucide-react';
 // Topic categories shown in the browse grid
 export const knowledgeCategories = [
   {
     id: 'people-culture',
     title: 'People & Culture',
-    icon: '👥',
+    icon: Users,
     iconTheme: 'mint',
     docCount: 24,
     updatedLabel: 'Updated this week',
@@ -16,7 +27,7 @@ export const knowledgeCategories = [
   {
     id: 'product-engineering',
     title: 'Product & Engineering',
-    icon: '🎚️',
+    icon: SlidersHorizontal,
     iconTheme: 'lavender',
     docCount: 18,
     updatedLabel: 'Updated this week',
@@ -24,7 +35,7 @@ export const knowledgeCategories = [
   {
     id: 'finance-legal',
     title: 'Finance & Legal',
-    icon: '📄',
+    icon: FileText,
     iconTheme: 'gold',
     docCount: 12,
     updatedLabel: 'Updated this week',
@@ -32,7 +43,7 @@ export const knowledgeCategories = [
   {
     id: 'sales-marketing',
     title: 'Sales & Marketing',
-    icon: '🏷️',
+    icon: Tag,
     iconTheme: 'pink',
     docCount: 16,
     updatedLabel: 'Updated this week',
@@ -40,7 +51,7 @@ export const knowledgeCategories = [
   {
     id: 'security-it',
     title: 'Security & IT',
-    icon: '🛡️',
+    icon: ShieldCheck,
     iconTheme: 'blue',
     docCount: 9,
     updatedLabel: 'Updated this week',
@@ -48,7 +59,7 @@ export const knowledgeCategories = [
   {
     id: 'company-foundations',
     title: 'Company foundations',
-    icon: '📖',
+    icon: BookOpen,
     iconTheme: 'tan',
     docCount: 7,
     updatedLabel: 'Updated this week',
