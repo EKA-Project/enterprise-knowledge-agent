@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
   will be handled by App.jsx.
 */
 
-function SplashScreen() {
+function SplashScreen({ onComplete }) {
   // ============================================================
   // INITIALIZATION STATE
   // ============================================================
@@ -45,6 +45,19 @@ function SplashScreen() {
     return () => clearInterval(timer);
   }, []);
 
+  /*
+  Once the final initialization phase is reached,
+  notify App that the splash screen has completed.
+
+  This runs after React has finished updating the phase,
+  so we avoid updating App while SplashScreen is rendering.
+*/
+  useEffect(() => {
+    if (phase === 3) {
+      onComplete();
+    }
+  }, [phase, onComplete]);
+
   // ============================================================
   // INITIALIZATION PHASE CONFIGURATION
   // ============================================================
@@ -78,7 +91,6 @@ function SplashScreen() {
     // ============================================================
 
     <div className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_50%_45%,rgba(16,185,129,0.10),transparent_45%),linear-gradient(135deg,#f0fdf4_0%,#ffffff_45%,#f0fdfa_100%)]">
-
       {/* ========================================================
           INTELLIGENCE VISUAL
           Contains the orbit system, information cards,
@@ -86,7 +98,6 @@ function SplashScreen() {
       ======================================================== */}
 
       <div className="relative flex items-center justify-center">
-
         {/* --------------------------------------------------------
             ORBIT RINGS
             Three independent orbital paths create the
@@ -101,7 +112,6 @@ function SplashScreen() {
 
         {/* Tertiary orbit */}
         <div className="absolute w-105 h-105 rounded-full border border-slate-500/20 transform-[rotateX(63deg)_rotateY(2deg)]"></div>
-
 
         {/* --------------------------------------------------------
             INTELLIGENCE POINTS
@@ -136,7 +146,6 @@ function SplashScreen() {
           </div>
         </div>
 
-
         {/* --------------------------------------------------------
             KNOWLEDGE INDICATOR
             Shows the amount of connected knowledge available
@@ -144,12 +153,9 @@ function SplashScreen() {
         -------------------------------------------------------- */}
 
         <div className="absolute top-8 -left-38 z-20">
-         <div className="eka-info-card eka-documents-card flex items-center gap-3 rounded-xl px-5 py-2.5">
-
+          <div className="eka-info-card eka-documents-card flex items-center gap-3 rounded-xl px-5 py-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500">
-              <span className="text-sm font-semibold">
-                42
-              </span>
+              <span className="text-sm font-semibold">42</span>
             </div>
 
             <div>
@@ -161,10 +167,8 @@ function SplashScreen() {
                 All knowledge connected ✓
               </div>
             </div>
-
           </div>
         </div>
-
 
         {/* --------------------------------------------------------
             ASK ANYTHING INDICATOR
@@ -174,11 +178,8 @@ function SplashScreen() {
 
         <div className="absolute bottom-8 -right-38 z-20">
           <div className="eka-info-card eka-ask-card flex items-center gap-3 rounded-xl px-5 py-2.5">
-
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-500">
-              <span className="text-sm">
-                ✦
-              </span>
+              <span className="text-sm">✦</span>
             </div>
 
             <div>
@@ -190,10 +191,8 @@ function SplashScreen() {
                 Answers with context
               </div>
             </div>
-
           </div>
         </div>
-
 
         {/* --------------------------------------------------------
             EKA INTELLIGENCE CORE
@@ -206,9 +205,7 @@ function SplashScreen() {
           alt="EKA Intelligence"
           className="relative z-10 w-64 h-64 object-contain"
         />
-
       </div>
-
 
       {/* ========================================================
           LOADING / INITIALIZATION INFORMATION
@@ -217,7 +214,6 @@ function SplashScreen() {
       ======================================================== */}
 
       <div className="absolute bottom-8 flex flex-col items-center">
-
         {/* EKA brand identity */}
         <div
           className="text-4xl font-semibold tracking-wide"
@@ -239,7 +235,7 @@ function SplashScreen() {
 
         <div className="mt-4 w-64 h-1 rounded-full bg-slate-200 overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-sky-500 via-emerald-400 to-pink-500 transition-all duration-700"
+            className="h-full rounded-full bg-linear-to-r from-sky-500 via-emerald-400 to-pink-500 transition-all duration-700"
             style={{ width: phases[phase].progress }}
           ></div>
         </div>
@@ -248,9 +244,7 @@ function SplashScreen() {
         <div className="mt-3 text-[8px] tracking-[0.15em] uppercase text-slate-500">
           {phases[phase].text}
         </div>
-
       </div>
-
     </div>
   );
 }
