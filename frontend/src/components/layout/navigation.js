@@ -29,8 +29,18 @@ const navigation = {
   ],
 
   administration: [
-    { label: "Analytics", path: "/analytics", icon: BarChart3 },
-    { label: "Organization", path: "/organization", icon: Building2 },
+    {
+      label: "Analytics",
+      path: "/analytics",
+      icon: BarChart3,
+      roles: ["Admin"],
+    },
+    {
+      label: "Organization",
+      path: "/organization",
+      icon: Building2,
+      roles: ["Admin"],
+    },
   ],
 
   settings: [{ label: "Settings", path: "/settings", icon: Settings }],
