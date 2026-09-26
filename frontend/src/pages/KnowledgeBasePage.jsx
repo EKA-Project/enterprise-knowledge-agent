@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Search, LayoutGrid } from 'lucide-react';
 import TopicFilterPills from '../components/knowledge/TopicFilterPills.jsx';
-import { topicFilters } from '../components/knowledge/KnowledgeData.js';
+import CategoryCard from '../components/knowledge/CategoryCard.jsx';
+import { topicFilters, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
 
 // Knowledge Base landing page — browse the collective knowledge, filter by
@@ -53,6 +54,18 @@ export default function KnowledgeBasePage() {
           activeTopic={activeTopic}
           onChange={setActiveTopic}
         />
+
+                {/* Category grid — filtered by the active topic pill.
+            "all" shows every category; a specific topic shows only its
+            matching card (Company foundations has no pill, so it only
+            appears under "All topics"). */}
+        <div className="grid grid-cols-3 gap-6">
+          {knowledgeCategories
+            .filter((category) => activeTopic === 'all' || category.id === activeTopic)
+            .map((category) => (
+              <CategoryCard key={category.id} category={category} />
+            ))}
+        </div>
     </div>
   );
 }
