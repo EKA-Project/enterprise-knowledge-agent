@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --sidebar-bg: #000000;
+  --sidebar-text: #e5e5e5;
+  --sidebar-text-muted: #fca311;
+  --sidebar-border: rgba(252, 163, 17, 0.25);
+  --sidebar-active-bg: #fca311;
+  --sidebar-active-text: #000000;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+}
