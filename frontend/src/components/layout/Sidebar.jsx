@@ -26,6 +26,8 @@ function Sidebar() {
           (item) => !item.roles || item.roles.includes(activeRole),
         );
 
+        if (visibleItems.length === 0) return null;
+
         return (
           <section key={sectionName} className="mb-6">
             <h2 className="mb-3 font-(--font-mono) text-[9.5px] uppercase tracking-[0.12em] text-(--sidebar-text-muted)">
