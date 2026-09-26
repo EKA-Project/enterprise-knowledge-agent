@@ -1,41 +1,14 @@
-@import "tailwindcss";
+/* =========================================================
+   Custom visual effects that Tailwind cannot express cleanly.
+   Organized by feature: background glows, brand mark, hero
+   controls, central illustration, floating cards, avatars,
+   ambient dots, theme toggle, and responsive tweaks.
+   ========================================================= */
 
-:root {
-  --ink: #102b3d;
-  --muted: #6f8390;
-  --teal: #0e9d92;
-  --paper: #f4f9fb;
-}
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-height: 100vh;
-  overflow-x: hidden;
-  color: var(--ink);
-  background: var(--paper);
-  font-family: "Manrope", sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button {
-  font: inherit;
-}
-
-/* ==========================================================================
-   Page-wide decorative glows
-   ========================================================================== */
-
+/* ---------- Background glows ---------- */
+/* Soft blurred circles placed behind the hero layout to create
+   an ambient, colorful backdrop. */
 .page-glow {
   position: fixed;
   border-radius: 50%;
@@ -43,168 +16,73 @@ button {
 }
 
 .page-glow--mint {
-  width: 510px;
-  height: 510px;
   top: 80px;
   right: -170px;
+  width: 510px;
+  height: 510px;
   background: rgba(196, 244, 239, 0.42);
 }
 
 .page-glow--lavender {
-  width: 280px;
-  height: 280px;
   bottom: -130px;
   left: -75px;
+  width: 280px;
+  height: 280px;
   background: rgba(222, 223, 255, 0.46);
 }
 
-/* ==========================================================================
-   Shared layout containers
-   ========================================================================== */
 
-.site-header,
-.hero {
-  position: relative;
-  z-index: 1;
-  width: min(1170px, calc(100% - 64px));
-  margin: auto;
-}
-
-/* ==========================================================================
-   Header / Navbar
-   ========================================================================== */
-
-.site-header {
-  height: 88px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: -0.8px;
-}
-
+/* ---------- Brand mark (leaf logo) ---------- */
+/* Rounded badge containing a hand-built leaf shape: a curved
+   border, a center vein, and a small stem. */
 .brand-mark {
   display: grid;
+  place-items: center;
   width: 31px;
   height: 31px;
-  place-items: center;
   border-radius: 10px;
   background: #89e5db;
   box-shadow: 0 9px 20px rgba(21, 175, 158, 0.18);
 }
 
 .brand-mark span {
-  width: 15px;
-  height: 13px;
+  position: relative;
+  display: block;
+  width: 14px;
+  height: 18px;
   border: 2px solid #146a73;
-  border-top-color: transparent;
-  border-radius: 2px 10px 8px 10px;
-  transform: rotate(-32deg);
+  border-radius: 100% 0 100% 0;
+  transform: rotate(45deg);
 }
 
-.brand-dot {
-  color: var(--teal);
+.brand-mark span::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 1px;
+  width: 10px;
+  height: 2px;
+  background: #146a73;
+  transform: rotate(-45deg);
+  transform-origin: left center;
 }
 
-.main-nav {
-  display: flex;
-  gap: 36px;
-  margin-left: 78px;
-  color: #677b87;
-  font-size: 12px;
-  font-weight: 700;
+.brand-mark span::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -3px;
+  width: 7px;
+  height: 2px;
+  border-radius: 2px;
+  background: #146a73;
+  transform: rotate(-45deg);
 }
 
-.main-nav a,
-.login-link {
-  transition: color 0.2s ease;
-}
 
-.main-nav a:hover,
-.login-link:hover {
-  color: var(--teal);
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-/* ==========================================================================
-   Buttons
-   ========================================================================== */
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 19px;
-  min-height: 46px;
-  padding: 0 19px;
-  border-radius: 12px;
-  color: white;
-  background: var(--teal);
-  box-shadow: 0 11px 22px rgba(12, 151, 140, 0.21);
-  font-size: 12px;
-  font-weight: 800;
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease;
-}
-
-.button:hover {
-  transform: translateY(-2px);
-  background: #087f78;
-}
-
-.button span {
-  font-size: 20px;
-  line-height: 0;
-  font-weight: 400;
-}
-
-.button--small {
-  min-height: 45px;
-  padding: 0 19px;
-}
-
-/* ==========================================================================
-   Hero — layout + copy (left half)
-   ========================================================================== */
-
-.hero {
-  min-height: 650px;
-  display: grid;
-  grid-template-columns: 51% 49%;
-  align-items: center;
-  padding-top: 33px;
-}
-
-.hero-copy {
-  padding-bottom: 34px;
-}
-
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 25px;
-  color: #398b8e;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.35px;
-}
-
+/* ---------- Small labels & action icons ---------- */
+/* Tiny status dot and circular play button used inside the
+   Tailwind content blocks in the hero. */
 .eyebrow-dot {
   width: 9px;
   height: 9px;
@@ -213,48 +91,11 @@ button {
   box-shadow: 0 0 0 5px rgba(48, 199, 182, 0.11);
 }
 
-.auth-shell h1 {
-  margin: 0;
-  font-size: clamp(43px, 5.2vw, 72px);
-  line-height: 1.07;
-  letter-spacing: -4px;
-  font-weight: 500;
-}
-
-.auth-shell h1 em {
-  color: var(--teal);
-  font-style: normal;
-  font-weight: 700;
-}
-
-.hero-description {
-  max-width: 540px;
-  margin: 26px 0 30px;
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.85;
-}
-
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.watch-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  color: #4b6978;
-  font-size: 12px;
-  font-weight: 800;
-}
-
 .play-icon {
   display: grid;
+  place-items: center;
   width: 27px;
   height: 27px;
-  place-items: center;
   padding-left: 2px;
   border-radius: 50%;
   color: #24bdae;
@@ -262,66 +103,45 @@ button {
   font-size: 9px;
 }
 
-/* ==========================================================================
-   Trust row (avatars + text)
-   ========================================================================== */
 
-.trust-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 53px;
-  color: #8b9ca5;
-  font-size: 9px;
-  line-height: 1.65;
-}
-
-.trust-row p {
-  margin: 0;
-}
-
-.trust-row strong {
-  color: #4e6977;
-}
-
-.avatar-stack {
-  display: flex;
-}
-
-.avatar-stack span {
-  display: grid;
-  width: 25px;
-  height: 25px;
-  place-items: center;
-  margin-right: -4px;
-  border: 2px solid var(--paper);
+/* ---------- Central illustration: orbits, core, shadow ---------- */
+/* Layered rings, a glowing blurred shadow, and the central
+   "core" card with a gradient icon tile and caption text.
+   Kept as custom CSS because the transforms compose into a
+   single illustrated object. */
+.orbit {
+  position: absolute;
+  top: 118px;
+  left: 50%;
+  width: 455px;
+  height: 240px;
+  border: 1px solid rgba(150, 220, 216, 0.52);
   border-radius: 50%;
-  color: #54717c;
-  background: #c3eef0;
-  font-size: 7px;
-  font-weight: 800;
+  transform: translateX(-42%) rotate(18deg);
 }
 
-.avatar-stack span:first-child {
-  background: #d9c7f4;
+.orbit--two {
+  border-color: rgba(170, 190, 232, 0.5);
+  transform: translateX(-42%) rotate(-25deg);
 }
 
-.avatar-stack span:nth-child(3) {
-  background: #f2cfb6;
+.orbit--three {
+  width: 365px;
+  height: 300px;
+  border-color: rgba(193, 230, 226, 0.45);
+  transform: translateX(-46%) rotate(65deg);
 }
 
-.avatar-stack span:last-child {
-  background: #b9eadc;
-}
-
-/* ==========================================================================
-   Hero art — visual side (right half): core card, orbits, floating cards
-   ========================================================================== */
-
-.hero-art {
-  position: relative;
-  height: 510px;
-  margin-top: 12px;
+.core-shadow {
+  position: absolute;
+  top: 180px;
+  left: 50%;
+  width: 270px;
+  height: 170px;
+  transform: translateX(-47%);
+  border-radius: 50%;
+  background: rgba(179, 238, 232, 0.4);
+  filter: blur(28px);
 }
 
 .core {
@@ -341,23 +161,15 @@ button {
   text-align: center;
 }
 
-.core-gradient {
-  display: grid;
-  width: 125px;
-  height: 125px;
-  margin: 64px auto 0;
-  place-items: center;
+.core-gradient-img {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 46px auto 0;
   border-radius: 43px;
-  background: linear-gradient(135deg, #5de0cf, #a1d8f1);
+  object-fit: cover;
   box-shadow: 0 16px 25px rgba(60, 194, 191, 0.28);
-  transform: rotate(4deg);
-}
-
-.brain-icon {
-  color: white;
-  font-size: 57px;
-  font-weight: 400;
-  line-height: 1;
+  transform: rotate(4deg) scale(1.5);
 }
 
 .core-label,
@@ -381,45 +193,11 @@ button {
   font-size: 7px;
 }
 
-.orbit {
-  position: absolute;
-  top: 118px;
-  left: 50%;
-  width: 455px;
-  height: 240px;
-  border: 1px solid rgba(150, 220, 216, 0.52);
-  border-radius: 50%;
-  transform: translateX(-42%) rotate(18deg);
-}
 
-.orbit--two {
-  transform: translateX(-42%) rotate(-25deg);
-  border-color: rgba(170, 190, 232, 0.5);
-}
-
-.orbit--three {
-  width: 365px;
-  height: 300px;
-  transform: translateX(-46%) rotate(65deg);
-  border-color: rgba(193, 230, 226, 0.45);
-}
-
-.core-shadow {
-  position: absolute;
-  top: 180px;
-  left: 50%;
-  width: 270px;
-  height: 170px;
-  transform: translateX(-47%);
-  border-radius: 50%;
-  background: rgba(179, 238, 232, 0.4);
-  filter: blur(28px);
-}
-
-/* ==========================================================================
-   Floating cards
-   ========================================================================== */
-
+/* ---------- Floating knowledge cards ---------- */
+/* Glass-style cards positioned around the central illustration,
+   each with an icon tile, title/subtitle text, and a trailing
+   accent value. */
 .floating-card {
   position: absolute;
   z-index: 3;
@@ -468,9 +246,9 @@ button {
 
 .card-icon {
   display: grid;
+  place-items: center;
   width: 35px;
   height: 35px;
-  place-items: center;
   border-radius: 11px;
   font-size: 19px;
 }
@@ -485,9 +263,35 @@ button {
   background: #eee7ff;
 }
 
-/* ==========================================================================
-   Ambient decorative dots
-   ========================================================================== */
+
+/* ---------- Trust avatars & ambient dots ---------- */
+/* Small overlapping circular avatars plus decorative dots
+   scattered around the page for texture. */
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  margin-right: -4px;
+  border: 2px solid #f4f9fb;
+  border-radius: 50%;
+  color: #54717c;
+  background: #c3eef0;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.avatar--one {
+  background: #d9c7f4;
+}
+
+.avatar--three {
+  background: #f2cfb6;
+}
+
+.avatar--four {
+  background: #b9eadc;
+}
 
 .ambient-dot {
   position: absolute;
@@ -517,10 +321,9 @@ button {
   border-color: #e1d6fa;
 }
 
-/* ==========================================================================
-   Theme toggle button
-   ========================================================================== */
 
+/* ---------- Theme toggle button ---------- */
+/* Fixed floating button in the corner for switching themes. */
 .theme-toggle {
   position: fixed;
   right: 20px;
@@ -537,90 +340,15 @@ button {
   cursor: pointer;
 }
 
-/* ==========================================================================
-   Responsive breakpoints
-   ========================================================================== */
 
-@media (max-width: 800px) {
-  .site-header,
-  .hero {
-    width: min(100% - 36px, 590px);
-  }
-
-  .main-nav {
-    display: none;
-  }
-
-  .header-actions {
-    gap: 15px;
-  }
-
-  .login-link {
-    display: none;
-  }
-
-  .hero {
-    display: block;
-    min-height: auto;
-    padding-top: 70px;
-  }
-
-  .hero-copy {
-    padding-bottom: 0;
-  }
-
-  .auth-shell h1 {
-    font-size: clamp(42px, 12vw, 64px);
-    letter-spacing: -2.5px;
-  }
-
-  .hero-description {
-    font-size: 14px;
-    line-height: 1.7;
-  }
-
-  .hero-art {
-    height: 390px;
-    margin-top: 22px;
-    transform: scale(0.82);
-    transform-origin: top center;
-  }
-
-  .theme-toggle {
-    display: none;
-  }
-
-  .ambient-dot--top {
-    top: 160px;
-    right: 9%;
-  }
-}
-
+/* ---------- Responsive: small screens ---------- */
+/* Widens the hero artwork on narrow viewports so the
+   composition stays centered and the floating cards stay
+   visible near the edges. */
 @media (max-width: 450px) {
-  .site-header {
-    height: 70px;
-  }
-
-  .button--small {
-    min-height: 40px;
-    padding: 0 13px;
-    font-size: 10px;
-  }
-
-  .hero-actions {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .trust-row {
-    margin-top: 34px;
-  }
-
   .hero-art {
     width: 125%;
     margin-left: -12.5%;
-    transform: scale(0.7);
   }
 
   .floating-card--docs {
@@ -629,20 +357,5 @@ button {
 
   .floating-card--ask {
     right: 1%;
-  }
-
-  /* Small additions to support real <img> tags instead of CSS-only icon shapes */
-  .brand-mark img {
-    width: 20px;
-    height: 20px;
-    border-radius: 6px;
-    object-fit: cover;
-  }
-
-  .core-gradient img {
-    width: 56px;
-    height: 56px;
-    object-fit: cover;
-    mix-blend-mode: multiply;
   }
 }
