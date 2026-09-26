@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Search, Upload, Bell, ChevronDown } from "lucide-react";
 import AuthContext from "../../context/AuthContext.jsx";
@@ -46,6 +46,7 @@ const roles = [
 ];
 
 function Topbar() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { activeRole, setActiveRole } = useContext(AuthContext);
 
@@ -86,6 +87,7 @@ function Topbar() {
         {/* Search control */}
         <button
           type="button"
+          onClick={() => navigate("/semantic-search")}
           className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"
         >
           <Search size={14} strokeWidth={2} />
@@ -95,7 +97,8 @@ function Topbar() {
         {/* Upload control */}
         <button
           type="button"
-          className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"
+          disabled={activeRole === "Employee"}
+          className={`flex h-auto items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 ${activeRole === "Employee" ? "cursor-not-allowed opacity-50 hover:border-(--status-danger) hover:bg-(--status-danger-bg) hover:text-(--status-danger) hover:opacity-100" : "cursor-pointer hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"}`}
         >
           <Upload size={14} strokeWidth={2} />
           <span className="text-[12px] font-bold">Upload</span>
@@ -104,6 +107,7 @@ function Topbar() {
         {/* Ask EKA control */}
         <button
           type="button"
+          onClick={() => navigate("/ask-eka")}
           className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-(--primary) bg-(--primary) px-4 py-1 text-[11px] font-semibold text-(--primary-contrast) transition-colors duration-200 hover:border-(--primary-hover) hover:bg-(--primary-hover)"
         >
           <span className="text-[12px]">+</span>
