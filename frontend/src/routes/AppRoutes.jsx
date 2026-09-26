@@ -29,6 +29,7 @@ function AppRoutes() {
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
       {/* Public / authentication routes */}
+      <Route path="/landing" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupChoicePage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -60,10 +61,7 @@ function AppRoutes() {
         path="/signup/admin/confirmation"
         element={<AdminEnterpriseProfilePage />}
       />
-      <Route
-        path="/signup/admin/invite"
-        element={<AdminInviteMembersPage />}
-      />
+      <Route path="/signup/admin/invite" element={<AdminInviteMembersPage />} />
 
       {/* EKA application */}
       <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
