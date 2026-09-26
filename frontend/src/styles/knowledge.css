@@ -1,0 +1,12 @@
+/* Knowledge Base page — font-family bindings.
+   Tailwind's arbitrary-value shorthand (font-(--var)) does not reliably
+   apply font-family for CSS custom properties, so these are defined as
+   plain classes instead — same pattern as topbar-page-title/topbar-metadata
+   in layout.css. */
+.kb-eyebrow {
+  font-family: var(--font-mono);
+}
+
+.kb-hero-heading {
+  font-family: var(--font-serif);
+}
