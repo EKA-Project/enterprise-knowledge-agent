@@ -3,6 +3,7 @@ import { Search, LayoutGrid } from 'lucide-react';
 import TopicFilterPills from '../components/knowledge/TopicFilterPills.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
 import RecentlySurfacedList from '../components/knowledge/RecentlySurfacedList.jsx';
+import PinnedGuides from '../components/knowledge/PinnedGuides.jsx';
 import { topicFilters, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
 
@@ -68,10 +69,12 @@ export default function KnowledgeBasePage() {
               <CategoryCard key={category.id} category={category} />
             ))}
         </div>
-        {/* Recently surfaced — full width for now; will move into a
-            two-column layout alongside Pinned Guides in the next step. */}
-        <div className="mt-8">
+                {/* Recently surfaced and pinned guides share the same two-column layout
+            shown in the approved Knowledge Base reference. */}
+        <div className="mt-8 grid grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-10">
           <RecentlySurfacedList />
+
+          <PinnedGuides />
         </div>
     </div>
   );
