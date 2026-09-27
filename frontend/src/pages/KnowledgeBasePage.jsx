@@ -19,7 +19,7 @@ export default function KnowledgeBasePage() {
   const [activeTopic, setActiveTopic] = useState('all');
 
   return (
-    <div className="px-6 py-6">
+    <div className="px-4 py-2">
       {/* Hero section */}
       <div className="mb-6 flex items-start justify-between">
         <div>
@@ -29,7 +29,7 @@ export default function KnowledgeBasePage() {
           <h2 className="kb-hero-heading text-[2.5rem] font-bold leading-tight text-(--text-primary)">
             Find the thread.
           </h2>
-          <p className="mt-2 text-sm text-(--text-secondary)">
+          <p className="mt-1 text-sm text-(--text-secondary)">
             A map of what your team knows, grouped in ways that make sense.
           </p>
         </div>
@@ -64,7 +64,7 @@ export default function KnowledgeBasePage() {
             "all" shows every category; a specific topic shows only its
             matching card (Company foundations has no pill, so it only
             appears under "All topics"). */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-9">
         {knowledgeCategories
           .filter((category) => activeTopic === 'all' || category.id === activeTopic)
           .map((category) => (

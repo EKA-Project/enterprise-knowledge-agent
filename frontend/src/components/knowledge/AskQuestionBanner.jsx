@@ -1,6 +1,8 @@
+ import { ArrowUpRight } from 'lucide-react';
+
  export default function AskQuestionBanner() {
    return (
-     <section className="mt-12 flex items-center justify-between rounded-3xl bg-[#e4f0e5] px-9 py-7">
+     <section className="mt-12 flex items-center justify-between rounded-3xl bg-(--status-success-bg) px-9 py-7">
        <div>
          {/* Reference eyebrow for the EKA guidance prompt */}
          <p className="kb-eyebrow text-[11px] font-bold uppercase tracking-[0.18em] text-(--text-secondary)">
@@ -18,10 +20,10 @@
 
        <button
          type="button"
-         className="flex shrink-0 items-center gap-2 rounded-full bg-[#124b3f] px-6 py-3 text-sm font-bold text-white transition-transform duration-150 hover:-translate-y-0.5"
+         className="flex shrink-0 items-center gap-2 rounded-full bg-[#173b2f] px-6 py-3 text-sm font-bold text-white transition-transform duration-150 hover:-translate-y-0.5"
        >
          Ask a question
-         <span aria-hidden="true">↗</span>
+         <ArrowUpRight size={16} aria-hidden="true" />
        </button>
      </section>
    );
