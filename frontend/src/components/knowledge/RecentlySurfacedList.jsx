@@ -32,7 +32,7 @@ export default function RecentlySurfacedList() {
         {recentlySurfacedDocs.map((doc) => (
           <div
             key={doc.id}
-            className="flex items-center justify-between rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-4 shadow-(--shadow-sm) transition-all duration-150 hover:-translate-y-0.5 hover:shadow-(--shadow-md) active:translate-y-0"
+            className="flex items-center justify-between rounded-2xl bg-(--bg-surface) p-4 shadow-(--shadow-sm) transition-colors duration-150 hover:-translate-y-0.5 hover:bg-(--bg-surface-subtle)"
           >
             <div className="flex items-center gap-4">
               <span className={`rounded-lg px-2 py-1 text-[10px] font-bold ${fileTypeStyles[doc.fileType]}`}>

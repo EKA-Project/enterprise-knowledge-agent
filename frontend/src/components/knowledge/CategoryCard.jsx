@@ -1,6 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 
-// Maps each category's iconTheme (from knowledgeData.js) to its exact
+// Maps each category's iconTheme (from KnowledgeData.js) to its exact
 // badge background + icon color, measured directly from the reference design.
 const themeStyles = {
   mint: 'bg-green-100 text-green-700',

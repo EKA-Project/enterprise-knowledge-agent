@@ -24,13 +24,13 @@ import { Bookmark, MoreHorizontal } from 'lucide-react';
          {pinnedGuides.map((guide) => (
            <div
              key={guide.id}
-             className="flex items-center justify-between rounded-2xl border border-(--border-subtle) bg-(--bg-surface) px-5 py-4 shadow-(--shadow-sm) transition-all duration-150 hover:-translate-y-0.5 hover:shadow-(--shadow-md) active:translate-y-0"
+             className="flex items-center justify-between rounded-2xl bg-(--bg-surface) px-5 py-4 shadow-(--shadow-sm) transition-colors duration-150 hover:translate-y-0.5 hover:bg-(--bg-surface-subtle)"
            >
              <div className="flex min-w-0 items-center gap-3">
                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100">
                  <Bookmark
                    size={15}
-                   className="text-amber-600"
+                   className="text-amber-800"
                  />
                </div>
 
