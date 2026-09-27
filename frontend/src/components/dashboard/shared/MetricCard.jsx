@@ -39,18 +39,18 @@ function MetricCard({
       </div>
 
       {/* Bottom row: primary value and supporting metric. */}
-      <div className="mt-7">
+      <div className="mt-7 flex min-h-24 items-end">
         {children ? (
           children
         ) : (
-          <div className="flex items-end justify-between gap-4">
-            <p className="font-[var(--font-serif)] text-2xl font-semibold tracking-tight text-(--text-primary)">
+          <div className="flex w-full items-end justify-between gap-4">
+            <p className="[font-family:var(--font-serif)] text-[1.85rem] font-bold tracking-tight text-(--text-primary)">
               {value}
             </p>
 
             {supportingText && (
               <p
-                className={`pb-0.5 text-xs font-medium ${
+                className={`pb-1 text-sm font-semibold ${
                   supportingColorStyles[supportingType]
                 }`}
               >

@@ -15,13 +15,13 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+/* body {
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--ink);
   background: var(--paper);
   font-family: "Manrope", sans-serif;
-}
+} */
 
 a {
   color: inherit;
