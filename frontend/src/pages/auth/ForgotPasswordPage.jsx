@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import ekaLogo from '../../assets/images/eka_logo.jpeg';
 import ekaBrain from '../../assets/images/eka_brain.jpeg';
 import '../../styles/auth.css';
@@ -44,7 +45,18 @@ function ForgotPasswordLeftPanel() {
   );
 }
  // right panel for forgot password page
- function RecoveryForm() {
+function RecoveryForm() {
+  const navigate = useNavigate();
+  const [stage, setStage] = useState(1);
+
+  function handleSendToken() {
+    setStage(2);
+  }
+
+  function handleEnterWorkspace() {
+    navigate('/dashboard');
+  }
+
   return (
     <>
       <div className="auth-card-brand">
@@ -61,10 +73,26 @@ function ForgotPasswordLeftPanel() {
         <input id="corporate-email" type="email" defaultValue="maya@northstar.studio" />
       </div>
 
-      <button className="option-card-btn option-card-btn--teal">
-        Send Recovery Token
-        <span aria-hidden="true">→</span>
-      </button>
+      {stage === 1 && (
+        <button onClick={handleSendToken} className="option-card-btn option-card-btn--teal">
+          Send Recovery Token
+          <span aria-hidden="true">→</span>
+        </button>
+      )}
+
+      {stage === 2 && (
+        <>
+          <div className="auth-field">
+            <label htmlFor="recovery-token">Recovery Token</label>
+            <input id="recovery-token" type="text" placeholder="Enter your recovery token" />
+          </div>
+
+          <button onClick={handleEnterWorkspace} className="option-card-btn option-card-btn--teal">
+            Enter workspace
+            <span aria-hidden="true">→</span>
+          </button>
+        </>
+      )}
 
       <p className="auth-footer">
         <Link to="/login">← Return to Sign in</Link>

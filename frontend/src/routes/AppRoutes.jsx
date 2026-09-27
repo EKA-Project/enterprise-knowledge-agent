@@ -26,7 +26,7 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Redirect the root URL to the main dashboard. */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+     <Route path="/" element={<Navigate to="/landing" replace />} />
 
       {/* Public / authentication routes */}
       <Route path="/landing" element={<LandingPage />} />

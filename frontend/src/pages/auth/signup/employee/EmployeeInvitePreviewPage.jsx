@@ -78,11 +78,10 @@ export default function EmployeeInvitePreviewPage() {
 
           <InvitationCard />
 
-          <button className="option-card-btn option-card-btn--teal">
+          <Link to="/dashboard" className="option-card-btn option-card-btn--teal">
             Accept Invitation
             <span aria-hidden="true">→</span>
-          </button>
-
+          </Link>
 
           <p className="auth-page-footer">© 2026 EKA Technologies. All rights reserved.</p>
         </div>

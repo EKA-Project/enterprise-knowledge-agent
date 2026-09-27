@@ -105,10 +105,10 @@ export default function LoginPage() {
             <span>Keep me signed in (30 days)</span>
           </label>
 
-          <button className="option-card-btn option-card-btn--teal">
+          <Link to="/dashboard" className="option-card-btn option-card-btn--teal">
             Enter workspace
             <span aria-hidden="true">→</span>
-          </button>
+          </Link>
 
           <SocialLogins />
 
