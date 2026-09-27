@@ -90,14 +90,14 @@ export const recentlySurfacedDocs = [
     fileType: 'PDF',
     updatedLabel: 'Updated nov 18, 2024',
     size: '5.1 MB',
-    status: 'indexed',
+    status: 'processing',
   },
     { id: 'doc-4', 
       title: 'Brand voice & language', 
       fileType: 'FIG', 
       updatedLabel: 'Updated nov 15, 2024', 
       size: '1.2 MB', 
-      status: 'indexed' },
+      status: 'failed' },
 ];
 // Guides shown in the "Pinned guides" list
 export const pinnedGuides = [

@@ -1,4 +1,4 @@
-import { Check, ArrowUpRight } from 'lucide-react';
+import { Check, Clock, XCircle, ArrowUpRight } from 'lucide-react';
 import { recentlySurfacedDocs } from './KnowledgeData.js';
 
 // File-type badge colors, measured from the reference design.
@@ -7,7 +7,14 @@ const fileTypeStyles = {
   DOCX: 'bg-green-100 text-green-700',
   FIG: 'bg-purple-100 text-purple-700',
 };
-
+// Status colors reuse the semantic status tokens already defined in
+// variables.css, so they stay consistent with any other status badges
+// used elsewhere in the app.
+const statusStyles = {
+  indexed: { icon: Check, className: 'text-(--status-success)' },
+  processing: { icon: Clock, className: 'text-(--status-warning)' },
+  failed: { icon: XCircle, className: 'text-(--status-danger)' },
+};
 export default function RecentlySurfacedList() {
   return (
     <div>
@@ -40,9 +47,14 @@ export default function RecentlySurfacedList() {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 text-sm font-medium text-green-700">
-                <Check size={14} /> {doc.status}
-              </span>
+              {(() => {
+                const StatusIcon = statusStyles[doc.status].icon;
+                return (
+                  <span className={`flex items-center gap-1 text-sm font-medium ${statusStyles[doc.status].className}`}>
+                    <StatusIcon size={14} /> {doc.status}
+                  </span>
+                );
+              })()}
               <ArrowUpRight size={16} className="text-(--text-primary)" />
             </div>
           </div>
