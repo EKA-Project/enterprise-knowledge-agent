@@ -5,6 +5,7 @@ import CategoryCard from '../components/knowledge/CategoryCard.jsx';
 import RecentlySurfacedList from '../components/knowledge/RecentlySurfacedList.jsx';
 import PinnedGuides from '../components/knowledge/PinnedGuides.jsx';
 import MissingSomething from '../components/knowledge/MissingSomething.jsx';
+import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 import { topicFilters, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
 
@@ -23,7 +24,7 @@ export default function KnowledgeBasePage() {
       <div className="mb-6 flex items-start justify-between">
         <div>
           <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
-             Browse the collective
+            Browse the collective
           </p>
           <h2 className="kb-hero-heading text-[2.5rem] font-bold leading-tight text-(--text-primary)">
             Find the thread.
@@ -37,7 +38,7 @@ export default function KnowledgeBasePage() {
           type="button"
           className="flex items-center gap-2 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-0.5 text-xs font-semibold text-(--text-primary) hover:bg-(--bg-surface-subtle)"
         >
-         
+
           <LayoutGrid size={14} />
           Browse all
         </button>
@@ -53,35 +54,39 @@ export default function KnowledgeBasePage() {
         />
       </div>
       {/* Topic filter pills */}
-        <TopicFilterPills
-          topics={topicFilters}
-          activeTopic={activeTopic}
-          onChange={setActiveTopic}
-        />
+      <TopicFilterPills
+        topics={topicFilters}
+        activeTopic={activeTopic}
+        onChange={setActiveTopic}
+      />
 
-                {/* Category grid — filtered by the active topic pill.
+      {/* Category grid — filtered by the active topic pill.
             "all" shows every category; a specific topic shows only its
             matching card (Company foundations has no pill, so it only
             appears under "All topics"). */}
-        <div className="grid grid-cols-3 gap-6">
-          {knowledgeCategories
-            .filter((category) => activeTopic === 'all' || category.id === activeTopic)
-            .map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
-        </div>
-        {/* Recently surfaced and pinned guides share the same two-column layout
+      <div className="grid grid-cols-3 gap-6">
+        {knowledgeCategories
+          .filter((category) => activeTopic === 'all' || category.id === activeTopic)
+          .map((category) => (
+            <CategoryCard key={category.id} category={category} />
+          ))}
+      </div>
+      {/* Recently surfaced and pinned guides share the same two-column layout
             shown in the approved Knowledge Base reference. */}
-        <div className="mt-8 grid grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-10">
-          <RecentlySurfacedList />
+      <div className="mt-8 grid grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-10">
+        <RecentlySurfacedList />
 
-          {/* Right column: pinned guides followed by the missing-content prompt. */}
-          <div>
-            <PinnedGuides />
-            <MissingSomething />
-          </div>
+        {/* Right column: pinned guides followed by the missing-content prompt. */}
+        <div>
+          <PinnedGuides />
+          <MissingSomething />
         </div>
-        </div>
+      </div>
+
+
+      {/* Bottom guidance banner from the approved Knowledge Base reference. */}
+      <AskQuestionBanner />
+    </div>
   );
 }
 
