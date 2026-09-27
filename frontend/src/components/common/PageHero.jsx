@@ -8,11 +8,11 @@ function PageHero({ eyebrow, title, description, status }) {
             {eyebrow}
           </p>
 
-          <h1 className="mt-3 font-(--font-serif) text-5xl font-semibold tracking-tight text-(--text-primary)">
+          <h1 className="mt-3 font-(--font-serif) text-4xl font-semibold tracking-tight text-(--text-primary)">
             {title}
           </h1>
 
-          <p className="mt-2 text-base text-(--text-secondary)">
+          <p className="mt-2 text-sm text-(--text-secondary)">
             {description}
           </p>
         </div>
