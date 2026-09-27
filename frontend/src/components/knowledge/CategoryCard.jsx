@@ -15,25 +15,25 @@ export default function CategoryCard({ category }) {
   const Icon = category.icon;
 
   return (
-    <div className="rounded-3xl bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
+    <div className="rounded-3xl bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-shadow duration-200 hover:shadow-(--shadow-md)">
       <div className="mb-6 flex items-start justify-between">
         <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${themeStyles[category.iconTheme]}`}>
           <Icon size={22} />
         </div>
         {/* Static "open topic" indicator — not an edit action */}
-        <ArrowUpRight size={18} className="text-slate-900" />
+        <ArrowUpRight size={18} className="text-(--text-primary)" />
       </div>
 
-      <h3 className="kb-hero-heading text-xl font-bold text-slate-900">
+      <h3 className="kb-hero-heading text-xl font-bold text-(--text-primary)">
         {category.title}
       </h3>
-      <p className="mt-1 text-sm text-slate-500">
+      <p className="mt-1 text-sm text-(--text-secondary)">
         {category.docCount} documents • {category.updatedLabel}
       </p>
 
       <button
         type="button"
-        className="mt-6 text-sm text-slate-500 hover:text-slate-700"
+        className="mt-6 text-sm text-(--text-secondary) hover:text-(--text-primary)"
       >
         Explore topic ›
       </button>

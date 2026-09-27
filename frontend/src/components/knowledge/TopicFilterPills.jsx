@@ -13,8 +13,8 @@ export default function TopicFilterPills({ topics, activeTopic, onChange }) {
             onClick={() => onChange(topic.id)}
             className={
               isActive
-                ? 'rounded-full bg-slate-900 px-4 py-0.5 text-xs font-semibold text-white'
-                : 'rounded-full border border-slate-300 bg-white px-4 py-0.5 text-xs font-semibold text-slate-700 hover:bg-slate-50'
+                ? 'rounded-full bg-(--primary) px-4 py-2 text-xs font-semibold text-(--primary-contrast)'
+                : 'rounded-full border border-(--border-medium) bg-(--bg-surface) px-4 py-2 text-xs font-semibold text-(--text-primary) hover:bg-(--bg-surface-subtle)'
             }
           >
             {topic.label}
