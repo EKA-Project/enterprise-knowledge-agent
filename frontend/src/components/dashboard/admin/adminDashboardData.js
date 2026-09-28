@@ -40,4 +40,27 @@ const adminMetrics = [
   },
 ];
 
+export const recentQuestions = [
+  {
+    number: "01",
+    title: "What changed in our pricing strategy this quarter?",
+    meta: "8 min ago • 3 sources",
+  },
+  {
+    number: "02",
+    title: "Summarise the remote work principles",
+    meta: "Yesterday • 1 source",
+  },
+  {
+    number: "03",
+    title: "Who owns the onboarding experience?",
+    meta: "Yesterday • 4 sources",
+  },
+  {
+    number: "04",
+    title: "What are the key Q4 product bets?",
+    meta: "2 days ago • 2 sources",
+  },
+];
+
 export default adminMetrics;
