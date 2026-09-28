@@ -1,6 +1,6 @@
 import { Bookmark, MoreHorizontal } from 'lucide-react';
 
- import { pinnedGuides } from './KnowledgeData.js';
+ import { pinnedGuides } from './DummyData/KnowledgeData.js';
 
  export default function PinnedGuides() {
    return (

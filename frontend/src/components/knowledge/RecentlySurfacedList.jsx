@@ -1,5 +1,5 @@
 import { Check, Clock, XCircle, ArrowUpRight } from 'lucide-react';
-import { recentlySurfacedDocs } from './KnowledgeData.js';
+import { recentlySurfacedDocs } from './DummyData/KnowledgeData.js';
 
 // File-type badge colors, measured from the reference design.
 const fileTypeStyles = {

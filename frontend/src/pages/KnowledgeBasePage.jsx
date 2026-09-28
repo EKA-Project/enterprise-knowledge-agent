@@ -6,7 +6,7 @@ import RecentlySurfacedList from '../components/knowledge/RecentlySurfacedList.j
 import PinnedGuides from '../components/knowledge/PinnedGuides.jsx';
 import MissingSomething from '../components/knowledge/MissingSomething.jsx';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
-import { topicFilters, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
+import { topicFilters, knowledgeCategories } from '../components/knowledge/DummyData/KnowledgeData.js';
 import '../styles/knowledge.css';
 
 // Knowledge Base landing page — browse the collective knowledge, filter by
