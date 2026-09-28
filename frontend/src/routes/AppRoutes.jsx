@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout.jsx";
 import KnowledgeBasePage from "../pages/KnowledgeBasePage.jsx";
+import DocumentsPage from "../pages/DocumentsPage.jsx";
 
 // Auth pages
 import LandingPage from "../pages/auth/LandingPage";
@@ -69,7 +70,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<h1>Dashboard</h1>} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
-        <Route path="/documents" element={<h1>Documents</h1>} />
+        <Route path="/documents" element={<DocumentsPage/>} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
         <Route path="/analytics" element={<h1>Analytics</h1>} />
         <Route path="/organization" element={<h1>Organization</h1>} />
