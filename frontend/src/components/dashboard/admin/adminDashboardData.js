@@ -63,4 +63,22 @@ export const recentQuestions = [
   },
 ];
 
+export const knowledgeActivity = [
+  {
+    type: "upload",
+    title: "Nadia Al-Mansoor uploaded SOC 2 Type II Security Report",
+    meta: "Security & Compliance • 5 hours ago",
+  },
+  {
+    type: "document",
+    title: "Elena Rostova verified Emergency Failover Runbook",
+    meta: "Engineering & DevOps • Yesterday",
+  },
+  {
+    type: "question",
+    title: 'Maya Narang asked "Kubernetes failover DNS TTL"',
+    meta: "Grounded via 2026 Remote Work Policy • 10 mins ago",
+  },
+];
+
 export default adminMetrics;

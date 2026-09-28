@@ -2,6 +2,7 @@ import PageHero from "../../common/PageHero.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
 import StorageMetric from "../shared/StorageMetric.jsx";
 import AdminRecentQuestions from "./AdminRecentQuestions.jsx";
+import AdminKnowledgeActivity from "./AdminKnowledgeActivity.jsx";
 import pageMetadata from "../../../config/pageMetadata.js";
 import adminMetrics from "./adminDashboardData.js";
 
@@ -50,11 +51,11 @@ function AdminOverview() {
       <div className="mt-8 grid grid-cols-[1.4fr_1fr] gap-6">
         <div>
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="[font-family:var(--font-serif)] text-[1.45rem] font-bold text-(--text-primary)">
+            <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
               Recent questions
             </h2>
 
-            <button className="cursor-pointer text-[0.85rem] font-semibold text-[#d97706] transition-colors hover:underline">
+            <button className="cursor-pointer !text-[0.78rem] font-semibold text-[#d97706] transition-colors hover:underline">
               View all ›
             </button>
           </div>
@@ -62,7 +63,19 @@ function AdminOverview() {
           <AdminRecentQuestions />
         </div>
 
-        <div>{/* Knowledge Activity will go here */}</div>
+        <div>
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
+              Knowledge activity
+            </h2>
+
+            <button className="cursor-pointer !text-[0.78rem] font-semibold text-[#d97706] transition-colors hover:underline">
+              All documents ›
+            </button>
+          </div>
+
+          <AdminKnowledgeActivity />
+        </div>
       </div>
     </div>
   );
