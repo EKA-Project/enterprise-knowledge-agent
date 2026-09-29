@@ -10,7 +10,7 @@ function AdminOverview() {
   const hero = pageMetadata.dashboard.admin;
 
   return (
-    <div className="min-h-full p-10">
+    <div className="min-h-full">
       {/* Hero section */}
       <PageHero
         eyebrow={hero.eyebrow}

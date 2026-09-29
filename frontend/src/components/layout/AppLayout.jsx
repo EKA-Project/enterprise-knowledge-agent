@@ -14,7 +14,7 @@ function AppLayout() {
         <Topbar />
 
         {/* Only this area changes between routes. */}
-        <main className="min-w-0 flex-1 overflow-y-auto bg-(--bg-app)">
+        <main className="min-h-0 flex-1 overflow-y-auto bg-(--bg-app) px-10 py-8">
           <Outlet />
         </main>
       </div>
