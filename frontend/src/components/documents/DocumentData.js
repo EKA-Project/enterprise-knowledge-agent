@@ -132,8 +132,9 @@ export const documents = [
  ];
 // Format options shown in the filter dropdown.
 export const documentFormats = [
-  'All Formats',
+  
   'PDF',
   'DOCX',
-  'Markdown (MD)',
+  'TXT',
+  'XLSX',
 ];

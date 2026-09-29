@@ -73,7 +73,7 @@ export default function DocumentsPage() {
                     >
                         <option value="All Formats">All Formats</option>
                         {documentFormats.map((fmt) => (
-                            <option key={fmt.value} value={fmt.value}>{fmt.label}</option>
+                            <option key={fmt} value={fmt}>{fmt}</option>
                         ))}
                     </select>
                     <ChevronDown
