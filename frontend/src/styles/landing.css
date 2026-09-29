@@ -15,20 +15,20 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+.landing-page {
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--ink);
   background: var(--paper);
   font-family: "Manrope", sans-serif;
-}
+} */
 
-a {
+.landing-page a {
   color: inherit;
   text-decoration: none;
 }
 
-button {
+.landing-page button {
   font: inherit;
 }
 
@@ -213,7 +213,7 @@ button {
   box-shadow: 0 0 0 5px rgba(48, 199, 182, 0.11);
 }
 
-.auth-shell h1 {
+.landing-page h1 {
   margin: 0;
   font-size: clamp(43px, 5.2vw, 72px);
   line-height: 1.07;
@@ -221,7 +221,7 @@ button {
   font-weight: 500;
 }
 
-.auth-shell h1 em {
+.landing-page h1 em {
   color: var(--teal);
   font-style: normal;
   font-weight: 700;
@@ -569,11 +569,10 @@ button {
     padding-bottom: 0;
   }
 
-  .auth-shell h1 {
+  .landing-page h1 {
     font-size: clamp(42px, 12vw, 64px);
     letter-spacing: -2.5px;
   }
-
   .hero-description {
     font-size: 14px;
     line-height: 1.7;

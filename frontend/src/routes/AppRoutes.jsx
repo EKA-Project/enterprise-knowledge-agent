@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout.jsx";
 import KnowledgeBasePage from "../pages/KnowledgeBasePage.jsx";
 import DocumentsPage from "../pages/DocumentsPage.jsx";
+import { AuthProvider } from "../context/AuthContext.jsx";
+import RoleGuard from "../components/common/RoleGuard.jsx";
 
 // Auth pages
 import LandingPage from "../pages/auth/LandingPage";
@@ -17,18 +19,19 @@ import AdminEnterpriseProfilePage from "../pages/auth/signup/admin/AdminEnterpri
 import LoginPage from "../pages/auth/LoginPage";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMembersPage";
-
+import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
 // EKA pages
-
+import Dashboard from "../pages/Dashboard.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
   return (
     <Routes>
       {/* Redirect the root URL to the main dashboard. */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+     <Route path="/" element={<Navigate to="/landing" replace />} />
 
       {/* Public / authentication routes */}
+      <Route path="/landing" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupChoicePage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -60,20 +63,21 @@ function AppRoutes() {
         path="/signup/admin/confirmation"
         element={<AdminEnterpriseProfilePage />}
       />
+      <Route path="/signup/admin/invite" element={<AdminInviteMembersPage />} />
       <Route
-        path="/signup/admin/invite"
-        element={<AdminInviteMembersPage />}
+        path="/signup/admin/invite-success"
+        element={<AdminInviteSuccessPage />}
       />
 
       {/* EKA application */}
-      <Route element={<AppLayout />}>
-        <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+      <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
-        <Route path="/analytics" element={<h1>Analytics</h1>} />
-        <Route path="/organization" element={<h1>Organization</h1>} />
+        <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
+        <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
         <Route path="/settings" element={<h1>Settings</h1>} />
       </Route>
     </Routes>
