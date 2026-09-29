@@ -9,12 +9,12 @@ function AppLayout() {
       <Sidebar />
 
       {/* Everything on the right side of the sidebar. */}
-      <div className="flex min-h-0 min-w-0 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-col bg-(--bg-app)">
         {/* Persistent top header. */}
         <Topbar />
 
         {/* Only this area changes between routes. */}
-        <main className="min-w-0 flex-1 overflow-y-auto">
+        <main className="min-w-0 flex-1 overflow-y-auto bg-(--bg-app)">
           <Outlet />
         </main>
       </div>

@@ -53,7 +53,7 @@ function Topbar() {
   const currentRoute = routeMetadata[location.pathname];
 
   return (
-    <header className="flex h-18 items-center justify-between border-b border-(--border-subtle) bg-(--bg-surface) px-8">
+    <header className="flex h-18 items-center justify-between border-b border-(--border-subtle) bg-(--bg-app) px-8">
       {/* Route Title & Metadata */}
       <div className="flex flex-col">
         <h1 className="topbar-page-title text-[1.45rem] font-bold leading-[1.2] text-(--text-primary)">
@@ -66,7 +66,7 @@ function Topbar() {
 
       <div className="flex items-center gap-3">
         {/* Role switcher */}
-        <div className="inline-flex items-center gap-0.5 rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) p-0.5">
+        <div className="inline-flex items-center gap-0.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5">
           {roles.map((role) => (
             <button
               key={role.name}
@@ -88,7 +88,7 @@ function Topbar() {
         <button
           type="button"
           onClick={() => navigate("/semantic-search")}
-          className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"
+          className="flex h-auto cursor-pointer items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"
         >
           <Search size={14} strokeWidth={2} />
           <span className="text-[12px] font-bold">Search</span>
@@ -98,7 +98,7 @@ function Topbar() {
         <button
           type="button"
           disabled={activeRole === "Employee"}
-          className={`flex h-auto items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 ${activeRole === "Employee" ? "cursor-not-allowed opacity-50 hover:border-(--status-danger) hover:bg-(--status-danger-bg) hover:text-(--status-danger) hover:opacity-100" : "cursor-pointer hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"}`}
+          className={`flex h-auto items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 ${activeRole === "Employee" ? "cursor-not-allowed opacity-50 hover:border-(--status-danger) hover:bg-(--status-danger-bg) hover:text-(--status-danger) hover:opacity-100" : "cursor-pointer hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"}`}
         >
           <Upload size={14} strokeWidth={2} />
           <span className="text-[12px] font-bold">Upload</span>
