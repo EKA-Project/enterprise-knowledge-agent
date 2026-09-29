@@ -1193,3 +1193,80 @@
   font-weight: 700;
   flex-shrink: 0;
 }
+/* ==========================================================================
+   Invite success page — success header, invited member rows
+   ========================================================================== */
+
+.success-header-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.status-icon-circle--success-sm {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #dff5f1;
+  color: var(--teal);
+  font-size: 18px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.invited-members-list {
+  border: 1px solid #e5eaea;
+  border-radius: 14px;
+  padding: 8px;
+  margin-bottom: 16px;
+}
+
+.invited-member-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+}
+
+.invited-member-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ede9fe;
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.invited-member-info {
+  flex: 1;
+}
+
+.invited-member-email {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.invited-member-role {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.invited-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e6f7f4;
+  color: var(--teal);
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}

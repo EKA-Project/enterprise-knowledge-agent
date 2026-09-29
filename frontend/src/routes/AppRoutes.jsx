@@ -17,7 +17,7 @@ import AdminEnterpriseProfilePage from "../pages/auth/signup/admin/AdminEnterpri
 import LoginPage from "../pages/auth/LoginPage";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMembersPage";
-
+import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
 // ...other EKA pages
@@ -26,7 +26,7 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Redirect the root URL to the main dashboard. */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+     <Route path="/" element={<Navigate to="/landing" replace />} />
 
       {/* Public / authentication routes */}
       <Route path="/landing" element={<LandingPage />} />
@@ -62,6 +62,10 @@ function AppRoutes() {
         element={<AdminEnterpriseProfilePage />}
       />
       <Route path="/signup/admin/invite" element={<AdminInviteMembersPage />} />
+      <Route
+        path="/signup/admin/invite-success"
+        element={<AdminInviteSuccessPage />}
+      />
 
       {/* EKA application */}
       <Route element={<AuthProvider><AppLayout /></AuthProvider>}>

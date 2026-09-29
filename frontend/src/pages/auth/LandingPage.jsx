@@ -136,7 +136,7 @@ function Hero() {
 
 export default function LandingPage() {
   return (
-    <>
+    <div className="landing-page">
       {/* Page-wide decorative glows — fixed position, sit behind everything */}
       <div className="page-glow page-glow--mint" />
       <div className="page-glow page-glow--lavender" />
@@ -160,8 +160,8 @@ export default function LandingPage() {
       </header>
       {/* =================== End Navbar =================== */}
       
-     <Hero/>
+         <Hero/>
 
-    </>
+    </div>
   );
 }
