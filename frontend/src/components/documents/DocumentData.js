@@ -86,18 +86,50 @@ export const documents = [
     author: 'Product Design',
     chunks: 36,
   },
+
+    {
+     id: 'doc-7',
+     title: 'Q1 2026 Sales Playbook & GTM Strategy',
+     format: 'PDF',
+     category: 'Sales & GTM',
+     description:
+       'Outbound and inbound sales motions, ICP definitions, competitive positioning, and go-to-market timelines for the new fiscal year...',
+     readTime: '9 min read',
+     size: '2.1 MB',
+     pages: 12,
+     status: 'Indexed & Ready',
+     author: 'Revenue Operations',
+     chunks: 39,
+   },
+   {
+     id: 'doc-8',
+     title: 'Vendor Contracts & Financial Compliance Manual',
+     format: 'DOCX',
+     category: 'Legal & Finance',
+     description:
+       'Standard vendor agreement templates, procurement approval thresholds, and financial reporting compliance requirements...',
+     readTime: '11 min read',
+     size: '2.9 MB',
+     pages: 16,
+     status: 'Indexed & Ready',
+     author: 'Legal & Finance',
+     chunks: 51,
+   },
 ];
 
-// Category options shown in the filter dropdown.
-// Four distinct categories are visible across the six reference documents.
-export const documentCategories = [
-  'All Categories',
-  'People & HR Operations',
-  'Engineering & DevOps',
-  'Security & Compliance',
-  'Product Strategy & Design',
-];
-
+ // Category options shown in the filter dropdown.
+ // value = matches the long-form text shown on document card badges
+ //         (also what's stored on each document's `category` field, for filtering).
+ // label = shorter text shown inside the dropdown itself (per reference design,
+ //         the dropdown label and the card badge don't always match verbatim).
+ export const documentCategories = [
+   { value: 'People & HR Operations', label: 'People & HR' },
+   { value: 'Engineering & DevOps', label: 'Engineering & DevOps' },
+   { value: 'Security & Compliance', label: 'Security & Compliance' },
+   { value: 'Product Strategy & Design', label: 'Product & Design' },
+   { value: 'Sales & GTM', label: 'Sales & GTM' },
+   { value: 'Legal & Finance', label: 'Legal & Finance' },
+ ];
 // Format options shown in the filter dropdown.
 export const documentFormats = [
   'All Formats',

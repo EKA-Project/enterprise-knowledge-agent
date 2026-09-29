@@ -1,7 +1,9 @@
 import { Search, ChevronDown, LayoutGrid, List } from 'lucide-react';
 import { useState } from 'react';
-import { documents } from '../components/documents/DocumentData';
+import { documents, documentCategories, documentFormats } from '../components/documents/DocumentData';
 import DocumentCard from '../components/documents/DocumentCard';
+import '../styles/document.css';
+
 
 export default function DocumentsPage() {
     const [category, setCategory] = useState('All Categories');
@@ -12,11 +14,10 @@ export default function DocumentsPage() {
             {/* Documents page hero */}
             <section className="mb-6 flex items-start justify-between">
                 <div>
-                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-(--text-eyebrow)">
-                        Ingestion Pipeline
+                    <p className="doc-mono text-xs font-semibold uppercase tracking-[0.16em] text-(--text-eyebrow)">
                     </p>
 
-                    <h1 className="mt-2 font-serif text-4xl font-bold text-(--text-primary)">
+                    <h1 className="doc-heading mt-2 text-4xl font-bold text-(--text-primary)">
                         Raw sources, structured.
                     </h1>
 
@@ -52,11 +53,10 @@ export default function DocumentsPage() {
                         onChange={(event) => setCategory(event.target.value)}
                         className="appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
                     >
-                        <option value="All Categories">All Categories (6)</option>
-                        <option value="People & HR Operations">People & HR Operations</option>
-                        <option value="Engineering & DevOps">Engineering & DevOps</option>
-                        <option value="Security & Compliance">Security & Compliance</option>
-                        <option value="Product Strategy & Design">Product Strategy & Design</option>
+                        <option value="All Categories">All Categories ({documentCategories.length})</option>
+                        {documentCategories.map((cat) => (
+                            <option key={cat.value} value={cat.value}>{cat.label}</option>
+                        ))}
                     </select>
                     <ChevronDown
                         size={14}
@@ -72,9 +72,9 @@ export default function DocumentsPage() {
                         className="appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
                     >
                         <option value="All Formats">All Formats</option>
-                        <option value="PDF">PDF</option>
-                        <option value="DOCX">DOCX</option>
-                        <option value="Markdown (MD)">Markdown (MD)</option>
+                        {documentFormats.map((fmt) => (
+                            <option key={fmt.value} value={fmt.value}>{fmt.label}</option>
+                        ))}
                     </select>
                     <ChevronDown
                         size={14}
@@ -83,14 +83,14 @@ export default function DocumentsPage() {
                 </div>
 
                 {/* Grid/List view toggle — functionality comes in Step 6. */}
-                <div className="flex shrink-0 items-center rounded-full border border-(--border-subtle) p-0.1">
+                <div className="flex shrink-0 items-center rounded-full border border-(--border-subtle) p-1">
                     <button
                         type="button"
                         aria-label="Grid view"
                         onClick={() => setViewMode('grid')}
                         className={`rounded-full p-2 ${viewMode === 'grid'
-                                ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-                                : 'text-(--text-muted)'
+                            ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
+                            : 'text-(--text-muted)'
                             }`}
                     >
                         <LayoutGrid size={15} />
@@ -99,9 +99,9 @@ export default function DocumentsPage() {
                         type="button"
                         aria-label="List view"
                         onClick={() => setViewMode('list')}
-                        className={`rounded-full p-4 ${viewMode === 'list'
-                                ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-                                : 'text-(--text-muted)'
+                        className={`rounded-full p-2 ${viewMode === 'list'
+                            ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
+                            : 'text-(--text-muted)'
                             }`}
                     >
                         <List size={15} />
