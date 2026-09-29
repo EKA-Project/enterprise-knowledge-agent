@@ -3,6 +3,7 @@ import MetricCard from "../shared/MetricCard.jsx";
 import StorageMetric from "../shared/StorageMetric.jsx";
 import AdminRecentQuestions from "./AdminRecentQuestions.jsx";
 import AdminKnowledgeActivity from "./AdminKnowledgeActivity.jsx";
+import AdminPinnedDocuments from "./AdminPinnedDocuments.jsx";
 import pageMetadata from "../../../config/pageMetadata.js";
 import adminMetrics from "./adminDashboardData.js";
 
@@ -77,6 +78,7 @@ function AdminOverview() {
           <AdminKnowledgeActivity />
         </div>
       </div>
+      <AdminPinnedDocuments />
     </div>
   );
 }
