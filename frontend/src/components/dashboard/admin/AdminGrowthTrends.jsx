@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import BarChart from "../../charts/BarChart.jsx";
 import StackedBarChart from "../../charts/StackedBarChart.jsx";
+import QuestionsAnsweredChart from "../../charts/QuestionsAnsweredChart.jsx";
 
 /*
  * ============================================================
@@ -43,8 +44,12 @@ const activeUsersData = [
 ];
 
 /*
- * The latest month is highlighted by default
- * in the document growth chart.
+ * ============================================================
+ * DEFAULT DOCUMENT BAR
+ * ============================================================
+ *
+ * The latest month is highlighted by default in the
+ * Document Growth chart.
  */
 const activeDocumentIndex = documentGrowthData.length - 1;
 
@@ -54,6 +59,10 @@ const activeDocumentIndex = documentGrowthData.length - 1;
  * ============================================================
  *
  * Shared information used to render the three cards.
+ *
+ * The Questions Answered card intentionally contains only
+ * the eyebrow because its own chart component handles the
+ * metric/header layout.
  */
 const chartCards = [
   {
@@ -68,8 +77,6 @@ const chartCards = [
   },
   {
     eyebrow: "QUESTIONS ANSWERED",
-    title: "Questions answered",
-    subtitle: "Answers generated from the knowledge base",
   },
 ];
 
@@ -77,6 +84,12 @@ const chartCards = [
  * ============================================================
  * ADMIN GROWTH TRENDS
  * ============================================================
+ *
+ * Main section containing:
+ *
+ * 1. Document Growth
+ * 2. Active Users
+ * 3. Questions Answered
  */
 function AdminGrowthTrends() {
   /*
@@ -86,7 +99,7 @@ function AdminGrowthTrends() {
   const [hoveredDocument, setHoveredDocument] = useState(null);
 
   /*
-   * Stores the day currently being hovered
+   * Stores the week currently being hovered
    * in the Active Users chart.
    */
   const [hoveredUserDay, setHoveredUserDay] = useState(null);
@@ -118,47 +131,60 @@ function AdminGrowthTrends() {
             key={card.eyebrow}
             className="rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm)"
           >
-            {/* ------------------------------------------------
-                Card eyebrow
-                ------------------------------------------------ */}
+            {/* ==================================================
+                CARD EYEBROW
+                ================================================== */}
             <p className="font-mono text-[10px] font-semibold tracking-[0.08em] text-(--text-muted)">
               {card.eyebrow}
             </p>
 
-            {/* ------------------------------------------------
-                Card title
-                ------------------------------------------------ */}
-            <h3 className="mt-1 font-serif text-[20px] font-bold text-(--text-primary)">
-              {card.title}
-            </h3>
+            {/* ==================================================
+                STANDARD CARD HEADER
+                ==================================================
+                
+                Document Growth and Active Users have their own
+                title + dynamic subtitle.
 
-            {/* ------------------------------------------------
-                Dynamic chart subtitle
+                Questions Answered does not render these because
+                QuestionsAnsweredChart owns its complete metric
+                header.
+                ================================================== */}
+            {index !== 2 && (
+              <>
+                {/* Card title */}
+                <h3 className="mt-1 font-serif text-[20px] font-bold text-(--text-primary)">
+                  {card.title}
+                </h3>
 
-                Document Growth:
-                Shows the selected document count on hover.
+                {/* ------------------------------------------------
+                    Dynamic chart subtitle
 
-                Active Users:
-                Shows the employee / manager / admin
-                breakdown on hover.
-                ------------------------------------------------ */}
-            <p
-              className={`
-                mt-1 min-h-[18px] text-[12px]
-                ${
-                  (index === 0 && hoveredDocument) ||
-                  (index === 1 && hoveredUserDay)
-                    ? "font-semibold text-[#2563eb]"
-                    : "font-normal text-(--text-muted)"
-                }
-              `}
-            >
-              {index === 0 && hoveredDocument
-                ? `📅 ${hoveredDocument.label}: ${hoveredDocument.value.toLocaleString()} Total Indexed Documents`
-                : index === 1 && hoveredUserDay
-                  ? `📅 ${hoveredUserDay.label}: ${hoveredUserDay.employee} Emp · ${hoveredUserDay.manager} Mgr · ${hoveredUserDay.admin} Adm`
-                  : card.subtitle}
-            </p>
+                    Document Growth:
+                    Shows the selected document count on hover.
+
+                    Active Users:
+                    Shows the employee / manager / admin
+                    breakdown on hover.
+                    ------------------------------------------------ */}
+                <p
+                  className={`
+                    mt-1 min-h-[18px] text-[12px]
+                    ${
+                      (index === 0 && hoveredDocument) ||
+                      (index === 1 && hoveredUserDay)
+                        ? "font-semibold text-[#2563eb]"
+                        : "font-normal text-(--text-muted)"
+                    }
+                  `}
+                >
+                  {index === 0 && hoveredDocument
+                    ? `📅 ${hoveredDocument.label}: ${hoveredDocument.value.toLocaleString()} Total Indexed Documents`
+                    : index === 1 && hoveredUserDay
+                      ? `📅 ${hoveredUserDay.label}: ${hoveredUserDay.employee} Emp · ${hoveredUserDay.manager} Mgr · ${hoveredUserDay.admin} Adm`
+                      : card.subtitle}
+                </p>
+              </>
+            )}
 
             {/* ==================================================
                 GRAPH 1 — DOCUMENT GROWTH
@@ -241,13 +267,16 @@ function AdminGrowthTrends() {
                 GRAPH 3 — QUESTIONS ANSWERED
                 ==================================================
 
-                Placeholder area for the upcoming Questions
-                Answered visualization.
+                The Questions Answered component manages its
+                complete metric header, status badge and chart.
 
-                This will be replaced by the actual chart later.
+                No additional title/subtitle is rendered here
+                so the layout stays aligned with the reference.
                 ================================================== */}
             {index === 2 && (
-              <div className="mt-5 h-[150px] border-b border-(--border-subtle)" />
+              <div className="-mt-1">
+                <QuestionsAnsweredChart />
+              </div>
             )}
           </article>
         ))}

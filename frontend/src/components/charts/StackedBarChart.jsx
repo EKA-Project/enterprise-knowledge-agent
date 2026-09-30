@@ -51,7 +51,7 @@ function StackedBarChart({ data = [], activeIndex = null, onHover }) {
   };
 
   return (
-    <div className="flex h-[105px] items-end justify-between border-b border-(--border-subtle) px-4 pb-[2px]">
+    <div className="flex h-[150px] items-end justify-between border-b border-(--border-subtle) px-4 pb-[2px]">
       {data.map((item, index) => {
         /*
          * Calculate the total users for this period.
@@ -62,7 +62,7 @@ function StackedBarChart({ data = [], activeIndex = null, onHover }) {
          * Scale the bar height relative to
          * the highest value in the dataset.
          */
-        const height = (total / maxValue) * 100;
+        const height = (total / maxValue) * 70;
 
         const isActive = index === activeIndex;
         const isHovered = index === hoveredIndex;
