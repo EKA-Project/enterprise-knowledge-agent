@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
 import BackLink from '../../../../components/common/BackLink';
-import '../../../../styles/auth.css';
-
+import styles from '../../../../styles/auth.module.css';
 function EmailChip({ email, onRemove }) {
   return (
-    <span className="email-chip">
+    <span className={styles['email-chip']}>
       {email}
       <button onClick={onRemove} aria-label={`Remove ${email}`}>
         ×
@@ -45,22 +44,22 @@ function handleRemove(emailToRemove) {
   }
 
   return (
-    <div className="auth-shell">
+    <div className={styles['auth-shell']}>
       <AuthBackground />
 
-      <div className="auth-form-panel">
-        <div className="auth-card">
-          <div className="auth-context-row">
+      <div className={styles['auth-form-panel']}>
+        <div className={styles['auth-card']}>
+          <div className={styles['auth-context-row']}>
             <BackLink>← Back to enterprise overview</BackLink>
           </div>
 
-          <h2 className="auth-title">Invite members</h2>
-          <p className="auth-description">
+          <h2 className={styles['auth-title']}>Invite members</h2>
+          <p className={styles['auth-description']}>
             Enter email addresses to invite colleagues to <strong>Northstar Studio</strong>.
           </p>
 
-          <div className="invite-members-box">
-            <div className="invite-email-input-row">
+          <div className={styles['invite-members-box']}>
+            <div className={styles['invite-email-input-row']}>
               <input
                 type="email"
                 placeholder="name@company.com"
@@ -68,13 +67,13 @@ function handleRemove(emailToRemove) {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
-              <button onClick={handleAdd} className="add-email-btn">
+              <button onClick={handleAdd} className={styles['add-email-btn']}>
                 + Add
               </button>
             </div>
 
             {emails.length > 0 && (
-              <div className="email-chip-list">
+              <div className={styles['email-chip-list']}>
                 {emails.map((email) => (
                   <EmailChip
                     key={email}
@@ -85,7 +84,7 @@ function handleRemove(emailToRemove) {
               </div>
             )}
 
-            <div className="default-role-row">
+            <div className={styles['default-role-row']}>
               <label htmlFor="default-role">Default role for new invites:</label>
               <select
                 id="default-role"
@@ -99,19 +98,19 @@ function handleRemove(emailToRemove) {
             </div>
           </div>
 
-          <p className="invite-tip">
+          <p className={styles['invite-tip']}>
             💡 You can always invite more members or adjust permissions later in settings.
           </p>
 
           <button
             onClick={handleSendInvitations}
-            className="option-card-btn option-card-btn--teal"
+            className={styles['option-card-btn'] + ' ' + styles['option-card-btn--teal']}
           >
             Send Invitations
             <span aria-hidden="true">→</span>
           </button>
 
-          <Link to="/dashboard" className="option-card-btn option-card-btn--outline">
+          <Link to="/dashboard" className={styles['option-card-btn'] + ' ' + styles['option-card-btn--outline']}>
             Skip for now
           </Link>
         </div>
