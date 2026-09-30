@@ -57,7 +57,7 @@ function BarChart({ data = [], activeIndex = null, onHover }) {
         return (
           <div
             key={item.label}
-            className="relative flex h-full flex-1 flex-col justify-end"
+            className="relative flex h-full flex-1  cursor-pointer flex-col justify-end"
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
