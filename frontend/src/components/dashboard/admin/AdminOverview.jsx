@@ -4,6 +4,7 @@ import StorageMetric from "../shared/StorageMetric.jsx";
 import AdminRecentQuestions from "./AdminRecentQuestions.jsx";
 import AdminKnowledgeActivity from "./AdminKnowledgeActivity.jsx";
 import AdminPinnedDocuments from "./AdminPinnedDocuments.jsx";
+import AdminGrowthTrends from "./AdminGrowthTrends.jsx";
 import pageMetadata from "../../../config/pageMetadata.js";
 import adminMetrics from "./adminDashboardData.js";
 
@@ -79,6 +80,8 @@ function AdminOverview() {
         </div>
       </div>
       <AdminPinnedDocuments />
+
+      <AdminGrowthTrends />
     </div>
   );
 }
