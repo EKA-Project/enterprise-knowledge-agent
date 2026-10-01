@@ -1,12 +1,30 @@
 import { Search, ChevronDown, LayoutGrid, List } from 'lucide-react';
 import { useState } from 'react';
 import { documents, documentCategories, documentFormats } from './DocumentData';
-import DocumentCard from './DocumentCard';
+import DocumentCard from './DocumentCard.jsx';
 
 function DocumentsContent() {
+  const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All Categories');
   const [format, setFormat] = useState('All Formats');
   const [viewMode, setViewMode] = useState('grid');
+    const filteredDocuments = documents.filter((document) => {
+        const searchText = search.toLowerCase().trim();
+
+    const matchesSearch =
+      document.title.toLowerCase().includes(searchText) ||
+      document.description.toLowerCase().includes(searchText);
+
+    const matchesCategory =
+      category === 'All Categories' ||
+      document.category === category;
+
+    const matchesFormat =
+      format === 'All Formats' ||
+      document.format === format;
+
+    return matchesSearch && matchesCategory && matchesFormat;
+  });
 
   return (
     <>
@@ -17,6 +35,8 @@ function DocumentsContent() {
           <input
             type="text"
             placeholder="Search documents..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
             className="min-w-0 flex-1 bg-transparent text-sm text-(--text-primary) outline-none placeholder:text-(--text-muted)"
           />
         </div>
@@ -96,7 +116,7 @@ function DocumentsContent() {
 
       {viewMode === 'grid' && (
         <section className="grid grid-cols-3 gap-5">
-          {documents.map((document) => (
+          {filteredDocuments.map((document) => (
             <DocumentCard key={document.id} document={document} />
           ))}
         </section>

@@ -1,4 +1,4 @@
-import '../../styles/document.css';
+import '../../../styles/document.css';
 
 function DocumentCard({ document }) {
   return (

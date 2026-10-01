@@ -1,7 +1,7 @@
 import DocumentContent from '../shared/DocumentContent.jsx';
 
-function ManagerDocument() {
+function EmployeeDocument() {
   return <DocumentContent/>;
 }
 
-export default ManagerDocument;
+export default EmployeeDocument;
