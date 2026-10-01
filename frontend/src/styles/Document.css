@@ -1,0 +1,13 @@
+/* Documents page — font-family bindings.
+   Tailwind's font-serif/font-mono utilities use Tailwind's own default
+   stacks, not the Fraunces/JetBrains Mono fonts defined in variables.css
+   (--font-serif/--font-mono aren't inside an @theme block, so Tailwind
+   doesn't pick them up automatically). Same pattern as kb-eyebrow/
+   kb-hero-heading in knowledge.css. */
+.doc-mono {
+  font-family: var(--font-mono);
+}
+
+.doc-heading {
+  font-family: var(--font-serif);
+}
