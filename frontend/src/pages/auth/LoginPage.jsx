@@ -100,12 +100,13 @@ export default function LoginPage() {
           </div>
 
 
-          <label cclassName={styles['terms-checkbox-row']}>
+          <label className={styles['terms-checkbox-row']}>
             <input type="checkbox" defaultChecked />
             <span>Keep me signed in (30 days)</span>
           </label>
 
-          <Link to="/dashboard" className={styles['option-card-btn']}>
+         <Link to="/dashboard" className={`${styles['option-card-btn']} ${styles['option-card-btn--teal']}`}
+>
             Enter workspace
             <span aria-hidden="true">→</span>
           </Link>

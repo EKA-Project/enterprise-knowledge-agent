@@ -1,3 +1,5 @@
+import styles from '../../styles/auth.module.css';
+
 export default function PasswordStrength({ password }) {
   const requirements = [
     { label: 'At least 8 char', met: password.length >= 8 },
@@ -8,10 +10,10 @@ export default function PasswordStrength({ password }) {
   ];
 
   return (
-    <ul className="password-requirements">
+    <ul className={styles['password-requirements']}>
       {requirements.map((req) => (
-        <li key={req.label} className={req.met ? 'met' : ''}>
-          <span className="req-icon">{req.met ? '✓' : '*'}</span>
+        <li key={req.label} className={req.met ? styles['met'] : ''}>
+          <span className={styles['req-icon']}>{req.met ? '✓' : '*'}</span>
           {req.label}
         </li>
       ))}

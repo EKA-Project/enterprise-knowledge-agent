@@ -4,19 +4,20 @@
 
 import { Link } from 'react-router-dom';
 import ekaBrain from '../../assets/images/eka_brain.jpeg';
+import styles from '../../styles/auth.module.css';
 
 function AuthIllustration() {
   return (
-    <div className="auth-illustration">
-      <div className="auth-orbit auth-orbit--one" />
-      <div className="auth-orbit auth-orbit--two" />
-      <div className="auth-core">
+    <div className={styles['auth-illustration']}>
+      <div className={`${styles['auth-orbit']} ${styles['auth-orbit--one']}`}/>
+      <div className={`${styles['auth-orbit']} ${styles['auth-orbit--two']}`}/>
+      <div className={styles['auth-core']}>
         <img src={ekaBrain} alt="" />
       </div>
-      <div className="auth-tag auth-tag--docs">
+      <div className={`${styles['auth-tag']} ${styles['auth-tag--docs']}`}>
         📄 42 docs
       </div>
-      <div className="auth-tag auth-tag--learning">
+      <div className={`${styles['auth-tag']} ${styles['auth-tag--learning']}`}>
         🧩 always learning
       </div>
     </div>
@@ -25,15 +26,15 @@ function AuthIllustration() {
 
 export default function AuthBackground() {
   return (
-    <div className="auth-brand-panel">
-      <Link to="/" className="auth-back-link">← Back to EKA</Link>
+    <div className={styles['auth-brand-panel']}>
+      <Link to="/" className={styles['auth-back-link']}>← Back to EKA</Link>
 
-      <div className="auth-eyebrow">
-        <span className="auth-eyebrow-dot" />
+      <div className={styles['auth-eyebrow']}>
+        <span className={styles['auth-eyebrow-dot']} />
         Knowledge in motion
       </div>
 
-      <h1 className="auth-headline">
+      <h1 className={styles['auth-headline']}>
         Good work starts
         <br />
         with context.
