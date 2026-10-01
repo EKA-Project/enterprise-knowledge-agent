@@ -37,6 +37,10 @@ const routeMetadata = {
     title: "Settings",
     metadata: "NORTHSTAR STUDIO / 24.11.2026",
   },
+  "/help-support": {
+    title: "Help & Support",
+    metadata: "OPERATIONAL ASSISTANT & FAQ",
+  },
 };
 
 const roles = [
