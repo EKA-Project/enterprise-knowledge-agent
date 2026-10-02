@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 import BarChart from "../../charts/BarChart.jsx";
 import StackedBarChart from "../../charts/StackedBarChart.jsx";
 import QuestionsAnsweredChart from "../../charts/QuestionsAnsweredChart.jsx";
@@ -114,12 +114,11 @@ function AdminGrowthTrends() {
           Usage & growth trends
         </h2>
 
-        <a
-          href="#"
-          className="text-[13.6px] font-semibold text-(--primary) transition-all hover:underline"
-        >
-          Detailed analytics ›
-        </a>
+        <Link
+        to = "/analytics"
+        className = "cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline">
+          Detailed analytics →
+        </Link>
       </div>
 
       {/* ======================================================

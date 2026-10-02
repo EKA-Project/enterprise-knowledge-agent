@@ -13,6 +13,10 @@ const routeMetadata = {
     title: "Ask EKA",
     metadata: "NEURAL RAG / 100% ISOLATED",
   },
+  "/ask-eka/history": {
+    title: "Chat History",
+    metadata: "CONVERSATION ARCHIVE / QUERY & RESPONSE LOG",
+  },
   "/knowledge-base": {
     title: "Knowledge Base",
     metadata: "INSTITUTIONAL PLAYBOOKS / 6 CATEGORIES",

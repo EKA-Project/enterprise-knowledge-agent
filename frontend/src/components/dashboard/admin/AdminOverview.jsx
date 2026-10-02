@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import PageHero from "../../common/PageHero.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
 import StorageMetric from "../shared/StorageMetric.jsx";
@@ -57,9 +58,12 @@ function AdminOverview() {
               Recent questions
             </h2>
 
-            <button className="cursor-pointer !text-[0.78rem] font-semibold text-[#d97706] transition-colors hover:underline">
+            <Link
+              to="/ask-eka/history"
+              className="cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline"
+            >
               View all ›
-            </button>
+            </Link>
           </div>
 
           <AdminRecentQuestions />
@@ -71,9 +75,12 @@ function AdminOverview() {
               Knowledge activity
             </h2>
 
-            <button className="cursor-pointer !text-[0.78rem] font-semibold text-[#d97706] transition-colors hover:underline">
+            <Link
+              to="/documents"
+              className="cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline"
+            >
               All documents ›
-            </button>
+            </Link>
           </div>
 
           <AdminKnowledgeActivity />

@@ -73,6 +73,7 @@ function AppRoutes() {
       <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
+        <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
