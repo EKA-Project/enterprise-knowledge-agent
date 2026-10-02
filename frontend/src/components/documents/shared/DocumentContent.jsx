@@ -8,8 +8,8 @@ function DocumentsContent() {
   const [category, setCategory] = useState('All Categories');
   const [format, setFormat] = useState('All Formats');
   const [viewMode, setViewMode] = useState('grid');
-    const filteredDocuments = documents.filter((document) => {
-        const searchText = search.toLowerCase().trim();
+  const filteredDocuments = documents.filter((document) => {
+    const searchText = search.toLowerCase().trim();
 
     const matchesSearch =
       document.title.toLowerCase().includes(searchText) ||
@@ -90,11 +90,10 @@ function DocumentsContent() {
             type="button"
             aria-label="Grid view"
             onClick={() => setViewMode('grid')}
-            className={`rounded-full p-2 ${
-              viewMode === 'grid'
+            className={`rounded-full p-2 ${viewMode === 'grid'
                 ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
                 : 'text-(--text-muted)'
-            }`}
+              }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -103,11 +102,10 @@ function DocumentsContent() {
             type="button"
             aria-label="List view"
             onClick={() => setViewMode('list')}
-            className={`rounded-full p-2 ${
-              viewMode === 'list'
+            className={`rounded-full p-2 ${viewMode === 'list'
                 ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
                 : 'text-(--text-muted)'
-            }`}
+              }`}
           >
             <List size={15} />
           </button>
@@ -119,6 +117,92 @@ function DocumentsContent() {
           {filteredDocuments.map((document) => (
             <DocumentCard key={document.id} document={document} />
           ))}
+        </section>
+      )}
+
+      {viewMode === 'list' && (
+        <section className="overflow-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)">
+          {/* List view */}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[900px] text-left">
+              <thead>
+                <tr className="border-b border-(--border-subtle)">
+                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
+                    Document Name
+                  </th>
+                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
+                    Category
+                  </th>
+                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
+                    Author / Owner
+                  </th>
+                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
+                    Size
+                  </th>
+                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
+                    Chunks
+                  </th>
+                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
+                    Status
+                  </th>
+                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filteredDocuments.map((document) => (
+                  <tr
+                    key={document.id}
+                    className="border-b border-(--border-subtle) transition-colors last:border-b-0 hover:bg-(--bg-surface-subtle)"
+                  >
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <span className="doc-mono rounded-md bg-(--bg-surface-subtle) px-2 py-1 text-[10px] font-bold text-(--text-primary)">
+                          {document.format}
+                        </span>
+                        <span className="text-sm font-semibold text-(--text-primary)">
+                          {document.title}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
+                      {document.category}
+                    </td>
+
+                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
+                      {document.author}
+                    </td>
+
+                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
+                      {document.size}
+                    </td>
+
+                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
+                      {document.chunks}
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <span className="inline-flex rounded-full bg-(--bg-surface-subtle) px-3 py-1.5 text-[10px] font-semibold text-(--text-secondary)">
+                        {document.status}
+                      </span>
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <button
+                        type="button"
+                        className="text-sm font-semibold text-(--text-primary) transition-opacity hover:opacity-70"
+                      >
+                        Summary →
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       )}
     </>
