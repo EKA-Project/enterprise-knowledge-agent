@@ -1,20 +1,35 @@
 import { Link } from "react-router-dom";
+
 import PageHero from "../../common/PageHero.jsx";
+
 import MetricCard from "../shared/MetricCard.jsx";
 import StorageMetric from "../shared/StorageMetric.jsx";
+
 import AdminRecentQuestions from "./AdminRecentQuestions.jsx";
 import AdminKnowledgeActivity from "./AdminKnowledgeActivity.jsx";
 import AdminPinnedDocuments from "./AdminPinnedDocuments.jsx";
 import AdminGrowthTrends from "./AdminGrowthTrends.jsx";
+
 import pageMetadata from "../../../config/pageMetadata.js";
 import adminMetrics from "./adminDashboardData.js";
 
 function AdminOverview() {
+  // ─────────────────────────────────────────────
+  // Page metadata
+  // ─────────────────────────────────────────────
+
   const hero = pageMetadata.dashboard.admin;
+
+  // ─────────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────────
 
   return (
     <div className="min-h-full">
-      {/* Hero section */}
+      {/* ─────────────────────────────────────────
+          Hero section
+      ───────────────────────────────────────── */}
+
       <PageHero
         eyebrow={hero.eyebrow}
         title={hero.title}
@@ -22,8 +37,13 @@ function AdminOverview() {
         status={hero.status}
       />
 
-      <div className="mt-6 grid grid-cols-4 gap-5">
+      {/* ─────────────────────────────────────────
+          Overview metrics
+      ───────────────────────────────────────── */}
+
+      <div className="mt-6 grid grid-cols-4 gap-5 auto-rows-[180px]">
         {adminMetrics.map((metric) => {
+          // Storage metric uses custom content.
           if (metric.label === "STORAGE CAPACITY") {
             return (
               <MetricCard
@@ -37,6 +57,7 @@ function AdminOverview() {
             );
           }
 
+          // Standard metric card.
           return (
             <MetricCard
               key={metric.label}
@@ -51,7 +72,12 @@ function AdminOverview() {
         })}
       </div>
 
+      {/* ─────────────────────────────────────────
+          Recent questions & knowledge activity
+      ───────────────────────────────────────── */}
+
       <div className="mt-8 grid grid-cols-[1.4fr_1fr] gap-6">
+        {/* Recent questions */}
         <div>
           <div className="mb-4 flex items-baseline justify-between">
             <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
@@ -69,6 +95,7 @@ function AdminOverview() {
           <AdminRecentQuestions />
         </div>
 
+        {/* Knowledge activity */}
         <div>
           <div className="mb-4 flex items-baseline justify-between">
             <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
@@ -86,7 +113,16 @@ function AdminOverview() {
           <AdminKnowledgeActivity />
         </div>
       </div>
+
+      {/* ─────────────────────────────────────────
+          Pinned documents
+      ───────────────────────────────────────── */}
+
       <AdminPinnedDocuments />
+
+      {/* ─────────────────────────────────────────
+          Growth trends
+      ───────────────────────────────────────── */}
 
       <AdminGrowthTrends />
     </div>
