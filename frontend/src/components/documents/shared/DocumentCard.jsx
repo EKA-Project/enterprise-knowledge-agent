@@ -31,9 +31,10 @@ function DocumentCard({ document }) {
         </p>
 
 
-       <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1.5 text-[10px] font-semibold text-green-700">
-            {document.status}
-       </span>
++       <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1.5 text-[10px] font-semibold text-green-700">
++         {document.status === 'Indexed' && '✓ '}
++         {document.status}
++       </span>
       </div>
     </article>
   );
