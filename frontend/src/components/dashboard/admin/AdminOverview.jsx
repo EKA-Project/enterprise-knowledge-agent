@@ -41,7 +41,7 @@ function AdminOverview() {
           Overview metrics
       ───────────────────────────────────────── */}
 
-      <div className="mt-6 grid grid-cols-4 gap-5 auto-rows-[180px]">
+      <div className="mt-6 grid grid-cols-4 gap-5 auto-rows-45">
         {adminMetrics.map((metric) => {
           // Storage metric uses custom content.
           if (metric.label === "STORAGE CAPACITY") {
@@ -80,13 +80,13 @@ function AdminOverview() {
         {/* Recent questions */}
         <div>
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
+            <h2 className="font-serif text-[1.25rem] font-bold text-(--text-primary)">
               Recent questions
             </h2>
 
             <Link
               to="/ask-eka/history"
-              className="cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline"
+              className="cursor-pointer text-[0.78rem]! font-semibold text-(--primary) transition-colors hover:underline"
             >
               View all ›
             </Link>
@@ -98,13 +98,13 @@ function AdminOverview() {
         {/* Knowledge activity */}
         <div>
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
+            <h2 className="font-serif text-[1.25rem] font-bold text-(--text-primary)">
               Knowledge activity
             </h2>
 
             <Link
               to="/documents"
-              className="cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline"
+              className="cursor-pointer text-[0.78rem]! font-semibold text-(--primary) transition-colors hover:underline"
             >
               All documents ›
             </Link>
