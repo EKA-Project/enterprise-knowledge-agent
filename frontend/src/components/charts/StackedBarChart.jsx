@@ -109,10 +109,10 @@ function StackedBarChart({ data = [], activeIndex = null, onHover }) {
                 ================================================== */}
             <div
               className={`
-                flex w-[44px]
+                flex w-11
                 flex-col justify-end overflow-hidden
                 rounded-t-[14px]
-                transition-all duration-[220ms]
+                transition-all duration-220
                 ease-[cubic-bezier(0.16,1,0.3,1)]
               `}
               style={{
@@ -125,7 +125,7 @@ function StackedBarChart({ data = [], activeIndex = null, onHover }) {
             >
               {/* Employee segment */}
               <div
-                className="bg-[#2563eb]"
+                className="bg-[#2563EB]"
                 style={{
                   height: `${(item.employee / total) * 100}%`,
                 }}
