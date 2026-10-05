@@ -1,0 +1,10 @@
+/* Scoped to .ask-eka-page only — cannot affect any other page or
+   any of your teammate's Tailwind-built pages. */
+
+.ask-eka-page .ask-eka-serif {
+  font-family: var(--font-serif);
+}
+
+.ask-eka-page .ask-eka-mono {
+  font-family: var(--font-mono);
+}
