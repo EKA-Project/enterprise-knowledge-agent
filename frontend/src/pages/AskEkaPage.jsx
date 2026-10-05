@@ -57,3 +57,48 @@ function AskEkaHeader({ onToggleHistory, onNewThread }) {
     </div>
   );
 }
+
+// ===================== Empty state (local — only used on this page) =====================
+const SUGGESTED_QUESTIONS = [
+  'What is our leave policy?',
+  'How do I trigger emergency Kubernetes failover?',
+  'Explain SOC 2 encryption and zero-training',
+];
+
+function EmptyState({ onPickSuggestion }) {
+  return (
+    <div className="relative flex gap-4 pl-1 pb-10 ml-2 border-l border-[var(--border-subtle)]">
+      <span className="absolute -left-[7px] top-0 w-[13px] h-[13px] rounded-full
+                       border-2 border-[var(--primary)] bg-[var(--bg-surface)]" />
+      <div className="flex-1 pl-6">
+        <p className="m-0 mb-1.5 text-[10.5px] font-extrabold tracking-wide uppercase
+                       text-[var(--text-muted)]">
+          READY FOR INQUIRY
+        </p>
+        <h2 className="ask-eka-serif m-0 mb-2.5 text-2xl font-bold max-w-[640px]
+                       text-[var(--text-primary)]">
+          "Ask anything across company policies, runbooks, or architecture specs."
+        </h2>
+        <p className="m-0 mb-5 text-sm leading-relaxed max-w-[620px] text-[var(--text-secondary)]">
+          EKA will cite exact pages and sections. Try asking about leave policies,
+          multi-region failover SOP, SOC 2 compliance, or product roadmaps.
+        </p>
+
+        <div className="flex flex-wrap gap-2.5">
+          {SUGGESTED_QUESTIONS.map((q) => (
+            <button
+              key={q}
+              onClick={() => onPickSuggestion(q)}
+              className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-[13px] font-semibold
+                         cursor-pointer bg-[var(--bg-surface)] border border-[var(--border-subtle)]
+                         text-[var(--text-primary)] hover:bg-[var(--bg-surface-subtle)]"
+            >
+              "{q}"
+              <span aria-hidden="true">→</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
