@@ -102,3 +102,16 @@ function EmptyState({ onPickSuggestion }) {
     </div>
   );
 }
+
+// ===================== Placeholder answer (swap this for a real API call later) =====================
+// This is the ONLY function that needs to change when the backend is ready.
+// Keep the same returned shape ({ intro, grounding, security, reference })
+// so ChatMessage doesn't need to change.
+function buildPlaceholderAnswer(question) {
+  return {
+    intro: `Based on an analysis of Northstar Studio's verified documentation for "${question}":`,
+    grounding: 'Internal workflows require adherence to approved organizational playbooks.',
+    security: 'All processing enforces tenant isolation with no external model training.',
+    reference: 'Review the relevant department policy or consult with the domain lead.',
+  };
+}
