@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 
 import PageHero from "../../common/PageHero.jsx";
 
+import MetricCard from "../shared/MetricCard.jsx";
 import pageMetadata from "../../../config/pageMetadata.js";
+
+import employeeMetrics from "./employeeDashboardData.js";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -25,6 +28,23 @@ function EmployeeOverview() {
         description={hero.description}
         status={hero.status}
       />
+
+      {/* ─────────────────────────────────────────
+          Overview metrics
+      ───────────────────────────────────────── */}
+      <div className="mt-6 grid grid-cols-4 gap-5">
+        {employeeMetrics.map((metric) => (
+          <MetricCard
+            key={metric.label}
+            label={metric.label}
+            value={metric.value}
+            supportingText={metric.supportingText}
+            supportingType={metric.supportingType}
+            icon={metric.icon}
+            iconColor={metric.iconColor}
+          />
+        ))}
+      </div>
     </div>
   );
 }
