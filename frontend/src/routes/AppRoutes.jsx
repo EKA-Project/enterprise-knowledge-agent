@@ -22,6 +22,7 @@ import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMember
 import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
+import AskEkaPage from "../pages/AskEkaPage";
 // ...other EKA pages
 
 function AppRoutes() {
@@ -72,7 +73,7 @@ function AppRoutes() {
       {/* EKA application */}
       <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
+        <Route path="/ask-eka" element={<AskEkaPage />} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
