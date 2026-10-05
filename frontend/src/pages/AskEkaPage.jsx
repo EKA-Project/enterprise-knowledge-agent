@@ -115,3 +115,59 @@ function buildPlaceholderAnswer(question) {
     reference: 'Review the relevant department policy or consult with the domain lead.',
   };
 }
+// ===================== Page =====================
+export default function AskEkaPage() {
+  // turns = array of { question, answer, citation } — turn-based, not message-based
+  const [turns, setTurns] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  function addTurn(question) {
+    const trimmed = question.trim();
+    if (!trimmed) return;
+    setTurns([
+      ...turns,
+      {
+        question: trimmed,
+        answer: buildPlaceholderAnswer(trimmed),
+        citation: {
+          title: 'Design_System_Guidelines.md',
+          meta: 'page 2 · verified source',
+        },
+      },
+    ]);
+    setInputValue('');
+  }
+  function handleSend() {
+    addTurn(inputValue);
+  }
+  function handleNewThread() {
+    setTurns([]);
+    setInputValue('');
+  }
+  function handleToggleHistory() {
+    // placeholder — no history panel wired up yet
+  }
+  return (
+    <div className="ask-eka-page relative px-8 pt-6 pb-36 bg-[var(--bg-app)]">
+      <AskEkaHeader onToggleHistory={handleToggleHistory} onNewThread={handleNewThread} />
+      {turns.length === 0 ? (
+        <EmptyState onPickSuggestion={addTurn} />
+      ) : (
+        turns.map((turn, i) => (
+          <ChatMessage
+            key={i}
+            entryNumber={i + 1}
+            question={turn.question}
+            answer={turn.answer}
+            citation={turn.citation}
+          />
+        ))
+      )}
+      <ChatInput
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onSend={handleSend}
+        requestNumber={turns.length + 1}
+      />
+    </div>
+  );
+}
