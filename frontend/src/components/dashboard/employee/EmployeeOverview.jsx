@@ -5,8 +5,13 @@ import PageHero from "../../common/PageHero.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
 import pageMetadata from "../../../config/pageMetadata.js";
 
-import { employeeMetrics, velocityChartData } from "./employeeDashboardData.js";
+import {
+  employeeMetrics,
+  velocityChartData,
+  myEkaUsageData,
+} from "./employeeDashboardData.js";
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
+import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -51,6 +56,14 @@ function EmployeeOverview() {
       ───────────────────────────────────────── */}
       <div className="mt-6">
         <LineAreaChart data={velocityChartData} />
+      </div>
+
+      {/* ─────────────────────────────────────────
+          Usage  Graph
+      ───────────────────────────────────────── */}
+      <div className="mt-6 grid grid-cols-[1.15fr_1fr] gap-6 max-[900px]:grid-cols-1">
+        {/* My Query Topics will go here */}
+        <MyEkaUsageChart data={myEkaUsageData} />
       </div>
     </div>
   );

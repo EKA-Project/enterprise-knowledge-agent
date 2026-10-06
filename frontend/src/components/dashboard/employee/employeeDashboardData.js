@@ -97,4 +97,47 @@ export const velocityChartData = {
     "M 25.0 83.2 C 33.3 79.7, 58.3 65.6, 75.0 62.1 C 91.7 58.6, 108.3 70.8, 125.0 72.6 C 141.7 74.4, 158.3 55.0, 175.0 51.5 C 191.7 48.0, 208.3 69.1, 225.0 72.6 C 241.7 76.1, 258.3 99.1, 275.0 104.4 C 291.7 109.7, 308.3 99.1, 325.0 93.8 C 341.7 88.5, 358.3 67.4, 375.0 62.1 C 391.7 56.8, 408.3 33.8, 425.0 30.3 C 441.7 26.8, 458.3 48.0, 475.0 51.5 C 491.7 55.0, 508.3 39.1, 525.0 40.9 C 541.7 42.7, 558.3 67.4, 575.0 72.6 C 591.7 77.9, 608.3 81.4, 625.0 83.2 C 641.7 85.0, 666.7 56.8, 675.0 51.5",
 };
 
+export const myEkaUsageData = {
+  7: {
+    label: "7 Days",
+    maxValue: 22,
+    subtext: "Personal activity breakdown over past 7 days",
+    totalText: "Total Activity: 24 Questions • 18 Docs • 42 Searches",
+    data: [
+      { label: "Day 1", questions: 2, documents: 1, searches: 4 },
+      { label: "Day 2", questions: 3, documents: 2, searches: 6 },
+      { label: "Day 3", questions: 4, documents: 3, searches: 7 },
+      { label: "Day 4", questions: 3, documents: 2, searches: 5 },
+      { label: "Day 5", questions: 5, documents: 4, searches: 8 },
+      { label: "Day 6", questions: 4, documents: 3, searches: 6 },
+      { label: "Today", questions: 6, documents: 4, searches: 9 },
+    ],
+  },
+
+  30: {
+    label: "30 Days",
+    maxValue: 120,
+    subtext: "Personal activity breakdown over past 30 days",
+    totalText: "Total Activity: 98 Questions • 74 Docs • 165 Searches",
+    data: [
+      { label: "Wk 1", questions: 18, documents: 12, searches: 32 },
+      { label: "Wk 2", questions: 24, documents: 18, searches: 42 },
+      { label: "Wk 3", questions: 28, documents: 22, searches: 45 },
+      { label: "Wk 4", questions: 28, documents: 22, searches: 46 },
+    ],
+  },
+
+  90: {
+    label: "90 Days",
+    maxValue: 380,
+    subtext: "Personal activity breakdown over past 90 days",
+    totalText: "Total Activity: 285 Questions • 210 Docs • 490 Searches",
+    data: [
+      { label: "Month 1", questions: 82, documents: 60, searches: 140 },
+      { label: "Month 2", questions: 95, documents: 72, searches: 165 },
+      { label: "Month 3", questions: 108, documents: 78, searches: 185 },
+    ],
+  },
+};
+
 export { employeeMetrics };
