@@ -5,7 +5,8 @@ import PageHero from "../../common/PageHero.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
 import pageMetadata from "../../../config/pageMetadata.js";
 
-import employeeMetrics from "./employeeDashboardData.js";
+import { employeeMetrics, velocityChartData } from "./employeeDashboardData.js";
+import LineAreaChart from "../../charts/LineAreaChart.jsx";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -44,6 +45,12 @@ function EmployeeOverview() {
             iconColor={metric.iconColor}
           />
         ))}
+      </div>
+      {/* ─────────────────────────────────────────
+          Velocity Graph
+      ───────────────────────────────────────── */}
+      <div className="mt-6">
+        <LineAreaChart data={velocityChartData} />
       </div>
     </div>
   );
