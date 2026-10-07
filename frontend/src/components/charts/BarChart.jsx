@@ -46,7 +46,7 @@ function BarChart({ data = [], activeIndex = null, onHover }) {
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="flex h-[150px] items-end justify-center gap-6 border-b border-(--border-subtle) pb-[2px]">
+    <div className="flex h-37.5 items-end justify-center gap-6 border-b border-(--border-subtle) pb-0.5">
       {data.map((item, index) => {
         // Derive visual states
         const height = (item.value / maxValue) * 100;
@@ -66,7 +66,7 @@ function BarChart({ data = [], activeIndex = null, onHover }) {
               className={`
     relative
     w-[85%] self-center rounded-t-[14px]
-    transition-all duration-[220ms] ease-[cubic-bezier(0.16,1,0.3,1)]
+    transition-all duration-220 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${isHovered || isActive ? "bg-(--primary)" : "bg-(--border-medium)"}
   `}
               style={{

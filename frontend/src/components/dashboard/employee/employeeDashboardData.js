@@ -140,4 +140,55 @@ export const myEkaUsageData = {
   },
 };
 
+export const myQueryTopicsData = {
+  title: "My Query Topics",
+  defaultSubtext: "Most frequently queried knowledge categories",
+  totalBadge: "76 Total Queries",
+  topCategory: "HR Policies",
+  topCategoryPercent: 31,
+  accuracyMetric: "99.1% Answer Accuracy",
+  topics: [
+    {
+      id: "hr",
+      icon: "📋",
+      topic: "HR Policies",
+      count: 24,
+      percent: 31,
+      widthPct: 100,
+    },
+    {
+      id: "finance",
+      icon: "💳",
+      topic: "Finance",
+      count: 18,
+      percent: 23,
+      widthPct: 75,
+    },
+    {
+      id: "engineering",
+      icon: "⚙️",
+      topic: "Engineering",
+      count: 15,
+      percent: 19,
+      widthPct: 62.5,
+    },
+    {
+      id: "company",
+      icon: "🏢",
+      topic: "Company Policies",
+      count: 11,
+      percent: 14,
+      widthPct: 45.8,
+    },
+    {
+      id: "benefits",
+      icon: "🎁",
+      topic: "Benefits",
+      count: 8,
+      percent: 10,
+      widthPct: 33.3,
+    },
+  ],
+};
+
 export { employeeMetrics };

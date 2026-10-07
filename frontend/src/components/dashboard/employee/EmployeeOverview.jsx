@@ -9,9 +9,11 @@ import {
   employeeMetrics,
   velocityChartData,
   myEkaUsageData,
+  myQueryTopicsData,
 } from "./employeeDashboardData.js";
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
 import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
+import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -62,8 +64,9 @@ function EmployeeOverview() {
           Usage  Graph
       ───────────────────────────────────────── */}
       <div className="mt-6 grid grid-cols-[1.15fr_1fr] gap-6 max-[900px]:grid-cols-1">
-        {/* My Query Topics will go here */}
         <MyEkaUsageChart data={myEkaUsageData} />
+
+        <MyQueryTopics data={myQueryTopicsData} />
       </div>
     </div>
   );
