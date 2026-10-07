@@ -18,7 +18,7 @@ export default function DocumentsPage() {
     const DocumentsComponent =
         roleComponents[activeRole] || EmployeeDocument;
     return (
-        <div className="px-6 py-6">
+        <div className="px-4 py-0">
             <DocumentsComponent />
         </div>
     );
