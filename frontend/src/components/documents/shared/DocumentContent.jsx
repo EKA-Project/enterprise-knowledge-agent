@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { documents, documentCategories, documentFormats } from './DocumentData';
 import DocumentCard from './DocumentCard.jsx';
 
-function DocumentsContent() {
+function DocumentsContent({ adminMode = false }) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All Categories');
   const [format, setFormat] = useState('All Formats');
@@ -91,8 +91,8 @@ function DocumentsContent() {
             aria-label="Grid view"
             onClick={() => setViewMode('grid')}
             className={`rounded-full p-2 ${viewMode === 'grid'
-                ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-                : 'text-(--text-muted)'
+              ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
+              : 'text-(--text-muted)'
               }`}
           >
             <LayoutGrid size={15} />
@@ -103,8 +103,8 @@ function DocumentsContent() {
             aria-label="List view"
             onClick={() => setViewMode('list')}
             className={`rounded-full p-2 ${viewMode === 'list'
-                ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-                : 'text-(--text-muted)'
+              ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
+              : 'text-(--text-muted)'
               }`}
           >
             <List size={15} />
@@ -115,7 +115,11 @@ function DocumentsContent() {
       {viewMode === 'grid' && (
         <section className="grid grid-cols-3 gap-5">
           {filteredDocuments.map((document) => (
-            <DocumentCard key={document.id} document={document} />
+            <DocumentCard
+              key={document.id}
+              document={document}
+              adminMode={adminMode}
+            />
           ))}
         </section>
       )}
