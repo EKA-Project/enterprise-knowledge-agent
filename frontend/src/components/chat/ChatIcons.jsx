@@ -138,3 +138,10 @@ export const PlusIcon = make(
 export const MessageIcon = make(
   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
 );
+///Back to ask eka page from history page
+export const ArrowLeftIcon = make(
+  <>
+    <path d="M19 12H5" />
+    <path d="m12 19-7-7 7-7" />
+  </>
+);
