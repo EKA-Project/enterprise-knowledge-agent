@@ -1,0 +1,38 @@
+/* Only what Tailwind can't express cleanly. Scoped to .ask-eka-page, so nothing leaks. */
+
+.ask-eka-page .ask-eka-rise {
+  animation: ask-eka-rise 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes ask-eka-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* blinking cursor shown at the end of the text while EKA is generating */
+.ask-eka-page .ask-eka-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--primary);
+  animation: ask-eka-blink 1s step-end infinite;
+}
+@keyframes ask-eka-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ask-eka-page .ask-eka-rise,
+  .ask-eka-page .ask-eka-cursor { animation: none; }
+}
+
+.ask-eka-page .ask-eka-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ask-eka-page .ask-eka-scroll::-webkit-scrollbar {
+  display: none;
+}
