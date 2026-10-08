@@ -57,3 +57,39 @@ function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread }) {
     </header>
   );
 }
+
+// ===================== empty state (page-specific, stays local) =====================
+const SUGGESTED = [
+  "What's our leave policy?",
+  'How do I submit an expense claim?',
+  "What's the onboarding checklist for new hires?",
+  "What's our remote work policy?",
+];
+
+function EmptyState({ onPick }) {
+  return (
+    <div className="m-auto flex flex-col items-center px-3 py-4 text-center">
+      <div className="mb-2 grid h-14 w-14 place-items-center rounded-xl border border-dashed border-[var(--primary)] text-[var(--primary)]">
+        <FileIcon size={22} />
+      </div>
+      <p className={`${EYEBROW} m-0 mb-1.5`}>ENTRY 00 · EMPTY</p>
+      <h2 className={`${SERIF} m-0 mb-1.5 text-[30px] font-bold italic text-[var(--text-primary)]`}>The ledger is empty</h2>
+      <p className="m-0 mb-4 max-w-[520px] text-[13px] leading-relaxed text-[var(--text-secondary)]">
+        Ask a question about your organization's documents and it will be logged here, with the exact source attached.
+      </p>
+
+      <p className={`${EYEBROW} m-0 mb-3`}>TRY ONE OF THESE</p>
+      <div className="flex max-w-[580px] flex-wrap justify-center gap-2.5">
+        {SUGGESTED.map((q) => (
+          <button
+            key={q}
+            onClick={() => onPick(q)}
+            className={`${MONO} rounded-md border border-dashed border-[var(--border-medium)] bg-[var(--bg-surface)] px-4 py-2.5 text-[12.5px] text-[var(--text-primary)] transition hover:border-[var(--primary)] hover:bg-[var(--bg-surface-subtle)]`}
+          >
+            {q}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
