@@ -8,7 +8,17 @@ function DocumentsContent({ adminMode = false }) {
   const [category, setCategory] = useState('All Categories');
   const [format, setFormat] = useState('All Formats');
   const [viewMode, setViewMode] = useState('grid');
-  const filteredDocuments = documents.filter((document) => {
+    // Local copy of the documents, so pin / bookmark toggles show up in the UI.
+  const [docs, setDocs] = useState(documents);
+
+  const handleToggleFlag = (id, flag) => {
+    setDocs((current) =>
+      current.map((item) =>
+        item.id === id ? { ...item, [flag]: !item[flag] } : item,
+      ),
+    );
+  };
+  const filteredDocuments = docs.filter((document) => {
     const searchText = search.toLowerCase().trim();
 
     const matchesSearch =
@@ -119,6 +129,7 @@ function DocumentsContent({ adminMode = false }) {
               key={document.id}
               document={document}
               adminMode={adminMode}
+              onToggleFlag={handleToggleFlag}
             />
           ))}
         </section>

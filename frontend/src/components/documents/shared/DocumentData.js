@@ -29,6 +29,8 @@ export const documents = [
     status: 'Indexed',
     author: 'Platform Engineering',
     chunks: 58,
+    isBookmarked: true,
+
   },
   {
     id: 'doc-3',
@@ -57,6 +59,7 @@ export const documents = [
     status: 'Indexed',
     author: 'People Operations',
     chunks: 47,
+    isPinned: true,
   },
   {
     id: 'doc-5',
@@ -71,6 +74,8 @@ export const documents = [
     status: 'Indexed',
     author: 'Security & Compliance',
     chunks: 76,
+    isPinned: true,
+    isBookmarked: true,
   },
   {
     id: 'doc-6',
@@ -85,6 +90,7 @@ export const documents = [
     status: 'Indexed',
     author: 'Product Design',
     chunks: 36,
+    isPinned: true,
   },
 
     {
@@ -152,3 +158,4 @@ export const documentHealth = [
 
 // Admin-only: storage usage shown next to the Ingest button.
 export const documentStorage = { usedGb: 14.2, totalGb: 50 };
+
