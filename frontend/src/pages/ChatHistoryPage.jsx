@@ -58,3 +58,69 @@ function ThreadCard({ thread, onResume, onArchive, onDelete }) {
     </article>
   );
 }
+//Chat history page, separate from the main AskEkaPage. This is a full-page view of all threads, with search and filtering.
+export default function ChatHistoryPage() {
+  const navigate = useNavigate();
+  const [threads, setThreads] = useState(getThreads);
+  const [query, setQuery] = useState('');
+
+  const refresh = () => setThreads(getThreads());
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return threads;
+    return threads.filter((t) => {
+      const { title, snippet } = summarizeThread(t);
+      return `${title} ${snippet}`.toLowerCase().includes(q);
+    });
+  }, [threads, query]);
+
+   return ( 
+  <div className="mx-auto w-full max-w-[960px]">
+
+    <Link 
+      to="/ask-eka" 
+      className="mb-5 inline-flex items-center gap-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3.5 py-2 text-[12.5px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-surface-subtle)]"
+    >
+      <ArrowLeftIcon size={14} />
+      Back to Ask EKA
+    </Link>
+
+    <p className={`${EYEBROW} m-0 mb-2`}>THREAD ARCHIVE</p>
+      <h1 className={`${SERIF} m-0 mb-2 text-[36px] font-bold text-[var(--text-primary)]`}>Chat History &amp; Archives</h1>
+      <p className="m-0 mb-6 max-w-[600px] text-[14.5px] leading-relaxed text-[var(--text-secondary)]">
+        Every conversation is logged, grounded in your documents, and isolated to your tenant. Search past threads or pick
+        up exactly where you left off.
+      </p>
+
+      <label className="mb-6 flex items-center gap-3 rounded-xl border border-[var(--border-medium)] bg-[var(--bg-surface)] px-4 py-3 transition focus-within:border-[var(--primary)]">
+        <SearchIcon size={16} className="text-[var(--text-muted)]" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search threads by question or answer..."
+          className="min-w-0 flex-1 border-none bg-transparent text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
+        />
+        <span className={`${MONO} text-[11px] text-[var(--text-muted)]`}>{filtered.length} threads</span>
+      </label>
+
+      <div className="flex flex-col gap-4 pb-6">
+        {filtered.map((thread) => (
+          <ThreadCard
+            key={thread.id}
+            thread={thread}
+            onResume={(id) => navigate('/ask-eka', { state: { threadId: id } })}
+            onArchive={(id) => { toggleArchiveThread(id); refresh(); }}
+            onDelete={(id) => { deleteThread(id); refresh(); }}
+          />
+        ))}
+
+        {filtered.length === 0 && (
+          <p className="m-0 rounded-2xl border border-dashed border-[var(--border-medium)] px-6 py-10 text-center text-[14px] text-[var(--text-muted)]">
+            No threads match your search.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
