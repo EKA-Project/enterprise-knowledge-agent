@@ -138,3 +138,17 @@ export const documentFormats = [
   'TXT',
   'XLSX',
 ];
+
+
+// Admin-only: repository health snapshot for the Document Health Overview.
+// Order matters — the donut draws its segments clockwise from 12 o'clock
+// in exactly this order.
+export const documentHealth = [
+  { key: 'indexed', label: 'Indexed', count: 531, color: 'var(--status-success)' },
+  { key: 'processing', label: 'Processing', count: 23, color: 'var(--status-info)' },
+  { key: 'outdated', label: 'Outdated', count: 10, color: 'var(--status-warning)' },
+  { key: 'failed', label: 'Failed', count: 14, color: 'var(--status-danger)' },
+];
+
+// Admin-only: storage usage shown next to the Ingest button.
+export const documentStorage = { usedGb: 14.2, totalGb: 50 };

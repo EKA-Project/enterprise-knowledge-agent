@@ -1,4 +1,7 @@
 import DocumentContent from '../shared/DocumentContent.jsx';
+import { documents } from '../shared/DocumentData';
+import StorageIndicator from './StorageIndicator.jsx';
+import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 
 function AdminDocument() {
 
@@ -8,7 +11,7 @@ function AdminDocument() {
       <section className="mb-6 flex items-end justify-between gap-8">
         <div>
           <p className="doc-mono text-xs font-semibold uppercase tracking-[0.16em] text-(--text-eyebrow)">
-            Ingestion Repository / 6 Docs
+            Ingestion Repository / {documents.length} Docs
           </p>
 
           <h1 className="doc-heading mt-2 text-4xl font-bold text-(--text-primary)">
@@ -21,10 +24,7 @@ function AdminDocument() {
         </div>
 
         <div className="flex shrink-0 items-center gap-3">
-          <div className="rounded-full border border-(--border-medium) bg-(--bg-surface) px-5 py-2.5 text-xs font-semibold text-(--text-primary)">
-            EKA STORAGE: 14.2 GB / 50 GB
-            <span className="ml-2 text-(--text-muted)">28.4% Capacity</span>
-          </div>
+          <StorageIndicator />
 
           <button
             type="button"
