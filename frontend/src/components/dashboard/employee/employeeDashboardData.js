@@ -191,4 +191,28 @@ export const myQueryTopicsData = {
   ],
 };
 
+export const savedBookmarks = [
+  {
+    id: "doc-1",
+    title: "Corporate Governance & Compliance Policy",
+    category: "People & HR Operations",
+    format: "PDF",
+    pages: 4,
+  },
+  {
+    id: "doc-2",
+    title: "Kubernetes Microservices & Service Mesh Architecture Guide",
+    category: "Engineering & DevOps",
+    format: "MD",
+    pages: 4,
+  },
+  {
+    id: "doc-3",
+    title: "2026 Global Remote Work, Travel & Flexible Hours Policy",
+    category: "People & HR Operations",
+    format: "PDF",
+    pages: 4,
+  },
+];
+
 export { employeeMetrics };

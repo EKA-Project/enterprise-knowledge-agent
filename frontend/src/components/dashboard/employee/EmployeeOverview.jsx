@@ -10,12 +10,14 @@ import {
   velocityChartData,
   myEkaUsageData,
   myQueryTopicsData,
+  savedBookmarks,
 } from "./employeeDashboardData.js";
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
 import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
 import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
 
 import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
+import MySavedBookmarks from "./MySavedBookmarks.jsx";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -73,8 +75,7 @@ function EmployeeOverview() {
 
       <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
         <AdminPinnedDocuments />
-
-        {/* Saved Bookmarks will go here */}
+        <MySavedBookmarks data={savedBookmarks} />
       </div>
     </div>
   );

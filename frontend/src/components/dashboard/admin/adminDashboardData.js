@@ -92,6 +92,13 @@ export const pinnedDocuments = [
     title: "2026 Global Remote Work, Travel & Expense Policy",
     meta: "People & HR Operations • 1.8 MB • 6 min read",
   },
+
+
+  {
+    title: "Information Security & Data Protection Policy",
+    type: "PDF",
+    meta: "Security & Compliance • 24 pages",
+  },
 ];
 
 export default adminMetrics;
