@@ -93,3 +93,125 @@ function EmptyState({ onPick }) {
     </div>
   );
 }
+
+// ===================== page =====================
+export default function AskEkaPage() {
+  const chat = useChat();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [inputValue, setInputValue] = useState('');
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [threads, setThreads] = useState(() => getThreads().filter((t) => !t.archived));
+
+  const scrollRef = useRef(null);
+  const stickRef = useRef(true); // true while the user is near the bottom
+
+  const refreshThreads = () => setThreads(getThreads().filter((t) => !t.archived));
+
+  // "Resume Thread" from the archive page arrives with { threadId } in router state.
+  useEffect(() => {
+    const id = location.state?.threadId;
+    if (id) {
+      chat.loadThread(id);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keep the newest text in view while generating, unless the user scrolled up.
+  function handleScroll() {
+    const el = scrollRef.current;
+    stickRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  }
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el && stickRef.current) el.scrollTo({ top: el.scrollHeight });
+  }, [chat.turns]);
+
+  function handleSend() {
+    if (chat.isGenerating) return;
+    stickRef.current = true;
+    if (chat.submitQuestion(inputValue)) setInputValue('');
+  }
+
+  function handleSuggestion(question) {
+    stickRef.current = true;
+    chat.submitQuestion(question);
+  }
+
+  function handleNewThread() {
+    chat.newThread();
+    setInputValue('');
+    refreshThreads();
+  }
+
+  function handleToggleHistory() {
+    if (!historyOpen) refreshThreads();
+    setHistoryOpen(!historyOpen);
+  }
+
+  function handleSelectThread(id) {
+    chat.loadThread(id);
+    refreshThreads();
+  }
+
+  function handleDeleteThread(id) {
+    deleteThread(id);
+    chat.detachThread(id);
+    refreshThreads();
+  }
+
+  return (
+    // h-full fills AppLayout's <main>. If main isn't height-constrained in your shell,
+    // use h-[calc(100dvh-8.5rem)] instead (4.5rem topbar + 4rem main vertical padding).
+    <div className="ask-eka-page flex h-full min-h-0 flex-col gap-4">
+      <AskEkaHeader historyOpen={historyOpen} onToggleHistory={handleToggleHistory} onNewThread={handleNewThread} />
+
+      <div className="flex min-h-0 flex-1">
+        <ChatHistoryDrawer
+          open={historyOpen}
+          threads={threads}
+          activeThreadId={chat.threadId}
+          onClose={() => setHistoryOpen(false)}
+          onSelect={handleSelectThread}
+          onDelete={handleDeleteThread}
+        />
+
+        <section className="flex min-h-0 min-w-0 flex-1 flex-col">
+          {/* only this area scrolls; header and input stay in place */}
+          <div ref={scrollRef} onScroll={handleScroll} className="ask-eka-scroll flex min-h-0 flex-1 flex-col overflow-y-auto pr-1">
+            {chat.turns.length === 0 ? (
+              <EmptyState onPick={handleSuggestion} />
+            ) : (
+              <div className="flex flex-col gap-5 pb-6 pt-1">
+                {chat.turns.map((turn, i) => (
+                  <ChatMessage
+                    key={turn.id}
+                    turn={turn}
+                    entryNumber={i + 1}
+                    onPause={chat.pauseTurn}
+                    onResume={chat.resumeTurn}
+                    onRegenerate={chat.regenerateTurn}
+                    onEdit={chat.editQuestion}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="shrink-0 -mb-4 pt-2">
+            <ChatInput
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onSend={handleSend}
+              entryNumber={chat.turns.length + 1}
+              isGenerating={chat.isGenerating}
+              onPause={chat.pauseActive}
+            />
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
