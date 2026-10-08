@@ -99,3 +99,32 @@ export function toggleArchiveThread(id) {
   threads = threads.map((t) => (t.id === id ? { ...t, archived: !t.archived } : t));
 }
 
+// Saves (or updates) a thread and returns its id.
+export function saveThread(turns, id = null) {
+  const clean = turns.map(({ id: turnId, question, answer, citation }) => ({
+    id: turnId,
+    question,
+    answer,
+    citation,
+    when: 'Earlier',
+  }));
+
+  if (id && threads.some((t) => t.id === id)) {
+    threads = threads.map((t) => (t.id === id ? { ...t, turns: clean, updated: 'Updated just now' } : t));
+    return id;
+  }
+
+  const newId = `th-${Date.now()}`;
+  threads = [{ id: newId, turns: clean, updated: 'Updated just now', archived: false }, ...threads];
+  return newId;
+}
+
+// Derived display values, so threads store no duplicated data.
+export function summarizeThread(thread) {
+  const first = thread.turns[0];
+  return {
+    title: first ? first.question : 'Untitled thread',
+    snippet: first ? first.answer.points[0]?.text ?? first.answer.intro : '',
+    messageCount: thread.turns.length * 2, // one question + one answer per turn
+  };
+}
