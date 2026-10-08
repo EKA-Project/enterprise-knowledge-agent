@@ -14,6 +14,8 @@ import {
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
 import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
 import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
+
+import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -67,6 +69,12 @@ function EmployeeOverview() {
         <MyEkaUsageChart data={myEkaUsageData} />
 
         <MyQueryTopics data={myQueryTopicsData} />
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
+        <AdminPinnedDocuments />
+
+        {/* Saved Bookmarks will go here */}
       </div>
     </div>
   );
