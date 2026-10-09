@@ -20,6 +20,7 @@ import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
 import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
 import MySavedBookmarks from "./MySavedBookmarks.jsx";
 import MyRecentSearchConfidence from "./MyRecentSearchConfidence.jsx";
+import EmployeeFaqCard from "./EmployeeFaqCard.jsx";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -76,11 +77,11 @@ function EmployeeOverview() {
         <AdminPinnedDocuments />
         <MySavedBookmarks data={savedBookmarks} />
       </div>
+
       {/* Recent Searches & Frequently Asked Questions */}
       <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
         <MyRecentSearchConfidence data={recentSearches} />
-
-        {/* Frequently Asked Questions will be added here */}
+        <EmployeeFaqCard />
       </div>
     </div>
   );

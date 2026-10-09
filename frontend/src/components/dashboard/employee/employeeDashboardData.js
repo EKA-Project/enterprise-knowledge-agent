@@ -240,4 +240,29 @@ export const recentSearches = [
   },
 ];
 
+// Frequently Asked Questions
+export const employeeFaqs = [
+  {
+    id: "faq-wifi",
+    question: "What is the office Wi-Fi password and VPN certificate link?",
+    targetQuery:
+      "What is the branch office Wi-Fi password and VPN download URL?",
+    actionLabel: "Click to query EKA →",
+  },
+  {
+    id: "faq-okr",
+    question: "How do I submit quarterly OKRs and peer reviews in Lattice?",
+    targetQuery:
+      "How do I submit quarterly OKRs and peer reviews in Lattice?",
+    actionLabel: "Click to query EKA →",
+  },
+  {
+    id: "faq-holidays",
+    question: "What are the official paid company holidays for 2026?",
+    targetQuery:
+      "What are the official paid company holidays for 2026?",
+    actionLabel: "Click to query EKA →",
+  },
+];
+
 export { employeeMetrics };
