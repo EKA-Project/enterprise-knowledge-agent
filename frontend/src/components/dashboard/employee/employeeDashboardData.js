@@ -215,4 +215,29 @@ export const savedBookmarks = [
   },
 ];
 
+// Recent Search Confidence
+export const recentSearches = [
+  {
+    id: "search-1",
+    query: "Work from home policy 90-day tax limits",
+    timestamp: "Queried 10 mins ago",
+    groundingDetail: "3 sources verified",
+    confidenceLevel: "high",
+  },
+  {
+    id: "search-2",
+    query: "Kubernetes failover DNS TTL settings",
+    timestamp: "Queried 2 hours ago",
+    groundingDetail: "2 sources verified",
+    confidenceLevel: "high",
+  },
+  {
+    id: "search-3",
+    query: "Navan travel stipend roll forward rules",
+    timestamp: "Queried Yesterday",
+    groundingDetail: "Partial policy match",
+    confidenceLevel: "medium",
+  },
+];
+
 export { employeeMetrics };

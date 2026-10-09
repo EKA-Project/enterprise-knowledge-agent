@@ -11,6 +11,7 @@ import {
   myEkaUsageData,
   myQueryTopicsData,
   savedBookmarks,
+  recentSearches,
 } from "./employeeDashboardData.js";
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
 import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
@@ -18,6 +19,7 @@ import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
 
 import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
 import MySavedBookmarks from "./MySavedBookmarks.jsx";
+import MyRecentSearchConfidence from "./MyRecentSearchConfidence.jsx";
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -40,7 +42,6 @@ function EmployeeOverview() {
         description={hero.description}
         status={hero.status}
       />
-
       {/* ─────────────────────────────────────────
           Overview metrics
       ───────────────────────────────────────── */}
@@ -63,7 +64,6 @@ function EmployeeOverview() {
       <div className="mt-6">
         <LineAreaChart data={velocityChartData} />
       </div>
-
       {/* ─────────────────────────────────────────
           Usage  Graph
       ───────────────────────────────────────── */}
@@ -72,10 +72,15 @@ function EmployeeOverview() {
 
         <MyQueryTopics data={myQueryTopicsData} />
       </div>
-
       <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
         <AdminPinnedDocuments />
         <MySavedBookmarks data={savedBookmarks} />
+      </div>
+      {/* Recent Searches & Frequently Asked Questions */}
+      <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
+        <MyRecentSearchConfidence data={recentSearches} />
+
+        {/* Frequently Asked Questions will be added here */}
       </div>
     </div>
   );
