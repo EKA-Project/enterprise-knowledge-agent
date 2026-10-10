@@ -60,9 +60,10 @@ function ActionBar({ answer, onRegenerate }) {
     setTimeout(() => setCopied(false), 1500);
   }
 
-  const btn = 'grid h-8 w-8 place-items-center rounded-lg transition hover:bg-[var(--bg-surface-subtle)]';
-  const idle = 'text-[var(--text-muted)] hover:text-[var(--text-primary)]';
-  const on = 'text-[var(--primary)]';
+const btn =
+  'grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-transparent transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-105 hover:border-[var(--badge-border)] hover:bg-[var(--primary-light)] hover:text-[var(--primary)] active:translate-y-0 active:scale-95';
+  const idle = 'text-[var(--text-muted)]';
+  const on = 'border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)]';
 
   return (
     <div className="mt-3 flex items-center gap-1">
@@ -86,8 +87,7 @@ function ActionBar({ answer, onRegenerate }) {
 }
 
 // ---- one full ledger entry (question + answer + sources) ----------------------
-export default function ChatMessage({ turn, entryNumber, onPause, onResume, onRegenerate, onEdit }) {
-  const { id, question, answer, citation, status, thinking, revealed, when } = turn;
+export default function ChatMessage({ turn, entryNumber, onPause, onResume, onRegenerate, onEdit, onOpenSource }) {  const { id, question, answer, citation, status, thinking, revealed, when } = turn;
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(question);
 
@@ -103,6 +103,10 @@ export default function ChatMessage({ turn, entryNumber, onPause, onResume, onRe
     setEditing(true);
   }
 
+  function cancelEdit() {
+    setDraft(question);
+    setEditing(false);
+  }
   function saveEdit() {
     const next = draft.trim();
     setEditing(false);
@@ -138,29 +142,50 @@ export default function ChatMessage({ turn, entryNumber, onPause, onResume, onRe
 
         {/* question (or inline editor) */}
         {editing ? (
-          <div className="mb-4 flex items-center gap-2">
-            <input
-              autoFocus
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') saveEdit();
-                if (e.key === 'Escape') setEditing(false);
-              }}
-              className={`${SERIF} min-w-0 flex-1 rounded-lg border border-[var(--primary)] bg-transparent px-3 py-2 text-[20px] font-semibold italic text-[var(--text-primary)] outline-none`}
-            />
-            <button onClick={saveEdit} className="rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)]">
-              Save
-            </button>
-            <button onClick={() => setEditing(false)} className="rounded-full border border-[var(--border-subtle)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--text-secondary)]">
-              Cancel
-            </button>
-          </div>
-        ) : (
-          <h3 className={`${SERIF} m-0 mb-2 text-[20px] font-semibold italic leading-tight text-[var(--text-primary)]`}>
-            “{question}”
-          </h3>
-        )}
+        <div className="mb-4 rounded-2xl border border-[var(--badge-border)] bg-[var(--primary-light)] p-4">
+        <div className="mb-2.5 flex items-center justify-between gap-3">
+          <p className={`${MONO} m-0 flex items-center gap-1.5 text-[10.5px] font-bold tracking-[0.12em] text-[var(--primary)]`}>
+            <EditIcon size={12} /> EDIT QUESTION PROMPT
+          </p>
+        <p className={`${MONO} m-0 text-[10.5px] text-[var(--text-muted)]`}>
+         Modifying prompt re-synthesizes answer
+        </p>
+      </div>
+
+      <textarea
+        autoFocus
+        rows={2}
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onFocus={(e) => e.target.setSelectionRange(e.target.value.length, e.target.value.length)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(); }
+          if (e.key === 'Escape') cancelEdit();
+        }}
+        className={`${SERIF} w-full resize-none rounded-xl border border-[var(--primary)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-[18px] font-semibold italic leading-snug text-[var(--text-primary)] outline-none focus:[box-shadow:0_0_0_3px_var(--primary-glow)]`}
+      />
+
+      <div className="mt-3 flex items-center justify-end gap-2">
+        <button
+          onClick={cancelEdit}
+          className="cursor-pointer rounded-full border border-[var(--border-medium)] bg-[var(--bg-surface)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-subtle)]"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={saveEdit}
+          disabled={!draft.trim()}
+          className="cursor-pointer rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Save &amp; Regenerate
+        </button>
+      </div>
+    </div>
+    ) : (
+    <h3 className={`${SERIF} m-0 mb-4 text-[26px] font-semibold italic leading-tight text-[var(--text-primary)]`}>
+      “{question}”
+    </h3>
+    )}
 
         {/* answer box, filled progressively */}
         <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-subtle)] px-5 py-4 text-[12.5px] leading-[1.5] text-[var(--text-secondary)]">
@@ -186,8 +211,8 @@ export default function ChatMessage({ turn, entryNumber, onPause, onResume, onRe
         {!showDots && (
           <div className="mt-4 flex flex-wrap gap-3">
             {citation.map((c) => (
-              <CitationPill key={c.title} title={c.title} meta={c.meta} />
-            ))}
+              <CitationPill key={c.title} {...c} onOpen={onOpenSource} />
+        ))}
           </div>
         )}
         {status === 'done' && <ActionBar answer={answer} onRegenerate={() => onRegenerate(id)} />}

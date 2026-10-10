@@ -16,8 +16,8 @@ export function buildPlaceholderAnswer(question) {
 // A turn's `citation` is a list of source objects.
 export function buildPlaceholderCitation() {
   return [
-    { title: 'Corporate Governance & Compliance Policy.pdf', meta: 'page 1 · verified source' },
-    { title: '2026 Global Remote Work Policy.pdf', meta: 'page 1 · verified source' },
+    { documentId: 'doc-corporate-governance', title: 'Corporate Governance & Compliance Policy.pdf', page: 1, meta: 'page 1 · verified source' },
+    { documentId: 'doc-remote-work-2026', title: '2026 Global Remote Work Policy.pdf', page: 1, meta: 'page 1 · verified source' },
   ];
 }
 
@@ -97,6 +97,10 @@ export function deleteThread(id) {
 
 export function toggleArchiveThread(id) {
   threads = threads.map((t) => (t.id === id ? { ...t, archived: !t.archived } : t));
+}
+
+export function clearAllArchivedThreads() {
+  threads = threads.filter((thread) => !thread.archived);
 }
 
 // Saves (or updates) a thread and returns its id.

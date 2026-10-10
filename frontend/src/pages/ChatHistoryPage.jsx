@@ -1,64 +1,66 @@
 import { useMemo, useState } from 'react';
-import { deleteThread, getThreads, summarizeThread, toggleArchiveThread } from '../../services/chatService';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArchiveIcon, ArrowLeftIcon, ArrowRightIcon, MessageIcon, SearchIcon, ShieldCheckIcon, TrashIcon } from '../components/chat/ChatIcons';
+import {  clearAllArchivedThreads, deleteThread, getThreads, summarizeThread, toggleArchiveThread } from '../../services/chatService';
+import { useNavigate } from 'react-router-dom';
+import { ArchiveIcon,  ArrowRightIcon, MessageIcon, PlusIcon, SearchIcon, ShieldCheckIcon, TrashIcon } from '../components/chat/ChatIcons';
 import { EYEBROW, MONO, SERIF } from '../components/chat/ChatUtils';
-
 function ThreadCard({ thread, onResume, onArchive, onDelete }) {
   const { title, snippet, messageCount } = summarizeThread(thread);
-  const iconBtn =
-    'grid h-8 w-8 place-items-center rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] transition hover:bg-[var(--bg-surface-subtle)]';
+  const iconBtn = 'grid h-7 w-7 cursor-pointer place-items-center rounded-full text-[var(--text-muted)] transition-colors';
 
   return (
-    <article className="flex items-start gap-5 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 transition [box-shadow:var(--shadow-sm)] hover:[box-shadow:var(--shadow-md)]">
-      <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[var(--sidebar-bg)] text-[var(--sidebar-text)]">
-        <MessageIcon size={18} />
+    <article className="flex items-center gap-3.5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-3 transition [box-shadow:var(--shadow-sm)] hover:border-[var(--border-medium)] hover:[box-shadow:var(--shadow-md)]">
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--primary-light)] text-[var(--primary)]">
+        <MessageIcon size={16} />
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="mb-1 flex items-center gap-2">
-          <h3 className={`${SERIF} m-0 truncate text-[19px] font-semibold italic text-[var(--text-primary)]`}>{title}</h3>
+        <div className="mb-0.5 flex items-center gap-2">
+          <h3 className={`${SERIF} m-0 truncate text-[15px] font-semibold text-[var(--text-primary)]`}>{title}</h3>
+          <span className={`${MONO} shrink-0 rounded-full border border-[var(--badge-border)] bg-[var(--badge-bg)] px-2 py-0.5 text-[9.5px] font-bold text-[var(--badge-text)]`}>
+            {messageCount} messages
+          </span>
           {thread.archived && (
-            <span className={`${MONO} rounded-full bg-[var(--bg-surface-subtle)] px-2 py-0.5 text-[10px] font-bold uppercase text-[var(--text-muted)]`}>
+            <span className={`${MONO} shrink-0 rounded-full bg-[var(--bg-surface-subtle)] px-2 py-0.5 text-[9.5px] font-bold uppercase text-[var(--text-muted)]`}>
               Archived
             </span>
           )}
         </div>
-        <p className="m-0 mb-3 line-clamp-2 text-[13.5px] leading-relaxed text-[var(--text-secondary)]">{snippet}</p>
-
-        <div className={`${MONO} flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-[var(--text-muted)]`}>
-          <span>{messageCount} messages</span>
+        <p className="m-0 mb-1 truncate text-[12.5px] text-[var(--text-secondary)]">{snippet}</p>
+        <div className={`${MONO} flex flex-wrap items-center gap-x-3 text-[10px] text-[var(--text-muted)]`}>
           <span>{thread.updated}</span>
-          <span className="flex items-center gap-1.5 text-[var(--badge-text)]">
-            <ShieldCheckIcon size={12} /> Tenant-Grounded
+          <span className="flex items-center gap-1 text-[var(--badge-text)]">
+            <ShieldCheckIcon size={11} /> 100% Tenant Grounded
           </span>
         </div>
       </div>
 
-      <div className="flex shrink-0 flex-col items-end gap-2">
+      <button
+        onClick={() => onResume(thread.id)}
+        className="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] active:scale-95"
+      >
+        Resume Thread <ArrowRightIcon size={12} />
+      </button>
+
+      <div className="flex shrink-0 items-center gap-0.5">
         <button
-          onClick={() => onResume(thread.id)}
-          className="flex items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-2 text-[12.5px] font-bold text-[var(--primary-contrast)] transition hover:bg-[var(--primary-hover)] active:scale-95"
+          onClick={() => onArchive(thread.id)}
+          title={thread.archived ? 'Unarchive' : 'Archive'}
+          className={`${iconBtn} hover:bg-[var(--primary-light)] hover:text-[var(--primary)]`}
         >
-          Resume Thread <ArrowRightIcon size={13} />
+          <ArchiveIcon size={14} />
         </button>
-        <div className="flex gap-1.5">
-          <button onClick={() => onArchive(thread.id)} title={thread.archived ? 'Unarchive' : 'Archive'} className={iconBtn}>
-            <ArchiveIcon size={14} />
-          </button>
-          <button
-            onClick={() => onDelete(thread.id)}
-            title="Delete"
-            className={`${iconBtn} hover:!bg-[var(--status-danger-bg)] hover:!text-[var(--status-danger)]`}
-          >
-            <TrashIcon size={14} />
-          </button>
-        </div>
+        <button
+          onClick={() => onDelete(thread.id)}
+          title="Delete"
+          className={`${iconBtn} hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)]`}
+        >
+          <TrashIcon size={14} />
+        </button>
       </div>
     </article>
   );
 }
-//Chat history page, separate from the main AskEkaPage. This is a full-page view of all threads, with search and filtering.
+
 export default function ChatHistoryPage() {
   const navigate = useNavigate();
   const [threads, setThreads] = useState(getThreads);
@@ -75,36 +77,56 @@ export default function ChatHistoryPage() {
     });
   }, [threads, query]);
 
-   return ( 
-  <div className="mx-auto w-full max-w-[960px]">
+  function handleClearAll() {
+    if (threads.length === 0) return;
+    if (window.confirm('Clear all archived threads? This cannot be undone.')) {
+      clearAllArchivedThreads();
+      refresh();
+    }
+  }
 
-    <Link 
-      to="/ask-eka" 
-      className="mb-5 inline-flex items-center gap-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3.5 py-2 text-[12.5px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-surface-subtle)]"
-    >
-      <ArrowLeftIcon size={14} />
-      Back to Ask EKA
-    </Link>
+  return (
+    <div className="mx-auto w-full max-w-[960px]">
+      <div className="mb-5 flex items-end justify-between gap-6">
+        <div className="min-w-0">
+          <p className={`${EYEBROW} m-0 mb-1.5`}>THREAD ARCHIVES</p>
+          <h1 className={`${SERIF} m-0 mb-1.5 text-[32px] font-bold text-[var(--text-primary)]`}>Chat History &amp; Archives</h1>
+          <p className="m-0 max-w-[560px] text-[13.5px] leading-relaxed text-[var(--text-secondary)]">
+            Reopen, search, and manage your past AI intelligence discussions and grounded answers.
+          </p>
+        </div>
 
-    <p className={`${EYEBROW} m-0 mb-2`}>THREAD ARCHIVE</p>
-      <h1 className={`${SERIF} m-0 mb-2 text-[36px] font-bold text-[var(--text-primary)]`}>Chat History &amp; Archives</h1>
-      <p className="m-0 mb-6 max-w-[600px] text-[14.5px] leading-relaxed text-[var(--text-secondary)]">
-        Every conversation is logged, grounded in your documents, and isolated to your tenant. Search past threads or pick
-        up exactly where you left off.
-      </p>
+        <div className="flex shrink-0 items-center gap-2.5">
+          <button
+            onClick={handleClearAll}
+            className="cursor-pointer rounded-full border border-red-200 bg-[var(--bg-surface)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--status-danger)] transition-colors hover:bg-[var(--status-danger-bg)]"
+          >
+            Clear All Archives
+          </button>
+          <button
+            onClick={() => navigate('/ask-eka')}
+            className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] active:scale-95"
+          >
+            <PlusIcon size={13} /> Start New Thread
+          </button>
+        </div>
+      </div>
 
-      <label className="mb-6 flex items-center gap-3 rounded-xl border border-[var(--border-medium)] bg-[var(--bg-surface)] px-4 py-3 transition focus-within:border-[var(--primary)]">
-        <SearchIcon size={16} className="text-[var(--text-muted)]" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search threads by question or answer..."
-          className="min-w-0 flex-1 border-none bg-transparent text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
-        />
-        <span className={`${MONO} text-[11px] text-[var(--text-muted)]`}>{filtered.length} threads</span>
-      </label>
+      {/* outer card with a capsule search field inside */}
+      <div className="mb-5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 [box-shadow:var(--shadow-sm)]">
+        <label className="flex items-center gap-2.5 rounded-full border border-transparent bg-[var(--bg-surface-subtle)] px-4 py-2.5 transition-colors focus-within:border-[var(--primary)]">
+          <SearchIcon size={15} className="shrink-0 text-[var(--text-muted)]" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search through past conversation topics, questions, or keywords..."
+            className={`${MONO} min-w-0 flex-1 border-none bg-transparent text-[12px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]`}
+          />
+          <span className={`${MONO} shrink-0 text-[10.5px] text-[var(--text-muted)]`}>{filtered.length} threads</span>
+        </label>
+      </div>
 
-      <div className="flex flex-col gap-4 pb-6">
+      <div className="flex flex-col gap-3 pb-6">
         {filtered.map((thread) => (
           <ThreadCard
             key={thread.id}

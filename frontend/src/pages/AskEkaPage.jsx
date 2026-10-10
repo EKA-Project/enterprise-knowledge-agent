@@ -11,11 +11,10 @@ import '../styles/chat.css'; // scoped animations only
 
 // ===================== header (page-specific, stays local) =====================
 function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread }) {
-  const badge = `${MONO} flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[10.5px] font-semibold text-[var(--text-secondary)]`;
-
+  const badge = `${MONO} inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[10.5px] font-semibold text-[var(--text-secondary)]`;
   return (
-    <header className="flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-4">
-      <div className="flex min-w-0 items-center gap-3">
+    <header className="flex shrink-0 items-start justify-between gap-4 border-b border-[var(--border-subtle)] pb-3">
+    <div className="flex min-w-0 flex-1 items-start gap-3">
         {/* opens the left history panel */}
         <button
           onClick={onToggleHistory}
@@ -30,26 +29,35 @@ function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread }) {
           <PanelIcon size={17} />
         </button>
 
-        <h1 className={`${SERIF} m-0 text-[24px] font-bold text-[var(--text-primary)]`}>Talk to your organization.</h1>
+        <div className="flex min-w-0 flex-col items-start gap-2">
+  <h1 className={`${SERIF} m-0 text-[24px] font-bold leading-tight text-[var(--text-primary)]`}>
+    Talk to your organization.
+  </h1>
 
-        <span className={badge}>
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> 24 docs (148k vectors)
-        </span>
-        <span className={badge}>
-          <ShieldCheckIcon size={12} /> 100% Tenant-Grounded
-        </span>
-      </div>
+  <div className="flex flex-wrap items-center gap-2">
+    <span className={badge}>
+      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+      24 docs (148k vectors)
+    </span>
+
+    <span className={badge}>
+      <ShieldCheckIcon size={12} />
+      100% Tenant-Grounded
+    </span>
+    </div>
+  </div>
+</div>
 
       <div className="flex shrink-0 items-center gap-2.5">
         <Link
           to="/ask-eka/history"
-          className="flex items-center gap-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3.5 py-2 text-[12.5px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-surface-subtle)]"
+          className="flex cursor-pointer items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--text-primary)] transition-colors hover:border-[var(--border-medium)] hover:bg-[var(--bg-surface-subtle)]"
         >
           <ArchiveIcon size={14} /> History Archive
         </Link>
         <button
           onClick={onNewThread}
-          className="flex items-center gap-1.5 rounded-lg bg-[var(--primary)] px-3.5 py-2 text-[12.5px] font-bold text-[var(--primary-contrast)] transition hover:bg-[var(--primary-hover)] active:scale-95"
+          className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-colors hover:bg-[var(--primary-hover)] active:scale-95"
         >
           <PlusIcon size={14} /> New Thread
         </button>
@@ -165,10 +173,9 @@ export default function AskEkaPage() {
   return (
     // h-full fills AppLayout's <main>. If main isn't height-constrained in your shell,
     // use h-[calc(100dvh-8.5rem)] instead (4.5rem topbar + 4rem main vertical padding).
-    <div className="ask-eka-page flex h-full min-h-0 flex-col gap-4">
-      <AskEkaHeader historyOpen={historyOpen} onToggleHistory={handleToggleHistory} onNewThread={handleNewThread} />
 
-      <div className="flex min-h-0 flex-1">
+      <div className="ask-eka-page flex h-full min-h-0 flex-col overflow-hidden">
+        <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
         <ChatHistoryDrawer
           open={historyOpen}
           threads={threads}
@@ -176,10 +183,15 @@ export default function AskEkaPage() {
           onClose={() => setHistoryOpen(false)}
           onSelect={handleSelectThread}
           onDelete={handleDeleteThread}
+          onNewThread={handleNewThread}
+          onOpenArchive={() => setHistoryOpen(false)}
         />
-
-        <section className="flex min-h-0 min-w-0 flex-1 flex-col">
-          {/* only this area scrolls; header and input stay in place */}
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden">          <AskEkaHeader
+          historyOpen={historyOpen}
+          onToggleHistory={handleToggleHistory}
+          onNewThread={handleNewThread}
+        />
+        <section className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">          {/* only this area scrolls; header and input stay in place */}
           <div ref={scrollRef} onScroll={handleScroll} className="ask-eka-scroll flex min-h-0 flex-1 flex-col overflow-y-auto pr-1">
             {chat.turns.length === 0 ? (
               <EmptyState onPick={handleSuggestion} />
@@ -200,8 +212,8 @@ export default function AskEkaPage() {
             )}
           </div>
 
-          <div className="shrink-0 -mb-4 pt-2">
-            <ChatInput
+          <div className="relative z-10 shrink-0 bg-[var(--bg-app)] pt-2">   
+              <ChatInput
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onSend={handleSend}
@@ -209,8 +221,10 @@ export default function AskEkaPage() {
               isGenerating={chat.isGenerating}
               onPause={chat.pauseActive}
             />
+            
           </div>
         </section>
+      </div>
       </div>
     </div>
   );

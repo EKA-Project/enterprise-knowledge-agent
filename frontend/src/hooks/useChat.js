@@ -7,9 +7,10 @@ import {
   saveThread,
 } from '../../services/chatService';
 
-const THINK_MS = 900;      // "thinking" dots before text starts
-const TICK_MS = 28;        // how often new text is revealed
-const CHARS_PER_TICK = 3;  // how much text is revealed per tick
+const THINK_MS = 1200;
+const TICK_MS = 38;
+const CHARS_MIN = 1;
+const CHARS_MAX = 3;
 
 let idCounter = 0;
 const makeId = () => `turn-${Date.now()}-${idCounter++}`;
@@ -54,14 +55,23 @@ export default function useChat() {
 
     // phase 2: reveal the answer a few characters at a time
     const timer = setInterval(() => {
+      const step =
+      CHARS_MIN + Math.floor(Math.random() * (CHARS_MAX - CHARS_MIN + 1));
+
       setTurns((prev) =>
-        prev.map((t) => {
-          if (t.id !== activeId || t.status !== 'generating') return t;
-          const revealed = Math.min(t.revealed + CHARS_PER_TICK, t.total);
-          return { ...t, revealed, status: revealed >= t.total ? 'done' : 'generating' };
-        })
-      );
-    }, TICK_MS);
+      prev.map((t) => {
+        if (t.id !== activeId || t.status !== 'generating') return t;
+
+        const revealed = Math.min(t.revealed + step, t.total);
+
+        return {
+          ...t,
+          revealed,
+          status: revealed >= t.total ? 'done' : 'generating',
+        };
+      })
+    );
+  }, TICK_MS);
     return () => clearInterval(timer);
   }, [activeId, activeThinking]);
   // Pausing flips status to 'paused', so `active` disappears and the cleanup stops the timer.

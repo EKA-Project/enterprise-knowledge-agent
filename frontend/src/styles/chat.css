@@ -8,19 +8,21 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* blinking cursor shown at the end of the text while EKA is generating */
+/* caret that sits at the end of the revealed text while EKA is generating */
 .ask-eka-page .ask-eka-cursor {
   display: inline-block;
   width: 2px;
-  height: 1.05em;
-  margin-left: 2px;
-  vertical-align: text-bottom;
+  height: 1.1em;
+  margin-left: 1px;
+  vertical-align: -0.18em;
+  border-radius: 1px;
   background: var(--primary);
-  animation: ask-eka-blink 1s step-end infinite;
+  box-shadow: 0 0 6px var(--primary-glow);
+  animation: ask-eka-caret 0.9s ease-in-out infinite;
 }
-@keyframes ask-eka-blink {
+@keyframes ask-eka-caret {
   0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
+  50%      { opacity: 0.45; }
 }
 
 @media (prefers-reduced-motion: reduce) {

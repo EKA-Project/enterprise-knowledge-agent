@@ -41,3 +41,13 @@ export function answerToPlainText(answer) {
     .map((line) => line.map((s) => s.text).join(''))
     .join('\n');
 }
+
+// ONE place that decides where a citation opens. It targets the existing /documents
+// route and passes the document id and page in router state. If Documents gets a
+// viewer route (e.g. /documents/:id), change only this function.
+export function getDocumentLink(citation) {
+  return {
+    to: '/documents',
+    state: { documentId: citation.documentId, page: citation.page },
+  };
+}
