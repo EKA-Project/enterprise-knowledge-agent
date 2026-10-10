@@ -1,57 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import BarChart from "../../charts/BarChart.jsx";
-import StackedBarChart from "../../charts/StackedBarChart.jsx";
+import DocumentGrowthChart from "../../charts/DocumentGrowthChart.jsx";
+import ActiveUsersChart from "../../charts/ActiveUsersChart.jsx";
 import QuestionsAnsweredChart from "../../charts/QuestionsAnsweredChart.jsx";
-
-/*
- * ============================================================
- * KNOWLEDGE GROWTH DATA
- * ============================================================
- *
- * Total indexed documents over time.
- *
- * This data is currently local.
- * Later, it can be replaced with data received from the
- * backend/API without changing the chart structure.
- */
-const documentGrowthData = [
-  { label: "Apr", value: 610 },
-  { label: "May", value: 760 },
-  { label: "Jun", value: 890 },
-  { label: "Jul", value: 1080 },
-  { label: "Aug", value: 1284 },
-];
-
-/*
- * ============================================================
- * USER ENGAGEMENT DATA
- * ============================================================
- *
- * Weekly active users separated by organization role.
- *
- * employee → Employee users
- * manager  → Manager users
- * admin    → Admin users
- *
- * The three values are displayed as a stacked bar.
- */
-const activeUsersData = [
-  { label: "Wk 1", employee: 38, manager: 10, admin: 3 },
-  { label: "Wk 2", employee: 44, manager: 12, admin: 4 },
-  { label: "Wk 3", employee: 52, manager: 15, admin: 5 },
-  { label: "Current", employee: 62, manager: 18, admin: 7 },
-];
-
-/*
- * ============================================================
- * DEFAULT DOCUMENT BAR
- * ============================================================
- *
- * The latest month is highlighted by default in the
- * Document Growth chart.
- */
-const activeDocumentIndex = documentGrowthData.length - 1;
+import {
+  documentGrowthData,
+  activeUsersData,
+  questionsData,
+  questionsDefaultMetric,
+} from "./adminDashboardData.js";
 
 /*
  * ============================================================
@@ -102,7 +59,7 @@ function AdminGrowthTrends() {
    * Stores the week currently being hovered
    * in the Active Users chart.
    */
-  const [hoveredUserDay, setHoveredUserDay] = useState(null);
+  const [hoveredUserWeek, setHoveredUserWeek] = useState(null);
 
   return (
     <section className="mt-8">
@@ -115,8 +72,9 @@ function AdminGrowthTrends() {
         </h2>
 
         <Link
-        to = "/analytics"
-        className = "cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline">
+          to="/analytics"
+          className="cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline"
+        >
           Detailed analytics →
         </Link>
       </div>
@@ -128,12 +86,20 @@ function AdminGrowthTrends() {
         {chartCards.map((card, index) => (
           <article
             key={card.eyebrow}
-            className="rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm)"
+            className={`rounded-[20px] border p-6 shadow-(--shadow-sm) ${
+              index === 2
+                ? "border-[rgba(168,203,186,0.55)] bg-[rgba(226,240,232,0.45)] backdrop-blur-sm"
+                : "border-(--border-subtle) bg-(--bg-surface)"
+            }`}
           >
             {/* ==================================================
                 CARD EYEBROW
                 ================================================== */}
-            <p className="font-mono text-[10px] font-semibold tracking-[0.08em] text-(--text-muted)">
+            <p
+              className={`font-mono text-[10px] font-semibold tracking-[0.08em] ${
+                index === 2 ? "text-[#527363]" : "text-(--text-muted)"
+              }`}
+            >
               {card.eyebrow}
             </p>
 
@@ -170,7 +136,7 @@ function AdminGrowthTrends() {
                     mt-1 min-h-[18px] text-[12px]
                     ${
                       (index === 0 && hoveredDocument) ||
-                      (index === 1 && hoveredUserDay)
+                      (index === 1 && hoveredUserWeek)
                         ? "font-semibold text-[#2563eb]"
                         : "font-normal text-(--text-muted)"
                     }
@@ -178,8 +144,8 @@ function AdminGrowthTrends() {
                 >
                   {index === 0 && hoveredDocument
                     ? `📅 ${hoveredDocument.label}: ${hoveredDocument.value.toLocaleString()} Total Indexed Documents`
-                    : index === 1 && hoveredUserDay
-                      ? `📅 ${hoveredUserDay.label}: ${hoveredUserDay.employee} Emp · ${hoveredUserDay.manager} Mgr · ${hoveredUserDay.admin} Adm`
+                    : index === 1 && hoveredUserWeek
+                      ? `📅 ${hoveredUserWeek.label}: ${hoveredUserWeek.employee} Emp · ${hoveredUserWeek.manager} Mgr · ${hoveredUserWeek.admin} Adm`
                       : card.subtitle}
                 </p>
               </>
@@ -199,9 +165,8 @@ function AdminGrowthTrends() {
                 ================================================== */}
             {index === 0 && (
               <div className="mt-5">
-                <BarChart
+                <DocumentGrowthChart
                   data={documentGrowthData}
-                  activeIndex={activeDocumentIndex}
                   onHover={setHoveredDocument}
                 />
               </div>
@@ -224,41 +189,10 @@ function AdminGrowthTrends() {
             {index === 1 && (
               <div className="mt-5">
                 {/* Stacked user activity chart */}
-                <StackedBarChart
+                <ActiveUsersChart
                   data={activeUsersData}
-                  onHover={setHoveredUserDay}
+                  onHover={setHoveredUserWeek}
                 />
-
-                {/* ------------------------------------------------
-                    Role legend + monthly growth
-                    ------------------------------------------------ */}
-                <div className="mt-3 flex items-center justify-between">
-                  {/* Role legend */}
-                  <div className="flex items-center gap-3">
-                    {/* Employees */}
-                    <span className="flex items-center gap-1.5 text-[10px] font-medium text-(--text-muted)">
-                      <span className="h-2 w-2 rounded-full bg-[#2563eb]" />
-                      Emp
-                    </span>
-
-                    {/* Managers */}
-                    <span className="flex items-center gap-1.5 text-[10px] font-medium text-(--text-muted)">
-                      <span className="h-2 w-2 rounded-full bg-[#60a5fa]" />
-                      Mgr
-                    </span>
-
-                    {/* Admins */}
-                    <span className="flex items-center gap-1.5 text-[10px] font-medium text-(--text-muted)">
-                      <span className="h-2 w-2 rounded-full bg-[#93c5fd]" />
-                      Adm
-                    </span>
-                  </div>
-
-                  {/* Monthly growth indicator */}
-                  <span className="text-[11px] font-semibold text-[#2563eb]">
-                    +18% MoM
-                  </span>
-                </div>
               </div>
             )}
 
@@ -274,7 +208,10 @@ function AdminGrowthTrends() {
                 ================================================== */}
             {index === 2 && (
               <div className="-mt-1">
-                <QuestionsAnsweredChart />
+                <QuestionsAnsweredChart
+                  data={questionsData}
+                  defaultMetric={questionsDefaultMetric}
+                />
               </div>
             )}
           </article>
