@@ -1,9 +1,4 @@
-import {
-  FileText,
-  MessageCircle,
-  Users,
-  Box,
-} from "lucide-react";
+import { FileText, MessageCircle, Users, Box } from "lucide-react";
 
 const adminMetrics = [
   {
@@ -93,5 +88,52 @@ export const pinnedDocuments = [
     meta: "People & HR Operations • 1.8 MB • 6 min read",
   },
 ];
+
+/*
+ * ============================================================
+ * CHART DATA
+ * ============================================================
+ * Replace these with API data later; the chart components
+ * only depend on the shape of each item.
+ */
+
+// Total indexed documents over time.
+export const documentGrowthData = [
+  { label: "Apr", value: 610 },
+  { label: "May", value: 760 },
+  { label: "Jun", value: 890 },
+  { label: "Jul", value: 1080 },
+  { label: "Aug", value: 1284 },
+];
+
+// Weekly active users by organization role.
+export const activeUsersData = [
+  { label: "Wk 1", employee: 38, manager: 10, admin: 3 },
+  { label: "Wk 2", employee: 44, manager: 12, admin: 4 },
+  { label: "Wk 3", employee: 52, manager: 15, admin: 5 },
+  { label: "Current", employee: 62, manager: 18, admin: 7 },
+];
+
+// Daily question activity. `tier` (1-4) picks the bar color.
+export const questionsData = [
+  { label: "Nov 01", value: 34, answerRate: 74, queries: 142, tier: 1 },
+  { label: "Nov 03", value: 52, answerRate: 78, queries: 186, tier: 3 },
+  { label: "Nov 05", value: 42, answerRate: 80, queries: 210, tier: 1 },
+  { label: "Nov 07", value: 48, answerRate: 77, queries: 174, tier: 2 },
+  { label: "Nov 09", value: 45, answerRate: 79, queries: 198, tier: 2 },
+  { label: "Nov 11", value: 57, answerRate: 82, queries: 224, tier: 3 },
+  { label: "Nov 13", value: 54, answerRate: 80, queries: 205, tier: 2 },
+  { label: "Nov 15", value: 66, answerRate: 83, queries: 241, tier: 4 },
+  { label: "Nov 17", value: 55, answerRate: 78, queries: 217, tier: 2 },
+  { label: "Nov 19", value: 61, answerRate: 76, queries: 232, tier: 4 },
+  { label: "Nov 21", value: 65, answerRate: 65, queries: 342, tier: 3 },
+  { label: "Nov 24", value: 73, answerRate: 81, queries: 258, tier: 4 },
+];
+
+// Overall metric shown on the Questions Answered card when nothing is hovered.
+export const questionsDefaultMetric = {
+  answerRate: 81,
+  queries: "4,820",
+};
 
 export default adminMetrics;

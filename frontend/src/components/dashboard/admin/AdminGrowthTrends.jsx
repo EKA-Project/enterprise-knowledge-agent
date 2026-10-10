@@ -3,45 +3,12 @@ import { Link } from "react-router-dom";
 import DocumentGrowthChart from "../../charts/DocumentGrowthChart.jsx";
 import ActiveUsersChart from "../../charts/ActiveUsersChart.jsx";
 import QuestionsAnsweredChart from "../../charts/QuestionsAnsweredChart.jsx";
-
-/*
- * ============================================================
- * KNOWLEDGE GROWTH DATA
- * ============================================================
- *
- * Total indexed documents over time.
- *
- * This data is currently local.
- * Later, it can be replaced with data received from the
- * backend/API without changing the chart structure.
- */
-const documentGrowthData = [
-  { label: "Apr", value: 610 },
-  { label: "May", value: 760 },
-  { label: "Jun", value: 890 },
-  { label: "Jul", value: 1080 },
-  { label: "Aug", value: 1284 },
-];
-
-/*
- * ============================================================
- * USER ENGAGEMENT DATA
- * ============================================================
- *
- * Weekly active users separated by organization role.
- *
- * employee → Employee users
- * manager  → Manager users
- * admin    → Admin users
- *
- * The three values are displayed as a stacked bar.
- */
-const activeUsersData = [
-  { label: "Wk 1", employee: 38, manager: 10, admin: 3 },
-  { label: "Wk 2", employee: 44, manager: 12, admin: 4 },
-  { label: "Wk 3", employee: 52, manager: 15, admin: 5 },
-  { label: "Current", employee: 62, manager: 18, admin: 7 },
-];
+import {
+  documentGrowthData,
+  activeUsersData,
+  questionsData,
+  questionsDefaultMetric,
+} from "./adminDashboardData.js";
 
 /*
  * ============================================================
@@ -92,7 +59,7 @@ function AdminGrowthTrends() {
    * Stores the week currently being hovered
    * in the Active Users chart.
    */
-  const [hoveredUserDay, setHoveredUserDay] = useState(null);
+  const [hoveredUserWeek, setHoveredUserWeek] = useState(null);
 
   return (
     <section className="mt-8">
@@ -169,7 +136,7 @@ function AdminGrowthTrends() {
                     mt-1 min-h-[18px] text-[12px]
                     ${
                       (index === 0 && hoveredDocument) ||
-                      (index === 1 && hoveredUserDay)
+                      (index === 1 && hoveredUserWeek)
                         ? "font-semibold text-[#2563eb]"
                         : "font-normal text-(--text-muted)"
                     }
@@ -177,8 +144,8 @@ function AdminGrowthTrends() {
                 >
                   {index === 0 && hoveredDocument
                     ? `📅 ${hoveredDocument.label}: ${hoveredDocument.value.toLocaleString()} Total Indexed Documents`
-                    : index === 1 && hoveredUserDay
-                      ? `📅 ${hoveredUserDay.label}: ${hoveredUserDay.employee} Emp · ${hoveredUserDay.manager} Mgr · ${hoveredUserDay.admin} Adm`
+                    : index === 1 && hoveredUserWeek
+                      ? `📅 ${hoveredUserWeek.label}: ${hoveredUserWeek.employee} Emp · ${hoveredUserWeek.manager} Mgr · ${hoveredUserWeek.admin} Adm`
                       : card.subtitle}
                 </p>
               </>
@@ -241,7 +208,10 @@ function AdminGrowthTrends() {
                 ================================================== */}
             {index === 2 && (
               <div className="-mt-1">
-                <QuestionsAnsweredChart />
+                <QuestionsAnsweredChart
+                  data={questionsData}
+                  defaultMetric={questionsDefaultMetric}
+                />
               </div>
             )}
           </article>

@@ -55,17 +55,16 @@ const defaultMetric = {
   queries: "4,820",
 };
 
-function QuestionsAnsweredChart() {
+function QuestionsAnsweredChart({ data = [], defaultMetric }) {
   // Index of the bar currently hovered (null = none).
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   /*
    * Largest bar value, so every bar scales proportionally.
    */
-  const maxValue = Math.max(...questionsData.map((item) => item.value), 1);
+  const maxValue = Math.max(...data.map((item) => item.value), 1);
 
-  const hoveredItem =
-    hoveredIndex !== null ? questionsData[hoveredIndex] : null;
+  const hoveredItem = hoveredIndex !== null ? data[hoveredIndex] : null;
 
   const displayedAnswerRate = hoveredItem
     ? hoveredItem.answerRate
@@ -115,7 +114,7 @@ function QuestionsAnsweredChart() {
           ====================================================== */}
       <div className="mt-5">
         <div className="flex h-[170px] items-end gap-[10px] border-b-[1.2px] border-[#b8d7c7] px-2">
-          {questionsData.map((item, index) => {
+          {data.map((item, index) => {
             const height = (item.value / maxValue) * 65;
 
             const isHovered = index === hoveredIndex;
