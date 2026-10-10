@@ -86,7 +86,7 @@ function AdminGrowthTrends() {
         {chartCards.map((card, index) => (
           <article
             key={card.eyebrow}
-            className={`rounded-[20px] border p-6 shadow-(--shadow-sm) ${
+            className={`rounded-[20px] border p-6 shadow-(--shadow-sm) xl:h-[300px] ${
               index === 2
                 ? "border-[rgba(168,203,186,0.55)] bg-[rgba(226,240,232,0.45)] backdrop-blur-sm"
                 : "border-(--border-subtle) bg-(--bg-surface)"
@@ -164,7 +164,7 @@ function AdminGrowthTrends() {
                 - Bars scale relative to highest value
                 ================================================== */}
             {index === 0 && (
-              <div className="mt-5">
+              <div className="mt-4">
                 <DocumentGrowthChart
                   data={documentGrowthData}
                   onHover={setHoveredDocument}
@@ -187,7 +187,7 @@ function AdminGrowthTrends() {
                 - Monthly growth indicator
                 ================================================== */}
             {index === 1 && (
-              <div className="mt-5">
+              <div className="mt-4">
                 {/* Stacked user activity chart */}
                 <ActiveUsersChart
                   data={activeUsersData}
@@ -207,7 +207,7 @@ function AdminGrowthTrends() {
                 so the layout stays aligned with the reference.
                 ================================================== */}
             {index === 2 && (
-              <div className="-mt-1">
+              <div className="-mt-4">
                 <QuestionsAnsweredChart
                   data={questionsData}
                   defaultMetric={questionsDefaultMetric}
