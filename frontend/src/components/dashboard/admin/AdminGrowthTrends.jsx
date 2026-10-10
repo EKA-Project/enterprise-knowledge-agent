@@ -119,12 +119,20 @@ function AdminGrowthTrends() {
         {chartCards.map((card, index) => (
           <article
             key={card.eyebrow}
-            className="rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm)"
+            className={`rounded-[20px] border p-6 shadow-(--shadow-sm) ${
+              index === 2
+                ? "border-[rgba(168,203,186,0.55)] bg-[rgba(226,240,232,0.45)] backdrop-blur-sm"
+                : "border-(--border-subtle) bg-(--bg-surface)"
+            }`}
           >
             {/* ==================================================
                 CARD EYEBROW
                 ================================================== */}
-            <p className="font-mono text-[10px] font-semibold tracking-[0.08em] text-(--text-muted)">
+            <p
+              className={`font-mono text-[10px] font-semibold tracking-[0.08em] ${
+                index === 2 ? "text-[#527363]" : "text-(--text-muted)"
+              }`}
+            >
               {card.eyebrow}
             </p>
 
