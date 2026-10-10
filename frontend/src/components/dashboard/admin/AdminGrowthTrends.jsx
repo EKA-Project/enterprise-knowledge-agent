@@ -45,16 +45,6 @@ const activeUsersData = [
 
 /*
  * ============================================================
- * DEFAULT DOCUMENT BAR
- * ============================================================
- *
- * The latest month is highlighted by default in the
- * Document Growth chart.
- */
-const activeDocumentIndex = documentGrowthData.length - 1;
-
-/*
- * ============================================================
  * CHART CARD CONFIGURATION
  * ============================================================
  *
@@ -115,8 +105,9 @@ function AdminGrowthTrends() {
         </h2>
 
         <Link
-        to = "/analytics"
-        className = "cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline">
+          to="/analytics"
+          className="cursor-pointer !text-[0.78rem] font-semibold text-(--primary) transition-colors hover:underline"
+        >
           Detailed analytics →
         </Link>
       </div>
@@ -201,7 +192,6 @@ function AdminGrowthTrends() {
               <div className="mt-5">
                 <BarChart
                   data={documentGrowthData}
-                  activeIndex={activeDocumentIndex}
                   onHover={setHoveredDocument}
                 />
               </div>
@@ -228,37 +218,6 @@ function AdminGrowthTrends() {
                   data={activeUsersData}
                   onHover={setHoveredUserDay}
                 />
-
-                {/* ------------------------------------------------
-                    Role legend + monthly growth
-                    ------------------------------------------------ */}
-                <div className="mt-3 flex items-center justify-between">
-                  {/* Role legend */}
-                  <div className="flex items-center gap-3">
-                    {/* Employees */}
-                    <span className="flex items-center gap-1.5 text-[10px] font-medium text-(--text-muted)">
-                      <span className="h-2 w-2 rounded-full bg-[#2563eb]" />
-                      Emp
-                    </span>
-
-                    {/* Managers */}
-                    <span className="flex items-center gap-1.5 text-[10px] font-medium text-(--text-muted)">
-                      <span className="h-2 w-2 rounded-full bg-[#60a5fa]" />
-                      Mgr
-                    </span>
-
-                    {/* Admins */}
-                    <span className="flex items-center gap-1.5 text-[10px] font-medium text-(--text-muted)">
-                      <span className="h-2 w-2 rounded-full bg-[#93c5fd]" />
-                      Adm
-                    </span>
-                  </div>
-
-                  {/* Monthly growth indicator */}
-                  <span className="text-[11px] font-semibold text-[#2563eb]">
-                    +18% MoM
-                  </span>
-                </div>
               </div>
             )}
 
