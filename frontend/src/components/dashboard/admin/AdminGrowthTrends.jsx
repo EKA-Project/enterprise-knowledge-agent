@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import BarChart from "../../charts/BarChart.jsx";
-import StackedBarChart from "../../charts/StackedBarChart.jsx";
+import DocumentGrowthChart from "../../charts/DocumentGrowthChart.jsx";
+import ActiveUsersChart from "../../charts/ActiveUsersChart.jsx";
 import QuestionsAnsweredChart from "../../charts/QuestionsAnsweredChart.jsx";
 
 /*
@@ -198,7 +198,7 @@ function AdminGrowthTrends() {
                 ================================================== */}
             {index === 0 && (
               <div className="mt-5">
-                <BarChart
+                <DocumentGrowthChart
                   data={documentGrowthData}
                   onHover={setHoveredDocument}
                 />
@@ -222,9 +222,9 @@ function AdminGrowthTrends() {
             {index === 1 && (
               <div className="mt-5">
                 {/* Stacked user activity chart */}
-                <StackedBarChart
+                <ActiveUsersChart
                   data={activeUsersData}
-                  onHover={setHoveredUserDay}
+                  onHover={setHoveredUserWeek}
                 />
               </div>
             )}

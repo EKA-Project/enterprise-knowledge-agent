@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 /**
- * BarChart Component
+ * DocumentGrowthChart Component
  *
  * Renders an interactive bar chart scaled relative to the highest data point.
  *
@@ -9,7 +9,7 @@ import { useMemo, useState } from "react";
  * @param {number|null} [props.activeIndex=null] - Index of a pre-selected/active bar.
  * @param {function} [props.onHover] - Callback receiving the hovered item, or null on leave.
  */
-function BarChart({ data = [],  onHover }) {
+function DocumentGrowthChart({ data = [], onHover }) {
   // ---------------------------------------------------------------------------
   // State
   // ---------------------------------------------------------------------------
@@ -95,4 +95,4 @@ return (
 );
 }
 
-export default BarChart;
+export default DocumentGrowthChart;

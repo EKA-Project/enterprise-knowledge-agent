@@ -2,7 +2,7 @@ import { useState } from "react";
 
 /**
  * ============================================================
- * STACKED BAR CHART
+ * ACTIVE USERS CHART
  * ============================================================
  *
  * Displays role-based user activity as stacked bars.
@@ -39,7 +39,7 @@ function getGrowthPercent(data) {
   return Math.round(((curr - prev) / prev) * 100);
 }
 
-function StackedBarChart({ data = [], onHover }) {
+function ActiveUsersChart({ data = [], onHover }) {
   // Tracks which bar is currently being hovered.
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -227,4 +227,4 @@ function StackedBarChart({ data = [], onHover }) {
   );
 }
 
-export default StackedBarChart;
+export default ActiveUsersChart;
