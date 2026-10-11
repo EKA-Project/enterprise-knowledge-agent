@@ -120,3 +120,43 @@ const DOCUMENTS = [
     citation: { page: 7, lines: "20-26", section: "§7.3 Key Management" },
   },
 ];
+// ---------- Grounded answers for top-ranked topics ----------
+const TOPIC_ANSWERS = {
+  leave: "Full-time employees receive 24 days of paid annual leave each year. Requests go through the HR portal at least two weeks ahead and need line manager approval. Unplanned sick absence must be reported before the working day starts.",
+  onboarding: "On your first day you receive Okta SSO access, your laptop and system accounts, then meet your team lead and finish the mandatory security training. A 30-day goals conversation with your manager should be scheduled by Friday.",
+  remote: "You can work from home up to three days a week with manager approval, and a $1,500 annual home-office stipend covers ergonomic equipment. Core hours of 10:00 to 15:00 apply on every remote day.",
+  travel: "Economy airfare and standard hotels are reimbursable, and meals are covered up to the daily limit. Upload receipts within 30 days of travel.",
+  laptop: "Company laptops must use disk encryption and cannot be used to install personal software. Report loss or theft to IT Security within 24 hours.",
+  health: "The group medical plan covers all employees from day one, and dependants can be enrolled. Dental and vision cover are optional add-ons.",
+  infra: "To start an emergency multi-region failover, lower the DNS TTL to 45 seconds, promote the standby cluster and confirm health checks before shifting traffic.",
+  security: "Encryption keys are rotated every 90 days under SOC 2 Type II controls, and each rotation is logged for audit review.",
+};
+
+// ---------- Search helpers ----------
+const STOP_WORDS = new Set([
+  "work", "from", "with", "what", "does", "have", "need", "into", "your", "company",
+  "about", "that", "this", "the", "and", "for", "how", "our", "policy", "policies",
+  "guidelines", "handbook", "document", "documents",
+]);
+
+const HIGHLIGHT_SKIP = new Set([
+  "with", "what", "does", "have", "that", "this", "your", "about", "into", "the", "and", "for", "how", "our",
+]);
+
+// Lowercase words of 4+ letters, without filler words.
+function tokenize(query) {
+  return query.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 4 && !STOP_WORDS.has(t));
+}
+
+// How well one document fits the query in the chosen mode.
+function scoreDocument(doc, query, tokens, mode) {
+  const q = query.toLowerCase();
+  const text = `${doc.title} ${doc.excerpt}`.toLowerCase();
+  const literalHits = tokens.filter((t) => text.includes(t)).length;
+  const conceptHits = doc.keywords.filter(
+    (k) => q.includes(k) || tokens.some((t) => t.length >= 5 && k.includes(t)),
+  ).length;
+  if (mode === "keyword") return literalHits;
+  if (mode === "semantic") return conceptHits;
+  return literalHits + conceptHits;
+}
