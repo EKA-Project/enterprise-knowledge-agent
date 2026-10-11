@@ -12,7 +12,7 @@ import AdminGrowthTrends from "./AdminGrowthTrends.jsx";
 
 import pageMetadata from "../../../config/pageMetadata.js";
 import adminMetrics from "./adminDashboardData.js";
-
+import { BrainCircuit } from "lucide-react";
 function AdminOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -34,14 +34,23 @@ function AdminOverview() {
         eyebrow={hero.eyebrow}
         title={hero.title}
         description={hero.description}
-        status={hero.status}
+        status={
+          <span className="flex items-center gap-2">
+            <BrainCircuit
+              size={15}
+              strokeWidth={1.8}
+              className="text-sky-600"
+            />
+            {hero.status}
+          </span>
+        }
       />
 
       {/* ─────────────────────────────────────────
           Overview metrics
       ───────────────────────────────────────── */}
 
-      <div className="mt-6 grid grid-cols-4 gap-5 auto-rows-45">
+      <div className="mt-6 grid grid-cols-4 gap-5 auto-rows-40">
         {adminMetrics.map((metric) => {
           // Storage metric uses custom content.
           if (metric.label === "STORAGE CAPACITY") {
