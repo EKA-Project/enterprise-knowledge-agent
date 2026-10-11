@@ -84,9 +84,6 @@ export default function SemanticSearchPage() {
   const hiddenCount = search.results.length - visibleResults.length;
   // ↑ "Show more" resets by itself whenever the query, mode or filter changes.
 
-  const balanced = visibleResults.length >= INITIAL_RESULTS;
-  // ↑ With 3+ cards, both columns are stretched to end at the same bottom edge.
-
   const showToast = (message) => {
     setToast(message);
     clearTimeout(toastTimer.current);
@@ -168,11 +165,7 @@ export default function SemanticSearchPage() {
         onPickSuggestion={runSearch}
       />
 
-      <div
-        className={`grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px] ${
-          balanced ? "items-stretch" : "items-start"
-        }`}
-      >
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section aria-label="Search results" className="flex flex-col gap-5">
           {topResult && (
             <GroundedAnswerCard
@@ -202,22 +195,19 @@ export default function SemanticSearchPage() {
             </div>
           ) : (
             <>
-              <ol className="flex flex-1 flex-col gap-5">
+            <ol className="flex flex-col gap-5">
                 {visibleResults.map((result, i) => (
-                  <li
-                    key={`${searchKey}|${regenKey}|${result.id}`}
-                    className={`flex ${balanced && i === visibleResults.length - 1 ? "flex-1" : ""}`}
-                  >
+                <li key={`${searchKey}|${regenKey}|${result.id}`}>
                     <SearchResultCard
-                      result={result}
-                      index={i}
-                      terms={terms}
-                      delay={i * 70}
-                      onPreview={setCitationResult}
+                    result={result}
+                    index={i}
+                    terms={terms}
+                    delay={i * 70}
+                    onPreview={setCitationResult}
                     />
-                  </li>
-                ))}
-              </ol>
+                </li>
+            ))}
+        </ol>
 
               {search.results.length > INITIAL_RESULTS && (
                 <button
