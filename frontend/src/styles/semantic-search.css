@@ -32,3 +32,14 @@
     animation: none;
   }
 }
+/* Hand cursor for everything clickable on the Semantic Search page.
+   Scoped, so no other page is affected. */
+.semantic-search-page button:not(:disabled),
+.semantic-search-page [role="button"],
+.semantic-search-page summary {
+  cursor: pointer;
+}
+
+.semantic-search-page button:disabled {
+  cursor: not-allowed;
+}
