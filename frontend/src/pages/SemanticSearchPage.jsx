@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ChevronDown, ChevronUp } from "lucide-react";
 import "../styles/semantic-search.css";
 import SemanticSearchControls from "../components/semantic-search/SemanticSearchControls";
 import GroundedAnswerCard from "../components/semantic-search/GroundedAnswerCard";
@@ -13,10 +13,12 @@ import {
   BETTER_SEARCH_TIPS, DEFAULT_QUERY, HYBRID_PROMPTS, SEARCH_MODES, SOURCE_FILTERS,
   SUGGESTED_CONCEPTS, createSeedRecentSearches, getHighlightTerms, getSearchStats, searchDocuments,
 } from "../../services/semanticSearchService";
-// ↑ The service lives in frontend/services, two folders above src/pages.
 
 const RECENT_KEY = "eka.semanticSearch.recent";
-const MAX_RECENT = 6;
+const MAX_RECENT = 5;
+// ↑ Recent searches list is capped at 5 so the right column stays short.
+const INITIAL_RESULTS = 3;
+// ↑ Only the first 3 result cards show until the user asks for more.
 const MODE_TOASTS = {
   semantic: "Switched to Semantic Vector Mode",
   keyword: "Switched to Keyword Mode",
@@ -28,14 +30,13 @@ function loadRecent() {
     const raw = localStorage.getItem(RECENT_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed;
+      if (Array.isArray(parsed)) return parsed.slice(0, MAX_RECENT);
     }
   } catch {
     /* storage unavailable, fall back to demo data */
   }
   return createSeedRecentSearches();
 }
-// ↑ Recent searches persist in this browser only (localStorage). No database.
 
 export default function SemanticSearchPage() {
   const navigate = useNavigate();
@@ -48,9 +49,9 @@ export default function SemanticSearchPage() {
   const [toast, setToast] = useState("");
   const [regenKey, setRegenKey] = useState(0);
   const [regenerating, setRegenerating] = useState(false);
+  const [expandedKey, setExpandedKey] = useState("");
   const toastTimer = useRef(null);
   const regenTimer = useRef(null);
-  // ↑ inputValue is what is typed. activeQuery is the search that was actually run.
 
   useEffect(() => {
     try {
@@ -77,6 +78,15 @@ export default function SemanticSearchPage() {
   const topResult = search.results[0];
   const isHybrid = mode === "hybrid";
 
+  const searchKey = `${activeQuery}|${mode}|${source}`;
+  const showAll = expandedKey === searchKey;
+  const visibleResults = showAll ? search.results : search.results.slice(0, INITIAL_RESULTS);
+  const hiddenCount = search.results.length - visibleResults.length;
+  // ↑ "Show more" resets by itself whenever the query, mode or filter changes.
+
+  const balanced = visibleResults.length >= INITIAL_RESULTS;
+  // ↑ With 3+ cards, both columns are stretched to end at the same bottom edge.
+
   const showToast = (message) => {
     setToast(message);
     clearTimeout(toastTimer.current);
@@ -97,7 +107,6 @@ export default function SemanticSearchPage() {
       [{ id: `${Date.now()}`, query: q, at: Date.now() }, ...prev.filter((r) => r.query.toLowerCase() !== q.toLowerCase())].slice(0, MAX_RECENT),
     );
   };
-  // ↑ Used by Enter, the Search button, chips, recent searches and Better Searches.
 
   const copyText = async (text, okMessage) => {
     try {
@@ -126,7 +135,6 @@ export default function SemanticSearchPage() {
 
   const goFollowUp = (question) => navigate("/ask-eka", { state: { question } });
   const openReader = () => navigate("/documents");
-  // ↑ Both routes already exist in AppRoutes. Ask EKA receives the question in router state.
 
   const closeCitation = useCallback(() => setCitationResult(null), []);
 
@@ -160,11 +168,15 @@ export default function SemanticSearchPage() {
         onPickSuggestion={runSearch}
       />
 
-      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <section aria-label="Search results" className="space-y-5">
+      <div
+        className={`grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px] ${
+          balanced ? "items-stretch" : "items-start"
+        }`}
+      >
+        <section aria-label="Search results" className="flex flex-col gap-5">
           {topResult && (
             <GroundedAnswerCard
-              key={`${activeQuery}|${mode}|${source}|${regenKey}`}
+              key={`${searchKey}|${regenKey}`}
               answer={search.answer}
               sourceTitle={topResult.title}
               citation={topResult.citation}
@@ -189,24 +201,47 @@ export default function SemanticSearchPage() {
               </p>
             </div>
           ) : (
-            <ol className="space-y-5">
-              {search.results.map((result, i) => (
-                <li key={`${activeQuery}|${mode}|${source}|${regenKey}|${result.id}`}>
-                  <SearchResultCard
-                    result={result}
-                    index={i}
-                    terms={terms}
-                    delay={i * 70}
-                    onPreview={setCitationResult}
-                  />
-                </li>
-              ))}
-            </ol>
+            <>
+              <ol className="flex flex-1 flex-col gap-5">
+                {visibleResults.map((result, i) => (
+                  <li
+                    key={`${searchKey}|${regenKey}|${result.id}`}
+                    className={`flex ${balanced && i === visibleResults.length - 1 ? "flex-1" : ""}`}
+                  >
+                    <SearchResultCard
+                      result={result}
+                      index={i}
+                      terms={terms}
+                      delay={i * 70}
+                      onPreview={setCitationResult}
+                    />
+                  </li>
+                ))}
+              </ol>
+
+              {search.results.length > INITIAL_RESULTS && (
+                <button
+                  type="button"
+                  onClick={() => setExpandedKey(showAll ? "" : searchKey)}
+                  className="flex items-center justify-center gap-2 rounded-2xl border border-dashed border-(--border-medium) bg-(--bg-surface) py-3 text-[12.5px] font-semibold text-(--text-secondary) transition hover:border-(--primary) hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
+                >
+                  {showAll ? (
+                    <>
+                      <ChevronUp size={14} aria-hidden="true" /> Show fewer results
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown size={14} aria-hidden="true" /> Show {hiddenCount} more result{hiddenCount === 1 ? "" : "s"}
+                    </>
+                  )}
+                </button>
+              )}
+            </>
           )}
         </section>
 
-        <aside className="space-y-5">
-          <SearchIntelligencePanel query={activeQuery} stats={stats} />
+        <aside className="flex flex-col gap-5">
+        <SearchIntelligencePanel query={activeQuery} stats={stats} />
           <RecentSearchesPanel
             items={recent}
             onSelect={runSearch}
@@ -219,6 +254,7 @@ export default function SemanticSearchPage() {
             onCopy={(text) => copyText(text, "Example copied to clipboard")}
           />
         </aside>
+        {/* ↑ The last panel stretches (flex-1) so both columns end at the same line. */}
       </div>
 
       {citationResult && (

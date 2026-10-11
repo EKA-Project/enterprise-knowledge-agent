@@ -5,11 +5,13 @@ export default function HighlightedText({ text, terms = [] }) {
   const cleaned = [...new Set(terms.map((t) => t.trim()).filter((t) => t.length >= 3))].sort(
     (a, b) => b.length - a.length,
   );
-  // ↑ Longest first, so the full phrase wins over single words.
+  // ↑ Longest first, so "time off work" wins over "time off" and "time".
 
   if (!cleaned.length) return <>{text}</>;
 
-  const pattern = new RegExp(`(${cleaned.map(escapeRegExp).join("|")})`, "gi");
+  const pattern = new RegExp(`((?<!\\w)(?:${cleaned.map(escapeRegExp).join("|")})\\w*)`, "gi");
+  // ↑ A match must start at the beginning of a word and runs to the end of it,
+  //   so "work" highlights all of "working", never half of it.
 
   return text.split(pattern).map((part, i) =>
     i % 2 === 1 ? (

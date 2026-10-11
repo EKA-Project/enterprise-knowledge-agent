@@ -47,73 +47,95 @@ export const BETTER_SEARCH_TIPS = [
   },
 ];
 
+
 // ---------- Mock documents (demo data only, no backend) ----------
 const DOCUMENTS = [
   {
-    id: "doc-leave", topic: "leave", title: "Employee_Leave_Policy_2026.pdf",
-    fileType: "PDF", category: "People & HR Operations", verified: true, page: 4, baseMatch: 94,
+    id: "doc-leave", topic: "leave", title: "2026 Employee Handbook & Leave Policy",
+    fileType: "PDF", category: "People & HR Operations", verified: true, page: 4, baseMatch: 96,
     keywords: ["time off", "leave", "vacation", "holiday", "pto", "days off", "annual leave", "sick"],
-    excerpt: "Full-time employees accrue 24 days of paid annual leave per calendar year. Requests should be submitted at least two weeks in advance through the HR portal and approved by the line manager.",
+    excerpt: "Full-time employees accrue 24 days of paid annual leave per calendar year. Time off requests should be submitted at least two weeks in advance through the HR portal and approved by the line manager.",
     citation: { page: 4, lines: "98-116", section: "§4.2 Annual Leave Entitlement" },
   },
   {
-    id: "doc-absence", topic: "leave", title: "Attendance_and_Absence_Guidelines.docx",
-    fileType: "DOCX", category: "People & HR Operations", verified: true, page: 2, baseMatch: 86,
+    id: "doc-remote", topic: "remote", title: "2026 Global Remote Work & Flexible Hours Policy",
+    fileType: "PDF", category: "People & HR Operations", verified: true, page: 8, baseMatch: 95,
+    keywords: ["time off", "working from home", "work from home", "remote", "wfh", "hybrid", "home office", "stipend", "flexible hours"],
+    excerpt: "Employees may work from home up to three days per week with manager approval, supported by a $1,500 home-office stipend. Flexible hours do not replace formal time off, so record any full day away in the HR portal.",
+    citation: { page: 8, lines: "44-58", section: "§8.1 Eligibility for Remote Work" },
+  },
+  {
+    id: "doc-parental", topic: "leave", title: "Parental Leave & Family Support Policy",
+    fileType: "PDF", category: "People & HR Operations", verified: true, page: 6, baseMatch: 90,
+    keywords: ["time off", "parental leave", "maternity", "paternity", "leave", "family"],
+    excerpt: "Primary caregivers are entitled to 16 weeks of paid parental leave and secondary caregivers to 6 weeks. This time off can be taken in one block or split across the first 12 months.",
+    citation: { page: 6, lines: "40-52", section: "§6.2 Paid Parental Leave" },
+  },
+  {
+    id: "doc-holidays", topic: "leave", title: "2026 Public Holiday & Company Closure Calendar",
+    fileType: "PDF", category: "People & HR Operations", verified: true, page: 1, baseMatch: 89,
+    keywords: ["time off", "holiday", "public holiday", "leave", "closure", "festival"],
+    excerpt: "The company observes 12 public holidays in 2026 plus a year-end closure. Time off taken on a public holiday does not reduce your annual leave balance, and holiday work is compensated with a day in lieu.",
+    citation: { page: 1, lines: "5-14", section: "§1.1 Public Holidays" },
+  },
+  {
+    id: "doc-absence", topic: "leave", title: "Attendance & Absence Guidelines",
+    fileType: "DOCX", category: "People & HR Operations", verified: true, page: 2, baseMatch: 88,
     keywords: ["absence", "sick", "time off", "leave", "attendance"],
-    excerpt: "Unplanned absence, including sick leave of up to 10 days, must be reported to the line manager before the start of the working day. A medical certificate is needed after three consecutive days.",
+    excerpt: "Any time off for illness must be reported to the line manager before the working day starts. Sick leave of up to 10 days is paid, and a medical certificate is needed after three consecutive days.",
     citation: { page: 2, lines: "22-29", section: "§2.1 Reporting an Absence" },
   },
   {
-    id: "doc-handbook", topic: "onboarding", title: "New_Joiner_Handbook.pdf",
+    id: "doc-playbook", topic: "health", title: "Employee Benefits, Health Insurance & Equity Playbook",
+    fileType: "DOCX", category: "People & HR Operations", verified: true, page: 12, baseMatch: 88,
+    keywords: ["time off", "benefits", "health benefits", "insurance", "equity", "leave", "medical", "wellness"],
+    excerpt: "Your benefits package includes group health insurance, equity vesting and paid time off. Health benefits start on your first day, and up to 5 days of unused time off can be carried over to the next year.",
+    citation: { page: 12, lines: "18-30", section: "§12.3 Benefits Summary" },
+  },
+  {
+    id: "doc-handbook", topic: "onboarding", title: "New Joiner Handbook",
     fileType: "PDF", category: "People Ops", verified: true, page: 6, baseMatch: 93,
     keywords: ["first week", "new joiner", "onboarding", "orientation", "induction", "joining", "okta", "sso"],
     excerpt: "On Day 1 you receive Okta SSO access, your laptop and system accounts, then meet your team lead and complete the mandatory security and compliance training modules.",
     citation: { page: 6, lines: "31-40", section: "§6.1 Your First Week" },
   },
   {
-    id: "doc-checklist", topic: "onboarding", title: "Onboarding_Checklist.docx",
+    id: "doc-checklist", topic: "onboarding", title: "Onboarding Checklist",
     fileType: "DOCX", category: "People Ops", verified: true, page: 1, baseMatch: 85,
     keywords: ["first week", "onboarding", "checklist", "new joiner", "induction"],
     excerpt: "Day one: collect your building pass and laptop. Day two: complete security awareness training. By Friday: schedule a 30-day goals conversation with your manager.",
     citation: { page: 1, lines: "8-14", section: "§1.0 Week One Checklist" },
   },
   {
-    id: "doc-remote", topic: "remote", title: "Remote_Work_Policy.pdf",
-    fileType: "PDF", category: "People & HR Operations", verified: true, page: 3, baseMatch: 95,
-    keywords: ["working from home", "work from home", "remote", "wfh", "hybrid", "home office", "stipend"],
-    excerpt: "Employees may work from home up to three days per week with manager approval. A $1,500 annual home-office stipend covers ergonomic equipment, and core hours of 10:00 to 15:00 apply on remote days.",
-    citation: { page: 3, lines: "44-58", section: "§3.1 Eligibility for Remote Work" },
-  },
-  {
-    id: "doc-travel", topic: "travel", title: "Travel_and_Expense_Policy.pdf",
+    id: "doc-travel", topic: "travel", title: "Travel & Expense Reimbursement Policy",
     fileType: "PDF", category: "Finance", verified: true, page: 5, baseMatch: 94,
     keywords: ["travel", "expenses", "reimbursement", "flights", "hotel", "claim"],
     excerpt: "Economy airfare and standard hotel accommodation are reimbursable. Meals are covered up to the daily limit, and receipts must be uploaded within 30 days of travel.",
     citation: { page: 5, lines: "60-72", section: "§5.3 Reimbursable Expenses" },
   },
   {
-    id: "doc-laptop", topic: "laptop", title: "Acceptable_Use_and_Laptop_Policy.docx",
+    id: "doc-laptop", topic: "laptop", title: "Acceptable Use & Company Laptop Policy",
     fileType: "DOCX", category: "IT Security", verified: true, page: 2, baseMatch: 92,
     keywords: ["company laptop", "laptop", "device", "acceptable use", "equipment"],
     excerpt: "Company laptops must have disk encryption enabled and may not be used to install personal software. Loss or theft must be reported to IT Security within 24 hours.",
     citation: { page: 2, lines: "17-26", section: "§2.4 Company Devices" },
   },
   {
-    id: "doc-health", topic: "health", title: "Health_Benefits_Guide.pdf",
+    id: "doc-health", topic: "health", title: "Group Health Benefits Guide",
     fileType: "PDF", category: "Benefits", verified: true, page: 8, baseMatch: 93,
     keywords: ["health benefits", "insurance", "medical", "dental", "wellness", "benefits"],
     excerpt: "All employees are covered by the group medical plan from their first day, with dependants eligible after enrolment. Dental and vision cover are optional add-ons.",
     citation: { page: 8, lines: "12-21", section: "§8.1 Medical Coverage" },
   },
   {
-    id: "doc-failover", topic: "infra", title: "Emergency_Multi_Region_Failover_Runbook.pdf",
+    id: "doc-failover", topic: "infra", title: "Emergency Multi-Region Failover Runbook",
     fileType: "PDF", category: "Engineering & DevOps", verified: true, page: 4, baseMatch: 90,
     keywords: ["kubernetes", "failover", "dns", "ttl", "runbook", "outage"],
     excerpt: "To initiate an emergency multi-region failover, lower the DNS TTL to 45 seconds, promote the standby cluster and confirm health checks before shifting traffic.",
     citation: { page: 4, lines: "98-116", section: "§4.2 Failover Procedure" },
   },
   {
-    id: "doc-soc2", topic: "security", title: "SOC2_Type_II_Security_Report.pdf",
+    id: "doc-soc2", topic: "security", title: "SOC 2 Type II Security & Data Governance Report",
     fileType: "PDF", category: "Security & Compliance", verified: true, page: 7, baseMatch: 91,
     keywords: ["soc 2", "soc2", "key rotation", "encryption", "compliance", "audit"],
     excerpt: "Encryption keys are rotated every 90 days under the SOC 2 Type II control framework, and every rotation is logged for audit review.",
@@ -122,8 +144,7 @@ const DOCUMENTS = [
 ];
 // ---------- Grounded answers for top-ranked topics ----------
 const TOPIC_ANSWERS = {
-  leave: "Full-time employees receive 24 days of paid annual leave each year. Requests go through the HR portal at least two weeks ahead and need line manager approval. Unplanned sick absence must be reported before the working day starts.",
-  onboarding: "On your first day you receive Okta SSO access, your laptop and system accounts, then meet your team lead and finish the mandatory security training. A 30-day goals conversation with your manager should be scheduled by Friday.",
+  leave: "Full-time employees receive 24 days of paid annual leave each year. Time off requests go through the HR portal at least two weeks ahead and need line manager approval. Unplanned sick absence must be reported before the working day starts.",  onboarding: "On your first day you receive Okta SSO access, your laptop and system accounts, then meet your team lead and finish the mandatory security training. A 30-day goals conversation with your manager should be scheduled by Friday.",
   remote: "You can work from home up to three days a week with manager approval, and a $1,500 annual home-office stipend covers ergonomic equipment. Core hours of 10:00 to 15:00 apply on every remote day.",
   travel: "Economy airfare and standard hotels are reimbursable, and meals are covered up to the daily limit. Upload receipts within 30 days of travel.",
   laptop: "Company laptops must use disk encryption and cannot be used to install personal software. Report loss or theft to IT Security within 24 hours.",
@@ -180,12 +201,21 @@ export function searchDocuments(query, { mode = "hybrid", source = "all" } = {})
 }
 
 // Words and phrases to highlight inside excerpts and the answer.
+const FILLER = new Set([...HIGHLIGHT_SKIP, "is", "are", "of", "a", "an", "to", "in", "on", "do", "i", "it", "at", "by", "or", "my"]);
+
 export function getHighlightTerms(query) {
   const phrase = query.trim();
   if (!phrase) return [];
-  const words = phrase.toLowerCase().split(/[^a-z0-9$]+/).filter((w) => w.length >= 4 && !HIGHLIGHT_SKIP.has(w));
-  return [phrase, ...words];
+  const all = phrase.toLowerCase().split(/[^a-z0-9$]+/).filter(Boolean);
+  const pairs = all
+    .slice(0, -1)
+    .map((w, i) => [w, all[i + 1]])
+    .filter(([a, b]) => !FILLER.has(a) && !FILLER.has(b))
+    .map(([a, b]) => `${a} ${b}`);
+  const words = all.filter((w) => w.length >= 4 && !HIGHLIGHT_SKIP.has(w));
+  return [phrase, ...pairs, ...words];
 }
+// ↑ Full phrase, neighbouring word pairs (like "time off") and single words.
 
 // ---------- Search Intelligence (illustrative demo metrics) ----------
 const TOTAL_INDEXED_DOCS = 23;
