@@ -82,7 +82,7 @@ function QuestionsAnsweredChart({ data = [], defaultMetric }) {
       <div className="mt-3 flex items-start justify-between">
         <div className="flex items-baseline gap-2">
           {/* Answer percentage */}
-          <span className="font-serif text-[30px] font-bold leading-none text-[#14352b]">
+          <span className="mt-4 font-serif  text-[50px] font-bold leading-none text-[#14352b]">
             {displayedAnswerRate}
           </span>
 
@@ -112,8 +112,8 @@ function QuestionsAnsweredChart({ data = [], defaultMetric }) {
       {/* ======================================================
           ACTIVITY BAR CHART
           ====================================================== */}
-      <div className="mt-5">
-        <div className="flex h-[170px] items-end gap-[10px] border-b-[1.2px] border-[#b8d7c7] px-2">
+      <div className="mt-3">
+        <div className="flex h-[120px] items-end gap-[10px] border-b-[1.2px] border-[#b8d7c7] px-2">
           {data.map((item, index) => {
             const height = (item.value / maxValue) * 65;
 
