@@ -160,3 +160,83 @@ function scoreDocument(doc, query, tokens, mode) {
   if (mode === "semantic") return conceptHits;
   return literalHits + conceptHits;
 }
+
+// Main search. Returns ranked results plus the grounded answer for the top topic.
+export function searchDocuments(query, { mode = "hybrid", source = "all" } = {}) {
+  const trimmed = query.trim();
+  if (!trimmed) return { results: [], answer: null };
+  const tokens = tokenize(trimmed);
+
+  const results = DOCUMENTS.filter((d) => source === "all" || d.fileType === source)
+    .map((doc) => {
+      const score = scoreDocument(doc, trimmed, tokens, mode);
+      const penalty = (score >= 3 ? 0 : score === 2 ? 2 : 5) + (mode === "keyword" ? 3 : 0);
+      return { ...doc, score, matchPercent: Math.min(99, doc.baseMatch - penalty) };
+    })
+    .filter((d) => d.score > 0)
+    .sort((a, b) => b.score - a.score || b.matchPercent - a.matchPercent);
+
+  return { results, answer: results[0] ? TOPIC_ANSWERS[results[0].topic] : null };
+}
+
+// Words and phrases to highlight inside excerpts and the answer.
+export function getHighlightTerms(query) {
+  const phrase = query.trim();
+  if (!phrase) return [];
+  const words = phrase.toLowerCase().split(/[^a-z0-9$]+/).filter((w) => w.length >= 4 && !HIGHLIGHT_SKIP.has(w));
+  return [phrase, ...words];
+}
+
+// ---------- Search Intelligence (illustrative demo metrics) ----------
+const TOTAL_INDEXED_DOCS = 23;
+
+const MODE_PROFILES = {
+  semantic: {
+    engine: "VECTOR HNSW", model: "e5-large HNSW Vector",
+    details: [["Embedding dimensions", "1024"], ["Top-k retrieved", "10"], ["Similarity threshold", "0.62"]],
+  },
+  keyword: {
+    engine: "KEYWORD BM25", model: "BM25 Inverted Index",
+    details: [["Analyzer", "Standard + stemming"], ["Top-k retrieved", "10"], ["Minimum should match", "1 term"]],
+  },
+  hybrid: {
+    engine: "HYBRID RAG", model: "e5-large + BM25 (RRF)",
+    details: [["Fusion method", "Reciprocal rank fusion"], ["Top-k retrieved", "10 per retriever"], ["Reranker", "Cross-encoder (demo)"]],
+  },
+};
+
+export function getSearchStats({ query, mode, results }) {
+  const profile = MODE_PROFILES[mode] ?? MODE_PROFILES.hybrid;
+  return {
+    engine: profile.engine,
+    model: profile.model,
+    details: profile.details,
+    scanned: TOTAL_INDEXED_DOCS,
+    chunks: results.length * 9 + (query.trim().length % 7),
+    topRelevance: results[0]?.matchPercent ?? 0,
+    latencyMs: 18 + ((query.trim().length * 7) % 23),
+  };
+}
+
+// ---------- Recent searches ----------
+export function createSeedRecentSearches(now = Date.now()) {
+  const min = 60_000;
+  const hour = 60 * min;
+  return [
+    { id: "seed-1", query: "annual leave policy", at: now - 10 * min },
+    { id: "seed-2", query: "information security requirements", at: now - hour },
+    { id: "seed-3", query: "employee onboarding process", at: now - 3 * hour },
+    { id: "seed-4", query: "work from home rules", at: now - 26 * hour },
+    { id: "seed-5", query: "time off from work", at: now - 50 * hour },
+  ];
+}
+
+export function formatRelativeTime(timestamp, now = Date.now()) {
+  const minutes = Math.floor((now - timestamp) / 60_000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  if (hours < 48) return "Yesterday";
+  return `${Math.floor(hours / 24)}d ago`;
+}
