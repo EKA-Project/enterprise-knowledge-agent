@@ -1,7 +1,6 @@
-import { Search, X, Sparkles, Hash, Layers } from "lucide-react";
-
-const MODE_ICONS = { semantic: Sparkles, keyword: Hash, hybrid: Layers };
-
+import { Search, X } from "lucide-react";
+const MODE_EMOJIS = { semantic: "✨", keyword: "🎯", hybrid: "⚡" };
+// ↑ Same icons as the reference: star, target and lightning.
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)";
 
@@ -27,8 +26,7 @@ export default function SemanticSearchControls({
   return (
     <div className="ssp-rise rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
       <form onSubmit={handleSubmit} className="flex items-center gap-3">
-        <div className="flex flex-1 items-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-app) px-4 py-3 transition focus-within:border-(--border-focus)">
-          <Search size={17} className="shrink-0 text-(--text-primary)" aria-hidden="true" />
+      <div className="flex flex-1 items-center gap-3 rounded-xl border border-(--badge-border) bg-(--primary-light) px-4 py-3 transition focus-within:border-(--border-focus)">          <Search size={17} className="shrink-0 text-(--text-primary)" aria-hidden="true" />
           <input
             type="text"
             value={value}
@@ -63,21 +61,20 @@ export default function SemanticSearchControls({
           aria-label="Search mode"
           className="inline-flex items-center gap-0.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5"
         >
-          {modes.map((m) => {
-            const Icon = MODE_ICONS[m.id];
-            return (
-              <button
-                key={m.id}
-                type="button"
-                aria-pressed={mode === m.id}
-                onClick={() => onModeChange(m.id)}
-                className={segment(mode === m.id)}
-              >
-                <Icon size={12} aria-hidden="true" />
-                {m.label}
-              </button>
-            );
-          })}
+       {modes.map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            aria-pressed={mode === m.id}
+            onClick={() => onModeChange(m.id)}
+            className={segment(mode === m.id)}
+          >
+          <span aria-hidden="true" className="text-[12px] leading-none">
+            {MODE_EMOJIS[m.id]}
+          </span>
+        {m.label}
+        </button>
+      ))}
         </div>
 
         <div className="inline-flex items-center gap-2">
