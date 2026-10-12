@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+// Change this single color variable to update the line, points, badge, legend dot, and hover text
+const CHART_ACCENT_COLOR = "#14b8a6";
+
 function LineAreaChart({ data }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -27,17 +30,21 @@ function LineAreaChart({ data }) {
             </h3>
 
             {/* Mint badge pill */}
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#a7f3d0] bg-[#e6f4ea] px-[0.3rem] py-[0.09rem] font-mono text-[0.6rem] font-semibold text-[#0d9488]">
+            <span
+              className="inline-flex items-center gap-1 rounded-full border border-[#a7f3d0] bg-[#e6f4ea] px-[0.3rem] py-[0.09rem] font-mono text-[0.6rem] font-semibold"
+              style={{ color: CHART_ACCENT_COLOR }}
+            >
               <span>{data.badgeIcon}</span>
               {data.badgeText}
             </span>
           </div>
 
-          {/* Subtext: Uses muted text by default, turns green only on hover */}
+          {/* Subtext: Uses muted text by default, turns accent color on hover */}
           <p
             className={`mt-1 min-h-5 text-[0.7rem] font-light leading-5 transition-colors ${
-              activePoint ? "text-[#0d9488]" : "text-(--text-muted)"
+              !activePoint ? "text-(--text-muted)" : ""
             }`}
+            style={activePoint ? { color: CHART_ACCENT_COLOR } : undefined}
           >
             {activePoint
               ? `📌 ${activePoint.date}: ${activePoint.value} Queries resolved (${
@@ -47,9 +54,12 @@ function LineAreaChart({ data }) {
           </p>
         </div>
 
-        {/* Legend: Green dot with muted label text */}
+        {/* Legend */}
         <div className="flex items-center gap-2 font-mono text-[.68rem] text-(--text-muted)">
-          <span className="h-2 w-2 rounded-full bg-[#0d9488]" />
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ backgroundColor: CHART_ACCENT_COLOR }}
+          />
           <span>{data.legendLabel}</span>
         </div>
       </div>
@@ -98,11 +108,11 @@ function LineAreaChart({ data }) {
             strokeDasharray="4 4"
           />
 
-          {/* Teal/Green line path */}
+          {/* Velocity curve */}
           <path
             d={data.svgPath}
             fill="none"
-            stroke="#0d9488"
+            stroke={CHART_ACCENT_COLOR}
             strokeWidth="3.2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -120,12 +130,16 @@ function LineAreaChart({ data }) {
               aria-label={`${point.date}: ${point.value} queries`}
               className={`absolute z-5 cursor-pointer -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-200 ${
                 isHovered
-                  ? "h-4 w-4 border-2 border-white bg-[#0d9488] ring-4 ring-[#0d9488]/30 shadow-md"
-                  : "h-2.5 w-2.5 border-2 border-(--bg-surface) bg-[#0d9488] shadow-[0_1px_3px_rgba(0,0,0,0.2)]"
+                  ? "h-4 w-4 border-2 border-white shadow-md"
+                  : "h-2.5 w-2.5 border-2 border-(--bg-surface) shadow-[0_1px_3px_rgba(0,0,0,0.2)]"
               }`}
               style={{
                 left: `${(point.x / 700) * 100}%`,
                 top: `${point.y}px`,
+                backgroundColor: CHART_ACCENT_COLOR,
+                boxShadow: isHovered
+                  ? `0 0 0 4px ${CHART_ACCENT_COLOR}44, 0 4px 6px -1px rgba(0, 0, 0, 0.1)`
+                  : undefined,
               }}
               onMouseEnter={() => handleMouseEnter(index)}
             />
@@ -149,7 +163,10 @@ function LineAreaChart({ data }) {
               {activePoint.date}
             </div>
 
-            <div className="mt-0.5 font-mono text-[0.8rem] font-bold tracking-tight text-[#34d399]">
+            <div
+              className="mt-0.5 font-mono text-[0.8rem] font-bold tracking-tight"
+              style={{ color: CHART_ACCENT_COLOR }}
+            >
               queries : {activePoint.value}
             </div>
           </div>
