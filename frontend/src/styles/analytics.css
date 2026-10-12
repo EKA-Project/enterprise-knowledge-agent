@@ -1,0 +1,37 @@
+/* Animations for the Analytics page only. Every selector is scoped under .analytics-page. */
+@keyframes anl-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes anl-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes anl-pop { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes anl-toast { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+@keyframes anl-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes anl-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes anl-donut { from { opacity: 0; transform: rotate(-70deg) scale(0.88); } to { opacity: 1; transform: none; } }
+@keyframes anl-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes anl-shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+
+/* "backwards" (not "both") so hover transforms still work after the animation ends. */
+.analytics-page .anl-rise  { animation: anl-rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.analytics-page .anl-fade  { animation: anl-fade 0.25s ease-out backwards; }
+.analytics-page .anl-pop   { animation: anl-pop 0.28s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.analytics-page .anl-toast { animation: anl-toast 0.3s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.analytics-page .anl-grow   { transform-origin: bottom; animation: anl-grow 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.analytics-page .anl-grow-x { transform-origin: left; animation: anl-grow-x 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.analytics-page .anl-donut  { animation: anl-donut 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.analytics-page .anl-float  { animation: anl-float 3s ease-in-out infinite; }
+.analytics-page .anl-shimmer {
+  height: 3px;
+  background-image: linear-gradient(90deg, transparent, var(--status-failure), transparent);
+  background-size: 200% 100%;
+  animation: anl-shimmer 2.2s linear infinite;
+}
+
+/* Hand cursor for everything clickable on this page. */
+.analytics-page button:not(:disabled),
+.analytics-page [role="button"] { cursor: pointer; }
+.analytics-page button:disabled { cursor: not-allowed; }
+
+@media (prefers-reduced-motion: reduce) {
+  .analytics-page .anl-rise, .analytics-page .anl-fade, .analytics-page .anl-pop,
+  .analytics-page .anl-toast, .analytics-page .anl-grow, .analytics-page .anl-grow-x,
+  .analytics-page .anl-donut, .analytics-page .anl-float, .analytics-page .anl-shimmer { animation: none; }
+}
