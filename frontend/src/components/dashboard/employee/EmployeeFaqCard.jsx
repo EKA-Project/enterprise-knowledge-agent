@@ -45,11 +45,6 @@ function EmployeeFaqCard() {
 
             <span className="mt-2 flex items-center gap-1 text-[0.67rem] font-semibold text-(--primary)">
               {faq.actionLabel}
-
-              <ArrowRight
-                size={14}
-                className="transition-transform duration-150 group-hover:translate-x-1"
-              />
             </span>
           </button>
         ))}
