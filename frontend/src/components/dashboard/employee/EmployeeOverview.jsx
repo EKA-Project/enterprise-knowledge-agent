@@ -17,10 +17,26 @@ import LineAreaChart from "../../charts/LineAreaChart.jsx";
 import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
 import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
 
-import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
-import MySavedBookmarks from "./MySavedBookmarks.jsx";
+import { pinnedDocuments } from "../admin/adminDashboardData.js";
+import EmployeeDocumentPanel from "./EmployeeDocumentPanel.jsx";
 import MyRecentSearchConfidence from "./MyRecentSearchConfidence.jsx";
 import EmployeeFaqCard from "./EmployeeFaqCard.jsx";
+// Normalize both data sources to the same shape: { id, type, title, meta, badge? }
+const pinnedDocs = pinnedDocuments.map((doc) => ({
+  id: doc.title,
+  type: doc.type,
+  title: doc.title,
+  meta: doc.meta,
+  badge: "Pinned",
+}));
+
+const bookmarkDocs = savedBookmarks.map((doc) => ({
+  id: doc.id,
+  type: doc.format,
+  title: doc.title,
+  meta: `${doc.category} • ${doc.pages} pages`,
+}));
+
 function EmployeeOverview() {
   // ─────────────────────────────────────────────
   // Page metadata
@@ -33,7 +49,7 @@ function EmployeeOverview() {
   // ─────────────────────────────────────────────
 
   return (
-    <div classname="min-h-full">
+    <div className="min-h-full">
       {/* ─────────────────────────────────────────
           Hero section
       ───────────────────────────────────────── */}
@@ -74,8 +90,22 @@ function EmployeeOverview() {
         <MyQueryTopics data={myQueryTopicsData} />
       </div>
       <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
-        <AdminPinnedDocuments />
-        <MySavedBookmarks data={savedBookmarks} />
+        <EmployeeDocumentPanel
+          icon="📌"
+          title="Admin–Pinned Documents"
+          description="Company standards & key charters pinned for spotlight access across all dashboards."
+          actionLabel="Manage Pinned →"
+          actionTo="/documents?category=pinned"
+          documents={pinnedDocs}
+        />
+
+        <EmployeeDocumentPanel
+          icon="⭐"
+          title="My Saved Bookmarks"
+          description="Quick access to your personal bookmarked sources."
+          actionLabel="View All Bookmarks →"
+          documents={bookmarkDocs}
+        />
       </div>
 
       {/* Recent Searches & Frequently Asked Questions */}
