@@ -118,4 +118,5 @@ export const topicFilters = [
   { id: 'finance-legal', label: 'Finance & Legal' },
   { id: 'sales-marketing', label: 'Sales & Marketing' },
   { id: 'security-it', label: 'Security & IT' },
+
 ];
