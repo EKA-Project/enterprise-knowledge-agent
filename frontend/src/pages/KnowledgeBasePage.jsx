@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
@@ -6,7 +8,9 @@ import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
 
-export default function KnowledgeBasePage() {
+export default function KnowledgeBasePage() {  // Category whose Collection Insights modal is open (null = closed)
+  const [insightsCategory, setInsightsCategory] = useState(null);
+
   return (
     <div className="px-4 py-2">
       {/* Hero section */}
@@ -58,7 +62,11 @@ export default function KnowledgeBasePage() {
 
         <div className="grid grid-cols-3 gap-5">
           {knowledgeCategories.map((category) => (
-            <CategoryCard key={category.id} category={category} />
+            <CategoryCard
+              key={category.id}
+              category={category}
+              onOpenInsights={setInsightsCategory}
+            />
           ))}
         </div>
       </section>
@@ -68,6 +76,12 @@ export default function KnowledgeBasePage() {
 
       {/* Bottom guidance banner from the approved Knowledge Base reference. */}
       <AskQuestionBanner />
+      {insightsCategory && (
+        <CollectionInsightsModal
+          category={insightsCategory}
+          onClose={() => setInsightsCategory(null)}
+        />
+      )}
     </div>
   );
 }
