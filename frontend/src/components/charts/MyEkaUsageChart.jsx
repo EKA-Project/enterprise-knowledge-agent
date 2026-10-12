@@ -1,5 +1,21 @@
 import { useState } from "react";
 
+// Color configuration for categories using high-contrast tones (Violet / Cyan / Coral)
+const USAGE_METRIC_COLORS = {
+  questions: {
+    label: "Questions",
+    color: "#0f172a", // Rose / Vivid Coral
+  },
+  documents: {
+    label: "Documents",
+    color: "#0284c7", // Bright Cyan / Aqua
+  },
+  searches: {
+    label: "Searches",
+    color: "#38bdf8", // Indigo / Violet
+  },
+};
+
 function MyEkaUsageChart({ data }) {
   const [activeRange, setActiveRange] = useState("7");
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -47,29 +63,29 @@ function MyEkaUsageChart({ data }) {
           </div>
         </div>
 
+        {/* Legend */}
         <div className="mt-[0.85rem] flex items-center gap-[1.1rem] border-b border-(--border-subtle) pb-2 font-sans text-[0.76rem]">
-          <div className="flex items-center gap-2 text-(--text-secondary)">
-            <span className="h-2 w-2 rounded-full bg-(--primary)" />
-            Questions
-          </div>
-
-          <div className="flex items-center gap-2 text-(--text-secondary)">
-            <span className="h-2 w-2 rounded-full bg-[#2563eb]" />
-            Documents
-          </div>
-
-          <div className="flex items-center gap-2 text-(--text-secondary)">
-            <span className="h-2 w-2 rounded-full bg-[#d97706]" />
-            Searches
-          </div>
+          {Object.entries(USAGE_METRIC_COLORS).map(([key, item]) => (
+            <div
+              key={key}
+              className="flex items-center gap-2 text-(--text-secondary)"
+            >
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: item.color }}
+              />
+              {item.label}
+            </div>
+          ))}
         </div>
       </div>
 
+      {/* Stacked Bar Chart */}
       <div className="mt-4 flex h-[145px] w-full items-end justify-between gap-[0.65rem] border-b border-(--border-subtle) px-1 pb-[0.4rem] pt-2">
         {rangeData.data.map((item, index) => {
           const total = item.questions + item.documents + item.searches;
-
           const barHeight = (total / rangeData.maxValue) * 100;
+          const isSelected = hoveredIndex === index;
 
           return (
             <div
@@ -77,14 +93,14 @@ function MyEkaUsageChart({ data }) {
               className="flex h-full flex-1 cursor-pointer flex-col items-center justify-end"
               onMouseEnter={() => setHoveredIndex(index)}
             >
-              {/* Total value */}
+              {/* Total label */}
               <span className="mb-1 whitespace-nowrap font-mono text-[0.64rem] font-bold text-(--text-primary)">
                 {total}
               </span>
 
-              {/* Stacked bar */}
+              {/* Stacked segment container */}
               <div
-                className="w-full max-w-[26px] overflow-hidden rounded-[8px_8px_0_0] transition-all duration-[220ms]"
+                className="w-full max-w-6.5 overflow-hidden rounded-[8px_8px_0_0] transition-all duration-200"
                 style={{
                   height: `${barHeight}%`,
                   opacity:
@@ -92,44 +108,43 @@ function MyEkaUsageChart({ data }) {
                       ? index === rangeData.data.length - 1
                         ? 1
                         : 0.85
-                      : hoveredIndex === index
+                      : isSelected
                         ? 1
                         : 0.35,
-                  filter:
-                    hoveredIndex === index
-                      ? "drop-shadow(0 4px 12px rgba(37,99,235,0.35))"
-                      : "none",
+                  filter: isSelected
+                    ? `drop-shadow(0 4px 12px ${USAGE_METRIC_COLORS.questions.color}55)`
+                    : "none",
                 }}
               >
-                {/* Searches */}
+                {/* Searches segment */}
                 <div
-                  className="bg-[#d97706]"
                   style={{
+                    backgroundColor: USAGE_METRIC_COLORS.searches.color,
                     height: `${(item.searches / total) * 100}%`,
                   }}
                   title={`Searches: ${item.searches}`}
                 />
 
-                {/* Documents */}
+                {/* Documents segment */}
                 <div
-                  className="bg-[#2563eb]"
                   style={{
+                    backgroundColor: USAGE_METRIC_COLORS.documents.color,
                     height: `${(item.documents / total) * 100}%`,
                   }}
                   title={`Documents: ${item.documents}`}
                 />
 
-                {/* Questions */}
+                {/* Questions segment */}
                 <div
-                  className="bg-(--primary)"
                   style={{
+                    backgroundColor: USAGE_METRIC_COLORS.questions.color,
                     height: `${(item.questions / total) * 100}%`,
                   }}
                   title={`Questions: ${item.questions}`}
                 />
               </div>
 
-              {/* Date / period label */}
+              {/* Date / label */}
               <span className="mt-[0.2rem] whitespace-nowrap font-sans text-[0.65rem] font-semibold text-(--text-muted)">
                 {item.label}
               </span>
@@ -138,6 +153,7 @@ function MyEkaUsageChart({ data }) {
         })}
       </div>
 
+      {/* Footer / Summary line */}
       <div
         className={`mt-3 flex items-center justify-between gap-4 font-sans text-[0.74rem] transition-colors duration-150 ${
           hoveredIndex !== null ? "text-(--primary)" : "text-(--text-muted)"
