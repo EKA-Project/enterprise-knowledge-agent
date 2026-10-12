@@ -41,7 +41,7 @@ function AdminOverview() {
           Overview metrics
       ───────────────────────────────────────── */}
 
-      <div className="mt-6 grid grid-cols-4 gap-5 auto-rows-45">
+      <div className="mt-6 grid grid-cols-4 gap-5">
         {adminMetrics.map((metric) => {
           // Storage metric uses custom content.
           if (metric.label === "STORAGE CAPACITY") {

@@ -32,7 +32,7 @@ function MetricCard({
   // ─────────────────────────────────────────────
 
   return (
-    <section className="rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
+    <section className="flex h-40 flex-col rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
       {/* ─────────────────────────────────────────
           Header: metric label and icon
       ───────────────────────────────────────── */}
@@ -57,7 +57,7 @@ function MetricCard({
           Content: metric value or custom content
       ───────────────────────────────────────── */}
 
-      <div className="mt-7 flex min-h-24 items-end pb-4">
+      <div className="mt-4 flex flex-1 items-end pb-0">
         {children ? (
           children
         ) : (

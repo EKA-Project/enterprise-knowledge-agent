@@ -37,7 +37,7 @@ function StorageMetric() {
           Storage progress ring
       ───────────────────────────────────────── */}
 
-      <div className="relative h-24 w-24 shrink-0">
+      <div className="relative h-20 w-20 shrink-0">
         <svg viewBox="0 0 96 96" className="h-full w-full -rotate-90">
           {/* Free storage segment */}
           <circle
@@ -76,11 +76,11 @@ function StorageMetric() {
 
         {/* Center label */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-sm font-semibold text-(--text-primary)">
+          <span className="text-xs font-semibold text-(--text-primary)">
             28%
           </span>
 
-          <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-(--text-muted)">
+          <span className="text-[6px] font-semibold uppercase tracking-[0.12em] text-(--text-muted)">
             Capacity
           </span>
         </div>
