@@ -7,116 +7,76 @@
 // Icon components imported directly (same pattern as navigation.js),
 // so each category object can hold the icon as a component reference.
 import {
+  SlidersVertical,
   Users,
-  SlidersHorizontal,
-  FileText,
+  Notebook,
+  Shield,
   Tag,
-  ShieldCheck,
-  BookOpen,
+  FileText,
 } from 'lucide-react';
-// Topic categories shown in the browse grid
+// Top stats row (values taken from the reference design)
+export const knowledgeStats = [
+  { id: 'total-docs', 
+    label: 'Total Documents', 
+    value: 19, 
+    caption: 'Indexed in EKA' },
+  { id: 'collections', 
+    label: 'Collections', 
+    value: 6, 
+    caption: 'Department Hubs' },
+  { id: 'glossary', 
+    label: 'Glossary Terms', 
+    value: 24, 
+    caption: 'Defined Terms', 
+    highlight: true },
+  { id: 'updated', 
+    label: 'Updated This Week', 
+    value: 5, 
+    caption: 'Recent Amendments' },
+];
+
+// documentCategory = exact category value used by the Documents page filter
 export const knowledgeCategories = [
-  {
-    id: 'people-culture',
-    title: 'People & Culture',
-    icon: Users,
-    iconTheme: 'mint',
-    docCount: 24,
-    updatedLabel: 'Updated this week',
-  },
-  {
-    id: 'product-engineering',
-    title: 'Product & Engineering',
-    icon: SlidersHorizontal,
-    iconTheme: 'lavender',
-    docCount: 18,
-    updatedLabel: 'Updated this week',
-  },
-  {
-    id: 'finance-legal',
-    title: 'Finance & Legal',
-    icon: FileText,
-    iconTheme: 'gold',
-    docCount: 12,
-    updatedLabel: 'Updated this week',
-  },
-  {
-    id: 'sales-marketing',
-    title: 'Sales & Marketing',
-    icon: Tag,
-    iconTheme: 'pink',
-    docCount: 16,
-    updatedLabel: 'Updated this week',
-  },
-  {
-    id: 'security-it',
-    title: 'Security & IT',
-    icon: ShieldCheck,
-    iconTheme: 'blue',
-    docCount: 9,
-    updatedLabel: 'Updated this week',
-  },
-  {
-    id: 'company-foundations',
-    title: 'Company foundations',
-    icon: BookOpen,
-    iconTheme: 'tan',
-    docCount: 7,
-    updatedLabel: 'Updated this week',
-  },
-];
-
-// Documents shown in the "Recently surfaced" list
-export const recentlySurfacedDocs = [
-  {
-    id: 'doc-1',
-    title: 'Q4 2024 Product Strategy',
-    fileType: 'PDF',
-    updatedLabel: 'Updated today, 9:42 am',
-    size: '2.4 MB',
-    status: 'indexed',
-  },
-  {
-    id: 'doc-2',
-    title: 'Remote work principles',
-    fileType: 'DOCX',
-    updatedLabel: 'Updated yesterday',
-    size: '840 KB',
-    status: 'indexed',
-  },
-  {
-    id: 'doc-3',
-    title: 'Customer interview synthesis',
-    fileType: 'PDF',
-    updatedLabel: 'Updated nov 18, 2024',
-    size: '5.1 MB',
-    status: 'processing',
-  },
-    { id: 'doc-4', 
-      title: 'Brand voice & language', 
-      fileType: 'FIG', 
-      updatedLabel: 'Updated nov 15, 2024', 
-      size: '1.2 MB', 
-      status: 'failed' },
-];
-// Guides shown in the "Pinned guides" list
-export const pinnedGuides = [
-  { id: 'guide-1', title: 'The Northstar handbook' },
-  { id: 'guide-2', title: 'Working agreements' },
-  { id: 'guide-3', title: 'How we make decisions' },
-];
-
-
-// Topic pills shown above the category grid.
-// Note: "Company foundations" intentionally has no filter pill — the
-// reference design only shows 5 topic pills even though there are
-// 6 category cards below.
-export const topicFilters = [
-  { id: 'all', label: 'All topics' },
-  { id: 'people-culture', label: 'People & Culture' },
-  { id: 'product-engineering', label: 'Product & Engineering' },
-  { id: 'finance-legal', label: 'Finance & Legal' },
-  { id: 'sales-marketing', label: 'Sales & Marketing' },
-  { id: 'security-it', label: 'Security & IT' },
-
+  { id: 'engineering', 
+    title: 'Engineering & DevOps', 
+    documentCategory: 'Engineering & DevOps', 
+    icon: SlidersVertical, 
+    iconTheme: 'lavender', 
+    docCount: 10, 
+    sourceCount: 14 },
+  { id: 'people', 
+    title: 'People & HR Operations', 
+    documentCategory: 'People & HR Operations', 
+    icon: Users, 
+    iconTheme: 'mint', 
+    docCount: 3, 
+    sourceCount: 9 },
+  { id: 'product', 
+    title: 'Product Strategy & Design', 
+    documentCategory: 'Product Strategy & Design', 
+    icon: Notebook, 
+    iconTheme: 'gold', 
+    docCount: 3, 
+    sourceCount: 8 },
+  { id: 'security', 
+    title: 'Security & Compliance', 
+    documentCategory: 'Security & Compliance', 
+    icon: Shield, 
+    iconTheme: 'teal', 
+    docCount: 1, 
+    sourceCount: 12 },
+  { id: 'sales', 
+    title: 'Sales & Go-To-Market', 
+    documentCategory: 'Sales & GTM', 
+    icon: Tag, 
+    iconTheme: 'rose', 
+    docCount: 1, 
+    sourceCount: 7 },
+  { id: 'legal', 
+    title: 'Legal & Finance', 
+    documentCategory: 'Legal & Finance', 
+    icon: FileText, 
+    iconTheme: 'gold', 
+    docCount: 1, 
+    sourceCount: 6 },
 ];

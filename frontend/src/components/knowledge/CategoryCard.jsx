@@ -1,42 +1,63 @@
-import { ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Zap, MessageSquare } from 'lucide-react';
 
-// Maps each category's iconTheme (from KnowledgeData.js) to its exact
-// badge background + icon color, measured directly from the reference design.
+// accent = coloured top border, icon = icon tile colours
 const themeStyles = {
-  mint: 'bg-green-100 text-green-700',
-  lavender: 'bg-purple-100 text-purple-800',
-  gold: 'bg-amber-100 text-amber-700',
-  pink: 'bg-rose-100 text-rose-600',
-  blue: 'bg-sky-100 text-sky-600',
-  tan: 'bg-[#f2eadf] text-stone-600',
+  lavender: { accent: 'border-t-violet-400', icon: 'bg-violet-50 text-violet-600' },
+  mint: { accent: 'border-t-emerald-400', icon: 'bg-emerald-50 text-emerald-600' },
+  gold: { accent: 'border-t-amber-400', icon: 'bg-amber-50 text-amber-600' },
+  teal: { accent: 'border-t-teal-400', icon: 'bg-teal-50 text-teal-600' },
+  rose: { accent: 'border-t-rose-400', icon: 'bg-rose-50 text-rose-500' },
 };
-
-export default function CategoryCard({ category }) {
-  const Icon = category.icon;
+function CategoryCard({ category }) {
+  const { icon: Icon, iconTheme, title, docCount, sourceCount, documentCategory } = category;
+  const theme = themeStyles[iconTheme];
 
   return (
-    <div className="rounded-3xl bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-shadow duration-200 hover:shadow-(--shadow-md)">
-      <div className="mb-6 flex items-start justify-between">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${themeStyles[category.iconTheme]}`}>
-          <Icon size={22} />
-        </div>
-        {/* Static "open topic" indicator — not an edit action */}
-        <ArrowUpRight size={18} className="text-(--text-primary)" />
+    <article
+      className={`rounded-3xl border border-t-2 border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) ${theme.accent}`}
+    >
+      {/* Icon + insights pill (modal comes in Step 2) */}
+      <div className="flex items-start justify-between">
+        <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${theme.icon}`}>
+          <Icon size={18} />
+        </span>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary)"
+        >
+          <Zap size={11} className="text-amber-500" />
+          Collection Insights
+        </button>
       </div>
 
-      <h3 className="kb-hero-heading text-xl font-bold text-(--text-primary)">
-        {category.title}
-      </h3>
-      <p className="mt-1 text-sm text-(--text-secondary)">
-        {category.docCount} documents • {category.updatedLabel}
-      </p>
+      <h3 className="kb-serif mt-4 text-lg font-bold text-(--text-primary)">{title}</h3>
 
-      <button
-        type="button"
-        className="mt-6 text-sm text-(--text-secondary) hover:text-(--text-primary)"
-      >
-        Explore topic ›
-      </button>
-    </div>
+      <div className="mt-2 flex items-center gap-2 text-xs text-(--text-secondary)">
+        <span className="kb-mono rounded-full bg-(--primary-light) px-2.5 py-0.5 text-[10px]">
+          {docCount} documents
+        </span>
+        <span>• {sourceCount} verified sources</span>
+      </div>
+
+      <div className="mt-5 flex items-center justify-between border-t border-(--border-subtle) pt-4">
+        {/* Opens Documents pre-filtered by this category */}
+        <Link
+          to={`/documents?category=${encodeURIComponent(documentCategory)}`}
+          className="text-sm font-semibold text-(--text-primary)"
+        >
+          Browse collection <span className="text-(--primary)">→</span>
+        </Link>
+        <button
+          type="button"
+          aria-label={`Ask EKA about ${title}`}
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-(--primary-light) text-(--primary)"
+        >
+          <MessageSquare size={14} />
+        </button>
+      </div>
+    </article>
   );
 }
+
+export default CategoryCard;

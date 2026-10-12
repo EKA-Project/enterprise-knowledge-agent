@@ -1,27 +1,16 @@
-import { useState } from 'react';
-import { Search, LayoutGrid } from 'lucide-react';
-import TopicFilterPills from '../components/knowledge/TopicFilterPills.jsx';
+import { Link } from 'react-router-dom';
+import { Upload, LayoutGrid } from 'lucide-react';
+import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
-import RecentlySurfacedList from '../components/knowledge/RecentlySurfacedList.jsx';
-import PinnedGuides from '../components/knowledge/PinnedGuides.jsx';
-import MissingSomething from '../components/knowledge/MissingSomething.jsx';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
-import { topicFilters, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
+import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
 
-// Knowledge Base landing page — browse the collective knowledge, filter by
-// topic, and jump into recently surfaced docs or pinned guides.
-// Note: page title/subtitle are NOT rendered here — Topbar already shows
-// them based on the current route (see routeMetadata in Topbar.jsx).
 export default function KnowledgeBasePage() {
-  // Active topic filter — lifted up here so the category grid (next step)
-  // can also read/react to it.
-  const [activeTopic, setActiveTopic] = useState('all');
-
   return (
     <div className="px-4 py-2">
       {/* Hero section */}
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex items-end justify-between">
         <div>
           <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
             Browse the collective
@@ -34,54 +23,47 @@ export default function KnowledgeBasePage() {
           </p>
         </div>
 
-        <button
-          type="button"
-          className="flex items-center gap-2 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-0.5 text-xs font-semibold text-(--text-primary) hover:bg-(--bg-surface-subtle)"
-        >
-
-          <LayoutGrid size={14} />
-          Browse all
-        </button>
-      </div>
-
-      {/* Search bar (static for now — no search/navigation logic yet) */}
-      <div className="mb-6 flex items-center gap-3 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-5 py-2.5 shadow-(--shadow-sm)">
-        <Search size={18} className="text-(--text-muted)" />
-        <input
-          type="text"
-          placeholder="Search policies, guides, rituals, runbooks…"
-          className="w-full border-0 bg-transparent text-sm text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none"
-        />
-      </div>
-      {/* Topic filter pills */}
-      <TopicFilterPills
-        topics={topicFilters}
-        activeTopic={activeTopic}
-        onChange={setActiveTopic}
-      />
-
-      {/* Category grid — filtered by the active topic pill.
-            "all" shows every category; a specific topic shows only its
-            matching card (Company foundations has no pill, so it only
-            appears under "All topics"). */}
-      <div className="grid grid-cols-3 gap-9">
-        {knowledgeCategories
-          .filter((category) => activeTopic === 'all' || category.id === activeTopic)
-          .map((category) => (
-            <CategoryCard key={category.id} category={category} />
-          ))}
-      </div>
-      {/* Recently surfaced and pinned guides share the same two-column layout
-            shown in the approved Knowledge Base reference. */}
-      <div className="mt-8 grid grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-10">
-        <RecentlySurfacedList />
-
-        {/* Right column: pinned guides followed by the missing-content prompt. */}
-        <div>
-          <PinnedGuides />
-          <MissingSomething />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-3.5 py-1 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
+          >
+            <Upload size={12} /> Upload document
+          </button>
+          <Link
+            to="/documents"
+            className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
+          >
+            <LayoutGrid size={12} /> Browse all
+          </Link>
         </div>
       </div>
+      <KnowledgeStats stats={knowledgeStats} />
+
+      {/* Browse by Department */}
+      <section className="mt-8">
+        <div className="mb-4 flex items-end justify-between">
+          <div>
+            <p className="kb-mono text-[10px] uppercase tracking-[0.12em] text-(--text-muted)">
+              Knowledge Directory
+            </p>
+            <h2 className="kb-serif text-xl font-bold text-(--text-primary)">
+              Browse by Department
+            </h2>
+          </div>
+          <span className="kb-mono text-[11px] text-(--text-muted)">
+            {knowledgeCategories.length} Collections Indexed
+          </span>
+        </div>
+
+        <div className="grid grid-cols-3 gap-5">
+          {knowledgeCategories.map((category) => (
+            <CategoryCard key={category.id} category={category} />
+          ))}
+        </div>
+      </section>
+
+
 
 
       {/* Bottom guidance banner from the approved Knowledge Base reference. */}

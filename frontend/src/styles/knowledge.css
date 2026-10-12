@@ -10,3 +10,7 @@
 .kb-hero-heading {
   font-family: var(--font-serif);
 }
+
+/* Small reusable font helpers for the Knowledge Base page */
+.kb-serif { font-family: var(--font-serif); }
+.kb-mono  { font-family: var(--font-mono); }
