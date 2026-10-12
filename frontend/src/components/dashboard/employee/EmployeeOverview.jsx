@@ -27,7 +27,7 @@ const pinnedDocs = pinnedDocuments.map((doc) => ({
   type: doc.type,
   title: doc.title,
   meta: doc.meta,
-  badge: "Pinned",
+  badge: "Saved",
 }));
 
 const bookmarkDocs = savedBookmarks.map((doc) => ({
@@ -96,6 +96,8 @@ function EmployeeOverview() {
           description="Company standards & key charters pinned for spotlight access across all dashboards."
           actionLabel="Manage Pinned →"
           actionTo="/documents?category=pinned"
+          itemAction="pinned"
+          itemActionLabel="Pinned by Admin"
           documents={pinnedDocs}
         />
 
@@ -104,6 +106,8 @@ function EmployeeOverview() {
           title="My Saved Bookmarks"
           description="Quick access to your personal bookmarked sources."
           actionLabel="View All Bookmarks →"
+          itemAction="saved"
+          itemActionLabel="Saved to your bookmarks"
           documents={bookmarkDocs}
         />
       </div>

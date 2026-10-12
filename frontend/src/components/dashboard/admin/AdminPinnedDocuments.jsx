@@ -34,7 +34,8 @@ function AdminPinnedDocuments() {
             type={document.type}
             title={document.title}
             meta={document.meta}
-            badge="Pinned"
+            action="pinned"
+            actionLabel="Pinned by Admin"
           />
         ))}
       </div>

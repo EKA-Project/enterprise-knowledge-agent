@@ -81,7 +81,7 @@ function MyEkaUsageChart({ data }) {
       </div>
 
       {/* Stacked Bar Chart */}
-      <div className="mt-4 flex h-[145px] w-full items-end justify-between gap-[0.65rem] border-b border-(--border-subtle) px-1 pb-[0.4rem] pt-2">
+      <div className="mt-4 flex h-36.25 w-full items-end justify-between gap-[0.65rem] border-b border-(--border-subtle) px-1 pb-[0.4rem] pt-2">
         {rangeData.data.map((item, index) => {
           const total = item.questions + item.documents + item.searches;
           const barHeight = (total / rangeData.maxValue) * 100;

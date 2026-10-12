@@ -10,6 +10,8 @@ function EmployeeDocumentPanel({
   description,
   actionLabel,
   actionTo,
+  itemAction,
+  itemActionLabel,
   documents,
 }) {
   return (
@@ -44,7 +46,8 @@ function EmployeeDocumentPanel({
             type={doc.type}
             title={doc.title}
             meta={doc.meta}
-            badge={doc.badge}
+            action={itemAction}
+            actionLabel={itemActionLabel}
           />
         ))}
       </div>
