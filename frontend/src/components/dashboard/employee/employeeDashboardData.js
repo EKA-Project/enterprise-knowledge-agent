@@ -215,28 +215,25 @@ export const savedBookmarks = [
   },
 ];
 
-// Recent Search Confidence
-export const recentSearches = [
+// Semantic Search Grounding
+export const semanticSearches = [
   {
-    id: "search-1",
-    query: "Work from home policy 90-day tax limits",
-    timestamp: "Queried 10 mins ago",
-    groundingDetail: "3 sources verified",
-    confidenceLevel: "high",
+    id: "semantic-1",
+    query: "Home office setup & desk stipend",
+    document: "Global Remote Work Policy 2026",
+    match: 98,
   },
   {
-    id: "search-2",
-    query: "Kubernetes failover DNS TTL settings",
-    timestamp: "Queried 2 hours ago",
-    groundingDetail: "2 sources verified",
-    confidenceLevel: "high",
+    id: "semantic-2",
+    query: "Vacation carryover rules",
+    document: "Employee Leave & PTO Guidelines",
+    match: 96,
   },
   {
-    id: "search-3",
-    query: "Navan travel stipend roll forward rules",
-    timestamp: "Queried Yesterday",
-    groundingDetail: "Partial policy match",
-    confidenceLevel: "medium",
+    id: "semantic-3",
+    query: "Office Wi-Fi & VPN setup",
+    document: "IT Infrastructure Access Runbook",
+    match: 92,
   },
 ];
 

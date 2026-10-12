@@ -11,7 +11,7 @@ import {
   myEkaUsageData,
   myQueryTopicsData,
   savedBookmarks,
-  recentSearches,
+  semanticSearches,
 } from "./employeeDashboardData.js";
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
 import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
@@ -19,7 +19,7 @@ import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
 
 import { pinnedDocuments } from "../admin/adminDashboardData.js";
 import EmployeeDocumentPanel from "./EmployeeDocumentPanel.jsx";
-import MyRecentSearchConfidence from "./MyRecentSearchConfidence.jsx";
+import SemanticSearchSuggestions from "./SemanticSearchSuggestions.jsx";
 import EmployeeFaqCard from "./EmployeeFaqCard.jsx";
 // Normalize both data sources to the same shape: { id, type, title, meta, badge? }
 const pinnedDocs = pinnedDocuments.map((doc) => ({
@@ -114,7 +114,7 @@ function EmployeeOverview() {
 
       {/* Recent Searches & Frequently Asked Questions */}
       <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
-        <MyRecentSearchConfidence data={recentSearches} />
+        <SemanticSearchSuggestions data={semanticSearches} />
         <EmployeeFaqCard />
       </div>
     </div>
