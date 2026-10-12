@@ -14,7 +14,7 @@ function AdminPinnedDocuments() {
 
           <Link
             to="/documents?category=pinned"
-            className="!text-[0.82rem] font-semibold text-(--primary) transition-colors hover:underline"
+            className="!text-[0.72rem] font-semibold text-(--primary) transition-colors hover:underline"
           >
             Manage Pinned →
           </Link>

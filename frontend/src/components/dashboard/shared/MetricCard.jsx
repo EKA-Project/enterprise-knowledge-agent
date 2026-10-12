@@ -70,7 +70,7 @@ function MetricCard({
             {/* Supporting metric */}
             {supportingText && (
               <p
-                className={`pb-1 text-sm font-semibold ${
+                className={`pb-1 text-xs font-semibold ${
                   supportingColorStyles[supportingType]
                 }`}
               >

@@ -4,7 +4,7 @@ const pageMetadata = {
       eyebrow: "MONDAY, 24 NOVEMBER",
       title: "Good morning, Maya.",
       description: "Here's what's happening across your team's memory.",
-      status: "All systems in sync",
+      status: "Knowledge engine active",
     },
 
     manager: {
