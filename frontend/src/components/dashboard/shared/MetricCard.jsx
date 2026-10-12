@@ -57,7 +57,7 @@ function MetricCard({
           Content: metric value or custom content
       ───────────────────────────────────────── */}
 
-      <div className="mt-7 flex min-h-24 items-end pb-4">
+      <div className="mt-2 flex min-h-24 items-end pb-2">
         {children ? (
           children
         ) : (
@@ -70,7 +70,7 @@ function MetricCard({
             {/* Supporting metric */}
             {supportingText && (
               <p
-                className={`pb-1 text-sm font-semibold ${
+                className={`pb-1 text-xs font-semibold ${
                   supportingColorStyles[supportingType]
                 }`}
               >

@@ -37,7 +37,7 @@ function StorageMetric() {
           Storage progress ring
       ───────────────────────────────────────── */}
 
-      <div className="relative h-24 w-24 shrink-0">
+      <div className="relative h-22 w-24 shrink-0">
         <svg viewBox="0 0 96 96" className="h-full w-full -rotate-90">
           {/* Free storage segment */}
           <circle
