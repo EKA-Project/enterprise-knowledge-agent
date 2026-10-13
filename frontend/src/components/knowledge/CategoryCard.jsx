@@ -1,15 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { categoryThemes } from './KnowledgeData.js';
 import { Zap, MessageSquare } from 'lucide-react';
+
 
 
 function CategoryCard({ category, onOpenInsights }) {
   const { icon: Icon, iconTheme, title, docCount, sourceCount, documentCategory } = category;
   const theme = categoryThemes[iconTheme];
+  const navigate = useNavigate();
+
+  // Documents page, pre-filtered by this category
+  const browseUrl = `/documents?category=${encodeURIComponent(documentCategory)}`;
 
   return (
     <article
-      className={`rounded-3xl border border-t-2 border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) ${theme.accent}`}
+      onClick={() => navigate(browseUrl)}
+      className={`cursor-pointer rounded-3xl border border-t-2 border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) ${theme.accent}`}
     >
       {/* Icon + insights pill */}
       <div className="flex items-start justify-between">
@@ -18,8 +24,11 @@ function CategoryCard({ category, onOpenInsights }) {
         </span>
         <button
           type="button"
-          onClick={() => onOpenInsights(category)}
-          className="inline-flex items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary)"
+          onClick={(event) => {
+            event.stopPropagation(); // don't trigger the card click
+            onOpenInsights(category);
+          }}
+          className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary)"
         >
           <Zap size={11} className="text-amber-500" />
           Collection Insights
@@ -38,7 +47,8 @@ function CategoryCard({ category, onOpenInsights }) {
       <div className="mt-5 flex items-center justify-between border-t border-(--border-subtle) pt-4">
         {/* Opens Documents pre-filtered by this category */}
         <Link
-          to={`/documents?category=${encodeURIComponent(documentCategory)}`}
+          to={browseUrl}
+          onClick={(event) => event.stopPropagation()}
           className="text-sm font-semibold text-(--text-primary)"
         >
           Browse collection <span className="text-(--primary)">→</span>
@@ -46,7 +56,8 @@ function CategoryCard({ category, onOpenInsights }) {
         <button
           type="button"
           aria-label={`Ask EKA about ${title}`}
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-(--primary-light) text-(--primary)"
+          onClick={(event) => event.stopPropagation()}
+          className="flex h-8 w-8  cursor-pointer items-center justify-center rounded-full bg-(--primary-light) text-(--primary)"
         >
           <MessageSquare size={14} />
         </button>

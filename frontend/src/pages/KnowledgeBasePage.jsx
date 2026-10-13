@@ -14,12 +14,12 @@ export default function KnowledgeBasePage() {  // Category whose Collection Insi
   return (
     <div className="px-4 py-2">
       {/* Hero section */}
-      <div className="mb-6 flex items-end justify-between">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
             Browse the collective
           </p>
-          <h2 className="kb-hero-heading text-[2.5rem] font-bold leading-tight text-(--text-primary)">
+          <h2 className="kb-hero-heading text-[2rem] sm:text-[2.5rem] font-bold leading-tight text-(--text-primary)">
             Find the thread.
           </h2>
           <p className="mt-1 text-sm text-(--text-secondary)">
@@ -36,7 +36,7 @@ export default function KnowledgeBasePage() {  // Category whose Collection Insi
           </button>
           <Link
             to="/documents"
-            className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
+            className="cursor-pointer inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
           >
             <LayoutGrid size={12} /> Browse all
           </Link>
@@ -60,7 +60,7 @@ export default function KnowledgeBasePage() {  // Category whose Collection Insi
           </span>
         </div>
 
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {knowledgeCategories.map((category) => (
             <CategoryCard
               key={category.id}

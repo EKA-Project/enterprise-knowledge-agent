@@ -1,7 +1,7 @@
 // Four summary tiles shown under the hero.
 function KnowledgeStats({ stats }) {
   return (
-    <section className="mt-6 grid grid-cols-4 gap-4">
+    <section className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
       {stats.map((stat) => (
         <div
           key={stat.id}

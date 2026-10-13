@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { X, Zap } from 'lucide-react';
 import { categoryThemes } from './KnowledgeData.js';
+import CollectionSourceFiles from './CollectionSourceFiles.jsx';
 
 // Collection Insights modal — opened from the "Collection Insights" pill on a
 // category card. Step 2 builds the shell (header + overview); source files,
 // keywords and footer actions are added in the next steps.
 function CollectionInsightsModal({ category, onClose }) {
-  const { title, docCount, iconTheme, insights } = category;
+  const { title, docCount, iconTheme, insights,sourceFiles } = category;
   const theme = categoryThemes[iconTheme];
 
   // Close on Escape
@@ -45,7 +46,7 @@ function CollectionInsightsModal({ category, onClose }) {
                 Live Repository
               </span>
             </div>
-            <h3 className="kb-serif text-xl font-bold text-(--text-primary)">
+            <h3 className="kb-serif text-lg sm:text-xl font-bold text-(--text-primary)">
               {title} — Collection Insights
             </h3>
             <p className="mt-0.5 text-xs text-(--text-muted)">
@@ -58,7 +59,7 @@ function CollectionInsightsModal({ category, onClose }) {
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary)"
+            className="cursor-pointer flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary)"
           >
             <X size={14} />
           </button>
@@ -80,7 +81,9 @@ function CollectionInsightsModal({ category, onClose }) {
             </p>
           </section>
 
-          {/* Step 3: source files list  |  Step 4: keywords, prompts, footer */}
+                    {sourceFiles && <CollectionSourceFiles files={sourceFiles} />}
+
+          {/* Step 4: keywords, prompts, footer */}
         </div>
       </div>
     </div>
