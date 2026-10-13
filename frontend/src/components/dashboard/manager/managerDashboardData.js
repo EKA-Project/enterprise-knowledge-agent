@@ -20,16 +20,13 @@ export const departmentKpis = {
   queriesGrowth: 14.2, // % vs previous period
 };
 
-// ── Query velocity (raw values, oldest -> today) ──
-// Dates, SVG path and points are generated from these in the chart step.
-export const queryVelocity = {
-  7: [78, 92, 85, 101, 96, 110, 104],
-  14: [62, 70, 66, 78, 72, 55, 58, 60, 84, 96, 104, 92, 98, 100],
-  30: [
-    48, 52, 50, 58, 61, 55, 49, 53, 60, 64, 62, 70, 66, 59, 62, 70, 66, 78, 72,
-    55, 58, 60, 84, 96, 104, 92, 98, 100, 94, 102,
-  ],
-};
+// ── Query velocity ──────────────────────────
+// One 30-day series (oldest -> today) summing to the department query total.
+// The 7 and 14-day views are slices taken from the end of this array.
+export const queryVelocity = [
+  14, 16, 15, 18, 20, 17, 13, 15, 19, 21, 18, 22, 20, 16, 17, 22, 19, 24, 21,
+  15, 17, 18, 26, 31, 28, 29, 31, 32, 28, 31,
+];
 
 // ── Team roster ─────────────────────────────
 export const teamMembers = [
