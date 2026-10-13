@@ -4,8 +4,8 @@ import { categoryThemes } from './KnowledgeData.js';
 import CollectionSourceFiles from './CollectionSourceFiles.jsx';
 
 // Collection Insights modal — opened from the "Collection Insights" pill on a
-// category card. Step 2 builds the shell (header + overview); source files,
-// keywords and footer actions are added in the next steps.
+// category card. Shows the overview and the paginated source files; keywords,
+// sample prompts and footer actions are added in the next step.
 function CollectionInsightsModal({ category, onClose }) {
   const { title, docCount, iconTheme, insights,sourceFiles } = category;
   const theme = categoryThemes[iconTheme];
@@ -83,7 +83,7 @@ function CollectionInsightsModal({ category, onClose }) {
 
                     {sourceFiles && <CollectionSourceFiles files={sourceFiles} />}
 
-          {/* Step 4: keywords, prompts, footer */}
+          {/* Step 6: keywords, prompts, footer */}
         </div>
       </div>
     </div>

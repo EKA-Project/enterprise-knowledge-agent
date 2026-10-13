@@ -7,9 +7,13 @@ import CategoryCard from '../components/knowledge/CategoryCard.jsx';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
+import IngestDocumentModal from '../components/documents/shared/IngestDocumentModal.jsx';
 
-export default function KnowledgeBasePage() {  // Category whose Collection Insights modal is open (null = closed)
+export default function KnowledgeBasePage() {  
+  // Category whose Collection Insights modal is open (null = closed)
   const [insightsCategory, setInsightsCategory] = useState(null);
+    // Ingest modal open/closed (opened by the "Upload document" button)
+  const [ingestOpen, setIngestOpen] = useState(false);
 
   return (
     <div className="px-4 py-2">
@@ -30,7 +34,8 @@ export default function KnowledgeBasePage() {  // Category whose Collection Insi
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-3.5 py-1 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
+            onClick={() => setIngestOpen(true)}
+            className="cursor-pointer inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-3.5 py-1 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
           >
             <Upload size={12} /> Upload document
           </button>
@@ -82,6 +87,7 @@ export default function KnowledgeBasePage() {  // Category whose Collection Insi
           onClose={() => setInsightsCategory(null)}
         />
       )}
+       {ingestOpen && <IngestDocumentModal onClose={() => setIngestOpen(false)} />}   {/* <-- ye nayi line */}
     </div>
   );
 }
