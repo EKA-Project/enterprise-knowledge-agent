@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import { documentCategories } from './DocumentData';
+import byteHungry from '../../../assets/mascot/byte/hungry.png';
 
 // "Ingest New Enterprise Document" modal — shared by every place that starts
 // an upload (Knowledge Base, Documents). UI only; the API call comes later.
@@ -64,9 +65,9 @@ function IngestDocumentModal({ onClose, defaultCategory }) {
         </header>
 
         <div className="space-y-9 px-5 py-5">
-          {/* Mascot prompt (mascot image is added in the next small step) */}
-          <div className="-mb-2 flex items-center gap-3 rounded-2xl bg-(--bg-surface-subtle) p-4">
-            <div className="h-12 w-12 shrink-0" />
+          {/* Mascot prompt  */}
+          <div className="-mb-2 flex items-center gap-3 rounded-2xl bg-(--bg-surface-subtle) px-4 py-3">
+            <img src={byteHungry} alt="" className="h-14 w-14 shrink-0 object-contain" />
             <div className="relative flex-1 rounded-xl bg-(--bg-surface) px-4 py-2 text-[13px] text-(--text-primary) shadow-(--shadow-sm)">
               <span className="absolute -left-1 top-1/2 h-2 w-2 -translate-y-1/2 rotate-45 bg-(--bg-surface)" />
               Feed me a document
