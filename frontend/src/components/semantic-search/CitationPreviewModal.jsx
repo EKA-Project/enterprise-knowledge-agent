@@ -27,15 +27,14 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
         aria-modal="true"
         aria-labelledby="citation-title"
         onClick={(e) => e.stopPropagation()}
-        className="ssp-pop w-full max-w-lg rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-6 shadow-(--shadow-lg)"
-      >
+className="ssp-pop w-full max-w-lg overflow-hidden rounded-2xl border border-[#c8e2f3] border-t-[3px] border-t-[#8bcaf0] bg-white p-6 shadow-xl"      >
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-md bg-(--primary) px-2 py-0.5 font-(family-name:--font-mono) text-[9.5px] font-bold uppercase tracking-wider text-(--primary-contrast)">
+              <span className="rounded-md border border-[#b7ead8] bg-[#e3f7ee] px-2 py-0.5 font-(family-name:--font-mono) text-[9.5px] font-bold uppercase tracking-wider text-[#278567]">
                 {result.verified ? "Verified" : "Unverified"}
               </span>
-              <span className="rounded-full border border-(--border-medium) px-2.5 py-0.5 text-[11px] font-semibold text-(--text-secondary)">
+              <span className="rounded-full border border-[#c8e2f3] bg-[#e0eff9] px-2.5 py-0.5 text-[11px] font-semibold text-[#29445b]">
                 {result.category}
               </span>
             </div>
@@ -51,18 +50,17 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
             type="button"
             onClick={onClose}
             aria-label="Close citation preview"
-            className="grid size-8 shrink-0 place-items-center rounded-full border border-(--border-medium) text-(--text-secondary) transition hover:border-(--primary) hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
-          >
-            <X size={15} />
+className="grid size-8 shrink-0 place-items-center rounded-full border border-[#c8e2f3] bg-white text-[#56718b] transition-all duration-500 ease-in-out hover:-translate-y-0.5 hover:rotate-[360deg] hover:border-[#8bcaf0] hover:bg-[#f3faff] hover:text-[#29445b] active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#68b8e8]">           
+<X size={15} />
           </button>
         </div>
 
-        <dl className="mt-5 grid grid-cols-2 gap-4 rounded-xl border border-(--border-subtle) bg-(--bg-app) p-4">
+        <dl className="mt-5 grid grid-cols-2 gap-4 rounded-xl border border-[#c8e2f3] bg-[#eaf4fb] p-4">
           <div>
-            <dt className="flex items-center gap-1.5 font-(family-name:--font-mono) text-[9px] uppercase tracking-widest text-(--text-muted)">
+            <dt className="flex items-center gap-1.5 font-(family-name:--font-mono) text-[9px] uppercase tracking-widest text-[#607a91]">
               <Bookmark size={10} aria-hidden="true" /> Citation reference
             </dt>
-            <dd className="mt-1 text-[13px] font-bold text-(--text-primary)">
+            <dd className="mt-1 text-[13px] text-[#56718b]">
               Page {citation.page} • Lines {citation.lines.replace("-", "–")}
             </dd>
           </div>
@@ -81,14 +79,14 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
         </dl>
 
         <div className="mt-5 flex items-center justify-between">
-          <p className="flex items-center gap-1.5 font-(family-name:--font-mono) text-[10px] uppercase tracking-widest text-(--text-secondary)">
+          <p className="flex items-center gap-1.5 font-(family-name:--font-mono) text-[10px] uppercase tracking-widest text-[#56718b]">
             <ShieldCheck size={12} aria-hidden="true" /> Verified document excerpt
           </p>
-          <span className="rounded-full bg-(--status-success-bg) px-2 py-0.5 text-[10px] font-semibold text-(--status-success)">
+          <span className="rounded-full border border-[#b7ead8] bg-[#e3f7ee] px-2 py-0.5 text-[10px] font-semibold text-[#278567]">
             Grounded Source
           </span>
         </div>
-        <p className="mt-2 rounded-xl border border-(--border-subtle) bg-(--bg-app) px-4 py-3.5 text-[13.5px] leading-7 text-(--text-secondary)">
+        <p className="mt-2 rounded-xl border border-[#c8e2f3] bg-[#e0eff9] px-4 py-3.5 text-[13.5px] leading-7 text-[#56718b]">
           <HighlightedText text={result.excerpt} terms={terms} />
         </p>
 

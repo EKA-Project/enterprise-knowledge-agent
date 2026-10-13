@@ -1,4 +1,4 @@
-import { Clock, Search, Trash2, X } from "lucide-react";
+import { Clock, Trash2, X } from "lucide-react";
 import { formatRelativeTime } from "../../../services/semanticSearchService";
 
 export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear }) {
@@ -10,7 +10,7 @@ export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear
       <div className="flex items-center justify-between">
         <h3 className="flex items-center gap-2 text-[14px] font-bold text-(--text-primary)">
           <Clock size={14} aria-hidden="true" /> Recent searches
-          <span className="rounded-full border border-(--border-medium) px-1.5 font-(family-name:--font-mono) text-[10px] text-(--text-muted)">
+          <span className="rounded-full bg-[#edf4fa] px-1.5 py-0.5 font-(family-name:--font-mono) text-[10px] font-semibold text-[#607a91]">
             {items.length}
           </span>
         </h3>
@@ -18,7 +18,7 @@ export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear
           <button
             type="button"
             onClick={onClear}
-            className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-(--text-muted) transition hover:text-(--status-danger)"
+className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-(--text-muted) transition-colors duration-200 hover:text-red-500"
           >
             <Trash2 size={12} aria-hidden="true" /> Clear
           </button>
@@ -31,16 +31,15 @@ export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear
         <ul className="mt-3 space-y-1.5">
           {items.map((item) => (
             <li
-              key={item.id}
-              className="group flex items-center rounded-lg border border-(--border-subtle) bg-(--bg-app) transition hover:border-(--primary)"
-            >
-              <button
+  key={item.id}
+className="group flex items-center rounded-lg border border-[#c8e2f3] bg-[#e0eff9] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[#a9d5ef] hover:bg-[#d5eafa] hover:shadow-sm"
+>
+                <button
                 type="button"
                 onClick={() => onSelect(item.query)}
                 className="flex min-w-0 flex-1 items-center gap-2 px-2.5 py-2 text-left focus-visible:outline-2 focus-visible:outline-(--border-focus)"
               >
-                <Search size={12} className="shrink-0 text-(--primary)" aria-hidden="true" />
-                <span className="truncate text-[12px] text-(--text-primary)">{item.query}</span>
+<span className="shrink-0 text-[13px]" aria-hidden="true">🔍</span>                <span className="truncate text-[12px] text-(--text-primary)">{item.query}</span>
                 <span className="ml-auto shrink-0 font-(family-name:--font-mono) text-[10px] text-(--text-muted)">
                   {formatRelativeTime(item.at)}
                 </span>

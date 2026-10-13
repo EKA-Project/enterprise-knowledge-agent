@@ -65,27 +65,6 @@ const DOCUMENTS = [
     citation: { page: 8, lines: "44-58", section: "§8.1 Eligibility for Remote Work" },
   },
   {
-    id: "doc-parental", topic: "leave", title: "Parental Leave & Family Support Policy",
-    fileType: "PDF", category: "People & HR Operations", verified: true, page: 6, baseMatch: 90,
-    keywords: ["time off", "parental leave", "maternity", "paternity", "leave", "family"],
-    excerpt: "Primary caregivers are entitled to 16 weeks of paid parental leave and secondary caregivers to 6 weeks. This time off can be taken in one block or split across the first 12 months.",
-    citation: { page: 6, lines: "40-52", section: "§6.2 Paid Parental Leave" },
-  },
-  {
-    id: "doc-holidays", topic: "leave", title: "2026 Public Holiday & Company Closure Calendar",
-    fileType: "PDF", category: "People & HR Operations", verified: true, page: 1, baseMatch: 89,
-    keywords: ["time off", "holiday", "public holiday", "leave", "closure", "festival"],
-    excerpt: "The company observes 12 public holidays in 2026 plus a year-end closure. Time off taken on a public holiday does not reduce your annual leave balance, and holiday work is compensated with a day in lieu.",
-    citation: { page: 1, lines: "5-14", section: "§1.1 Public Holidays" },
-  },
-  {
-    id: "doc-absence", topic: "leave", title: "Attendance & Absence Guidelines",
-    fileType: "DOCX", category: "People & HR Operations", verified: true, page: 2, baseMatch: 88,
-    keywords: ["absence", "sick", "time off", "leave", "attendance"],
-    excerpt: "Any time off for illness must be reported to the line manager before the working day starts. Sick leave of up to 10 days is paid, and a medical certificate is needed after three consecutive days.",
-    citation: { page: 2, lines: "22-29", section: "§2.1 Reporting an Absence" },
-  },
-  {
     id: "doc-playbook", topic: "health", title: "Employee Benefits, Health Insurance & Equity Playbook",
     fileType: "DOCX", category: "People & HR Operations", verified: true, page: 12, baseMatch: 88,
     keywords: ["time off", "benefits", "health benefits", "insurance", "equity", "leave", "medical", "wellness"],
@@ -144,8 +123,7 @@ const DOCUMENTS = [
 ];
 // ---------- Grounded answers for top-ranked topics ----------
 const TOPIC_ANSWERS = {
-  leave: "Full-time employees receive 24 days of paid annual leave each year. Time off requests go through the HR portal at least two weeks ahead and need line manager approval. Unplanned sick absence must be reported before the working day starts.",  onboarding: "On your first day you receive Okta SSO access, your laptop and system accounts, then meet your team lead and finish the mandatory security training. A 30-day goals conversation with your manager should be scheduled by Friday.",
-  remote: "You can work from home up to three days a week with manager approval, and a $1,500 annual home-office stipend covers ergonomic equipment. Core hours of 10:00 to 15:00 apply on every remote day.",
+  leave: "Full-time employees receive 20 days of paid annual leave plus 10 days of paid sick/wellness leave per calendar year. Leave requests over 3 consecutive days require 48 hours notice via HR Portal.",  remote: "You can work from home up to three days a week with manager approval, and a $1,500 annual home-office stipend covers ergonomic equipment. Core hours of 10:00 to 15:00 apply on every remote day.",
   travel: "Economy airfare and standard hotels are reimbursable, and meals are covered up to the daily limit. Upload receipts within 30 days of travel.",
   laptop: "Company laptops must use disk encryption and cannot be used to install personal software. Report loss or theft to IT Security within 24 hours.",
   health: "The group medical plan covers all employees from day one, and dependants can be enrolled. Dental and vision cover are optional add-ons.",

@@ -7,8 +7,7 @@ export default function SearchResultCard({ result, index, terms, delay = 0, onPr
   return (
     <article
       style={{ animationDelay: `${delay}ms` }}
-      className="ssp-rise flex w-full flex-col rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition duration-200 hover:-translate-y-0.5 hover:border-(--border-subtle-nav) hover:shadow-(--shadow-md)"
-    >
+className="ssp-rise flex w-full flex-col rounded-2xl border border-[#e0edf5] bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#c8e2f3] hover:shadow-md"    >
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
           <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-(--bg-app) font-(family-name:--font-mono) text-[11px] text-(--text-muted)">
@@ -32,21 +31,18 @@ export default function SearchResultCard({ result, index, terms, delay = 0, onPr
         </span>
       </div>
 
-      <p className="mt-4 rounded-xl border border-(--border-subtle) bg-(--bg-app) px-4 py-3.5 text-[13.5px] leading-8 text-(--text-secondary)">
-        <HighlightedText text={result.excerpt} terms={terms} />
+<p className="mt-3 rounded-xl bg-[#e0eff9] px-4 py-3 text-[13px] leading-[1.6] text-[#56718b]">        <HighlightedText text={result.excerpt} terms={terms} />
       </p>
       {/* ↑ The text found in the document. */}
 
-      <div className="mt-5 flex items-center justify-between gap-3 border-t border-(--border-medium) pt-4">
-        {/* ↑ border-t is the single line between the excerpt and the footer. */}
-        <span className="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-(--status-success)">
-          <CheckCircle2 size={13} aria-hidden="true" />
+<div className="mt-4 flex items-center justify-between gap-3 border-t border-[#e0edf5] pt-3">        {/* ↑ border-t is the single line between the excerpt and the footer. */}
+<span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#48b99a]">          <CheckCircle2 size={13} aria-hidden="true" />
           {result.verified ? "Verified source" : "Unverified source"} • Click to preview citation
         </span>
         <button
           type="button"
           onClick={() => onPreview(result)}
-          className="rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:bg-(--primary) hover:text-(--primary-contrast) active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
+          className="rounded-full border border-[#cfe5f5] bg-white px-3 py-1 text-[11px] font-semibold text-[#29445b] transition hover:border-[#8bcaf0] hover:bg-[#f3faff] active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#68b8e8]"
         >
           Preview Citation →
         </button>

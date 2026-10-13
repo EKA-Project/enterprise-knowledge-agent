@@ -17,8 +17,7 @@ export default function HighlightedText({ text, terms = [] }) {
     i % 2 === 1 ? (
       <mark
         key={i}
-        className="rounded-md bg-(--highlight-bg) px-1.5 py-0.5 font-semibold text-(--highlight-text) shadow-(--highlight-shadow)"
-      >
+className="rounded-md bg-[#a9dcf5] px-1.5 py-0.5 font-semibold text-[#174d70] shadow-[0_2px_4px_rgba(30,100,140,0.18)]">   
         {part}
       </mark>
     ) : (

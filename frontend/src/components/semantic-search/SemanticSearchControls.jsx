@@ -5,10 +5,10 @@ const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)";
 
 const segment = (active) =>
-  `inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold transition ${focusRing} ${
+  `inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-all duration-200 ${focusRing} ${
     active
-      ? "bg-(--primary) text-(--primary-contrast) shadow-sm"
-      : "text-(--text-muted) hover:bg-(--primary-light) hover:text-(--primary)"
+      ? "bg-[#244B70] text-white shadow-sm"
+      : "bg-transparent text-[#536579] hover:bg-[#DCEAF5] hover:text-[#244B70]"
   }`;
 
 export default function SemanticSearchControls({
@@ -83,16 +83,20 @@ export default function SemanticSearchControls({
           </span>
           <div role="group" aria-label="Source filter" className="inline-flex items-center gap-1.5">
             {sources.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                aria-pressed={source === s.id}
-                onClick={() => onSourceChange(s.id)}
-                className={`${segment(source === s.id)} border border-(--border-subtle)`}
-              >
-                {s.label}
-              </button>
-            ))}
+  <button
+    key={s.id}
+    type="button"
+    aria-pressed={source === s.id}
+    onClick={() => onSourceChange(s.id)}
+    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] font-semibold transition-all duration-200 ${focusRing} ${
+      source === s.id
+        ? "border-[#244B70] bg-[#244B70] text-white shadow-sm"
+        : "border-[#C2D9EC] bg-[#E5F0FA] text-[#244B70] hover:border-[#8FB6D8] hover:bg-[#D0E4F5] hover:text-[#173B5C]"
+    }`}
+  >
+    {s.label}
+  </button>
+))}
           </div>
         </div>
       </div>
@@ -106,9 +110,8 @@ export default function SemanticSearchControls({
             key={s}
             type="button"
             onClick={() => onPickSuggestion(s)}
-            className={`inline-flex items-center gap-1.5 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11.5px] font-semibold text-(--text-primary) transition hover:-translate-y-0.5 hover:border-(--primary) hover:text-(--primary) ${focusRing}`}
-          >
-            <Search size={11} aria-hidden="true" />
+            className={`inline-flex items-center gap-1.5 rounded-full border border-[#C2D9EC] bg-[#E5F0FA] px-3 py-1.5 text-[11.5px] font-semibold text-[#244B70] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#8FB6D8] hover:bg-[#D0E4F5] hover:text-[#173B5C] ${focusRing}`}>     
+            <Search size={11} aria-hidden="true"/>
             {s}
           </button>
         ))}
