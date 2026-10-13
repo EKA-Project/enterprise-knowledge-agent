@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import PageHero from "../../common/PageHero.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
+import ManagerQueryVelocity from "./ManagerQueryVelocity.jsx";
 import {
   department,
   departmentDocuments,
@@ -152,7 +153,12 @@ function ManagerOverview() {
         />
       </section>
 
-      {/* Next: query velocity chart goes here */}
+      {/* ─────────────────────────────────────────
+          Query velocity chart
+      ───────────────────────────────────────── */}
+      <ManagerQueryVelocity />
+
+      {/* Next: pinned documents and queries by member go here */}
     </div>
   );
 }
