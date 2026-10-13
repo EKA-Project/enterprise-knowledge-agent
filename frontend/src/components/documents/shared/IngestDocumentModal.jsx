@@ -3,6 +3,21 @@ import { Upload, X } from 'lucide-react';
 import { documentCategories } from './DocumentData';
 import byteHungry from '../../../assets/mascot/byte/hungry.png';
 import '../../../styles/document.css';
+import byteDrop from '../../../assets/mascot/byte/drop.png';
+import byteEating from '../../../assets/mascot/byte/eating.png';
+import byteDigesting from '../../../assets/mascot/byte/digesting.png';
+import byteUploaded from '../../../assets/mascot/byte/uploaded.png';
+
+
+// Mascot pose + speech-bubble text for each stage of the form.
+
+const mascotStates = {
+  idle: { image: byteHungry, text: 'Feed me a document' },
+  dragging: { image: byteDrop, text: 'Drop it here!' },
+  ready: { image: byteEating, text: 'Yum! Ready to ingest' },
+  digesting: { image: byteDigesting, text: 'Digesting your document…' },
+  done: { image: byteUploaded, text: 'Ingested! Ready to search' },
+};
 
 
 // "Ingest New Enterprise Document" modal — shared by every place that starts
@@ -11,7 +26,14 @@ function IngestDocumentModal({ onClose, defaultCategory }) {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState(defaultCategory ?? documentCategories[0].value);
   const [file, setFile] = useState(null);
+  const [dragging, setDragging] = useState(false);
+  // form -> digesting -> done (dummy timing until the real API exists)
+  const [phase, setPhase] = useState('form');
+  // Mascot "looks" towards the mouse pointer
+  const [look, setLook] = useState({ x: 0, y: 0, tilt: 0 });
+
   const fileInputRef = useRef(null);
+  const mascotRef = useRef(null);
 
   // Close on Escape
   useEffect(() => {
@@ -22,6 +44,20 @@ function IngestDocumentModal({ onClose, defaultCategory }) {
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
+
+  // Dummy ingestion progress: digesting -> done -> close
+  useEffect(() => {
+    if (phase === 'digesting') {
+      const timer = setTimeout(() => setPhase('done'), 1500);
+      return () => clearTimeout(timer);
+    }
+    if (phase === 'done') {
+      const timer = setTimeout(onClose, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, onClose]);
+
+
   // Submit stays disabled until a title and a file are provided
   const canSubmit = title.trim() !== '' && file !== null;
 
@@ -29,18 +65,43 @@ function IngestDocumentModal({ onClose, defaultCategory }) {
     event.preventDefault();
     if (!canSubmit) return;
     // TODO: send { title, category, file } to the ingestion API
-    onClose();
+    setPhase('digesting');
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
+     setDragging(false);
     setFile(event.dataTransfer.files[0] ?? null);
   };
+  // Move / tilt the mascot slightly towards the pointer
+  const handleMouseMove = (event) => {
+    const el = mascotRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const dx = event.clientX - (rect.left + rect.width / 2);
+    const dy = event.clientY - (rect.top + rect.height / 2);
+    const distance = Math.hypot(dx, dy) || 1;
+    setLook({
+      x: (dx / distance) * 4,
+      y: (dy / distance) * 4,
+      tilt: Math.max(-8, Math.min(8, dx / 40)),
+    });
+  };
+
+  // Which mascot pose to show
+  let stage = 'idle';
+  if (phase === 'digesting') stage = 'digesting';
+  else if (phase === 'done') stage = 'done';
+  else if (dragging) stage = 'dragging';
+  else if (file) stage = 'ready';
+  const mascot = mascotStates[stage];
 
   return (
-    <div
+     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--sidebar-bg)/50 p-4 backdrop-blur-sm"
       onClick={onClose}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setLook({ x: 0, y: 0, tilt: 0 })}
     >
       <form
         role="dialog"
@@ -67,12 +128,18 @@ function IngestDocumentModal({ onClose, defaultCategory }) {
         </header>
 
         <div className="space-y-9 px-5 py-5">
-          {/* Mascot prompt  */}
+          {/* Mascot prompt */}
           <div className="-mb-2 flex items-center gap-3 rounded-2xl bg-(--bg-surface-subtle) px-4 py-3">
-            <img src={byteHungry} alt="" className="doc-mascot-float h-14 w-14 shrink-0 object-contain" />
+            <img
+              ref={mascotRef}
+              src={mascot.image}
+              alt=""
+              className="h-14 w-14 shrink-0 object-contain transition-transform duration-150 ease-out"
+              style={{ transform: `translate(${look.x}px, ${look.y}px) rotate(${look.tilt}deg)` }}
+            />
             <div className="relative flex-1 rounded-xl bg-(--bg-surface) px-4 py-2 text-[13px] text-(--text-primary) shadow-(--shadow-sm)">
               <span className="absolute -left-1 top-1/2 h-2 w-2 -translate-y-1/2 rotate-45 bg-(--bg-surface)" />
-              Feed me a document
+              {mascot.text}
             </div>
           </div>
 
@@ -124,9 +191,15 @@ function IngestDocumentModal({ onClose, defaultCategory }) {
               tabIndex={0}
               onClick={() => fileInputRef.current?.click()}
               onKeyDown={(event) => event.key === 'Enter' && fileInputRef.current?.click()}
-              onDragOver={(event) => event.preventDefault()}
+              onDragOver={(event) => {
+                event.preventDefault();
+                setDragging(true);
+              }}
+              onDragLeave={() => setDragging(false)}
               onDrop={handleDrop}
-              className="flex h-32 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border border-dashed border-(--border-medium) bg-(--bg-surface-subtle) text-center"
+              className={`flex h-32 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border border-dashed bg-(--bg-surface-subtle) text-center ${
+                dragging ? 'border-(--primary)' : 'border-(--border-medium)'
+              }`}
             >
               <Upload size={26} className="text-(--primary)" />
               <p className="text-[13px] font-semibold text-(--text-primary)">
