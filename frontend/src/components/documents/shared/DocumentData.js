@@ -12,7 +12,7 @@ export const documents = [
     readTime: '8 min read',
     size: '2.4 MB',
     pages: 14,
-    status: 'Indexed & Ready',
+    status: 'Outdated',
     author: 'Legal & Compliance',
     chunks: 42,
   },
@@ -26,9 +26,11 @@ export const documents = [
     readTime: '12 min read',
     size: '1.1 MB',
     pages: 11,
-    status: 'Indexed & Ready',
+    status: 'Indexed',
     author: 'Platform Engineering',
     chunks: 58,
+    isBookmarked: true,
+
   },
   {
     id: 'doc-3',
@@ -40,7 +42,7 @@ export const documents = [
     readTime: '6 min read',
     size: '1.8 MB',
     pages: 8,
-    status: 'Indexed & Ready',
+    status: 'Indexed',
     author: 'People Operations',
     chunks: 31,
   },
@@ -54,9 +56,10 @@ export const documents = [
     readTime: '10 min read',
     size: '3.2 MB',
     pages: 13,
-    status: 'Indexed & Ready',
+    status: 'Indexed',
     author: 'People Operations',
     chunks: 47,
+    isPinned: true,
   },
   {
     id: 'doc-5',
@@ -68,9 +71,11 @@ export const documents = [
     readTime: '15 min read',
     size: '4.7 MB',
     pages: 19,
-    status: 'Indexed & Ready',
+    status: 'Indexed',
     author: 'Security & Compliance',
     chunks: 76,
+    isPinned: true,
+    isBookmarked: true,
   },
   {
     id: 'doc-6',
@@ -82,9 +87,10 @@ export const documents = [
     readTime: '7 min read',
     size: '1.6 MB',
     pages: 8,
-    status: 'Indexed & Ready',
+    status: 'Indexed',
     author: 'Product Design',
     chunks: 36,
+    isPinned: true,
   },
 
     {
@@ -97,7 +103,7 @@ export const documents = [
      readTime: '9 min read',
      size: '2.1 MB',
      pages: 12,
-     status: 'Indexed & Ready',
+     status: 'Indexed',
      author: 'Revenue Operations',
      chunks: 39,
    },
@@ -111,7 +117,7 @@ export const documents = [
      readTime: '11 min read',
      size: '2.9 MB',
      pages: 16,
-     status: 'Indexed & Ready',
+     status: 'Indexed',
      author: 'Legal & Finance',
      chunks: 51,
    },
@@ -138,3 +144,18 @@ export const documentFormats = [
   'TXT',
   'XLSX',
 ];
+
+
+// Admin-only: repository health snapshot for the Document Health Overview.
+// Order matters — the donut draws its segments clockwise from 12 o'clock
+// in exactly this order.
+export const documentHealth = [
+  { key: 'indexed', label: 'Indexed', count: 531, color: 'var(--status-success)' },
+  { key: 'processing', label: 'Processing', count: 23, color: 'var(--status-info)' },
+  { key: 'outdated', label: 'Outdated', count: 10, color: 'var(--status-warning)' },
+  { key: 'failed', label: 'Failed', count: 14, color: 'var(--status-danger)' },
+];
+
+// Admin-only: storage usage shown next to the Ingest button.
+export const documentStorage = { usedGb: 14.2, totalGb: 50 };
+
