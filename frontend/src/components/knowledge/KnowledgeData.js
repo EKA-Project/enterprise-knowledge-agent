@@ -110,9 +110,9 @@ export const knowledgeCategories = [
 ];
 // Colour themes shared by the category card and the insights modal
 export const categoryThemes = {
-  lavender: { accent: 'bg-(--cat-lavender)', icon: 'bg-(--cat-lavender-bg) text-(--cat-lavender)' },
-  mint: { accent: 'bg-(--cat-mint)', icon: 'bg-(--cat-mint-bg) text-(--cat-mint)' },
-  gold: { accent: 'bg-(--cat-gold)', icon: 'bg-(--cat-gold-bg) text-(--cat-gold)' },
-  teal: { accent: 'bg-(--cat-teal)', icon: 'bg-(--cat-teal-bg) text-(--cat-teal)' },
-  rose: { accent: 'bg-(--cat-rose)', icon: 'bg-(--cat-rose-bg) text-(--cat-rose)' },
+  lavender: { accent: 'border-t-(--cat-lavender)', icon: 'bg-(--cat-lavender-bg) text-(--cat-lavender)' },
+  mint: { accent: 'border-t-(--cat-mint)', icon: 'bg-(--cat-mint-bg) text-(--cat-mint)' },
+  gold: { accent: 'border-t-(--cat-gold)', icon: 'bg-(--cat-gold-bg) text-(--cat-gold)' },
+  teal: { accent: 'border-t-(--cat-teal)', icon: 'bg-(--cat-teal-bg) text-(--cat-teal)' },
+  rose: { accent: 'border-t-(--cat-rose)', icon: 'bg-(--cat-rose-bg) text-(--cat-rose)' },
 };

@@ -11,7 +11,7 @@ function CategoryCard({ category, onOpenInsights }) {
     <article
       className={`rounded-3xl border border-t-2 border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) ${theme.accent}`}
     >
-      {/* Icon + insights pill (modal comes in Step 2) */}
+      {/* Icon + insights pill */}
       <div className="flex items-start justify-between">
         <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${theme.icon}`}>
           <Icon size={18} />
