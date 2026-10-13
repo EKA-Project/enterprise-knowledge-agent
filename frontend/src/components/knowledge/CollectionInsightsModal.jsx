@@ -1,13 +1,25 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { X, Zap } from 'lucide-react';
 import { categoryThemes } from './KnowledgeData.js';
 import CollectionSourceFiles from './CollectionSourceFiles.jsx';
+import CollectionKeywords from './CollectionKeywords.jsx';
+import CollectionPrompts from './CollectionPrompts.jsx';
 
 // Collection Insights modal — opened from the "Collection Insights" pill on a
 // category card. Shows the overview and the paginated source files; keywords,
 // sample prompts and footer actions are added in the next step.
 function CollectionInsightsModal({ category, onClose }) {
-  const { title, docCount, iconTheme, insights,sourceFiles } = category;
+  const {
+    title,
+    docCount,
+    iconTheme,
+    insights,
+    sourceFiles,
+    keywords,
+    prompts,
+    documentCategory,
+  } = category;
   const theme = categoryThemes[iconTheme];
 
   // Close on Escape
@@ -81,9 +93,22 @@ function CollectionInsightsModal({ category, onClose }) {
             </p>
           </section>
 
-                    {sourceFiles && <CollectionSourceFiles files={sourceFiles} />}
+          {sourceFiles && <CollectionSourceFiles files={sourceFiles} />}
 
-          {/* Step 6: keywords, prompts, footer */}
+          {/* Step 6: semantic keywords + sample AI prompts */}
+          {keywords && <CollectionKeywords keywords={keywords} />}
+          {prompts && <CollectionPrompts prompts={prompts} />}
+        </div>
+
+        {/* Footer actions */}
+        <div className="flex flex-wrap items-center justify-end gap-3 border-t border-(--border-subtle) bg-(--bg-surface-subtle) px-5 py-4">
+          {/* No action yet: video doesn't show what re-index does */}
+          <Link
+            to={`/documents?category=${encodeURIComponent(documentCategory)}`}
+            className="cursor-pointer rounded-full bg-(--primary) px-4 py-1.5 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
+          >
+            Browse Documents
+          </Link>
         </div>
       </div>
     </div>

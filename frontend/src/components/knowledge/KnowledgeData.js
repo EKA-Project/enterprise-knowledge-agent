@@ -91,6 +91,19 @@ export const knowledgeCategories = [
         description: 'Disaster recovery playbooks for automated pod restart loops, OOMKilled worker nodes, and cross-AZ traffic evacuation.',
         notes: ['Uploaded by Alex Morgan — pending vectorization retry.', 'Failure caused by OpenAI Embedding API 429 Token Rate Limit during batch upload.'] },
     ],
+    keywords: [
+      { term: 'ideal customer profile', score: 0.94 },
+      { term: 'competitor comparison', score: 0.91 },
+      { term: 'sales playbook', score: 0.88 },
+      { term: 'outbound email templates', score: 0.84 },
+      { term: 'go to market plan', score: 0.8 },
+      { term: 'pricing and discounts', score: 0.76 },
+    ],
+    prompts: [
+      'How does Patroni handle PostgreSQL failover?',
+      'What is the Sev-1 incident escalation process?',
+      'Explain our ArgoCD GitOps deployment flow',
+    ],
   },
 
 
@@ -118,6 +131,18 @@ export const knowledgeCategories = [
         description: 'Comprehensive guide to health, vision and dental plans, 401(k) matching (100% match up to 6%) and annual stock grants.',
         notes: ['401(k) match of 100% up to 6% of eligible salary.', 'Equity refresh grants are reviewed every January.'] },
     ],
+        keywords: [
+      { term: 'remote-work', score: 0.93 },
+      { term: '401k-match', score: 0.89 },
+      { term: 'whistleblower', score: 0.84 },
+      { term: 'home-office-stipend', score: 0.8 },
+      { term: 'equity-refresh', score: 0.76 },
+    ],
+    prompts: [
+      'How many days can I work abroad each year?',
+      'What is the 401(k) matching policy?',
+      'What is the home office stipend amount?',
+    ],
   },
   {
     id: 'product',
@@ -143,6 +168,18 @@ export const knowledgeCategories = [
         description: 'Company-wide product naming, editorial tone, typography tokens, Figma component libraries, and copywriting standards for customer-facing interfaces.',
         notes: ['Clarity over jargon across all user-facing microcopy.', 'Consistent typography scales anchored on Editorial Serif and Modern Grotesque sans.'] },
     ],
+        keywords: [
+      { term: 'neural-search', score: 0.92 },
+      { term: 'design-tokens', score: 0.88 },
+      { term: 'brand-voice', score: 0.85 },
+      { term: 'roadmap-q4', score: 0.81 },
+      { term: 'figma-library', score: 0.77 },
+    ],
+    prompts: [
+      'What are the Q4 product roadmap milestones?',
+      'Which typography tokens do we use?',
+      'What is our brand voice guideline?',
+    ],
   },
   {
     id: 'security',
@@ -162,7 +199,22 @@ export const knowledgeCategories = [
         description: 'Annual independent audit report evaluating security controls, confidentiality, processing integrity, encryption standards (AES-256 at rest, TLS 1.3 in transit), and zero AI training practices.',
         notes: ['Zero exceptions noted across all 5 Trust Services Criteria during the evaluation period.', 'All customer enterprise knowledge embeddings and documents are encrypted using tenant KMS keys.'] },
     ],
+    keywords: [
+      { term: 'soc 2 audit report', score: 0.94 },
+      { term: 'data encryption', score: 0.91 },
+      { term: 'access control policy', score: 0.88 },
+      { term: 'customer data privacy', score: 0.84 },
+      { term: 'security compliance', score: 0.8 },
+      { term: 'ai training on our data', score: 0.76 },
+    ],
+    prompts: [
+      'What did the SOC 2 audit conclude?',
+      'How is customer data encrypted?',
+      'Do you train AI models on customer data?',
+    ],
   },
+
+
   {
     id: 'sales',
     title: 'Sales & Go-To-Market',
@@ -181,7 +233,21 @@ export const knowledgeCategories = [
         description: 'Outbound and inbound sales motions, ICP definitions, competitive positioning, and go-to-market timelines for the new fiscal year.',
         notes: ['Outbound cadences defined for enterprise and mid-market segments.', 'Competitive battlecards are refreshed every quarter.'] },
     ],
+    keywords: [
+      { term: 'ideal customer profile', score: 0.94 },
+      { term: 'competitor comparison', score: 0.91 },
+      { term: 'sales playbook', score: 0.88 },
+      { term: 'outbound email templates', score: 0.84 },
+      { term: 'go to market plan', score: 0.8 },
+      { term: 'pricing and discounts', score: 0.76 },
+    ],
+    prompts: [
+      'Who is our ideal customer profile?',
+      'How often are competitive battlecards updated?',
+    ],
   },
+
+
   {
     id: 'legal',
     title: 'Legal & Finance',
@@ -199,6 +265,18 @@ export const knowledgeCategories = [
       { id: 'legal-1', title: 'Vendor Contracts & Financial Compliance Manual', format: 'DOCX', size: '2.9 MB', chunks: 51, author: 'Legal & Finance',
         description: 'Standard vendor agreement templates, procurement approval thresholds, and financial reporting compliance requirements.',
         notes: ['Vendor agreement templates are pre-approved by Legal.', 'Procurement approvals are required above defined spend thresholds.'] },
+    ],
+    keywords: [
+      { term: 'vendor contract template', score: 0.94 },
+      { term: 'procurement approval limits', score: 0.91 },
+      { term: 'expense reimbursement', score: 0.88 },
+      { term: 'financial reporting rules', score: 0.84 },
+      { term: 'nda and legal review', score: 0.8 },
+      { term: 'purchase order process', score: 0.76 },
+    ],
+    prompts: [
+      'When is Legal approval needed for a vendor?',
+      'What are the procurement approval thresholds?',
     ],
   },
 ];
