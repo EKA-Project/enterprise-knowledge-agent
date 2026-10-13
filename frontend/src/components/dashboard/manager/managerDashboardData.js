@@ -14,12 +14,9 @@ export const department = {
   code: "ENG-DEV",
 };
 
-// ── KPI cards ───────────────────────────────
+// Documents, team size, queries and RAG health are derived from the arrays
+// below in the UI. Only the growth figure is a standalone mock value.
 export const departmentKpis = {
-  documents: 10,
-  team: 9,
-  ragHealth: 90, // % of documents successfully indexed
-  queries: 633,
   queriesGrowth: 14.2, // % vs previous period
 };
 
