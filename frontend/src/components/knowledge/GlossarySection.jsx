@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { BookOpen, Search, Plus } from 'lucide-react';
 import { glossaryTerms } from './KnowledgeData.js';
 import GlossaryCard from './GlossaryCard.jsx';
+import AddGlossaryTermModal from './AddGlossaryTermModal.jsx';
 
 const PAGE_SIZE = 4;
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -12,26 +13,28 @@ export default function GlossarySection({ canManage = true }) {
   const [query, setQuery] = useState('');
   const [letter, setLetter] = useState('All');
   const [page, setPage] = useState(1);
+    const [terms, setTerms] = useState(glossaryTerms); // local copy so new terms can be added
+  const [addOpen, setAddOpen] = useState(false);
 
   // How many terms start with each letter (drives faint/active letters + tooltip)
   const letterCounts = useMemo(() => {
     const counts = {};
-    glossaryTerms.forEach((t) => {
+    terms.forEach((t) => {
       const l = t.term[0].toUpperCase();
       counts[l] = (counts[l] || 0) + 1;
     });
     return counts;
-  }, []);
+  }, [terms]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return glossaryTerms.filter((t) => {
+    return terms.filter((t) => {
       const matchesLetter = letter === 'All' || t.term[0].toUpperCase() === letter;
       const matchesQuery =
         !q || `${t.term} ${t.expansion} ${t.definition}`.toLowerCase().includes(q);
       return matchesLetter && matchesQuery;
     });
-  }, [query, letter]);
+  }, [terms,query, letter]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const start = (page - 1) * PAGE_SIZE;
@@ -41,6 +44,18 @@ export default function GlossarySection({ canManage = true }) {
   const changeLetter = (next) => {
     setLetter(next);
     setPage(1);
+  };
+
+  // Add a new term, keep the list alphabetical, and reset filters so it is visible
+  const handleAdd = (newTerm) => {
+    setTerms((prev) =>
+      [...prev, newTerm].sort((a, b) =>
+        a.term.localeCompare(b.term, undefined, { sensitivity: 'base' }),
+      ),
+    );
+    setQuery('');
+    changeLetter('All');
+    setAddOpen(false);
   };
 
   return (
@@ -77,6 +92,7 @@ export default function GlossarySection({ canManage = true }) {
           {canManage && (
             <button
               type="button"
+              onClick={() => setAddOpen(true)}
               className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-(--primary) px-3.5 py-1.5 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
             >
               <Plus size={12} /> Add term
@@ -94,7 +110,7 @@ export default function GlossarySection({ canManage = true }) {
             letter === 'All' ? 'bg-(--primary) text-(--primary-contrast)' : 'text-(--text-secondary)'
           }`}
         >
-          All ({glossaryTerms.length})
+          All ({terms.length})
         </button>
         {LETTERS.map((l) => {
           const count = letterCounts[l] || 0;
@@ -124,6 +140,7 @@ export default function GlossarySection({ canManage = true }) {
           );
         })}
       </div>
+      
 
       {/* Cards */}
       {visible.length > 0 ? (
@@ -165,6 +182,7 @@ export default function GlossarySection({ canManage = true }) {
           </div>
         </div>
       )}
+            {addOpen && <AddGlossaryTermModal onClose={() => setAddOpen(false)} onSave={handleAdd} />}
     </section>
   );
 }
