@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const PAGE_SIZE = 3;
 
@@ -14,6 +15,7 @@ export const formatStyles = {
 
 // Paginated "Source files in collection" list shown inside the insights modal.
 function CollectionSourceFiles({ files }) {
+    const navigate = useNavigate();
     const [page, setPage] = useState(1);
 
     const totalPages = Math.ceil(files.length / PAGE_SIZE);
@@ -35,6 +37,7 @@ function CollectionSourceFiles({ files }) {
                 {visibleFiles.map((file) => (
                     <li
                         key={file.id}
+                        onClick={() => navigate(`/documents/${file.id}`)}
                         className="cursor-pointer rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-4 transition-colors hover:border-(--accent-highlight)"
                     >
                         <div className="flex items-start gap-3">
@@ -56,14 +59,15 @@ function CollectionSourceFiles({ files }) {
                                 </div>
                             </div>
 
-                            {/* Link to the Document Summary page is wired once that page exists */}
-                            <button
-                                type="button"
+                            {/* Opens the Document Summary page (stopPropagation: the card itself is also clickable) */}
+                            <Link
+                                to={`/documents/${file.id}`}
+                                onClick={(event) => event.stopPropagation()}
                                 aria-label={`Open ${file.title}`}
-                                className="cursor-pointer mt-1 text-(--text-muted)"
+                                className="mt-1 cursor-pointer text-(--text-muted) hover:text-(--primary)"
                             >
                                 <ArrowRight size={14} />
-                            </button>
+                            </Link>
                         </div>
 
                         <p className="mt-2 text-xs leading-snug text-(--text-secondary)">{file.description}</p>
