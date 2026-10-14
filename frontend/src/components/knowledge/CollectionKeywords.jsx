@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Sparkles, Search } from 'lucide-react';
+import { Sparkles, Pencil } from 'lucide-react';
 
 // Searchable terms for one collection, shown as plain search pills
 export default function CollectionKeywords({ keywords = [] }) {
@@ -14,24 +14,31 @@ export default function CollectionKeywords({ keywords = [] }) {
         </span>
       </div>
       <p className="mb-3 text-xs text-(--text-secondary)">
-        Top terms indexed for this collection. Click one to run a semantic search.
+        Primary semantic concepts and neural keywords for this collection. Click any word to launch an instant semantic search.
       </p>
 
       <div className="flex flex-wrap gap-2">
-        {keywords.map((k) => {
-          // "istio-mtls" -> "istio mtls" so it reads like a search phrase
-          const label = k.term.replace(/-/g, ' ');
-          return (
-            <Link
-              key={k.term}
-              to={`/semantic-search?q=${encodeURIComponent(label)}`}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-(--accent-highlight)/40 bg-(--bg-surface) px-3 py-1 text-xs font-medium text-(--text-primary) transition-colors hover:border-(--primary)"
+        {keywords.map((k, i) => (
+          <Link
+            key={k.term}
+            to={`/semantic-search?q=${encodeURIComponent(k.term)}`}
+            className={`group inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] transition-colors hover:border-(--primary) ${
+              i < 2
+                ? 'border-(--accent-highlight) bg-(--primary-light)'
+                : 'border-(--border-subtle) bg-(--bg-surface)'
+            }`}
+          >
+            <span className="kb-mono font-medium text-(--text-primary)">#{k.term}</span>
+            <span
+              className={`kb-mono rounded-full px-1.5 text-[10px] text-(--text-secondary) ${
+                i < 2 ? 'border border-(--accent-highlight) bg-(--bg-surface)' : 'bg-(--bg-surface-subtle)'
+              }`}
             >
-              <Search size={12} className="shrink-0 text-(--text-muted)" />
-              {label}
-            </Link>
-          );
-        })}
+              {k.score}
+            </span>
+            <Pencil size={10} className="text-(--text-muted) group-hover:text-(--primary)" />
+          </Link>
+        ))}
       </div>
     </section>
   );

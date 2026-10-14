@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, MessageSquare } from 'lucide-react';
+import { Pencil, MessageSquare } from 'lucide-react';
 
 // Sample AI prompts for one collection
 export default function CollectionPrompts({ prompts = [] }) {
@@ -17,7 +17,7 @@ export default function CollectionPrompts({ prompts = [] }) {
           >
             <MessageSquare size={14} className="shrink-0 text-(--cat-lavender)" />
             <span>{p}</span>
-            <ArrowUpRight size={12} className="shrink-0 text-(--text-muted) group-hover:text-(--primary)" />
+            <Pencil size={10} className="shrink-0 text-(--text-muted) group-hover:text-(--primary)" />
           </Link>
         ))}
       </div>
