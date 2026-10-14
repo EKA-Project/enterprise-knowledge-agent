@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import PageHero from "../../common/PageHero.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
+import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
 import ManagerQueryVelocity from "./ManagerQueryVelocity.jsx";
 import {
   department,
@@ -158,7 +159,24 @@ function ManagerOverview() {
       ───────────────────────────────────────── */}
       <ManagerQueryVelocity />
 
-      {/* Next: pinned documents and queries by member go here */}
+      {/* ─────────────────────────────────────────
+          Two-column area: pinned docs + usage (left), team roster (right)
+      ───────────────────────────────────────── */}
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+        <div className="space-y-6">
+          <AdminPinnedDocuments
+            className=""
+            title="📌 Admin-Pinned Documents"
+            description="Admin-pinned documents relevant to your department."
+            linkTo="/documents?category=pinned"
+            linkLabel="View All →"
+          />
+
+          {/* Next: queries by team member goes here */}
+        </div>
+
+        {/* Next: team roster goes here */}
+      </div>
     </div>
   );
 }
