@@ -5,6 +5,7 @@ import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
 import GlossarySection from '../components/knowledge/GlossarySection';
+import LibraryFavorites from '../components/knowledge/LibraryFavorites';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
@@ -78,6 +79,8 @@ export default function KnowledgeBasePage() {
       </section>
 
         <GlossarySection />
+
+        <LibraryFavorites />
 
 
 

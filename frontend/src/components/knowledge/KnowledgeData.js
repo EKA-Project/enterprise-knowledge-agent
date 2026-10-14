@@ -341,3 +341,41 @@ export const glossaryTerms = [
   { id: 'gl-wfa', term: 'WFA', expansion: 'Work From Anywhere', category: 'People & HR Operations', revised: '2026-07-21',
     definition: 'Policy allowing employees to work remotely across supported countries for a limited number of days per year.' },
 ];
+
+// Library Favorites: one top document per department.
+// docId matches an id in knowledgeCategories[].sourceFiles (used for the Document Summary link later).
+// cited / viewed = monthly counts ("viewed" values are placeholders).
+export const libraryFavorites = [
+  { id: 'fav-eng', docId: 'eng-9', iconTheme: 'lavender', category: 'Engineering & DevOps', area: 'Engineering',
+    title: 'PostgreSQL High Availability, Replication & Sharding Standards', format: 'PDF', readTime: 11, cited: 94, viewed: 1280,
+    description: 'Patroni-managed PostgreSQL cluster setup with synchronous standby replication, pgBouncer connection pooling, and continuous WAL archiving to S3.',
+    bullets: [
+      'Automatic failover consensus via etcd-backed Patroni nodes under 10 seconds.',
+      'pgBouncer connection pooling in transaction mode to support 10,000+ concurrent app connections.',
+      'Point-in-time recovery (PITR) with continuous WAL streaming.',
+    ] },
+  { id: 'fav-people', docId: 'ppl-2', iconTheme: 'mint', category: 'People & HR Operations', area: 'People',
+    title: '2026 Global Remote Work, Travel & Flexible Hours Policy', format: 'PDF', readTime: 6, cited: 119, viewed: 2310,
+    description: 'Official workplace guidelines governing remote work across 18 countries. Covers home office stipends, international work-from-anywhere allowances (up to 90 days/year), and core collaboration windows.',
+    bullets: [
+      'Employees can work internationally outside their home tax residency for up to 90 days per rolling year.',
+      'Annual home office wellness stipend is $1,500 USD, claimable through Navan Expense in Q1.',
+      'Core collaboration window is 10:00 AM to 3:00 PM in regional anchor timezone.',
+    ] },
+  { id: 'fav-sec', docId: 'sec-1', iconTheme: 'teal', category: 'Security & Compliance', area: 'Security',
+    title: 'SOC 2 Type II Security & Data Governance Compliance Report', format: 'PDF', readTime: 15, cited: 142, viewed: 960,
+    description: 'Annual independent audit report evaluating security controls, confidentiality, processing integrity, encryption standards (AES-256 at rest, TLS 1.3 in transit), and zero AI training practices.',
+    bullets: [
+      'Zero exceptions noted across all 5 Trust Services Criteria during the evaluation period.',
+      'All customer enterprise knowledge embeddings and documents are encrypted using tenant KMS keys.',
+      'Data retention policy automatically purges soft-deleted records after 30 calendar days.',
+    ] },
+  { id: 'fav-prod', docId: 'prod-3', iconTheme: 'gold', category: 'Product Strategy & Design', area: 'Product',
+    title: 'Brand Voice, Language & Design Tokens Guide', format: 'FIG', readTime: 5, cited: 78, viewed: 1740,
+    description: 'Company-wide product naming, editorial tone, typography tokens, Figma component libraries, and copywriting standards for customer-facing interfaces.',
+    bullets: [
+      'Clarity over jargon across all user-facing microcopy.',
+      'Consistent typography scales anchored on Editorial Serif and Modern Grotesque sans.',
+      'Standard semantic color palette tokens aligned with accessibility standards.',
+    ] },
+];

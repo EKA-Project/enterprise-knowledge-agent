@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 const PAGE_SIZE = 3;
 
 // Format tile colours (status tokens so a theme change updates them too)
-const formatStyles = {
+export const formatStyles = {
     PDF: 'bg-(--status-danger-bg) text-(--status-danger)',
     DOCX: 'bg-(--status-info-bg) text-(--status-info)',
     MD: 'bg-(--bg-surface-subtle) text-(--text-secondary)',

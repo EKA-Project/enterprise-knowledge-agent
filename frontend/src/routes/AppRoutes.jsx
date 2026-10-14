@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout.jsx";
 import KnowledgeBasePage from "../pages/KnowledgeBasePage.jsx";
 import DocumentsPage from "../pages/DocumentsPage.jsx";
+import DocumentSummaryPage from "../pages/DocumentSummaryPage.jsx";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import RoleGuard from "../components/common/RoleGuard.jsx";
 
@@ -77,6 +78,7 @@ function AppRoutes() {
         <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
+        <Route path="/documents/:id" element={<DocumentSummaryPage />} />
         <Route path="/semantic-search" element={<SemanticSearchPage />} />
         <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
         <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
