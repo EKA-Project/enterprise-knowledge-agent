@@ -379,3 +379,12 @@ export const libraryFavorites = [
       'Standard semantic color palette tokens aligned with accessibility standards.',
     ] },
 ];
+// Recently Updated: latest 5 verified document revisions.
+// docId matches an id in knowledgeCategories[].sourceFiles (for the Document Summary link).
+export const recentUpdates = [
+  { id: 'upd-1', docId: 'prod-1', title: 'Q4 2024 Product Strategy & Strategic Roadmap', format: 'PDF', iconTheme: 'gold', category: 'Product Strategy & Design', when: 'Today, 9:42 am', isNew: true },
+  { id: 'upd-2', docId: 'sec-1', title: 'SOC 2 Type II Security & Data Governance Compliance Report', format: 'PDF', iconTheme: 'teal', category: 'Security & Compliance', when: '5 hours ago', isNew: true },
+  { id: 'upd-3', docId: 'ppl-1', title: 'Corporate Governance & Compliance Policy', format: 'PDF', iconTheme: 'mint', category: 'People & HR Operations', when: 'Yesterday', isNew: true },
+  { id: 'upd-4', docId: 'sales-1', title: 'Enterprise Sales Playbook & Discounting Matrix 2026', format: 'PDF', iconTheme: 'rose', category: 'Sales & Go-To-Market', when: '1 day ago', isNew: true },
+  { id: 'upd-5', docId: 'eng-7', title: 'CI/CD Deployment Pipelines & GitOps Automated Release Workflow', format: 'PDF', iconTheme: 'lavender', category: 'Engineering & DevOps', when: '2 days ago', isNew: true },
+];
