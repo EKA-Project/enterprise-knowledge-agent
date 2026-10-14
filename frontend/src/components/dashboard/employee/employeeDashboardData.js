@@ -115,53 +115,22 @@ export const myEkaUsageData = {
 
 export const myQueryTopicsData = {
   title: "My Query Topics",
-  defaultSubtext: "Most frequently queried knowledge categories",
-  totalBadge: "76 Total Queries",
-  topCategory: "HR Policies",
-  topCategoryPercent: 31,
-  accuracyMetric: "99.1% Answer Accuracy",
-  topics: [
-    {
-      id: "hr",
-      icon: "📋",
-      topic: "HR Policies",
-      count: 24,
-      percent: 31,
-      widthPct: 100,
-    },
-    {
-      id: "finance",
-      icon: "💳",
-      topic: "Finance",
-      count: 18,
-      percent: 23,
-      widthPct: 75,
-    },
-    {
-      id: "engineering",
-      icon: "⚙️",
-      topic: "Engineering",
-      count: 15,
-      percent: 19,
-      widthPct: 62.5,
-    },
-    {
-      id: "company",
-      icon: "🏢",
-      topic: "Company Policies",
-      count: 11,
-      percent: 14,
-      widthPct: 45.8,
-    },
-    {
-      id: "benefits",
-      icon: "🎁",
-      topic: "Benefits",
-      count: 8,
-      percent: 10,
-      widthPct: 33.3,
-    },
+  subtext: "Most frequently queried knowledge categories",
+  badge: "76 Total Queries",
+  unit: "Queries",
+  items: [
+    { id: "hr", icon: "📋", label: "HR Policies", count: 24, percent: 31, color: "#7c3aed" },
+    { id: "finance", icon: "💳", label: "Finance", count: 18, percent: 23, color: "#0d9488" },
+    { id: "engineering", icon: "⚙️", label: "Engineering", count: 15, percent: 19, color: "#2563eb" },
+    { id: "company", icon: "🏢", label: "Company Policies", count: 11, percent: 14, color: "#ea580c" },
+    { id: "benefits", icon: "🎁", label: "Benefits", count: 8, percent: 10, color: "#db2777" },
   ],
+  footer: {
+    label: "Top Category:",
+    highlight: "HR Policies (31%)",
+    highlightColor: "#7c3aed",
+    note: "99.1% Answer Accuracy",
+  },
 };
 
 export const savedBookmarks = [

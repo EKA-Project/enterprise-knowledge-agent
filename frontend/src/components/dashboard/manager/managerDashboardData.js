@@ -237,3 +237,51 @@ export const departmentDocuments = [
     meta: "9 min read • 14 pages",
   },
 ];
+
+// ── Queries per member for the 7 and 14-day ranges ──
+// The 30-day figure is each member's `queries` value in teamMembers.
+export const memberQueries = {
+  7: {
+    "u-elena": 30, "u-marcus": 13, "u-liam": 36, "u-vikram": 15, "u-tariq": 29,
+    "u-maya": 32, "u-priya": 29, "u-noah": 11, "u-sofia": 15,
+  },
+  14: {
+    "u-elena": 51, "u-marcus": 21, "u-liam": 61, "u-vikram": 25, "u-tariq": 48,
+    "u-maya": 52, "u-priya": 49, "u-noah": 19, "u-sofia": 24,
+  },
+};
+
+const getInitials = (name) =>
+  name
+    .split(" ")
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+// Builds the chart data for "Queries by Team Member".
+export function getUsageByMember(range, topN = 5) {
+  const ranked = teamMembers
+    .map((member) => ({
+      member,
+      count: range === 30 ? member.queries : memberQueries[range][member.id],
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, topN);
+
+  const top = ranked[0];
+
+  return {
+    title: "📊 Queries by Team Member",
+    subtext: "See how actively each team member is using EKA.",
+    badge: `Top user: ${top.member.name.split(" ")[0]} · ${top.count} queries`,
+    unit: "queries",
+    items: ranked.map(({ member, count }) => ({
+      id: member.id,
+      label: member.name,
+      count,
+      initials: getInitials(member.name),
+      color: "#0284c7",
+    })),
+  };
+}

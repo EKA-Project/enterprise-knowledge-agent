@@ -11,13 +11,16 @@ import {
   Users,
 } from "lucide-react";
 import PageHero from "../../common/PageHero.jsx";
+import RankedBarList from "../../charts/RankedBarList.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
 import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
 import ManagerQueryVelocity from "./ManagerQueryVelocity.jsx";
+import ManagerRangeToggle, { DEFAULT_RANGE } from "./ManagerRangeToggle.jsx";
 import {
   department,
   departmentDocuments,
   departmentKpis,
+  getUsageByMember,
   manager,
   teamMembers,
 } from "./managerDashboardData.js";
@@ -47,6 +50,7 @@ function getGreeting() {
 
 function ManagerOverview() {
   const [isRetrying, setIsRetrying] = useState(false);
+  const [range, setRange] = useState(DEFAULT_RANGE);
 
   const ragHealth = getRagHealth(departmentDocuments);
   const totalQueries = teamMembers.reduce((sum, m) => sum + m.queries, 0);
@@ -65,9 +69,7 @@ function ManagerOverview() {
 
   return (
     <div className="space-y-6">
-      {/* ─────────────────────────────────────────
-          Hero
-      ───────────────────────────────────────── */}
+      {/* Hero */}
       <PageHero
         eyebrow="Department Lead Hub"
         title={`${getGreeting()}, ${manager.firstName}.`}
@@ -83,9 +85,7 @@ function ManagerOverview() {
         }
       />
 
-      {/* ─────────────────────────────────────────
-          KPI cards
-      ───────────────────────────────────────── */}
+      {/* KPI cards */}
       <section
         aria-label="Department key metrics"
         className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
@@ -154,14 +154,10 @@ function ManagerOverview() {
         />
       </section>
 
-      {/* ─────────────────────────────────────────
-          Query velocity chart
-      ───────────────────────────────────────── */}
-      <ManagerQueryVelocity />
+      {/* Query velocity chart */}
+      <ManagerQueryVelocity range={range} onRangeChange={setRange} />
 
-      {/* ─────────────────────────────────────────
-          Two-column area: pinned docs + usage (left), team roster (right)
-      ───────────────────────────────────────── */}
+      {/* Two-column area: pinned docs + usage (left), team roster (right) */}
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <div className="space-y-6">
           <AdminPinnedDocuments
@@ -172,7 +168,12 @@ function ManagerOverview() {
             linkLabel="View All →"
           />
 
-          {/* Next: queries by team member goes here */}
+          <RankedBarList
+            data={getUsageByMember(range)}
+            headerAction={
+              <ManagerRangeToggle value={range} onChange={setRange} />
+            }
+          />
         </div>
 
         {/* Next: team roster goes here */}
