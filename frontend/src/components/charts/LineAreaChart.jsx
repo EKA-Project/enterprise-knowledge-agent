@@ -113,8 +113,10 @@ function LineAreaChart({ data, headerAction, showArea = true }) {
   }, [data.values]);
 
   const unit = data.unit ?? "queries";
+  const isDown = data.trend === "down";
   const isDense = points.length > 16;
-  const activePoint = hoveredIndex !== null ? points[hoveredIndex] ?? null : null;
+  const activePoint =
+    hoveredIndex !== null ? (points[hoveredIndex] ?? null) : null;
 
   const handleMouseEnter = (index) => {
     setHoveredIndex(index);
@@ -137,10 +139,14 @@ function LineAreaChart({ data, headerAction, showArea = true }) {
               {data.title}
             </h3>
 
-            {/* Mint badge pill */}
+            {/* Trend badge pill: mint by default, red when data.trend === "down" */}
             <span
-              className="inline-flex items-center gap-1 rounded-full border border-[#a7f3d0] bg-[#e6f4ea] px-[0.3rem] py-[0.09rem] font-mono text-[0.6rem] font-semibold"
-              style={{ color: CHART_ACCENT_COLOR }}
+              className={`inline-flex items-center gap-1 rounded-full border px-[0.3rem] py-[0.09rem] font-mono text-[0.6rem] font-semibold ${
+                isDown
+                  ? "border-[#e83131] bg-(--status-danger-bg) text-(--status-danger)"
+                  : "border-[#a7f3d0] bg-[#e6f4ea]"
+              }`}
+              style={isDown ? undefined : { color: CHART_ACCENT_COLOR }}
             >
               <span>{data.badgeIcon}</span>
               {data.badgeText}
@@ -156,7 +162,9 @@ function LineAreaChart({ data, headerAction, showArea = true }) {
           >
             {activePoint
               ? `📌 ${activePoint.date}: ${activePoint.value} ${unit} (${
-                  activePoint.value >= peakAt ? "Peak activity" : "Normal activity"
+                  activePoint.value >= peakAt
+                    ? "Peak activity"
+                    : "Normal activity"
                 })`
               : data.subtext}
           </p>
@@ -196,8 +204,16 @@ function LineAreaChart({ data, headerAction, showArea = true }) {
         >
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={CHART_ACCENT_COLOR} stopOpacity="0.22" />
-              <stop offset="100%" stopColor={CHART_ACCENT_COLOR} stopOpacity="0" />
+              <stop
+                offset="0%"
+                stopColor={CHART_ACCENT_COLOR}
+                stopOpacity="0.22"
+              />
+              <stop
+                offset="100%"
+                stopColor={CHART_ACCENT_COLOR}
+                stopOpacity="0"
+              />
             </linearGradient>
           </defs>
 

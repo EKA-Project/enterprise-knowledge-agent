@@ -52,6 +52,7 @@ function ManagerQueryVelocity() {
 
     return {
       title: "Department Intelligence & Query Velocity",
+      trend: isUp ? "up" : "down",
       badgeIcon: isUp ? "↗" : "↘",
       badgeText: `${isUp ? "+" : ""}${change.toFixed(1)}% Growth`,
       legendLabel: "Queries / Day",
