@@ -6,6 +6,10 @@
   --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
   --font-sans: "Plus Jakarta Sans", -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+    /* Bottom guidance banner (Knowledge Base) */
+  --banner-bg: #273b34;
+  --banner-eyebrow: #869f96;
+  --banner-text-muted: #c3e6e1;
 
   /* Sidebar Palette (Deep Midnight Sky / Celestial Blue) */
   --sidebar-bg: #0c233c;
