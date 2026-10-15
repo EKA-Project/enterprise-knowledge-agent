@@ -1,8 +1,37 @@
 import { Clock, AlertCircle } from 'lucide-react';
 
-// Empty / error box shown inside a Knowledge Base section when it has nothing to show.
-// The action button only appears when onAction is passed (e.g. "Reset View" / "Retry").
-export default function SectionState({ variant = 'empty', title, message, actionLabel, onAction }) {
+// Skeleton rows (Recently Updated loading)
+export function SkeletonRows({ count = 5 }) {
+  return (
+    <ul className="mt-4 space-y-2" aria-busy="true">
+      {Array.from({ length: count }).map((_, i) => (
+        <li key={i} className="flex animate-pulse items-center justify-between rounded-xl bg-(--primary-light) px-4 py-3">
+          <span className="h-2 w-1/3 rounded bg-(--bg-surface)" />
+          <span className="h-2 w-10 rounded bg-(--bg-surface)" />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// Skeleton cards (Library Favorites / Glossary loading)
+export function SkeletonCards({ count = 4, heightClass = 'h-32' }) {
+  return (
+    <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2" aria-busy="true">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className={`animate-pulse space-y-3 rounded-2xl bg-(--primary-light) p-5 ${heightClass}`}>
+          <span className="block h-2.5 w-1/4 rounded bg-(--bg-surface)" />
+          <span className="block h-2.5 w-3/4 rounded bg-(--bg-surface)" />
+          <span className="block h-2.5 w-1/2 rounded bg-(--bg-surface)" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Empty / error box shown inside a Knowledge Base section.
+// The action button only appears when onAction is passed ("Reset View", "Retry"...).
+export default function SectionState({ variant = 'empty', icon: Icon = Clock, title, message, actionLabel, onAction }) {
   const button = onAction && (
     <button
       type="button"
@@ -31,7 +60,7 @@ export default function SectionState({ variant = 'empty', title, message, action
 
   return (
     <div className="flex flex-col items-center gap-1 rounded-2xl border border-(--border-subtle) bg-(--primary-light) px-5 py-8 text-center">
-      <Clock size={22} className="text-(--text-muted)" />
+      <Icon size={22} className="text-(--text-muted)" />
       <p className="mt-1 text-sm font-semibold text-(--text-primary)">{title}</p>
       <p className="text-[11px] text-(--text-muted)">{message}</p>
       {button && <div className="mt-3">{button}</div>}

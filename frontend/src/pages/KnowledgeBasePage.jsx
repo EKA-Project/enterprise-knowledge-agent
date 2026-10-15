@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useContext,useState } from 'react';
+import { useContext, useState } from 'react';
 import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
@@ -13,12 +13,15 @@ import { knowledgeStats, knowledgeCategories } from '../components/knowledge/Kno
 import '../styles/knowledge.css';
 import IngestDocumentModal from '../components/documents/shared/IngestDocumentModal.jsx';
 import DemoStatesBar from '../components/knowledge/DemoStatesBar';
-export default function KnowledgeBasePage() { 
-     const { activeRole } = useContext(AuthContext);
-     const [demoState, setDemoState] = useState('normal'); 
+import SectionState from '../components/knowledge/SectionState';
+
+export default function KnowledgeBasePage() {
+  const { activeRole } = useContext(AuthContext);
+  const [demoState, setDemoState] = useState('normal');
+  const resetDemo = () => setDemoState('normal');
   // Category whose Collection Insights modal is open (null = closed)
   const [insightsCategory, setInsightsCategory] = useState(null);
-    // Ingest modal open/closed (opened by the "Upload document" button)
+  // Ingest modal open/closed (opened by the "Upload document" button)
   const [ingestOpen, setIngestOpen] = useState(false);
 
   return (
@@ -70,24 +73,38 @@ export default function KnowledgeBasePage() {
             {knowledgeCategories.length} Collections Indexed
           </span>
         </div>
-
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {knowledgeCategories.map((category) => (
-            <CategoryCard
-              key={category.id}
-              category={category}
-              onOpenInsights={setInsightsCategory}
-            />
-          ))}
-        </div>
+        {demoState === 'empty' ? (
+          <SectionState
+            icon={LayoutGrid}
+            title="No collections indexed yet"
+            message="Create a department in Admin Settings to begin populating collections."
+            actionLabel="Reset View"
+            onAction={resetDemo}
+          />
+        ) : demoState === 'error' ? (
+          <SectionState
+            variant="error"
+            title="Unable to load department collections"
+            message="A transient storage error occurred while building the index."
+            actionLabel="Retry"
+            onAction={resetDemo}
+          />
+        ) : (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {knowledgeCategories.map((category) => (
+              <CategoryCard
+                key={category.id}
+                category={category}
+                onOpenInsights={setInsightsCategory}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
-           <GlossarySection canManage={activeRole === 'Admin'} />
-
-        <LibraryFavorites isEmpty={demoState === 'empty'} onReset={() => setDemoState('normal')} />
-
-         <RecentlyUpdated isEmpty={demoState === 'empty'} onReset={() => setDemoState('normal')} />
-
+      <GlossarySection canManage={activeRole === 'Admin'} state={demoState} onReset={resetDemo} />
+      <LibraryFavorites state={demoState} onReset={resetDemo} />
+      <RecentlyUpdated state={demoState} onReset={resetDemo} />
 
       {/* Bottom guidance banner from the approved Knowledge Base reference. */}
       <AskQuestionBanner />
@@ -97,8 +114,8 @@ export default function KnowledgeBasePage() {
           onClose={() => setInsightsCategory(null)}
         />
       )}
-       {ingestOpen && <IngestDocumentModal onClose={() => setIngestOpen(false)} />}   {/* <-- ye nayi line */}
-          <DemoStatesBar value={demoState} onChange={setDemoState} />
+      {ingestOpen && <IngestDocumentModal onClose={() => setIngestOpen(false)} />}   {/* <-- ye nayi line */}
+      <DemoStatesBar value={demoState} onChange={setDemoState} />
     </div>
   );
 }

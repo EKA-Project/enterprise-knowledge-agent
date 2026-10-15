@@ -2,28 +2,61 @@ import { useMemo, useState } from 'react';
 import { FileText } from 'lucide-react';
 import { libraryFavorites } from './KnowledgeData.js';
 import FavoriteCard from './FavoriteCard.jsx';
-import SectionState from './SectionState.jsx';
-
+import SectionState, { SkeletonCards } from './SectionState.jsx';
 
 const modes = [
   { id: 'referenced', label: 'Most Referenced' },
   { id: 'viewed', label: 'Most Viewed' },
 ];
 
-// Library Favorites: top document per department, switchable between Most Referenced / Most Viewed.
-export default function LibraryFavorites({ isEmpty = false, onReset }) {
+// Library Favorites: top document per department. state = normal | loading | empty | error
+export default function LibraryFavorites({ state = 'normal', onReset }) {
   const [mode, setMode] = useState('referenced');
 
   // "Most Referenced" keeps the design order; "Most Viewed" sorts by view count.
   const items = useMemo(
     () =>
-      
       mode === 'viewed'
         ? [...libraryFavorites].sort((a, b) => b.viewed - a.viewed)
         : libraryFavorites,
     [mode],
   );
-      const shown = isEmpty ? [] : items;
+
+  let body;
+  if (state === 'loading') {
+    body = <SkeletonCards count={4} heightClass="h-44" />;
+  } else if (state === 'error') {
+    body = (
+      <div className="mt-4">
+        <SectionState
+          variant="error"
+          title="Unable to rank library favorites"
+          message="A transient telemetry aggregation error occurred."
+          actionLabel="Retry"
+          onAction={onReset}
+        />
+      </div>
+    );
+  } else if (state === 'empty' || items.length === 0) {
+    body = (
+      <div className="mt-4">
+        <SectionState
+          title="No favorite documents recorded"
+          message="Usage analytics will appear once team members begin referencing library files."
+          actionLabel="Reset View"
+          onAction={onReset}
+        />
+      </div>
+    );
+  } else {
+    body = (
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {items.map((item, index) => (
+          <FavoriteCard key={item.id} item={item} rank={index + 1} mode={mode} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <section className="relative mt-8 overflow-hidden rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
@@ -52,31 +85,17 @@ export default function LibraryFavorites({ isEmpty = false, onReset }) {
               key={m.id}
               type="button"
               onClick={() => setMode(m.id)}
-              className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold ${mode === m.id ? 'bg-(--primary) text-(--primary-contrast)' : 'text-(--text-secondary)'
-                }`}
+              className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold ${
+                mode === m.id ? 'bg-(--primary) text-(--primary-contrast)' : 'text-(--text-secondary)'
+              }`}
             >
               {m.label}
             </button>
           ))}
         </div>
       </div>
-      {shown.length === 0 ? (
-        <div className="mt-4">
-          <SectionState
-            title="No favorite documents recorded"
-            message="Usage analytics will appear once team members begin referencing library files."
-            actionLabel="Reset View"
-            onAction={onReset}
-          />
-        </div>
-      ) : (
-        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {shown.map((item, index) => (
-            <FavoriteCard key={item.id} item={item} rank={index + 1} mode={mode} />
-          ))}
-        </div>
-      )}
+
+      {body}
     </section>
   );
 }
-

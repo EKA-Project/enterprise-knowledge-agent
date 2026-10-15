@@ -3,18 +3,20 @@ import { BookOpen, Search, Plus } from 'lucide-react';
 import { glossaryTerms } from './KnowledgeData.js';
 import GlossaryCard from './GlossaryCard.jsx';
 import AddGlossaryTermModal from './AddGlossaryTermModal.jsx';
+import SectionState, { SkeletonCards } from './SectionState.jsx';
 
 const PAGE_SIZE = 4;
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 // Company Glossary: search + A–Z filter + paginated 2-column term cards.
-// canManage -> shows "+ Add term" and card edit icons (admin only; wired later).
-export default function GlossarySection({ canManage = true }) {
+// canManage -> "+ Add term" and card edit icons (admin only).
+// state = normal | loading | empty | error (demo states); onReset returns to normal.
+export default function GlossarySection({ canManage = false, state = 'normal', onReset }) {
+  const [terms, setTerms] = useState(glossaryTerms); // local copy so new terms can be added
+  const [addOpen, setAddOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [letter, setLetter] = useState('All');
   const [page, setPage] = useState(1);
-    const [terms, setTerms] = useState(glossaryTerms); // local copy so new terms can be added
-  const [addOpen, setAddOpen] = useState(false);
 
   // How many terms start with each letter (drives faint/active letters + tooltip)
   const letterCounts = useMemo(() => {
@@ -34,7 +36,7 @@ export default function GlossarySection({ canManage = true }) {
         !q || `${t.term} ${t.expansion} ${t.definition}`.toLowerCase().includes(q);
       return matchesLetter && matchesQuery;
     });
-  }, [terms,query, letter]);
+  }, [terms, query, letter]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const start = (page - 1) * PAGE_SIZE;
@@ -57,6 +59,53 @@ export default function GlossarySection({ canManage = true }) {
     changeLetter('All');
     setAddOpen(false);
   };
+
+  const showAllTerms = () => {
+    setQuery('');
+    changeLetter('All');
+    onReset?.();
+  };
+
+  // What goes between the A–Z bar and the pagination bar
+  let body;
+  if (state === 'loading') {
+    body = <SkeletonCards count={4} heightClass="h-28" />;
+  } else if (state === 'error') {
+    body = (
+      <div className="mt-4">
+        <SectionState
+          variant="error"
+          icon={BookOpen}
+          title="Unable to load company glossary"
+          message="A transient storage error occurred while indexing dictionary definitions."
+          actionLabel="Retry"
+          onAction={onReset}
+        />
+      </div>
+    );
+  } else if (state === 'empty' || visible.length === 0) {
+    body = (
+      <div className="mt-4">
+        <SectionState
+          icon={BookOpen}
+          title="No glossary terms found"
+          message={query ? 'No terms match your search.' : 'No terms defined for this letter.'}
+          actionLabel="View All Terms"
+          onAction={showAllTerms}
+        />
+      </div>
+    );
+  } else {
+    body = (
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {visible.map((item) => (
+          <GlossaryCard key={item.id} item={item} canManage={canManage} />
+        ))}
+      </div>
+    );
+  }
+
+  const showPagination = totalPages > 1 && (state === 'normal' || state === 'loading');
 
   return (
     <section className="mt-8 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
@@ -140,21 +189,11 @@ export default function GlossarySection({ canManage = true }) {
           );
         })}
       </div>
-      
 
-      {/* Cards */}
-      {visible.length > 0 ? (
-        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {visible.map((item) => (
-            <GlossaryCard key={item.id} item={item} canManage={canManage} />
-          ))}
-        </div>
-      ) : (
-        <p className="py-8 text-center text-xs text-(--text-muted)">No terms match your search.</p>
-      )}
+      {body}
 
       {/* Pagination (only when there is more than one page) */}
-      {totalPages > 1 && (
+      {showPagination && (
         <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-(--primary-light) px-4 py-2.5">
           <span className="kb-mono text-[10px] text-(--text-muted)">
             Showing {start + 1}-{Math.min(start + PAGE_SIZE, filtered.length)} of {filtered.length} terms
@@ -182,7 +221,8 @@ export default function GlossarySection({ canManage = true }) {
           </div>
         </div>
       )}
-            {addOpen && <AddGlossaryTermModal onClose={() => setAddOpen(false)} onSave={handleAdd} />}
+
+      {addOpen && <AddGlossaryTermModal onClose={() => setAddOpen(false)} onSave={handleAdd} />}
     </section>
   );
 }
