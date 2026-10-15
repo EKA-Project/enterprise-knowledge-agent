@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { FileText } from 'lucide-react';
 import { libraryFavorites } from './KnowledgeData.js';
 import FavoriteCard from './FavoriteCard.jsx';
+import SectionState from './SectionState.jsx';
+
 
 const modes = [
   { id: 'referenced', label: 'Most Referenced' },
@@ -48,21 +50,29 @@ export default function LibraryFavorites() {
               key={m.id}
               type="button"
               onClick={() => setMode(m.id)}
-              className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold ${
-                mode === m.id ? 'bg-(--primary) text-(--primary-contrast)' : 'text-(--text-secondary)'
-              }`}
+              className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold ${mode === m.id ? 'bg-(--primary) text-(--primary-contrast)' : 'text-(--text-secondary)'
+                }`}
             >
               {m.label}
             </button>
           ))}
         </div>
       </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-        {items.map((item, index) => (
-          <FavoriteCard key={item.id} item={item} rank={index + 1} mode={mode} />
-        ))}
-      </div>
+      {items.length === 0 ? (
+        <div className="mt-4">
+          <SectionState
+            title="No favorite documents recorded"
+            message="Usage analytics will appear once team members begin referencing library files."
+          />
+        </div>
+      ) : (
+        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+          {items.map((item, index) => (
+            <FavoriteCard key={item.id} item={item} rank={index + 1} mode={mode} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
+

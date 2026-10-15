@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext,useState } from 'react';
 import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
 import GlossarySection from '../components/knowledge/GlossarySection';
+import AuthContext from '../context/AuthContext.jsx';
 import LibraryFavorites from '../components/knowledge/LibraryFavorites';
 import RecentlyUpdated from '../components/knowledge/RecentlyUpdated';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
@@ -12,7 +13,8 @@ import { knowledgeStats, knowledgeCategories } from '../components/knowledge/Kno
 import '../styles/knowledge.css';
 import IngestDocumentModal from '../components/documents/shared/IngestDocumentModal.jsx';
 
-export default function KnowledgeBasePage() {  
+export default function KnowledgeBasePage() { 
+     const { activeRole } = useContext(AuthContext); 
   // Category whose Collection Insights modal is open (null = closed)
   const [insightsCategory, setInsightsCategory] = useState(null);
     // Ingest modal open/closed (opened by the "Upload document" button)
@@ -79,7 +81,7 @@ export default function KnowledgeBasePage() {
         </div>
       </section>
 
-        <GlossarySection />
+           <GlossarySection canManage={activeRole === 'Admin'} />
 
         <LibraryFavorites />
 
