@@ -12,9 +12,10 @@ import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
 import IngestDocumentModal from '../components/documents/shared/IngestDocumentModal.jsx';
-
+import DemoStatesBar from '../components/knowledge/DemoStatesBar';
 export default function KnowledgeBasePage() { 
-     const { activeRole } = useContext(AuthContext); 
+     const { activeRole } = useContext(AuthContext);
+     const [demoState, setDemoState] = useState('normal'); 
   // Category whose Collection Insights modal is open (null = closed)
   const [insightsCategory, setInsightsCategory] = useState(null);
     // Ingest modal open/closed (opened by the "Upload document" button)
@@ -83,9 +84,9 @@ export default function KnowledgeBasePage() {
 
            <GlossarySection canManage={activeRole === 'Admin'} />
 
-        <LibraryFavorites />
+        <LibraryFavorites isEmpty={demoState === 'empty'} onReset={() => setDemoState('normal')} />
 
-         <RecentlyUpdated />
+         <RecentlyUpdated isEmpty={demoState === 'empty'} onReset={() => setDemoState('normal')} />
 
 
       {/* Bottom guidance banner from the approved Knowledge Base reference. */}
@@ -97,6 +98,7 @@ export default function KnowledgeBasePage() {
         />
       )}
        {ingestOpen && <IngestDocumentModal onClose={() => setIngestOpen(false)} />}   {/* <-- ye nayi line */}
+          <DemoStatesBar value={demoState} onChange={setDemoState} />
     </div>
   );
 }

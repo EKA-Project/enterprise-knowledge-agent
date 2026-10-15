@@ -8,7 +8,8 @@ import SectionState from './SectionState.jsx';
 const docUrl = (docId) => `/documents/${docId}`;
 
 // Recently Updated: latest document revisions. Each row opens the document.
-export default function RecentlyUpdated() {
+export default function RecentlyUpdated({ isEmpty = false, onReset }) {
+  const items = isEmpty ? [] : recentUpdates;
   return (
     <section className="mt-8 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -25,16 +26,18 @@ export default function RecentlyUpdated() {
         </div>
         <span className="kb-mono text-[10px] text-(--text-muted)">Top 5 verified document revisions</span>
       </div>
-      {recentUpdates.length === 0 ? (
+      {items.length === 0 ? (
         <div className="mt-4">
           <SectionState
             title="No recent updates found"
             message="Document revisions will be listed as they are uploaded or re-indexed."
+            actionLabel="Reset View"
+            onAction={onReset}
           />
         </div>
       ) : (
         <ul className="mt-4 space-y-2">
-          {recentUpdates.map((item) => (
+          {items.map((item) => (
             <li key={item.id}>
               <Link
                 to={docUrl(item.docId)}

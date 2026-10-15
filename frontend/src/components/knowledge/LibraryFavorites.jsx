@@ -11,17 +11,19 @@ const modes = [
 ];
 
 // Library Favorites: top document per department, switchable between Most Referenced / Most Viewed.
-export default function LibraryFavorites() {
+export default function LibraryFavorites({ isEmpty = false, onReset }) {
   const [mode, setMode] = useState('referenced');
 
   // "Most Referenced" keeps the design order; "Most Viewed" sorts by view count.
   const items = useMemo(
     () =>
+      
       mode === 'viewed'
         ? [...libraryFavorites].sort((a, b) => b.viewed - a.viewed)
         : libraryFavorites,
     [mode],
   );
+      const shown = isEmpty ? [] : items;
 
   return (
     <section className="relative mt-8 overflow-hidden rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
@@ -58,16 +60,18 @@ export default function LibraryFavorites() {
           ))}
         </div>
       </div>
-      {items.length === 0 ? (
+      {shown.length === 0 ? (
         <div className="mt-4">
           <SectionState
             title="No favorite documents recorded"
             message="Usage analytics will appear once team members begin referencing library files."
+            actionLabel="Reset View"
+            onAction={onReset}
           />
         </div>
       ) : (
         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {items.map((item, index) => (
+          {shown.map((item, index) => (
             <FavoriteCard key={item.id} item={item} rank={index + 1} mode={mode} />
           ))}
         </div>
