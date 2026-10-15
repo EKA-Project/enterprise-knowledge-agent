@@ -31,15 +31,16 @@ function DestructiveModal({
     <Modal
       title={title}
       onClose={onCancel}
+      icon={
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-(--status-failure-bg) text-(--status-failure)">
+          <AlertTriangle size={20} strokeWidth={2} />
+        </div>
+      }
       size={size}
       closeOnClickOutside={false}
       footer={
         <div className="flex items-center justify-end gap-3">
-          <Button
-            variant="secondary"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
+          <Button variant="secondary" onClick={onCancel} disabled={isLoading}>
             Cancel
           </Button>
           <button
