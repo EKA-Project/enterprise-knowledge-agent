@@ -250,38 +250,3 @@ export const memberQueries = {
     "u-maya": 52, "u-priya": 49, "u-noah": 19, "u-sofia": 24,
   },
 };
-
-const getInitials = (name) =>
-  name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-
-// Builds the chart data for "Queries by Team Member".
-export function getUsageByMember(range, topN = 5) {
-  const ranked = teamMembers
-    .map((member) => ({
-      member,
-      count: range === 30 ? member.queries : memberQueries[range][member.id],
-    }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, topN);
-
-  const top = ranked[0];
-
-  return {
-    title: "📊 Queries by Team Member",
-    subtext: "See how actively each team member is using EKA.",
-    badge: `Top user: ${top.member.name.split(" ")[0]} · ${top.count} queries`,
-    unit: "queries",
-    items: ranked.map(({ member, count }) => ({
-      id: member.id,
-      label: member.name,
-      count,
-      initials: getInitials(member.name),
-      color: "#0284c7",
-    })),
-  };
-}

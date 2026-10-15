@@ -78,7 +78,13 @@ function RankedBarList({ data, headerAction }) {
                 <div className="mb-1 flex items-center justify-between gap-3">
                   <span className="flex min-w-0 items-center gap-1.5 text-[0.7rem] font-semibold text-(--text-primary)">
                     {item.initials && (
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-(--accent-chip) font-mono text-[0.55rem] font-bold text-(--accent-chip-text)">
+                      <span
+                        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-mono text-[0.55rem] font-bold"
+                        style={{
+                          backgroundColor: `${color}1f`,
+                          color,
+                        }}
+                      >
                         {item.initials}
                       </span>
                     )}

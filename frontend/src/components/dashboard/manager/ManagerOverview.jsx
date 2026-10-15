@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Activity,
@@ -20,8 +20,8 @@ import {
   department,
   departmentDocuments,
   departmentKpis,
-  getUsageByMember,
   manager,
+  memberQueries,
   teamMembers,
 } from "./managerDashboardData.js";
 
@@ -41,6 +41,48 @@ function getRagIconColor(percent) {
   return "red";
 }
 
+// Colours belong to the row position (1st to 5th), not to a person.
+const USAGE_TOP_N = 5;
+const RANK_COLORS = ["#0284c7", "#2563eb", "#4f46e5", "#0891b2", "#0d9488"];
+
+const getInitials = (name) =>
+  name
+    .split(" ")
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+// Builds the chart data for "Queries by Team Member".
+// 30 days uses the roster total; 7 and 14 days come from memberQueries.
+function buildUsageByMember(range) {
+  const rows = teamMembers.map((member) => ({
+    member,
+    count: range === 30 ? member.queries : memberQueries[range][member.id],
+  }));
+
+  const total = rows.reduce((sum, row) => sum + row.count, 0);
+  const ranked = [...rows]
+    .sort((a, b) => b.count - a.count)
+    .slice(0, USAGE_TOP_N);
+  const top = ranked[0];
+
+  return {
+    title: "📊 Queries by Team Member",
+    subtext: "See how actively each team member is using EKA.",
+    badge: `Top user: ${top.member.name.split(" ")[0]} · ${top.count} queries`,
+    unit: "queries",
+    items: ranked.map(({ member, count }, index) => ({
+      id: member.id,
+      label: member.name,
+      count,
+      percent: Math.round((count / total) * 100),
+      initials: getInitials(member.name),
+      color: RANK_COLORS[index],
+    })),
+  };
+}
+
 function getGreeting() {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -53,6 +95,7 @@ function ManagerOverview() {
   const [range, setRange] = useState(DEFAULT_RANGE);
 
   const ragHealth = getRagHealth(departmentDocuments);
+  const usage = useMemo(() => buildUsageByMember(range), [range]);
   const totalQueries = teamMembers.reduce((sum, m) => sum + m.queries, 0);
 
   // UI-only for now; real re-indexing comes with the backend.
@@ -169,7 +212,7 @@ function ManagerOverview() {
           />
 
           <RankedBarList
-            data={getUsageByMember(range)}
+            data={usage}
             headerAction={
               <ManagerRangeToggle value={range} onChange={setRange} />
             }
