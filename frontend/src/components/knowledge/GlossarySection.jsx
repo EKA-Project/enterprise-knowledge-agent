@@ -150,13 +150,16 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
         </div>
       </div>
 
-      {/* A–Z filter */}
-      <div className="mt-4 flex items-center gap-1 overflow-x-auto rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) p-1.5">
+            {/* A–Z filter */}
+      {/* Bar is plain white; hover / selected letter gets a soft blue tile */}
+      <div className="mt-4 flex items-center gap-1 overflow-x-auto rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-1.5">
         <button
           type="button"
           onClick={() => changeLetter('All')}
-          className={`shrink-0 cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold ${
-            letter === 'All' ? 'bg-(--primary) text-(--primary-contrast)' : 'text-(--text-secondary)'
+          className={`kb-mono shrink-0 cursor-pointer rounded-xl px-3 py-1 text-[11px] font-semibold transition-colors ${
+            letter === 'All'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
           }`}
         >
           All ({terms.length})
@@ -170,11 +173,11 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
                 type="button"
                 disabled={count === 0}
                 onClick={() => changeLetter(l)}
-                className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold ${
+                className={`kb-mono flex h-6 w-6 items-center justify-center rounded-lg text-[11px] font-semibold transition-colors ${
                   active
-                    ? 'bg-(--primary) text-(--primary-contrast)'
+                    ? 'cursor-pointer bg-(--bg-surface-subtle) text-(--text-primary)'
                     : count
-                      ? 'cursor-pointer text-(--text-primary) hover:bg-(--primary-light)'
+                      ? 'cursor-pointer text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
                       : 'cursor-not-allowed text-(--text-muted) opacity-40'
                 }`}
               >

@@ -25,6 +25,10 @@ const routeMetadata = {
     title: "Documents",
     metadata: "INGESTION REPOSITORY / 24 DOCS",
   },
+    "/documents/document_summary": {
+    title: "Documents",
+    metadata: "INGESTION REPOSITORY / 24 DOCS",
+  },
   "/semantic-search": {
     title: "Semantic Search",
     metadata: "CONCEPT & INTENT DISCOVERY",
