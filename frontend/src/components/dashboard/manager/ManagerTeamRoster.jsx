@@ -1,33 +1,30 @@
+import { MoreVertical, Users } from "lucide-react";
 import { useState } from "react";
-import { MoreVertical } from "lucide-react";
-import DataTable from "../../common/DataTable.jsx";
-import Pagination from "../../common/Pagination.jsx";
-import Badge from "../../common/Badge.jsx";
-import UserViewModal from "../../common/UserViewModal.jsx";
+import TableContainer from "../../common/TableContainer";
+import DataTable from "../../common/DataTable";
+import UserViewModal from "../../common/UserViewModal";
+import DestructiveModal from "../../common/DestructiveModal";
+import Badge from "../../common/Badge";
 
 const PAGE_SIZE = 5;
 
-/**
- * teamMembers: array of members
- * currentUserId: ID of the logged-in user (to hide actions on their own row)
- * department: department name
- */
-function ManagerTeamRoster({ teamMembers, currentUserId, department }) {
+function ManagerTeamRoster({ teamMembers, currentUserId, department, onAddMember }) {
   const [page, setPage] = useState(1);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [memberToRemove, setMemberToRemove] = useState(null);
   const [openMenu, setOpenMenu] = useState(null);
-
-  const totalPages = Math.ceil(teamMembers.length / PAGE_SIZE);
-  const start = (page - 1) * PAGE_SIZE;
-  const paginatedMembers = teamMembers.slice(start, start + PAGE_SIZE);
 
   const getInitials = (name) =>
     name
       .split(" ")
-      .map((part) => part[0])
-      .slice(0, 2)
+      .map((n) => n[0])
       .join("")
       .toUpperCase();
+
+  // Paginate
+  const startIdx = (page - 1) * PAGE_SIZE;
+  const endIdx = startIdx + PAGE_SIZE;
+  const paginatedMembers = teamMembers.slice(startIdx, endIdx);
 
   const columns = [
     {
@@ -151,56 +148,55 @@ function ManagerTeamRoster({ teamMembers, currentUserId, department }) {
 
   return (
     <>
-      <section
-        id="team-roster"
-        className="rounded-[18px] border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)"
+      <TableContainer
+        icon={<Users size={20} />}
+        title="Team Roster"
+        subtitle={`${teamMembers.length} members in ${department.name}`}
+        buttons={[
+          {
+            label: "Add Member",
+            icon: null,
+            onClick: onAddMember,
+            variant: "primary",
+          },
+        ]}
+        page={page}
+        pageSize={PAGE_SIZE}
+        total={teamMembers.length}
+        onPageChange={setPage}
+        onPageSizeChange={(newSize) => {
+          // Reset to page 1 when changing page size
+          setPage(1);
+        }}
       >
-        {/* Header */}
-        <div className="border-b border-(--border-subtle) px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="font-serif text-lg font-bold text-(--text-primary)">
-                👥 {department} Team Roster ({teamMembers.length})
-              </h2>
-              <p className="mt-1 text-sm text-(--text-muted)">
-                Department personnel and query activity.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              className="cursor-pointer rounded-full border border-(--primary) bg-(--primary-light) px-4 py-2 text-xs font-semibold text-(--primary) transition-colors hover:bg-(--primary) hover:text-white"
-            >
-              + Add Member
-            </button>
-          </div>
-        </div>
-
-        {/* Table */}
         <DataTable
           columns={columns}
           rows={paginatedMembers}
           getRowKey={(row) => row.id}
-          caption={`${department} team members, page ${page} of ${totalPages}`}
+          emptyMessage="No team members yet."
         />
+      </TableContainer>
 
-        {/* Pagination */}
-        <Pagination
-          page={page}
-          pageSize={PAGE_SIZE}
-          total={teamMembers.length}
-          onPageChange={setPage}
-          itemLabel="members"
-        />
-      </section>
-
-      {/* User View Modal */}
       {selectedMember && (
         <UserViewModal
           member={selectedMember}
           department={department}
           onClose={() => setSelectedMember(null)}
           canEdit={false}
+        />
+      )}
+
+      {memberToRemove && (
+        <DestructiveModal
+          title="Remove from Team"
+          message={`Are you sure you want to remove ${memberToRemove.name} from ${department.name}?`}
+          onConfirm={() => {
+            console.log("Remove:", memberToRemove.id);
+            setMemberToRemove(null);
+          }}
+          onCancel={() => setMemberToRemove(null)}
+          confirmLabel="Remove"
+          confirmTone="danger"
         />
       )}
     </>

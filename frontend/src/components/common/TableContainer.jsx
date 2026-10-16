@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 /**
  * Reusable table wrapper with header (icon, title, subtitle) + buttons + pagination footer
- * 
+ *
  * <TableContainer
  *   icon={<Icon />}
  *   title="Title"
@@ -35,23 +35,17 @@ function TableContainer({
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <div className="rounded-lg border border-(--border-subtle) bg-(--bg-surface) overflow-hidden">
+    <div className="rounded-xl border border-(--border-subtle) bg-(--bg-surface) overflow-hidden shadow-sm">
       {/* Header: icon + title/subtitle + buttons */}
-      <div className="flex items-start justify-between gap-4 border-b border-(--border-subtle) px-6 py-4">
+      <div className="flex items-start justify-between gap-4 border-b border-(--border-subtle) px-6 py-4 bg-(--bg-surface)">
         <div className="flex items-start gap-3">
-          {icon && (
-            <div className="mt-1 text-(--primary) shrink-0">
-              {icon}
-            </div>
-          )}
+          {icon && <div className="mt-1 text-(--primary) shrink-0">{icon}</div>}
           <div>
             <h3 className="text-sm font-semibold text-(--text-primary)">
               {title}
             </h3>
             {subtitle && (
-              <p className="text-xs text-(--text-muted) mt-0.5">
-                {subtitle}
-              </p>
+              <p className="text-xs text-(--text-muted) mt-0.5">{subtitle}</p>
             )}
           </div>
         </div>
@@ -81,19 +75,22 @@ function TableContainer({
       </div>
 
       {/* Table body */}
-      <div className="overflow-x-auto">
-        {children}
-      </div>
+      <div className="overflow-x-auto">{children}</div>
 
       {/* Footer: pagination */}
-      <div className="flex items-center justify-between gap-4 border-t border-(--border-subtle) px-6 py-3 bg-(--bg-surface-subtle)/40">
+      <div className="flex items-center justify-between gap-4 border-t border-(--border-subtle) px-6 py-3 bg-white">
         <div className="text-xs text-(--text-muted)">
-          Showing <span className="font-semibold">{startItem}</span>–<span className="font-semibold">{endItem}</span> of <span className="font-semibold">{total}</span> documents
+          Showing <span className="font-semibold">{startItem}</span>–
+          <span className="font-semibold">{endItem}</span> of{" "}
+          <span className="font-semibold">{total}</span> documents
         </div>
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <label htmlFor="pageSize" className="text-xs font-semibold text-(--text-muted)">
+            <label
+              htmlFor="pageSize"
+              className="text-xs font-semibold text-(--text-muted)"
+            >
               Rows per page:
             </label>
             <select

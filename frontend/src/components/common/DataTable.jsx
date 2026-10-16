@@ -35,7 +35,7 @@ function DataTable({
         </colgroup>
 
         <thead>
-          <tr className="bg-(--bg-surface-subtle)">
+          <tr className="bg-(--bg-surface-subtle) rounded-t-xl">
             {columns.map((column) => (
               <th
                 key={column.key}
