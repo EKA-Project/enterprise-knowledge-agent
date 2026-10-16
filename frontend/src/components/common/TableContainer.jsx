@@ -28,6 +28,7 @@ function TableContainer({
   total = 0,
   onPageChange,
   onPageSizeChange,
+  itemLabel = "items",
   children, // <DataTable /> goes here
 }) {
   const startItem = (page - 1) * pageSize + 1;

@@ -22,6 +22,7 @@ function DataTable({
   getRowKey = (row) => row.id,
   emptyMessage = "Nothing to show yet.",
   caption,
+  onRowClick,
 }) {
   return (
     <div className="overflow-x-auto">
@@ -40,7 +41,7 @@ function DataTable({
               <th
                 key={column.key}
                 scope="col"
-                className={`px-3 py-2 font-mono text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-(--text-muted) ${
+                className={`px-4 py-3 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-(--text-muted) ${
                   ALIGN[column.align ?? "left"]
                 }`}
               >
@@ -64,12 +65,15 @@ function DataTable({
             rows.map((row) => (
               <tr
                 key={getRowKey(row)}
-                className="border-t border-(--border-subtle) transition-colors hover:bg-(--bg-surface-subtle)/30"
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
+                className={`border-t border-(--border-subtle) transition-colors hover:bg-(--bg-surface-subtle) ${
+                  onRowClick ? "cursor-pointer" : ""
+                }`}
               >
                 {columns.map((column) => (
                   <td
                     key={column.key}
-                    className={`px-3 py-2.5 align-middle text-[0.75rem] text-(--text-primary) ${
+                    className={`px-4 py-3.5 align-middle text-sm text-(--text-primary) ${
                       ALIGN[column.align ?? "left"]
                     }`}
                   >
