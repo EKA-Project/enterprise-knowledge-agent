@@ -27,6 +27,7 @@
   /* Primary & Accent Tones (Calm Sky Blue 600 & Vivid Sky Azure) */
   --primary: #0a75aa;
   --primary-hover: #4eb4eb;
+    --primary-deep: #075f8c;
   --primary-light: #e0f2fe;
   --primary-glow: rgba(2, 132, 199, 0.18);
   --primary-contrast: #ffffff;

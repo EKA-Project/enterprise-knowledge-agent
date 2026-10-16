@@ -28,7 +28,7 @@ const VARIANTS = {
   light:
     "border-(--border-medium) bg-white text-(--text-primary) hover:border-(--primary) hover:text-(--primary)",
   solid:
-    "border-(--primary) bg-(--primary) text-white hover:bg-white hover:text-(--primary)",
+    "border-(--accent-secondary) bg-(--accent-secondary) text-white hover:border-(--primary-deep) hover:bg-(--primary-deep)",
 };
 
 // ---- Sizes: height + text size ----
@@ -53,8 +53,7 @@ const CHIP_BOX = { sm: "h-6 w-6", md: "h-7 w-7" };
 // ---- Icon chip colours (follow the button's hover, via `group`) ----
 const CHIP_COLORS = {
   light: "bg-(--primary-light) text-(--primary)",
-  solid:
-    "bg-white/20 text-white group-hover:bg-(--primary-light) group-hover:text-(--primary)",
+  solid: "bg-white/20 text-white group-hover:bg-white/30",
 };
 
 function Button({
@@ -80,7 +79,7 @@ function Button({
       {Icon &&
         (iconChip ? (
           <span
-            className={`flex items-center justify-center rounded-full ${
+            className={`flex items-center justify-center rounded-full transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:scale-110 ${
               CHIP_BOX[size] ?? CHIP_BOX.sm
             } ${CHIP_COLORS[variant] ?? CHIP_COLORS.light}`}
           >
