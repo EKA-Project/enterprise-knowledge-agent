@@ -156,4 +156,7 @@
   --file-fig-bg: var(--doc-fig-bg);
   --file-fig-color: var(--doc-fig-color);
   --file-fig-border: var(--doc-fig-border);
+
+  --radius-table: 28px;
+  --table-header-bg: #cfe4f5;
 }

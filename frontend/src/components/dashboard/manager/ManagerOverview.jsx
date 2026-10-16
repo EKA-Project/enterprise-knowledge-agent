@@ -219,12 +219,13 @@ function ManagerOverview() {
             }
           />
         </div>
-
-        <ManagerTeamRoster
-          teamMembers={teamMembers}
-          currentUserId={manager.id}
-          department={department.name}
-        />
+        <div id="team-roster" className="scroll-mt-6">
+          <ManagerTeamRoster
+            teamMembers={teamMembers}
+            currentUserId={manager.id}
+            department={department}
+          />
+        </div>
       </div>
     </div>
   );
