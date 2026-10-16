@@ -23,6 +23,7 @@ function UserViewModal({ member, department, onClose, canEdit = false, onEdit })
           {member.name
             .split(" ")
             .map((part) => part[0])
+            .slice(0, 2)
             .join("")
             .toUpperCase()}
         </div>

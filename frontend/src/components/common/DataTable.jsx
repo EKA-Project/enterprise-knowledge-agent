@@ -25,7 +25,7 @@ function DataTable({
 }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full table-fixed border-collapse text-left">
+      <table className="w-full border-collapse text-left">
         {caption && <caption className="sr-only">{caption}</caption>}
 
         <colgroup>
@@ -40,7 +40,7 @@ function DataTable({
               <th
                 key={column.key}
                 scope="col"
-                className={`px-5 py-3 font-mono text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-(--text-muted) ${
+                className={`px-3 py-2 font-mono text-[0.55rem] font-semibold uppercase tracking-[0.12em] text-(--text-muted) ${
                   ALIGN[column.align ?? "left"]
                 }`}
               >
@@ -55,7 +55,7 @@ function DataTable({
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-5 py-10 text-center text-sm text-(--text-muted)"
+                className="px-3 py-6 text-center text-xs text-(--text-muted)"
               >
                 {emptyMessage}
               </td>
@@ -64,12 +64,12 @@ function DataTable({
             rows.map((row) => (
               <tr
                 key={getRowKey(row)}
-                className="border-t border-(--border-subtle) transition-colors hover:bg-(--bg-surface-subtle)/60"
+                className="border-t border-(--border-subtle) transition-colors hover:bg-(--bg-surface-subtle)/30"
               >
                 {columns.map((column) => (
                   <td
                     key={column.key}
-                    className={`px-5 py-3.5 align-middle text-sm text-(--text-primary) ${
+                    className={`px-3 py-2.5 align-middle text-[0.75rem] text-(--text-primary) ${
                       ALIGN[column.align ?? "left"]
                     }`}
                   >
