@@ -1,0 +1,22 @@
+/* Organization page only. Every selector is scoped under .organization-page. */
+@keyframes org-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes org-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes org-toast { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+
+/* "backwards" (not "both") so hover transforms still work after the animation ends. */
+.organization-page .org-rise { animation: org-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.organization-page .org-fade { animation: org-fade 0.25s ease-out backwards; }
+
+/* Toast.jsx tags every toast with "anl-toast". On this page only, give it the slide-in. */
+.organization-page .anl-toast { animation: org-toast 0.3s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+
+/* Hand cursor for clickable things on this page. */
+.organization-page button:not(:disabled),
+.organization-page [role="button"] { cursor: pointer; }
+.organization-page button:disabled { cursor: not-allowed; }
+
+@media (prefers-reduced-motion: reduce) {
+  .organization-page .org-rise,
+  .organization-page .org-fade,
+  .organization-page .anl-toast { animation: none; }
+}
