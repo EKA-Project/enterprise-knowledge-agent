@@ -27,7 +27,7 @@
   /* Primary & Accent Tones (Calm Sky Blue 600 & Vivid Sky Azure) */
   --primary: #0a75aa;
   --primary-hover: #4eb4eb;
-    --primary-deep: #075f8c;
+  --primary-deep: #075f8c;
   --primary-light: #e0f2fe;
   --primary-glow: rgba(2, 132, 199, 0.18);
   --primary-contrast: #ffffff;
@@ -160,4 +160,87 @@
 
   --radius-table: 28px;
   --table-header-bg: #cfe4f5;
+}
+
+/* ---------- Modal animation ---------- */
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modal-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes modal-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes modal-pop-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.modal-overlay {
+  animation: modal-fade-in 150ms ease-out;
+}
+.modal-overlay[data-closing] {
+  animation: modal-fade-out 150ms ease-in forwards;
+}
+.modal-card {
+  animation: modal-pop-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-overlay[data-closing] .modal-card {
+  animation: modal-pop-out 150ms ease-in forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay,
+  .modal-card,
+  .modal-overlay[data-closing],
+  .modal-overlay[data-closing] .modal-card {
+    animation: none;
+  }
+}
+
+/* ---------- Modal scroll area ---------- */
+.modal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--border-medium);
+}
+
+/* Firefox only (Chrome would ignore the webkit rules above if it saw these) */
+@supports not selector(::-webkit-scrollbar) {
+  .modal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-subtle) transparent;
+  }
 }
