@@ -16,6 +16,7 @@ import MetricCard from "../shared/MetricCard.jsx";
 import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
 import ManagerQueryVelocity from "./ManagerQueryVelocity.jsx";
 import ManagerTeamRoster from "./ManagerTeamRoster.jsx";
+import ManagerDepartmentDocuments from "./ManagerDepartmentDocuments.jsx";
 import ManagerRangeToggle, { DEFAULT_RANGE } from "./ManagerRangeToggle.jsx";
 import {
   department,
@@ -128,7 +129,6 @@ function ManagerOverview() {
           </span>
         }
       />
-
       {/* KPI cards */}
       <section
         aria-label="Department key metrics"
@@ -197,10 +197,8 @@ function ManagerOverview() {
           supportingType="positive"
         />
       </section>
-
       {/* Query velocity chart */}
       <ManagerQueryVelocity range={range} onRangeChange={setRange} />
-
       {/* Two-column area: pinned docs + usage (left), team roster (right) */}
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <div className="space-y-6">
@@ -227,6 +225,12 @@ function ManagerOverview() {
           />
         </div>
       </div>
+
+      {/* Department documents table */}
+      <ManagerDepartmentDocuments
+        documents={departmentDocuments}
+        department={department}
+      />
     </div>
   );
 }

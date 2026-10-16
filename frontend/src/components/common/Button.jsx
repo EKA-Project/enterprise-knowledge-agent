@@ -33,12 +33,14 @@ const VARIANTS = {
 
 // ---- Sizes: height + text size ----
 const SIZES = {
+  xs: "h-6 text-[0.7rem]",
   sm: "h-8 text-xs",
   md: "h-10 text-sm",
 };
 
 // ---- Horizontal padding (smaller on the left when an icon chip is shown) ----
 const PADDING = {
+  xs: { plain: "px-2.5", chip: "pl-1 pr-2.5" },
   sm: { plain: "px-3", chip: "pl-1 pr-3" },
   md: { plain: "px-4", chip: "pl-1.5 pr-4" },
 };

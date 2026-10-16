@@ -31,7 +31,13 @@ export function AddMemberButton(props) {
 
 export function IngestDocumentButton(props) {
   return (
-    <Button variant="solid" icon={Upload} title="Ingest a new document" {...props}>
+    <Button
+      variant="solid"
+      icon={Upload}
+      iconChip
+      title="Ingest a new document"
+      {...props}
+    >
       Ingest Document
     </Button>
   );
@@ -39,7 +45,12 @@ export function IngestDocumentButton(props) {
 
 export function IngestionLibraryButton(props) {
   return (
-    <Button icon={FileText} title="Open the ingestion library" {...props}>
+    <Button
+      icon={FileText}
+      iconChip
+      title="Open the ingestion library"
+      {...props}
+    >
       Ingestion Library →
     </Button>
   );
