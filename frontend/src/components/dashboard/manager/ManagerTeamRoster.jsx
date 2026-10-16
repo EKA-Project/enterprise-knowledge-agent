@@ -189,6 +189,7 @@ function ManagerTeamRoster({
             <button
               type="button"
               onClick={() => {
+                console.log("View clicked:", openMenu.row);
                 setSelectedMember(openMenu.row);
                 setOpenMenu(null);
               }}
@@ -213,7 +214,7 @@ function ManagerTeamRoster({
       {selectedMember && (
         <UserViewModal
           member={selectedMember}
-          department={department}
+          department={department.name}
           onClose={() => setSelectedMember(null)}
           canEdit={false}
         />
