@@ -4,16 +4,17 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 /* ==========================================================================
    TableContainer
    --------------------------------------------------------------------------
-   The CARD around a table. It owns the header (icon, title, subtitle,
-   action buttons) and the pagination footer. It knows nothing about columns
-   or rows: the table itself goes in as `children` (usually <DataTable />).
+   The CARD around a table. It owns the header (icon, title, subtitle and an
+   `actions` slot for buttons) and the pagination footer. It knows nothing
+   about columns, rows or button styling: the table goes in as `children`
+   (usually <DataTable />) and the buttons come in through `actions`.
 
    Usage:
      <TableContainer
-       icon={<Users size={20} />}
-       title="Team Roster"
-       subtitle="9 members in Engineering"
-       buttons={[{ label: "Add Member", icon: UserPlus, onClick, variant: "primary" }]}
+       icon={<span aria-hidden="true">👥</span>}
+       title="Engineering Team Roster (9)"
+       subtitle="Department personnel and query activity."
+       actions={<AddMemberButton onClick={onAddMember} />}
        page={page}
        pageSize={pageSize}
        total={rows.length}
@@ -34,7 +35,7 @@ function TableContainer({
   icon,
   title,
   subtitle,
-  buttons = [], // [{ label, icon, onClick, variant?: "primary" }]
+  actions, // any JSX for the right side of the header, usually buttons
 
   // Pagination
   page = 1,
@@ -57,44 +58,24 @@ function TableContainer({
 
   return (
     <div className="overflow-hidden rounded-(--radius-table) border border-(--border-subtle) bg-(--bg-surface) shadow-sm">
-      {/* ================= HEADER: icon + title/subtitle + buttons ================= */}
-      <div className="flex items-start justify-between gap-4 border-b border-(--border-subtle) bg-(--bg-surface) px-7 py-5">
-        {/* Left: icon + text */}
-        <div className="flex items-start gap-3">
-          {icon && <div className="mt-1 shrink-0 text-(--primary)">{icon}</div>}
-          <div>
-            <h3 className="text-sm font-semibold text-(--text-primary)">
+      {/* ================= HEADER: icon + title/subtitle + actions ================= */}
+      <div className="flex items-center justify-between gap-4 border-b border-(--border-subtle) bg-(--bg-surface) px-7 py-5">
+        {/* Left: icon + title on one row, subtitle underneath */}
+        <div>
+          <div className="flex items-center gap-2">
+            {icon && <span className="shrink-0 text-(--primary)">{icon}</span>}
+            <h3 className="text-[1.1rem] font-bold leading-tight text-(--text-primary)">
               {title}
             </h3>
-            {subtitle && (
-              <p className="mt-0.5 text-xs text-(--text-muted)">{subtitle}</p>
-            )}
           </div>
+          {subtitle && (
+            <p className="mt-1 text-[0.8rem] text-(--text-muted)">{subtitle}</p>
+          )}
         </div>
 
-        {/* Right: action buttons */}
-        {buttons.length > 0 && (
-          <div className="flex shrink-0 items-center gap-2">
-            {buttons.map((button, idx) => {
-              const Icon = button.icon;
-              const isPrimary = button.variant === "primary";
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={button.onClick}
-                  className={`inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-                    isPrimary
-                      ? "bg-(--primary) text-white hover:bg-(--primary-hover)"
-                      : "border border-(--border-subtle) text-(--primary) hover:bg-(--bg-surface-subtle)"
-                  }`}
-                >
-                  {Icon && <Icon size={16} />}
-                  {button.label}
-                </button>
-              );
-            })}
-          </div>
+        {/* Right: action slot (each page passes its own buttons) */}
+        {actions && (
+          <div className="flex shrink-0 items-center gap-2">{actions}</div>
         )}
       </div>
 

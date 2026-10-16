@@ -1,7 +1,8 @@
-import { KeyRound, MoreVertical, Users } from "lucide-react";
+import { KeyRound, MoreVertical } from "lucide-react";
 import { useState } from "react";
 import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
+import { AddMemberButton } from "../../common/ActionButtons";
 import UserViewModal from "../../common/UserViewModal";
 import DestructiveModal from "../../common/DestructiveModal";
 
@@ -152,17 +153,10 @@ function ManagerTeamRoster({
   return (
     <>
       <TableContainer
-        icon={<Users size={20} />}
-        title="Team Roster"
-        subtitle={`${teamMembers.length} members in ${department.name}`}
-        buttons={[
-          {
-            label: "Add Member",
-            icon: null,
-            onClick: onAddMember,
-            variant: "primary",
-          },
-        ]}
+        icon={<span aria-hidden="true">👥</span>}
+        title={`${department.name} Team Roster (${teamMembers.length})`}
+        subtitle="Department personnel and query activity."
+        actions={<AddMemberButton onClick={onAddMember} />}
         page={page}
         pageSize={pageSize}
         total={teamMembers.length}
