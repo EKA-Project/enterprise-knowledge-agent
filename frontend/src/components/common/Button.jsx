@@ -8,7 +8,10 @@
 
    Colour schemes (variant):
      "light" (default)  white  -> on hover: blue border + blue text
-     "solid"            blue   -> on hover: white with blue text + blue border
+         "solid"            blue   -> on hover: white with blue text + blue border
+         "danger"           red    -> on hover: darker red (destructive confirms)
+     "soft"             white, blue text -> on hover: light blue fill (Cancel / Close)
+     "dangerSoft"       light red -> on hover: solid red with white text
 
    Props:
      variant:  "light" | "solid"
@@ -29,6 +32,12 @@ const VARIANTS = {
     "border-(--border-medium) bg-white text-(--text-primary) hover:border-(--primary) hover:text-(--primary)",
   solid:
     "border-(--accent-secondary) bg-(--accent-secondary) text-white hover:border-(--primary-deep) hover:bg-(--primary-deep)",
+  danger:
+    "border-(--status-danger) bg-(--status-danger) text-white hover:border-[#b91c1c] hover:bg-[#b91c1c]",
+  // Same look as the modal's close button: quiet at rest, reacts on hover
+  soft: "border-(--border-subtle) bg-white text-(--primary) hover:border-(--primary)/40 hover:bg-(--accent-chip)",
+  dangerSoft:
+    "border-[#fca5a5] bg-[#fee2e2] text-(--status-danger) hover:border-(--status-danger) hover:bg-(--status-danger) hover:text-white",
 };
 
 // ---- Sizes: height + text size ----
@@ -54,6 +63,8 @@ const CHIP_BOX = { sm: "h-6 w-6", md: "h-7 w-7" };
 const CHIP_COLORS = {
   light: "bg-(--primary-light) text-(--primary)",
   solid: "bg-white/20 text-white group-hover:bg-white/30",
+  danger: "bg-white/20 text-white group-hover:bg-white/30",
+  dangerSoft: "bg-white text-(--status-danger)",
 };
 
 function Button({

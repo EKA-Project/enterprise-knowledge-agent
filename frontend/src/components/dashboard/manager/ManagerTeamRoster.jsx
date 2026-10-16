@@ -4,7 +4,7 @@ import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
 import { AddMemberButton } from "../../common/ActionButtons";
 import UserViewModal from "../../common/UserViewModal";
-import DestructiveModal from "../../common/DestructiveModal";
+import RemoveMemberModal from "../../common/RemoveMemberModal";
 
 const DEFAULT_PAGE_SIZE = 5;
 
@@ -221,16 +221,13 @@ function ManagerTeamRoster({
       )}
 
       {memberToRemove && (
-        <DestructiveModal
-          title="Remove from Team"
-          message={`Are you sure you want to remove ${memberToRemove.name} from ${department.name}?`}
-          onConfirm={() => {
-            console.log("Remove:", memberToRemove.id);
-            setMemberToRemove(null);
+        <RemoveMemberModal
+          member={memberToRemove}
+          department={department.name}
+          onClose={() => setMemberToRemove(null)}
+          onConfirm={(member) => {
+            console.log("Remove:", member.id);
           }}
-          onCancel={() => setMemberToRemove(null)}
-          confirmLabel="Remove"
-          confirmTone="danger"
         />
       )}
     </>

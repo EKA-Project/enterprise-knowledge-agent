@@ -1,4 +1,4 @@
-import { FileText, Upload, UserPlus } from "lucide-react";
+import { FileText, Upload, UserPlus, UserX, X } from "lucide-react";
 import Button from "./Button";
 
 /* ==========================================================================
@@ -52,6 +52,27 @@ export function IngestionLibraryButton(props) {
       {...props}
     >
       Ingestion Library →
+    </Button>
+  );
+}
+
+export function CancelButton(props) {
+  return (
+    <Button variant="soft" icon={X} title="Cancel" {...props}>
+      Cancel
+    </Button>
+  );
+}
+
+export function RemoveFromTeamButton(props) {
+  return (
+    <Button
+      variant="dangerSoft"
+      icon={UserX}
+      title="Remove this member from the team"
+      {...props}
+    >
+      Remove from Team
     </Button>
   );
 }
