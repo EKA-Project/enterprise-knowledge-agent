@@ -197,7 +197,7 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
 
       {/* Pagination (only when there is more than one page) */}
       {showPagination && (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-(--primary-light) px-4 py-2.5">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-(--bg-surface-subtle) px-4 py-2.5">
           <span className="kb-mono text-[10px] text-(--text-muted)">
             Showing {start + 1}-{Math.min(start + PAGE_SIZE, filtered.length)} of {filtered.length} terms
           </span>
@@ -206,18 +206,18 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
               type="button"
               disabled={page === 1}
               onClick={() => setPage((p) => p - 1)}
-              className="cursor-pointer rounded-lg border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-(--text-secondary) disabled:cursor-not-allowed disabled:opacity-40"
+              className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-(--text-secondary) shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
             >
               ← Previous
             </button>
-            <span className="kb-mono rounded-lg border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-(--text-secondary)">
+            <span className="kb-mono rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-(--text-secondary) shadow-(--shadow-sm)">
               Page {page} of {totalPages}
             </span>
             <button
               type="button"
               disabled={page === totalPages}
               onClick={() => setPage((p) => p + 1)}
-              className="cursor-pointer rounded-lg border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-40"
+              className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 font-semibold text-(--text-primary) shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
             >
               Next{remaining > 0 ? ` ${Math.min(PAGE_SIZE, remaining)}` : ''} →
             </button>
