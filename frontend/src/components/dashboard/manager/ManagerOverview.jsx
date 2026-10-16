@@ -15,6 +15,7 @@ import RankedBarList from "../../charts/RankedBarList.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
 import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
 import ManagerQueryVelocity from "./ManagerQueryVelocity.jsx";
+import ManagerTeamRoster from "./ManagerTeamRoster.jsx";
 import ManagerRangeToggle, { DEFAULT_RANGE } from "./ManagerRangeToggle.jsx";
 import {
   department,
@@ -219,7 +220,11 @@ function ManagerOverview() {
           />
         </div>
 
-        {/* Next: team roster goes here */}
+        <ManagerTeamRoster
+          teamMembers={teamMembers}
+          currentUserId={manager.id}
+          department={department.name}
+        />
       </div>
     </div>
   );
