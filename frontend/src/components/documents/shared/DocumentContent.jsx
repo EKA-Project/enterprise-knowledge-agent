@@ -1,5 +1,6 @@
 import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { documents, documentCategories, documentFormats } from './DocumentData';
 import {
   ALL_CATEGORIES,
@@ -12,6 +13,7 @@ import DocumentCard from './DocumentCard.jsx';
 
 
 function DocumentsContent({ adminMode = false }) {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState(ALL_CATEGORIES);
   const [format, setFormat] = useState(ALL_FORMATS);
@@ -34,7 +36,7 @@ function DocumentsContent({ adminMode = false }) {
     documentCategories.find((cat) => cat.value === category)?.label ?? category;
   const isCategoryFiltered = category !== ALL_CATEGORIES;
 
-  
+
   return (
     <>
       {/* Filter controls */}
@@ -116,11 +118,10 @@ function DocumentsContent({ adminMode = false }) {
             aria-label="Grid view"
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${
-              viewMode === 'grid'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'grid'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
+              }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -130,11 +131,10 @@ function DocumentsContent({ adminMode = false }) {
             aria-label="List view"
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${
-              viewMode === 'list'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'list'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
+              }`}
           >
             <List size={15} />
           </button>
@@ -227,6 +227,11 @@ function DocumentsContent({ adminMode = false }) {
                     <td className="px-5 py-4">
                       <button
                         type="button"
+                        onClick={() =>
+                          navigate("/documents/summary", {
+                            state: { document },
+                          })
+                        }
                         className="text-sm font-semibold text-(--text-primary) transition-opacity hover:opacity-70"
                       >
                         Summary →
@@ -237,8 +242,9 @@ function DocumentsContent({ adminMode = false }) {
               </tbody>
             </table>
           </div>
-        </section>
-      )}
+        </section >
+      )
+      }
     </>
   );
 }
