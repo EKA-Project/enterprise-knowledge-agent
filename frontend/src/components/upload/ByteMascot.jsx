@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { MASCOT_STATES } from "./uploadMascotStates.js";
-
+import ByteParticles from "./ByteParticles.jsx";
 // Banner background + border for each tone.
 // (Full class names are written out so Tailwind can detect them.)
 const TONES = {
@@ -31,16 +31,19 @@ function ByteMascot({ state = "empty", message }) {
       className={`relative flex h-36 items-center justify-center rounded-2xl border transition-colors duration-300 ${TONES[config.tone]}`}
     >
       <div className="relative">
-        {/* Outer div bobs; inner img pops in. Two animations can't share one element. */}
-        <div className="byte-float">
+        {/* The stage plays this state's motion; the img pops in.
+            key={state} remounts both, so the animation replays on every change. */}
+        <div key={state} className={`byte-stage ${config.motion}`}>
           <img
-            key={state} // new key = new element = the pop-in animation replays
             src={config.image}
-            alt="" // decorative: the bubble text below carries the meaning
+            alt="" // decorative: the bubble text carries the meaning
             draggable={false}
-            className="byte-swap h-24 w-auto select-none"
+            className="byte-swap block h-24 w-auto select-none"
           />
         </div>
+
+        {/* Particles float around Byte (nothing for states without them) */}
+        <ByteParticles key={`particles-${state}`} type={config.particles} />
 
         {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
         <div
