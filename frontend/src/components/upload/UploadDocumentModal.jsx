@@ -297,7 +297,7 @@ function UploadDocumentModal({
           <div className="ml-auto flex items-center gap-2">
             {finished ? (
               <>
-                <Button variant="solid" size="md" icon={Check} onClick={close}>
+                <Button variant="solid" size="sm" icon={Check} onClick={close}>
                   Done
                 </Button>
                 <CloseAfter close={close} ms={CLOSE_DELAY_MS} />
@@ -306,7 +306,7 @@ function UploadDocumentModal({
               <>
                 <Button
                   variant="soft"
-                  size="md"
+                  size="sm"
                   onClick={close}
                   disabled={busy}
                 >
@@ -318,7 +318,7 @@ function UploadDocumentModal({
                   type="submit"
                   form={formId}
                   variant="solid"
-                  size="md"
+                  size="sm"
                   icon={submitIcon}
                   disabled={!canSubmit}
                   aria-busy={busy}
