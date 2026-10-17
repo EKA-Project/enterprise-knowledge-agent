@@ -26,7 +26,7 @@ const CLOSE_DELAY_MS = 1800; // how long the success state shows before closing
 
 // One look shared by the title input and the select (matches the target pill)
 const CONTROL =
-  "h-11 w-full rounded-full border border-(--border-medium) bg-white px-4 text-sm text-(--text-primary) outline-none transition placeholder:text-(--text-muted) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)] disabled:cursor-not-allowed disabled:bg-(--bg-surface-subtle) disabled:text-(--text-secondary)";
+  "h-9 w-full rounded-full border border-(--border-medium) bg-white px-4 text-sm text-(--text-primary) outline-none transition placeholder:text-(--text-muted) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)] disabled:cursor-not-allowed disabled:bg-(--bg-surface-subtle) disabled:text-(--text-secondary)";
 
 // Footer hint colours (written out in full so Tailwind can see them)
 const HINT_TONES = {
@@ -106,7 +106,7 @@ function Field({ htmlFor, label, required = false, children }) {
       <div className="mb-1.5 flex items-center justify-between">
         <Label
           htmlFor={htmlFor}
-          className="text-sm font-semibold text-(--text-primary)"
+          className="text-[0.8rem] font-semibold text-(--text-primary)"
         >
           {label}
         </Label>
@@ -254,11 +254,12 @@ function UploadDocumentModal({
 
   return (
     <Modal
-      size="lg"
+      size="confirm"
+      spacing="compact"
       onClose={onClose}
       icon={
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-(--border-medium) bg-(--primary-light) text-(--primary)">
-          <Upload size={20} />
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-(--border-medium) bg-(--primary-light) text-(--primary)">
+          <Upload size={18} />
         </div>
       }
       title="Ingest New Enterprise Document"
@@ -312,7 +313,7 @@ function UploadDocumentModal({
       )}
     >
       {/* Byte reacts to everything below. Pokeable only while nothing is running. */}
-      <ByteMascot state={mascotState} pokeable={phase === "idle"} />
+      <ByteMascot state={mascotState} pokeable={phase === "idle"} frameClassName="h-32" imageClassName="h-20" />
 
       <form id={formId} onSubmit={handleSubmit} noValidate className="mt-5 space-y-5">
         {/* Title */}
