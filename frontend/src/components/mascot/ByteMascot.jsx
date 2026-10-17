@@ -77,6 +77,7 @@ function ByteMascot({
         <ByteParticles key={`particles-${playKey}`} type={config.particles} />
 
         {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
+          {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
         <div
           role="status"
           aria-live="polite"
@@ -84,24 +85,17 @@ function ByteMascot({
         >
           {bubbleText && (
             <p
-              key={bubbleText}
-              className="byte-bubble relative ..." // keep your existing classes and children
+              key={bubbleText} // replay the pop-in when the text changes
+              className="byte-bubble relative rounded-2xl bg-white px-3.5 py-1.5 text-sm font-medium text-(--text-primary) shadow-md"
             >
               {bubbleText}
-              {/* tail span stays here, unchanged */}
+              {/* Little tail pointing down toward Byte */}
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-1 left-4 h-2.5 w-2.5 rotate-45 bg-white"
+              />
             </p>
           )}
-          <p
-            key={bubbleText} // replay the pop-in when the text changes
-            className="byte-bubble relative rounded-2xl bg-white px-3.5 py-1.5 text-sm font-medium text-(--text-primary) shadow-md"
-          >
-            {bubbleText}
-            {/* Little tail pointing down toward Byte */}
-            <span
-              aria-hidden="true"
-              className="absolute -bottom-1 left-4 h-2.5 w-2.5 rotate-45 bg-white"
-            />
-          </p>
         </div>
       </div>
     </div>
