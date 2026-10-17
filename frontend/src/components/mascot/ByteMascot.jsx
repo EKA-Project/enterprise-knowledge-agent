@@ -51,22 +51,30 @@ function ByteMascot({
 
   return (
     <div
-      className={`relative flex h-36 items-center justify-center rounded-2xl border transition-colors duration-300 ${TONES[config.tone]}`}
+      className={`flex items-center justify-center ${
+        framed
+          ? `h-36 rounded-2xl border transition-colors duration-300 ${TONES[config.tone]}`
+          : ""
+      }`}
     >
       <div className="relative">
         {/* The stage plays this state's motion; the img pops in.
-            key={state} remounts both, so the animation replays on every change. */}
-        <div key={state} className={`byte-stage ${config.motion}`}>
+            Changing playKey remounts both, so the animation replays. */}
+        <Stage
+          key={playKey}
+          {...stageProps}
+          className={`byte-stage ${config.motion} ${pokeable ? "cursor-pointer" : ""}`}
+        >
           <img
             src={config.image}
             alt="" // decorative: the bubble text carries the meaning
             draggable={false}
-            className="byte-swap block h-24 w-auto select-none"
+            className={`byte-swap block w-auto select-none ${imageClassName}`}
           />
-        </div>
+        </Stage>
 
         {/* Particles float around Byte (nothing for states without them) */}
-        <ByteParticles key={`particles-${state}`} type={config.particles} />
+        <ByteParticles key={`particles-${playKey}`} type={config.particles} />
 
         {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
         <div
@@ -74,6 +82,15 @@ function ByteMascot({
           aria-live="polite"
           className="absolute bottom-[65%] left-[55%] w-max max-w-[15rem]"
         >
+          {bubbleText && (
+            <p
+              key={bubbleText}
+              className="byte-bubble relative ..." // keep your existing classes and children
+            >
+              {bubbleText}
+              {/* tail span stays here, unchanged */}
+            </p>
+          )}
           <p
             key={bubbleText} // replay the pop-in when the text changes
             className="byte-bubble relative rounded-2xl bg-white px-3.5 py-1.5 text-sm font-medium text-(--text-primary) shadow-md"
