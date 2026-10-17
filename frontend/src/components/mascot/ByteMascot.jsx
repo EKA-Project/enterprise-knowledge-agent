@@ -168,10 +168,20 @@ function ByteMascot({
           type="button"
           onClick={toggleSound}
           aria-label={soundOn ? "Mute mascot sounds" : "Unmute mascot sounds"}
+          aria-pressed={!soundOn}
           title={soundOn ? "Mute mascot sounds" : "Unmute mascot sounds"}
-          className="absolute right-2 bottom-2 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-(--border-subtle) bg-white/80 text-(--text-secondary) transition-colors hover:bg-white hover:text-(--primary)"
+          className={`absolute top-2.5 right-2.5 z-10 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-white/70 shadow-sm backdrop-blur-sm transition-all duration-150 hover:scale-105 hover:bg-white active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) ${
+            soundOn ? "text-(--primary)" : "text-(--text-muted)"
+          }`}
         >
-          {soundOn ? <Volume2 size={13} /> : <VolumeX size={13} />}
+          {/* key remounts the icon on every toggle, which replays the small pop-in */}
+          <span key={soundOn ? "on" : "off"} className="byte-swap flex">
+            {soundOn ? (
+              <Volume2 size={14} strokeWidth={2} />
+            ) : (
+              <VolumeX size={14} strokeWidth={2} />
+            )}
+          </span>
         </button>
       )}
     </div>
