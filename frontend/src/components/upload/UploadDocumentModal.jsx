@@ -41,7 +41,7 @@ const FILE_ERROR_MASCOT = {
   size: "tooLarge",
   empty: "emptyFile",
 };
-const [rejectCount, setRejectCount] = useState(0); // lets Byte react to every rejection
+
 // "Q4_cloud_plan.pdf" -> "Q4 cloud plan" (used to pre-fill the title)
 function titleFromFilename(name) {
   return name
@@ -154,6 +154,7 @@ function UploadDocumentModal({
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState(null); // { code, message } | null
   const [isDragging, setIsDragging] = useState(false);
+   const [rejectCount, setRejectCount] = useState(0); // lets Byte react to every rejection
 
   const pipeline = useUploadPipeline(onSubmit);
   const { phase } = pipeline;
