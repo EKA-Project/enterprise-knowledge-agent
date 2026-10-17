@@ -29,6 +29,9 @@ const SETS = {
     { dx: -20, dy: -62, delay: 0.3 },
     { dx: 22, dy: -64, delay: 0.22 },
   ],
+
+  // Negative delays start each star partway around its circle, so they're evenly spaced
+  stars: [{ delay: 0 }, { delay: -0.4 }, { delay: -0.8 }],
 };
 
 // type: "drool" | "crumbs" | "bits" | "sparkles" | null
