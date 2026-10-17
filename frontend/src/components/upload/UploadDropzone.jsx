@@ -192,16 +192,16 @@ function UploadDropzone({
           type="button"
           onClick={openPicker}
           disabled={locked}
-          className={`flex h-40 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 px-4 text-center transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) disabled:cursor-not-allowed ${zoneStyle}`}
+          className={`flex h-32 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 px-4 text-center transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) disabled:cursor-not-allowed ${zoneStyle}`}
         >
           <Upload
-            size={34}
+            size={28}
             strokeWidth={1.75}
             className={`text-(--primary) transition-transform duration-200 ${
               isDragging ? "-translate-y-1 scale-110" : ""
             }`}
           />
-          <span className="font-serif text-base font-bold text-(--text-primary)">
+          <span className="font-serif text-sm font-bold text-(--text-primary)">
             {isDragging ? "Drop to attach" : "Drop file here or click to browse"}
           </span>
           <span className="text-xs text-(--text-muted)">

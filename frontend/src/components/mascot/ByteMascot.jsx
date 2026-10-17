@@ -20,6 +20,7 @@ function ByteMascot({
   framed = true, // true: tinted banner box (upload modal); false: just Byte
   pokeable = false, // true: tapping Byte makes it angry, repeated taps make it dizzy
   imageClassName = "h-24", // size of Byte, e.g. "h-16" for a small one
+  frameClassName = "h-36", // height of the tinted banner (only when framed)
 }) {
   const { override, pokeId, poke } = usePokeReaction(pokeable);
 
@@ -53,7 +54,7 @@ function ByteMascot({
     <div
       className={`flex items-center justify-center ${
         framed
-          ? `h-36 rounded-2xl border transition-colors duration-300 ${TONES[config.tone]}`
+          ? `${frameClassName} rounded-2xl border transition-colors duration-300 ${TONES[config.tone]}`
           : ""
       }`}
     >
@@ -77,7 +78,7 @@ function ByteMascot({
         <ByteParticles key={`particles-${playKey}`} type={config.particles} />
 
         {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
-          {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
+        {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
         <div
           role="status"
           aria-live="polite"
