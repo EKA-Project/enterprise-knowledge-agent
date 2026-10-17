@@ -26,6 +26,7 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-hungry",
     particles: "drool",
+    sound: "hungry",
   },
   dragging: {
     image: drop,
@@ -33,6 +34,7 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-eager",
     particles: null,
+    sound: "drop",
   },
   ready: {
     image: happy,
@@ -40,6 +42,7 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-happy",
     particles: null,
+    sound: "eating",
   },
 
   // ---- File rejected ----
@@ -49,6 +52,7 @@ export const MASCOT_STATES = {
     tone: "error",
     motion: "byte-m-confused",
     particles: null,
+    sound: "sad",
   },
   tooLarge: {
     image: dizzy,
@@ -56,6 +60,7 @@ export const MASCOT_STATES = {
     tone: "error",
     motion: "byte-m-confused",
     particles: null,
+    sound: "sad",
   },
   emptyFile: {
     image: hungry,
@@ -63,6 +68,7 @@ export const MASCOT_STATES = {
     tone: "error",
     motion: "byte-m-confused",
     particles: null,
+    sound: "sad",
   },
 
   // ---- The 3 upload stages ----
@@ -72,6 +78,8 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-eating",
     particles: "crumbs",
+    sound: "eating",
+    soundEvery: 450,
   },
   chunking: {
     image: digesting,
@@ -79,6 +87,7 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-digesting",
     particles: "bits",
+    sound: "digesting",
   },
   embedding: {
     image: thinking,
@@ -86,6 +95,8 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-thinking",
     particles: "bits",
+    sound: "searching",
+    soundEvery: 900,
   },
 
   // ---- Finished ----
@@ -96,6 +107,8 @@ export const MASCOT_STATES = {
     motion: "byte-m-victory",
     particles: "confetti",
     shadow: true,
+    sound: "uploaded",
+    soundDelay: 250,
   },
   failed: {
     image: angry,
@@ -103,6 +116,7 @@ export const MASCOT_STATES = {
     tone: "error",
     motion: "byte-m-shake",
     particles: null,
+    sound: "sad",
   },
 
   // ---- Generic states (any page: Ask EKA, empty states, the poke reaction) ----
@@ -120,6 +134,7 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-angry",
     particles: "steam",
+    sound: "angry",
   },
   dizzy: {
     image: dizzy,
@@ -128,5 +143,6 @@ export const MASCOT_STATES = {
     tone: "neutral",
     motion: "byte-m-dizzy",
     particles: "stars",
+    sound: "dizzy",
   },
 };
