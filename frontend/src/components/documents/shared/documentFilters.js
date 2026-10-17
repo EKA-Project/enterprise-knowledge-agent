@@ -1,0 +1,31 @@
+// Filter values + the filter function for the Documents page.
+// Today it filters the in-memory list; when the API arrives, replace
+// filterDocuments() with a request that sends { search, category, format }.
+
+export const ALL_CATEGORIES = 'All Categories';
+export const ALL_FORMATS = 'All Formats';
+
+// Special "categories" that filter by a flag instead of a category name.
+export const SAVED_FILTER = 'Saved Bookmarks';
+export const PINNED_FILTER = 'Admin Pinned';
+
+export function filterDocuments(docs, { search, category, format }) {
+  const text = search.toLowerCase().trim();
+
+  return docs.filter((doc) => {
+    const matchesSearch =
+      !text ||
+      doc.title.toLowerCase().includes(text) ||
+      doc.description.toLowerCase().includes(text) ||
+      (doc.author ?? '').toLowerCase().includes(text);
+
+    let matchesCategory = true;
+    if (category === SAVED_FILTER) matchesCategory = Boolean(doc.isBookmarked);
+    else if (category === PINNED_FILTER) matchesCategory = Boolean(doc.isPinned);
+    else if (category !== ALL_CATEGORIES) matchesCategory = doc.category === category;
+
+    const matchesFormat = format === ALL_FORMATS || doc.format === format;
+
+    return matchesSearch && matchesCategory && matchesFormat;
+  });
+}

@@ -1,15 +1,24 @@
-import { Search, ChevronDown, LayoutGrid, List } from 'lucide-react';
+import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { useState } from 'react';
 import { documents, documentCategories, documentFormats } from './DocumentData';
+import {
+  ALL_CATEGORIES,
+  ALL_FORMATS,
+  SAVED_FILTER,
+  PINNED_FILTER,
+  filterDocuments,
+} from './documentFilters';
 import DocumentCard from './DocumentCard.jsx';
+
 
 function DocumentsContent({ adminMode = false }) {
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('All Categories');
-  const [format, setFormat] = useState('All Formats');
+  const [category, setCategory] = useState(ALL_CATEGORIES);
+  const [format, setFormat] = useState(ALL_FORMATS);
   const [viewMode, setViewMode] = useState('grid');
-    // Local copy of the documents, so pin / bookmark toggles show up in the UI.
+  // Local copy of the documents, so pin / bookmark toggles show up in the UI.
   const [docs, setDocs] = useState(documents);
+
 
   const handleToggleFlag = (id, flag) => {
     setDocs((current) =>
@@ -18,48 +27,53 @@ function DocumentsContent({ adminMode = false }) {
       ),
     );
   };
-  const filteredDocuments = docs.filter((document) => {
-    const searchText = search.toLowerCase().trim();
+  const filteredDocuments = filterDocuments(docs, { search, category, format });
 
-    const matchesSearch =
-      document.title.toLowerCase().includes(searchText) ||
-      document.description.toLowerCase().includes(searchText);
+  // Text shown in the "Filtered by" chip (category label, or Saved / Pinned)
+  const categoryLabel =
+    documentCategories.find((cat) => cat.value === category)?.label ?? category;
+  const isCategoryFiltered = category !== ALL_CATEGORIES;
 
-    const matchesCategory =
-      category === 'All Categories' ||
-      document.category === category;
-
-    const matchesFormat =
-      format === 'All Formats' ||
-      document.format === format;
-
-    return matchesSearch && matchesCategory && matchesFormat;
-  });
-
+  
   return (
     <>
       {/* Filter controls */}
-      <section className="mb-8 flex items-center gap-3 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-3 shadow-(--shadow-sm)">
-        <div className="flex min-w-0 flex-1 items-center gap-4 rounded-full bg-(--bg-surface-subtle) px-2.5 py-2">
+      <section className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-3 shadow-(--shadow-sm)">
+        <div className="flex w-full min-w-0 items-center gap-4 rounded-full bg-(--bg-surface-subtle) px-2.5 py-2 lg:w-auto lg:flex-1">
           <Search size={16} className="shrink-0 text-(--text-muted)" />
           <input
             type="text"
-            placeholder="Search documents..."
+            placeholder="Search by title, summary keywords, or author..."
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             className="min-w-0 flex-1 bg-transparent text-sm text-(--text-primary) outline-none placeholder:text-(--text-muted)"
           />
         </div>
 
+        {/* Active category filter chip */}
+        {isCategoryFiltered && (
+          <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) py-1.5 pl-3 pr-2 text-xs text-(--text-secondary)">
+            Filtered by: <strong className="font-semibold text-(--text-primary)">{categoryLabel}</strong>
+            <button
+              type="button"
+              aria-label="Clear category filter"
+              onClick={() => setCategory(ALL_CATEGORIES)}
+              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full text-(--text-muted) transition-colors hover:text-(--text-primary)"
+            >
+              <X size={12} />
+            </button>
+          </span>
+        )}
+
         <div className="relative shrink-0">
           <select
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
+            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
-            <option value="All Categories">
-              All Categories ({documentCategories.length})
-            </option>
+            <option value={ALL_CATEGORIES}>All Categories</option>
+            <option value={SAVED_FILTER}>⭐ Saved Bookmarks</option>
+            <option value={PINNED_FILTER}>📌 Admin Pinned</option>
 
             {documentCategories.map((cat) => (
               <option key={cat.value} value={cat.value}>
@@ -78,9 +92,9 @@ function DocumentsContent({ adminMode = false }) {
           <select
             value={format}
             onChange={(event) => setFormat(event.target.value)}
-            className="appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
+            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
-            <option value="All Formats">All Formats</option>
+            <option value={ALL_FORMATS}>All Formats</option>
 
             {documentFormats.map((fmt) => (
               <option key={fmt} value={fmt}>
@@ -95,15 +109,18 @@ function DocumentsContent({ adminMode = false }) {
           />
         </div>
 
-        <div className="flex shrink-0 items-center rounded-full border border-(--border-subtle) p-1">
+        {/* Grid / list toggle: active button is solid blue */}
+        <div className="flex shrink-0 items-center gap-1 rounded-xl border border-(--border-subtle) p-1">
           <button
             type="button"
             aria-label="Grid view"
+            aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`rounded-full p-2 ${viewMode === 'grid'
-              ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-              : 'text-(--text-muted)'
-              }`}
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${
+              viewMode === 'grid'
+                ? 'bg-(--primary) text-(--primary-contrast)'
+                : 'text-(--text-muted) hover:text-(--text-primary)'
+            }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -111,11 +128,13 @@ function DocumentsContent({ adminMode = false }) {
           <button
             type="button"
             aria-label="List view"
+            aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`rounded-full p-2 ${viewMode === 'list'
-              ? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-              : 'text-(--text-muted)'
-              }`}
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${
+              viewMode === 'list'
+                ? 'bg-(--primary) text-(--primary-contrast)'
+                : 'text-(--text-muted) hover:text-(--text-primary)'
+            }`}
           >
             <List size={15} />
           </button>
@@ -123,7 +142,7 @@ function DocumentsContent({ adminMode = false }) {
       </section>
 
       {viewMode === 'grid' && (
-        <section className="grid grid-cols-3 gap-5">
+        <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredDocuments.map((document) => (
             <DocumentCard
               key={document.id}
@@ -137,7 +156,7 @@ function DocumentsContent({ adminMode = false }) {
 
       {viewMode === 'list' && (
         <section className="overflow-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)">
-          {/* List view */}
+          {/* List view (restyled in a later step) */}
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left">
               <thead>
