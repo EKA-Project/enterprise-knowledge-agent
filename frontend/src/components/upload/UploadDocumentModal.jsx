@@ -41,7 +41,7 @@ const FILE_ERROR_MASCOT = {
   size: "tooLarge",
   empty: "emptyFile",
 };
-
+const [rejectCount, setRejectCount] = useState(0); // lets Byte react to every rejection
 // "Q4_cloud_plan.pdf" -> "Q4 cloud plan" (used to pre-fill the title)
 function titleFromFilename(name) {
   return name
@@ -111,7 +111,10 @@ function Field({ htmlFor, label, required = false, children }) {
           {label}
         </Label>
         {required && (
-          <span aria-hidden="true" className="text-sm font-bold text-(--status-danger)">
+          <span
+            aria-hidden="true"
+            className="text-sm font-bold text-(--status-danger)"
+          >
             *
           </span>
         )}
@@ -213,7 +216,10 @@ function UploadDocumentModal({
   };
 
   // A rejected file never replaces a good one: we only remember the error
-  const handleReject = (rejection) => setFileError(rejection);
+  const handleReject = (rejection) => {
+    setFileError(rejection);
+    setRejectCount((count) => count + 1);
+  };
 
   const handleRemove = () => {
     setFile(null);
@@ -230,11 +236,19 @@ function UploadDocumentModal({
   /* ---------- Footer pieces ---------- */
   let hint;
   if (phase === "uploading") {
-    hint = { icon: SpinnerIcon, tone: "muted", text: "Ingesting… keep this window open" };
+    hint = {
+      icon: SpinnerIcon,
+      tone: "muted",
+      text: "Ingesting… keep this window open",
+    };
   } else if (phase === "success") {
     hint = { icon: Check, tone: "success", text: "Ingested! Closing…" };
   } else if (phase === "error") {
-    hint = { icon: AlertCircle, tone: "danger", text: "Ingestion failed. You can try again." };
+    hint = {
+      icon: AlertCircle,
+      tone: "danger",
+      text: "Ingestion failed. You can try again.",
+    };
   } else if (missing) {
     hint = { icon: Info, tone: "muted", text: missing };
   } else {
@@ -289,7 +303,12 @@ function UploadDocumentModal({
               </>
             ) : (
               <>
-                <Button variant="soft" size="md" onClick={close} disabled={busy}>
+                <Button
+                  variant="soft"
+                  size="md"
+                  onClick={close}
+                  disabled={busy}
+                >
                   Cancel
                 </Button>
                 {/* type="submit" + form=... submits the form even though the
@@ -313,9 +332,20 @@ function UploadDocumentModal({
       )}
     >
       {/* Byte reacts to everything below. Pokeable only while nothing is running. */}
-      <ByteMascot state={mascotState} pokeable={phase === "idle"} frameClassName="h-32" imageClassName="h-20" />
+      <ByteMascot
+        state={mascotState}
+        pokeable={phase === "idle"}
+        frameClassName="h-32"
+        imageClassName="h-20"
+        replayKey={rejectCount}
+      />
 
-      <form id={formId} onSubmit={handleSubmit} noValidate className="mt-5 space-y-5">
+      <form
+        id={formId}
+        onSubmit={handleSubmit}
+        noValidate
+        className="mt-5 space-y-5"
+      >
         {/* Title */}
         <Field htmlFor={titleId} label="Document Title" required>
           <input
@@ -336,7 +366,11 @@ function UploadDocumentModal({
         </Field>
 
         {/* Scope */}
-        <Field htmlFor={scopeId} label="Category / Department Scope" required={!lockedDepartment}>
+        <Field
+          htmlFor={scopeId}
+          label="Category / Department Scope"
+          required={!lockedDepartment}
+        >
           <div className="relative">
             <select
               id={scopeId}
