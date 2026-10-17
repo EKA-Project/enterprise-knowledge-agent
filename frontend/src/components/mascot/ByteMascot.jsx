@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { MASCOT_STATES } from "./uploadMascotStates.js";
+import { MASCOT_STATES } from "./byteStates.js";
+import usePokeReaction from "./usePokeReaction.js";
 import ByteParticles from "./ByteParticles.jsx";
 // Banner background + border for each tone.
 // (Full class names are written out so Tailwind can detect them.)
@@ -13,10 +14,32 @@ const TONES = {
  * state?: a key of MASCOT_STATES (default "empty")
  * message?: string, overrides the bubble text (e.g. a specific error)
  */
-function ByteMascot({ state = "empty", message }) {
+function ByteMascot({
+  state = "empty",
+  message,
+  framed = true, // true: tinted banner box (upload modal); false: just Byte
+  pokeable = false, // true: tapping Byte makes it angry, repeated taps make it dizzy
+  imageClassName = "h-24", // size of Byte, e.g. "h-16" for a small one
+}) {
+  const { override, pokeId, poke } = usePokeReaction(pokeable);
+
+  // A poke reaction temporarily replaces the state the page asked for
+  const reacting = pokeable ? override : null;
+  const activeState = reacting ?? state;
+
   // Unknown state? Fall back to "empty" instead of crashing
-  const config = MASCOT_STATES[state] ?? MASCOT_STATES.empty;
-  const bubbleText = message ?? config.bubble;
+  const config = MASCOT_STATES[activeState] ?? MASCOT_STATES.empty;
+
+  // During a reaction use its own bubble, not the page's custom message
+  const bubbleText = reacting ? config.bubble : (message ?? config.bubble);
+
+  // Pokeable: Byte is a real <button> (keyboard and screen-reader friendly)
+  const Stage = pokeable ? "button" : "div";
+  const stageProps = pokeable
+    ? { type: "button", onClick: poke, "aria-label": "Poke Byte" }
+    : {};
+  // Changing this key remounts the stage and replays the animation, even on repeat taps
+  const playKey = `${activeState}-${pokeId}`;
 
   // Preload every image once, so changing state never shows a blank flash
   useEffect(() => {

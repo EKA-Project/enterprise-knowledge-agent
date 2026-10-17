@@ -410,7 +410,31 @@
   animation: byte-sparkle 1s ease-out forwards;
   animation-delay: var(--delay);
 }
+/* Idle (generic pages): just a gentle float */
+.byte-m-idle { animation: byte-bob 3s ease-in-out infinite; }
 
+/* Dizzy: wobbling side to side */
+@keyframes byte-dizzy {
+  0%, 100% { transform: rotate(-10deg) translateX(-3px); }
+  50% { transform: rotate(10deg) translateX(3px); }
+}
+.byte-m-dizzy { animation: byte-dizzy 0.6s ease-in-out infinite; }
+
+/* Dizzy: three stars circling above Byte's head */
+@keyframes byte-star {
+  0% { opacity: 1; transform: translate(-22px, 0) scale(0.9); }
+  25% { opacity: 1; transform: translate(0, 6px) scale(1.1); }   /* in front */
+  50% { opacity: 1; transform: translate(22px, 0) scale(0.9); }
+  75% { opacity: 0.5; transform: translate(0, -6px) scale(0.7); } /* behind */
+  100% { opacity: 1; transform: translate(-22px, 0) scale(0.9); }
+}
+.byte-p-star {
+  left: 50%; top: 2%; width: 9px; height: 9px; margin-left: -4px;
+  background: #facc15;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  animation: byte-star 1.2s linear infinite;
+  animation-delay: var(--delay);
+}
 /* ---------- Reduced motion: everything stands still ---------- */
 @media (prefers-reduced-motion: reduce) {
   .byte-stage, .byte-swap, .byte-bubble { animation: none; }
