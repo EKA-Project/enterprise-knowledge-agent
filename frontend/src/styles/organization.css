@@ -20,3 +20,13 @@
   .organization-page .org-fade,
   .organization-page .anl-toast { animation: none; }
 }
+/* Organization > User Directory: hide only its table scrollbar */
+.organization-page .org-user-directory__scroll-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.organization-page
+  .org-user-directory__scroll-container::-webkit-scrollbar {
+  display: none;
+}

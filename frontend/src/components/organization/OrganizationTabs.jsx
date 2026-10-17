@@ -24,7 +24,7 @@ export default function OrganizationTabs({ value, onChange }) {
     : "text-(--text-muted) hover:bg-(--bg-surface) hover:text-(--primary)"
 }`}
         >
-          <Icon size={13} aria-hidden="true" /> {label}
+          <Icon size={12} aria-hidden="true" /> {label}
         </button>
       ))}
     </div>
