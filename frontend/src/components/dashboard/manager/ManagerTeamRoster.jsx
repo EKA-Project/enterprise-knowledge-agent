@@ -4,6 +4,7 @@ import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
 import { AddMemberButton } from "../../common/ActionButtons";
 import UserViewModal from "../../common/UserViewModal";
+import InviteMemberModal from "../../common/InviteMemberModal";
 import RemoveMemberModal from "../../common/RemoveMemberModal";
 
 const DEFAULT_PAGE_SIZE = 5;
@@ -12,11 +13,12 @@ function ManagerTeamRoster({
   teamMembers,
   currentUserId,
   department,
-  onAddMember = () => console.log("add member"),
+  onInviteMember = (invite) => console.log("invite member:", invite),
 }) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [memberToRemove, setMemberToRemove] = useState(null);
   const [openMenu, setOpenMenu] = useState(null); // { row, top, right }
 
@@ -156,7 +158,7 @@ function ManagerTeamRoster({
         icon={<span aria-hidden="true">👥</span>}
         title={`${department.name} Team Roster (${teamMembers.length})`}
         subtitle="Department personnel and query activity."
-        actions={<AddMemberButton onClick={onAddMember} />}
+        actions={<AddMemberButton onClick={() => setIsInviteOpen(true)} />}
         page={page}
         pageSize={pageSize}
         total={teamMembers.length}
@@ -209,6 +211,14 @@ function ManagerTeamRoster({
             </button>
           </div>
         </>
+      )}
+
+      {isInviteOpen && (
+        <InviteMemberModal
+          department={department.name}
+          onClose={() => setIsInviteOpen(false)}
+          onInvite={onInviteMember}
+        />
       )}
 
       {selectedMember && (
