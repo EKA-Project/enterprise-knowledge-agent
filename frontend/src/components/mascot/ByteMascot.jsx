@@ -85,9 +85,17 @@ function ByteMascot({
           : ""
       }`}
     >
-      <div className="relative">
+      <div className="relative isolate">
         {/* The stage plays this state's motion; the img pops in.
             Changing playKey remounts both, so the animation replays. */}
+        {/* Ground shadow (success only): shrinks while Byte is in the air */}
+        {config.shadow && (
+          <span
+            key={`shadow-${playKey}`}
+            className="byte-shadow"
+            aria-hidden="true"
+          />
+        )}
         {/* Wrapper used only for the tap "boop" squish (see the effect above) */}
         <div ref={boopRef} className="origin-[50%_90%]">
           <Stage

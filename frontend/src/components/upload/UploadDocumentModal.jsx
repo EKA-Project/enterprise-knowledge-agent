@@ -22,7 +22,7 @@ import useUploadPipeline from "./useUploadPipeline.js";
    ========================================================================== */
 
 const TITLE_MAX = 120;
-const CLOSE_DELAY_MS = 1800; // how long the success state shows before closing
+const CLOSE_DELAY_MS = 2600; // how long the success state shows before closing
 
 // One look shared by the title input and the select (matches the target pill)
 const CONTROL =

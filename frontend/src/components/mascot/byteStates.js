@@ -94,7 +94,8 @@ export const MASCOT_STATES = {
     bubble: "Ingested! Ask me anything",
     tone: "success",
     motion: "byte-m-victory",
-    particles: "sparkles",
+    particles: "confetti",
+    shadow: true,
   },
   failed: {
     image: angry,
@@ -117,8 +118,8 @@ export const MASCOT_STATES = {
     bubble: "Okay, that's enough!",
     bubbleMs: 1600,
     tone: "neutral",
-    motion: "byte-m-shake",
-    particles: null,
+    motion: "byte-m-angry",
+    particles: "steam",
   },
   dizzy: {
     image: dizzy,
