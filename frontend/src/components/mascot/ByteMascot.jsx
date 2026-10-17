@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MASCOT_STATES } from "./byteStates.js";
 import usePokeReaction from "./usePokeReaction.js";
 import ByteParticles from "./ByteParticles.jsx";
+import "../../styles/mascot.css";
 // Banner background + border for each tone.
 // (Full class names are written out so Tailwind can detect them.)
 const TONES = {
@@ -42,6 +43,16 @@ function ByteMascot({
   // Changing this key remounts the stage and replays the animation, even on repeat taps
   const playKey = `${activeState}-${pokeId}`;
 
+  // Reaction bubbles (states with bubbleMs) fade out so the full animation stays visible.
+  // We remember WHICH playKey was hidden, so a new state or a new tap shows its bubble again.
+  const [hiddenKey, setHiddenKey] = useState(null);
+  useEffect(() => {
+    if (!config.bubbleMs) return;
+    const id = setTimeout(() => setHiddenKey(playKey), config.bubbleMs);
+    return () => clearTimeout(id);
+  }, [playKey, config.bubbleMs]);
+  const bubbleHidden = hiddenKey === playKey;
+
   // Preload every image once, so changing state never shows a blank flash
   useEffect(() => {
     Object.values(MASCOT_STATES).forEach(({ image }) => {
@@ -77,23 +88,26 @@ function ByteMascot({
         {/* Particles float around Byte (nothing for states without them) */}
         <ByteParticles key={`particles-${playKey}`} type={config.particles} />
 
-        {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
-        {/* Speech bubble. role="status" makes screen readers read changes aloud. */}
-        <div
-          role="status"
-          aria-live="polite"
-          className="absolute bottom-[65%] left-[55%] w-max max-w-[15rem]"
-        >
+        {/* Speech bubble: sits up and to the right of Byte's head (see .byte-bubble-anchor
+            in variables.css). role="status" makes screen readers read changes aloud. */}
+        <div role="status" aria-live="polite" className="byte-bubble-anchor">
           {bubbleText && (
             <p
               key={bubbleText} // replay the pop-in when the text changes
-              className="byte-bubble relative rounded-2xl bg-white px-3.5 py-1.5 text-sm font-medium text-(--text-primary) shadow-md"
+              aria-hidden={bubbleHidden}
+              className={`byte-bubble relative rounded-xl bg-white px-2.5 py-1 text-xs leading-snug font-medium text-(--text-primary) shadow-md ${
+                bubbleHidden ? "byte-bubble-hidden" : ""
+              }`}
             >
               {bubbleText}
-              {/* Little tail pointing down toward Byte */}
+              {/* Small tail and a trail dot, both pointing back toward Byte's head */}
               <span
                 aria-hidden="true"
-                className="absolute -bottom-1 left-4 h-2.5 w-2.5 rotate-45 bg-white"
+                className="absolute -bottom-[3px] left-2.5 h-2 w-2 rotate-45 bg-white"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-2.5 -left-1.5 h-1.5 w-1.5 rounded-full bg-white shadow-sm"
               />
             </p>
           )}
