@@ -7,6 +7,7 @@ const sizes = {
   md: "max-w-lg", // 512px
   lg: "max-w-2xl", // 672px
   xl: "max-w-4xl", // 896px
+  confirm: "max-w-[530px]",
 };
 
 // Spacing and text sizes for the two densities
@@ -19,6 +20,15 @@ const density = {
     closeIcon: 18,
     body: "px-6 py-5",
     footer: "px-6 py-4",
+  },
+  roomy: {
+    header: "items-start! gap-[15.2px] px-[25.6px] pt-[18px] pb-[13px]",
+    title: "text-xl leading-[1.2]",
+    subtitle: "mt-1 text-[0.8rem] leading-[1.35]",
+    close: "h-[34px] w-[34px]",
+    closeIcon: 15,
+    body: "px-[25.6px] py-[16px]",
+    footer: "px-[22.4px] py-[9px]",
   },
   compact: {
     header: "gap-3 px-5 py-3.5",
@@ -39,6 +49,7 @@ const density = {
  * onClose: () => void
  * size?: "sm" | "md" | "lg" | "xl" (default "md")
  * compact?: boolean (smaller header, padding and text; default false)
+ * headerClassName?: string (header background classes; default "bg-(--bg-surface)")
  * children: node (the body; this is the only part that scrolls)
  * footer?: node | (close) => node (omit it and no footer band is drawn;
  *   use the function form so a Cancel/Close button gets the exit animation)
@@ -53,13 +64,15 @@ function Modal({
   onClose,
   size = "md",
   compact = false,
+  spacing, // "regular" | "compact" | "roomy" (overrides compact)
+  headerClassName = "bg-(--bg-surface)",
   children,
   footer,
   closeOnClickOutside = true,
   closeOnEsc = true,
 }) {
   const titleId = useId();
-  const d = compact ? density.compact : density.regular;
+  const d = density[spacing ?? (compact ? "compact" : "regular")];
 
   return (
     <ModalOverlay
@@ -76,7 +89,7 @@ function Modal({
         >
           {/* Header: fixed */}
           <div
-            className={`flex shrink-0 items-center border-b border-(--border-subtle) bg-(--bg-surface) ${d.header}`}
+            className={`flex shrink-0 items-center border-b border-(--border-subtle) ${headerClassName} ${d.header}`}
           >
             {icon && <div className="shrink-0">{icon}</div>}
 
@@ -114,7 +127,9 @@ function Modal({
           </div>
 
           {/* Body: the only part that scrolls */}
-          <div className={`modal-scroll min-h-0 flex-1 overflow-y-auto ${d.body}`}>
+          <div
+            className={`modal-scroll min-h-0 flex-1 overflow-y-auto ${d.body}`}
+          >
             {children}
           </div>
 
