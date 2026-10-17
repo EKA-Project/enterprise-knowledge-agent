@@ -15,23 +15,26 @@ import thinking from "../../assets/mascot/byte/thinking.png";
 import uploaded from "../../assets/mascot/byte/uploaded.png";
 import angry from "../../assets/mascot/byte/angry.png";
 
+// Each state now also says:
+//   motion:    which body animation to play (a .byte-m-* class in variables.css)
+//   particles: which particle effect floats around Byte (or null for none)
 export const MASCOT_STATES = {
   // ---- Choosing a file ----
-  empty: { image: hungry, bubble: "Feed me a document", tone: "neutral" },
-  dragging: { image: drop, bubble: "Drop it here!", tone: "neutral" },
-  ready: { image: happy, bubble: "That looks tasty", tone: "neutral" },
+  empty: { image: hungry, bubble: "Feed me a document", tone: "neutral", motion: "byte-m-hungry", particles: "drool" },
+  dragging: { image: drop, bubble: "Drop it here!", tone: "neutral", motion: "byte-m-eager", particles: null },
+  ready: { image: happy, bubble: "That looks tasty", tone: "neutral", motion: "byte-m-happy", particles: null },
 
-  // ---- File rejected (these match the codes from validateFile) ----
-  invalidType: { image: sad, bubble: "I can't digest that file type", tone: "error" },
-  tooLarge: { image: dizzy, bubble: "Too big for me to swallow", tone: "error" },
-  emptyFile: { image: hungry, bubble: "That file is empty", tone: "error" },
+  // ---- File rejected ----
+  invalidType: { image: sad, bubble: "I can't digest that file type", tone: "error", motion: "byte-m-confused", particles: null },
+  tooLarge: { image: dizzy, bubble: "Too big for me to swallow", tone: "error", motion: "byte-m-confused", particles: null },
+  emptyFile: { image: hungry, bubble: "That file is empty", tone: "error", motion: "byte-m-confused", particles: null },
 
   // ---- The 3 upload stages ----
-  sending: { image: eating, bubble: "Nom nom… uploading", tone: "neutral" },
-  chunking: { image: digesting, bubble: "Breaking it into chunks…", tone: "neutral" },
-  embedding: { image: thinking, bubble: "Building vector embeddings…", tone: "neutral" },
+  sending: { image: eating, bubble: "Nom nom… uploading", tone: "neutral", motion: "byte-m-eating", particles: "crumbs" },
+  chunking: { image: digesting, bubble: "Breaking it into chunks…", tone: "neutral", motion: "byte-m-digesting", particles: "bits" },
+  embedding: { image: thinking, bubble: "Building vector embeddings…", tone: "neutral", motion: "byte-m-thinking", particles: "bits" },
 
   // ---- Finished ----
-  success: { image: uploaded, bubble: "Ingested! Ask me anything", tone: "success" },
-  failed: { image: angry, bubble: "Something went wrong", tone: "error" },
+  success: { image: uploaded, bubble: "Ingested! Ask me anything", tone: "success", motion: "byte-m-victory", particles: "sparkles" },
+  failed: { image: angry, bubble: "Something went wrong", tone: "error", motion: "byte-m-shake", particles: null },
 };
