@@ -114,7 +114,7 @@ export const MASCOT_STATES = {
   },
   poked: {
     image: angry,
-    bubble: "Hey! Don't poke me!",
+    bubble: "Okay, that's enough!",
     bubbleMs: 1600,
     tone: "neutral",
     motion: "byte-m-shake",
@@ -122,7 +122,7 @@ export const MASCOT_STATES = {
   },
   dizzy: {
     image: dizzy,
-    bubble: "Okay okay… I'm dizzy…",
+    bubble: "Too… many… taps…",
     bubbleMs: 1600,
     tone: "neutral",
     motion: "byte-m-dizzy",

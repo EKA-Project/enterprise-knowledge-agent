@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MASCOT_STATES } from "./byteStates.js";
 import usePokeReaction from "./usePokeReaction.js";
 import ByteParticles from "./ByteParticles.jsx";
@@ -23,7 +23,7 @@ function ByteMascot({
   imageClassName = "h-24", // size of Byte, e.g. "h-16" for a small one
   frameClassName = "h-36", // height of the tinted banner (only when framed)
 }) {
-  const { override, pokeId, poke } = usePokeReaction(pokeable);
+  const { override, pokeId, boopId, poke } = usePokeReaction(pokeable);
 
   // A poke reaction temporarily replaces the state the page asked for
   const reacting = pokeable ? override : null;
@@ -53,6 +53,22 @@ function ByteMascot({
   }, [playKey, config.bubbleMs]);
   const bubbleHidden = hiddenKey === playKey;
 
+  // Tiny squish on taps that don't (yet) cause a reaction.
+  // It animates a wrapper, so it never restarts Byte's own motion.
+  const boopRef = useRef(null);
+  useEffect(() => {
+    if (!boopId) return; // 0 = no tap yet
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    boopRef.current?.animate(
+      [
+        { transform: "scale(1, 1)" },
+        { transform: "scale(1.12, 0.88)", offset: 0.35 },
+        { transform: "scale(0.96, 1.05)", offset: 0.7 },
+        { transform: "scale(1, 1)" },
+      ],
+      { duration: 320, easing: "ease-out" },
+    );
+  }, [boopId]);
   // Preload every image once, so changing state never shows a blank flash
   useEffect(() => {
     Object.values(MASCOT_STATES).forEach(({ image }) => {
@@ -72,18 +88,21 @@ function ByteMascot({
       <div className="relative">
         {/* The stage plays this state's motion; the img pops in.
             Changing playKey remounts both, so the animation replays. */}
-        <Stage
-          key={playKey}
-          {...stageProps}
-          className={`byte-stage ${config.motion} ${pokeable ? "cursor-pointer" : ""}`}
-        >
-          <img
-            src={config.image}
-            alt="" // decorative: the bubble text carries the meaning
-            draggable={false}
-            className={`byte-swap block w-auto select-none ${imageClassName}`}
-          />
-        </Stage>
+        {/* Wrapper used only for the tap "boop" squish (see the effect above) */}
+        <div ref={boopRef} className="origin-[50%_90%]">
+          <Stage
+            key={playKey}
+            {...stageProps}
+            className={`byte-stage block ${config.motion} ${pokeable ? "cursor-pointer" : ""}`}
+          >
+            <img
+              src={config.image}
+              alt="" // decorative: the bubble text carries the meaning
+              draggable={false}
+              className={`byte-swap block w-auto select-none ${imageClassName}`}
+            />
+          </Stage>
+        </div>
 
         {/* Particles float around Byte (nothing for states without them) */}
         <ByteParticles key={`particles-${playKey}`} type={config.particles} />
