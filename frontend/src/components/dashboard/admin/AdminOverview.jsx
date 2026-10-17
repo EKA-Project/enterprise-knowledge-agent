@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-
 import PageHero from "../../common/PageHero.jsx";
 
 import MetricCard from "../shared/MetricCard.jsx";
@@ -29,7 +28,7 @@ function AdminOverview() {
       {/* ─────────────────────────────────────────
           Hero section
       ───────────────────────────────────────── */}
-
+      <ByteMascotPreview />
       <PageHero
         eyebrow={hero.eyebrow}
         title={hero.title}

@@ -245,3 +245,28 @@
     scrollbar-color: var(--border-subtle) transparent;
   }
 }
+
+/* ---------- Byte mascot ---------- */
+@keyframes byte-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes byte-swap {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bubble-pop {
+  from { opacity: 0; transform: translateY(6px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+.byte-float { animation: byte-float 3s ease-in-out infinite; } /* gentle idle bob */
+.byte-swap { animation: byte-swap 220ms cubic-bezier(0.16, 1, 0.3, 1); } /* new image pops in */
+.byte-bubble {
+  animation: bubble-pop 220ms cubic-bezier(0.16, 1, 0.3, 1); /* bubble pops in */
+  transform-origin: bottom left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .byte-float, .byte-swap, .byte-bubble { animation: none; }
+}
