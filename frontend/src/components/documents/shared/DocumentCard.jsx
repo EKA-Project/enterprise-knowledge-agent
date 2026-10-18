@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Pin, Bookmark, MoreHorizontal } from 'lucide-react';
 import '../../../styles/Document.css';
 
 // File-type tile colours (keyed by document.format). Unknown formats fall back to neutral.
-const formatStyles = {
+// Exported so the list view and the summary page use the same colours.
+export const formatStyles = {
   PDF: 'bg-(--status-danger-bg) text-(--status-danger)',
   DOCX: 'bg-sky-100 text-sky-700',
   MD: 'bg-indigo-100 text-indigo-700',
@@ -14,7 +14,7 @@ const formatStyles = {
 };
 
 // Status pill text + colours (keyed by document.status).
-const statusMeta = {
+export const statusMeta = {
   Indexed: {
     label: '✓ Indexed & Ready',
     style: 'border border-(--status-verified-border) bg-(--status-verified-bg) text-(--status-success)',
@@ -45,20 +45,20 @@ function Tooltip({ children }) {
 const iconButton =
   'rounded-md p-1 transition-colors text-(--text-muted) hover:text-(--text-primary)';
 
-function DocumentCard({ document, adminMode = false, onToggleFlag }) {
-  const navigate = useNavigate();
-
+function DocumentCard({ document, adminMode = false, onToggleFlag, onOpen }) {
   // "Pinned" / "Saved" tags appear when the user toggles a flag on this card
   // (not for documents that were already pinned / saved when the page loaded).
   const [showPinnedTag, setShowPinnedTag] = useState(false);
   const [showSavedTag, setShowSavedTag] = useState(false);
 
-  const handlePin = () => {
+  const handlePin = (e) => {
+    e.stopPropagation(); // don't open the summary when pinning
     setShowPinnedTag(!document.isPinned);
     onToggleFlag(document.id, 'isPinned');
   };
 
-  const handleSave = () => {
+  const handleSave = (e) => {
+    e.stopPropagation();
     setShowSavedTag(!document.isBookmarked);
     onToggleFlag(document.id, 'isBookmarked');
   };
@@ -72,7 +72,13 @@ function DocumentCard({ document, adminMode = false, onToggleFlag }) {
     formatStyles[document.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)';
 
   return (
-    <article className="flex flex-col rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-colors hover:border-(--accent-highlight)">
+    <article
+      role="link"
+      tabIndex={0}
+      onClick={() => onOpen?.(document)}
+      onKeyDown={(e) => e.key === 'Enter' && onOpen?.(document)}
+      className="flex cursor-pointer flex-col rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-all hover:border-(--accent-highlight) hover:shadow-(--shadow-md)"
+    >
       {/* Header: format tile on the left, tags + title in the column beside it */}
       <div className="flex items-start gap-4">
         <span
@@ -109,10 +115,11 @@ function DocumentCard({ document, adminMode = false, onToggleFlag }) {
                     aria-label={document.isPinned ? 'Unpin document' : 'Pin document'}
                     aria-pressed={Boolean(document.isPinned)}
                     onClick={handlePin}
-                    className={`cursor-pointer rounded-md p-1 transition-colors ${document.isPinned
+                    className={`cursor-pointer rounded-md p-1 transition-colors ${
+                      document.isPinned
                         ? 'text-(--primary)'
                         : 'text-(--text-muted) hover:text-(--text-primary)'
-                      }`}
+                    }`}
                   >
                     <Pin size={14} className={document.isPinned ? 'fill-current' : ''} />
                   </button>
@@ -132,18 +139,20 @@ function DocumentCard({ document, adminMode = false, onToggleFlag }) {
                 aria-label={document.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
                 aria-pressed={Boolean(document.isBookmarked)}
                 onClick={handleSave}
-                className={`cursor-pointer rounded-md p-1 transition-colors ${document.isBookmarked
+                className={`cursor-pointer rounded-md p-1 transition-colors ${
+                  document.isBookmarked
                     ? 'text-amber-500'
                     : 'text-(--text-muted) hover:text-(--text-primary)'
-                  }`}
+                }`}
               >
                 <Bookmark size={14} className={document.isBookmarked ? 'fill-current' : ''} />
               </button>
 
-              {/* Static for now — the actions menu is the next step */}
+              {/* Static for now — the actions menu is a later step */}
               <button
                 type="button"
                 aria-label="More document actions"
+                onClick={(e) => e.stopPropagation()}
                 className={`cursor-pointer ${iconButton}`}
               >
                 <MoreHorizontal size={16} />
@@ -160,18 +169,6 @@ function DocumentCard({ document, adminMode = false, onToggleFlag }) {
       <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-(--text-secondary)">
         {document.description}
       </p>
-
-      <button
-        type="button"
-        onClick={() =>
-          navigate("/documents/summary", {
-            state: { document },
-          })
-        }
-        className="mt-4 self-start text-sm font-semibold text-(--primary) transition-opacity hover:opacity-70"
-      >
-        View Summary →
-      </button>
 
       {/* Divider, then meta info and status on one row */}
       <div className="mt-auto pt-4">
