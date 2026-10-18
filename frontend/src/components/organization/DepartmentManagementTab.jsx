@@ -1,9 +1,9 @@
 import DepartmentStatCards from "./DepartmentStatCards";
 import DepartmentCard from "./DepartmentCard";
-
+// DepartmentManagementTab
 export default function DepartmentManagementTab({ departments, getLead, onCreate, onEdit, onDelete, onReassign, onViewDocs }) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <DepartmentStatCards departments={departments} />
 
       {departments.length === 0 ? (
@@ -19,8 +19,7 @@ export default function DepartmentManagementTab({ departments, getLead, onCreate
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {departments.map((dept, i) => (
+<div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">          {departments.map((dept, i) => (
             <DepartmentCard
               key={dept.id}
               dept={dept}

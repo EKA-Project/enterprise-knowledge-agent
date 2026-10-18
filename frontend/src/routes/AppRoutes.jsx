@@ -79,8 +79,8 @@ function AppRoutes() {
         <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
-        {/* <Route path="/semantic-search" element={<SemanticSearchPage />} /> */}
-        {/* <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><AnalyticsPage /></RoleGuard>} /> */}
+        {/*<Route path="/semantic-search" element={<SemanticSearchPage />} />*/}
+        {/*<Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><AnalyticsPage /></RoleGuard>} />*/}
         <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><OrganizationPage /></RoleGuard>} />
         <Route path="/settings" element={<h1>Settings</h1>} />
       </Route>
