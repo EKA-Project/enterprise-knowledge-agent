@@ -1,5 +1,5 @@
 import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { documents, documentCategories, documentFormats } from './DocumentData';
 import {
@@ -8,9 +8,15 @@ import {
   SAVED_FILTER,
   PINNED_FILTER,
   filterDocuments,
+  paginate,
 } from './documentFilters';
 import DocumentCard from './DocumentCard.jsx';
+import DocumentList from './DocumentList.jsx';
+import DocumentPagination from './DocumentPagination.jsx';
+import DocumentEmptyState from './DocumentEmptyState.jsx';
 
+// Single place that knows the summary URL (matches the route in AppRoutes)
+const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
 
 function DocumentsContent({ adminMode = false }) {
   const navigate = useNavigate();
@@ -18,9 +24,10 @@ function DocumentsContent({ adminMode = false }) {
   const [category, setCategory] = useState(ALL_CATEGORIES);
   const [format, setFormat] = useState(ALL_FORMATS);
   const [viewMode, setViewMode] = useState('grid');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   // Local copy of the documents, so pin / bookmark toggles show up in the UI.
   const [docs, setDocs] = useState(documents);
-
 
   const handleToggleFlag = (id, flag) => {
     setDocs((current) =>
@@ -29,13 +36,31 @@ function DocumentsContent({ adminMode = false }) {
       ),
     );
   };
+
+  const openSummary = (doc) => navigate(summaryPath(doc));
+
   const filteredDocuments = filterDocuments(docs, { search, category, format });
+  const { pageItems, total, totalPages, current, from, to } = paginate(
+    filteredDocuments,
+    page,
+    pageSize,
+  );
+
+  // Back to page 1 whenever the filter or page size changes
+  useEffect(() => {
+    setPage(1);
+  }, [search, category, format, pageSize]);
+
+  const resetFilters = () => {
+    setSearch('');
+    setCategory(ALL_CATEGORIES);
+    setFormat(ALL_FORMATS);
+  };
 
   // Text shown in the "Filtered by" chip (category label, or Saved / Pinned)
   const categoryLabel =
     documentCategories.find((cat) => cat.value === category)?.label ?? category;
   const isCategoryFiltered = category !== ALL_CATEGORIES;
-
 
   return (
     <>
@@ -111,7 +136,7 @@ function DocumentsContent({ adminMode = false }) {
           />
         </div>
 
-        {/* Grid / list toggle: active button is solid blue */}
+        {/* Grid / list toggle: active button is solid */}
         <div className="flex shrink-0 items-center gap-1 rounded-xl border border-(--border-subtle) p-1">
           <button
             type="button"
@@ -141,110 +166,38 @@ function DocumentsContent({ adminMode = false }) {
         </div>
       </section>
 
-      {viewMode === 'grid' && (
-        <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filteredDocuments.map((document) => (
-            <DocumentCard
-              key={document.id}
-              document={document}
-              adminMode={adminMode}
-              onToggleFlag={handleToggleFlag}
-            />
-          ))}
-        </section>
+      {total === 0 ? (
+        <DocumentEmptyState onReset={resetFilters} />
+      ) : (
+        <>
+          {viewMode === 'grid' ? (
+            <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {pageItems.map((document) => (
+                <DocumentCard
+                  key={document.id}
+                  document={document}
+                  adminMode={adminMode}
+                  onToggleFlag={handleToggleFlag}
+                  onOpen={openSummary}
+                />
+              ))}
+            </section>
+          ) : (
+            <DocumentList documents={pageItems} onOpen={openSummary} />
+          )}
+
+          <DocumentPagination
+            from={from}
+            to={to}
+            total={total}
+            current={current}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
+        </>
       )}
-
-      {viewMode === 'list' && (
-        <section className="overflow-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)">
-          {/* List view (restyled in a later step) */}
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left">
-              <thead>
-                <tr className="border-b border-(--border-subtle)">
-                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
-                    Document Name
-                  </th>
-                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
-                    Category
-                  </th>
-                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
-                    Author / Owner
-                  </th>
-                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
-                    Size
-                  </th>
-                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
-                    Chunks
-                  </th>
-                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
-                    Status
-                  </th>
-                  <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-[0.12em] text-(--text-muted)">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredDocuments.map((document) => (
-                  <tr
-                    key={document.id}
-                    className="border-b border-(--border-subtle) transition-colors last:border-b-0 hover:bg-(--bg-surface-subtle)"
-                  >
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-3">
-                        <span className="doc-mono rounded-md bg-(--bg-surface-subtle) px-2 py-1 text-[10px] font-bold text-(--text-primary)">
-                          {document.format}
-                        </span>
-                        <span className="text-sm font-semibold text-(--text-primary)">
-                          {document.title}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
-                      {document.category}
-                    </td>
-
-                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
-                      {document.author}
-                    </td>
-
-                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
-                      {document.size}
-                    </td>
-
-                    <td className="px-5 py-4 text-sm text-(--text-secondary)">
-                      {document.chunks}
-                    </td>
-
-                    <td className="px-5 py-4">
-                      <span className="inline-flex rounded-full bg-(--bg-surface-subtle) px-3 py-1.5 text-[10px] font-semibold text-(--text-secondary)">
-                        {document.status}
-                      </span>
-                    </td>
-
-                    <td className="px-5 py-4">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          navigate("/documents/summary", {
-                            state: { document },
-                          })
-                        }
-                        className="text-sm font-semibold text-(--text-primary) transition-opacity hover:opacity-70"
-                      >
-                        Summary →
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section >
-      )
-      }
     </>
   );
 }
