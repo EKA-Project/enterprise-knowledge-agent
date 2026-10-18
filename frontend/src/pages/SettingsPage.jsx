@@ -64,7 +64,7 @@ export default function SettingsPage() {
 
   return (
     <div className="settings-page mx-auto w-full max-w-[1400px] space-y-4">
-      <PageHero eyebrow="Workspace & account" title="Settings." description="Manage your personal preferences, security, and workspace experience." />
+      <PageHero eyebrow="Workspace & account" title="Make EKA Yours." description="Manage your personal preferences, security, and workspace experience." />
 
       <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[250px_minmax(0,1fr)]">
         <nav aria-label="Settings sections" className="set-rise space-y-1.5 lg:sticky lg:top-4">
