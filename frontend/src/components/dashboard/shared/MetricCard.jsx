@@ -5,6 +5,7 @@ function MetricCard({
   supportingType,
   icon: Icon,
   iconColor,
+  action,
   children,
 }) {
   // ─────────────────────────────────────────────
@@ -16,6 +17,7 @@ function MetricCard({
     green: "bg-[#eaf7ef] text-[#4caf50]",
     amber: "bg-[#fff6df] text-[#ffb300]",
     purple: "bg-[#f0eafb] text-[#7e57c2]",
+    red: "bg-[#fdecea] text-[#ef4444]",
   };
 
   // ─────────────────────────────────────────────
@@ -66,6 +68,9 @@ function MetricCard({
             <p className="font-serif text-[2rem] font-bold tracking-tight text-(--text-primary)">
               {value}
             </p>
+
+            {/* Optional action (link or button) */}
+            {action}
 
             {/* Supporting metric */}
             {supportingText && (

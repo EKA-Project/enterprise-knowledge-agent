@@ -15,7 +15,7 @@ import {
 } from "./employeeDashboardData.js";
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
 import MyEkaUsageChart from "../../charts/MyEkaUsageChart.jsx";
-import MyQueryTopics from "../../charts/MyQueryTopics.jsx";
+import RankedBarList from "../../charts/RankedBarList.jsx";
 
 import { pinnedDocuments } from "../admin/adminDashboardData.js";
 import EmployeeDocumentPanel from "./EmployeeDocumentPanel.jsx";
@@ -87,7 +87,7 @@ function EmployeeOverview() {
       <div className="mt-6 grid grid-cols-[1.15fr_1fr] gap-6 max-[900px]:grid-cols-1">
         <MyEkaUsageChart data={myEkaUsageData} />
 
-        <MyQueryTopics data={myQueryTopicsData} />
+        <RankedBarList data={myQueryTopicsData} />
       </div>
       <div className="mt-6 grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
         <EmployeeDocumentPanel
