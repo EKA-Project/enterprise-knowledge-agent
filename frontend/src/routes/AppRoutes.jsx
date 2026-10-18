@@ -22,8 +22,8 @@ import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMember
 import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
-//import SemanticSearchPage from "../pages/SemanticSearchPage.jsx";
-//import AnalyticsPage from "../pages/AnalyticsPage.jsx";
+// import SemanticSearchPage from "../pages/SemanticSearchPage.jsx";
+// import AnalyticsPage from "../pages/AnalyticsPage.jsx";
 import OrganizationPage from "../pages/OrganizationPage.jsx";
 // ...other EKA pages
 
@@ -79,8 +79,8 @@ function AppRoutes() {
         <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
-        {/*<Route path="/semantic-search" element={<SemanticSearchPage />} />*/}
-        {/*<Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><AnalyticsPage /></RoleGuard>} />*/}
+        <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
+        <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>AnalyticsPage </h1></RoleGuard>} />
         <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><OrganizationPage /></RoleGuard>} />
         <Route path="/settings" element={<h1>Settings</h1>} />
       </Route>
