@@ -91,7 +91,7 @@ const mockSummary = {
       author: 'Nadia Al-Mansoor (Chief Information Security Officer)',
     },
   ],
-  
+
   // Served by the backend later (a signed/static URL of the original file)
   pdfUrl: '/sample/enterprise_policy.pdf',
   // Reader pages. `text` keeps the raw "###" markdown, shown as-is in the video.
@@ -124,3 +124,14 @@ export async function getDocumentSummary() {
   return mockSummary;
 }
 
+
+// Mock write actions. Replace each body with a fetch/PATCH call later.
+export async function setDocumentFlag(id, flag, value) {
+  return { id, [flag]: value };
+}
+export async function setDocumentArchived(id, archived) {
+  return { id, archived };
+}
+export async function reindexDocument(id) {
+  return { id, status: 'queued' };
+}

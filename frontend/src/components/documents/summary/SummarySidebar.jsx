@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
+import { Zap, RefreshCw, Archive, ArchiveRestore } from 'lucide-react';
 import '../../../styles/Document.css';
 
 const card =
   'rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm)';
 
-// Right column: ingestion telemetry + suggested questions (sticky on desktop).
-function SummarySidebar({ telemetry, questions }) {
+const actionBtn =
+  'inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1.5 text-[11px] font-semibold text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)';
+
+// Right column: ingestion telemetry (+ admin actions) and suggested questions.
+function SummarySidebar({
+  telemetry, questions, adminMode, archived, onReindex, onToggleArchive,
+}) {
   const rows = [
     ['Vector Chunks', telemetry.vectorChunks],
     ['Total Pages', telemetry.totalPages],
@@ -17,9 +23,18 @@ function SummarySidebar({ telemetry, questions }) {
   return (
     <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
       <section className={card}>
-        <h2 className="doc-heading text-base font-bold text-(--text-primary)">
-          AI Ingestion Telemetry
-        </h2>
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="doc-heading flex items-center gap-2 text-base font-bold text-(--text-primary)">
+            {adminMode && <Zap size={14} className="shrink-0 text-(--status-warning)" />}
+            AI Ingestion Telemetry
+          </h2>
+          {adminMode && (
+            <span className="shrink-0 rounded-full border border-(--border-subtle) px-3 py-1 text-[10px] font-medium text-(--text-secondary)">
+              ✓ Indexed
+            </span>
+          )}
+        </div>
+
         <dl className="mt-3">
           {rows.map(([label, value, good]) => (
             <div
@@ -28,8 +43,9 @@ function SummarySidebar({ telemetry, questions }) {
             >
               <dt className="text-(--text-muted)">{label}</dt>
               <dd
+                // Admin sees neutral values, other roles see green on the two security rows
                 className={`doc-mono font-semibold ${
-                  good ? 'text-(--status-success)' : 'text-(--text-primary)'
+                  good && !adminMode ? 'text-(--status-success)' : 'text-(--text-primary)'
                 }`}
               >
                 {value}
@@ -37,6 +53,22 @@ function SummarySidebar({ telemetry, questions }) {
             </div>
           ))}
         </dl>
+
+        {adminMode && (
+          <div className="mt-4 flex gap-2">
+            <button type="button" onClick={onReindex} className={actionBtn}>
+              <RefreshCw size={12} className="text-sky-600" /> Re-index Chunks
+            </button>
+            <button type="button" onClick={onToggleArchive} className={actionBtn}>
+              {archived ? (
+                <ArchiveRestore size={12} className="text-amber-700" />
+              ) : (
+                <Archive size={12} className="text-amber-700" />
+              )}
+              {archived ? 'Unarchive' : 'Archive'}
+            </button>
+          </div>
+        )}
       </section>
 
       <section className={card}>
