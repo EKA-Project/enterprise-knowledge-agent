@@ -13,22 +13,25 @@ const EXIT_MS = 150;
 const TYPES = {
   success: {
     icon: CheckCircle2,
-    chip: "bg-(--status-success-bg) text-(--status-success)",
+    color: "text-[#4ade80]",
+    bar: "bg-[#4ade80]",
     role: "status",
   },
   error: {
     icon: AlertCircle,
-    chip: "bg-(--status-danger-bg) text-(--status-danger)",
+    color: "text-[#f87171]",
+    bar: "bg-[#f87171]",
     role: "alert",
   },
   info: {
     icon: Info,
-    chip: "bg-(--status-info-bg) text-(--status-info)",
+    color: "text-(--accent-highlight)",
+    bar: "bg-(--accent-highlight)",
     role: "status",
   },
 };
 
-// New shared Toast component used by the toast provider.
+// New shared Toast component used by ToastProvider.
 export function Toast({
   message,
   description,
@@ -58,13 +61,6 @@ export function Toast({
   }, []);
 
   useEffect(() => {
-    if (!duration || paused) return;
-
-    const timer = setTimeout(close, duration);
-    return () => clearTimeout(timer);
-  }, [duration, paused, close]);
-
-  useEffect(() => {
     return () => clearTimeout(exitTimer.current);
   }, []);
 
@@ -77,21 +73,22 @@ export function Toast({
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="toast pointer-events-auto flex items-start gap-3 rounded-2xl border border-(--border-subtle) bg-white p-3 shadow-lg"
+      className="toast group pointer-events-auto relative flex w-fit max-w-full items-start gap-2.5 self-end overflow-hidden rounded-2xl border border-(--sidebar-border) bg-(--sidebar-bg) py-2.5 pr-3 pl-3.5 font-sans shadow-[0_10px_30px_rgba(8,32,53,0.35)]"
     >
-      <span
-        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${config.chip}`}
-      >
-        <Icon size={17} aria-hidden="true" />
-      </span>
+      <Icon
+        size={16}
+        strokeWidth={2.25}
+        className={`mt-px shrink-0 ${config.color}`}
+        aria-hidden="true"
+      />
 
-      <div className="min-w-0 flex-1 pt-0.5">
-        <p className="text-[0.8rem] font-semibold text-(--text-primary)">
+      <div className="min-w-0 pr-1">
+        <p className="font-serif text-[0.85rem] leading-snug font-bold text-(--sidebar-text)">
           {message}
         </p>
 
         {description && (
-          <p className="mt-0.5 text-xs text-(--text-secondary)">
+          <p className="mt-0.5 text-[0.72rem] leading-snug font-medium text-(--sidebar-text-muted)">
             {description}
           </p>
         )}
@@ -101,15 +98,27 @@ export function Toast({
         type="button"
         onClick={close}
         aria-label="Dismiss notification"
-        className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full text-(--text-muted) transition-colors hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)"
+        className="-mr-1 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-(--sidebar-text-muted) opacity-50 transition hover:bg-(--sidebar-hover-bg) hover:text-(--sidebar-text) group-focus-within:opacity-100 group-hover:opacity-100"
       >
-        <X size={14} aria-hidden="true" />
+        <X size={12} aria-hidden="true" />
       </button>
+
+      {duration > 0 && (
+        <span
+          aria-hidden="true"
+          onAnimationEnd={close}
+          style={{
+            "--toast-ms": `${duration}ms`,
+            animationPlayState: paused ? "paused" : "running",
+          }}
+          className={`toast-bar absolute inset-x-0 bottom-0 h-0.5 origin-left ${config.bar}`}
+        />
+      )}
     </div>
   );
 }
 
-// Legacy ToastStack used by OrganizationPage and other existing pages.
+// Legacy ToastStack used by OrganizationPage.
 function ToastItem({ toast, onDismiss, animationClass }) {
   useEffect(() => {
     const timer = setTimeout(() => {
