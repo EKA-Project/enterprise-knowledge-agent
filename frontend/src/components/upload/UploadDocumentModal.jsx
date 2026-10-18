@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   AlertCircle,
   Check,
@@ -130,6 +130,7 @@ function Field({ htmlFor, label, required = false, children }) {
    onClose:           () => void   called after the exit animation
    onSubmit?:         (payload) => Promise   payload = { title, scope, file }
                       resolve = success, reject = failure (message is shown)
+    onSuccess?:        (payload) => void   called once when ingestion has finished
    departments?:      [{ value, label }]   default: documentCategories
    lockedDepartment?: string   fixes + disables the scope select (managers)
 
@@ -139,6 +140,7 @@ function Field({ htmlFor, label, required = false, children }) {
 function UploadDocumentModal({
   onClose,
   onSubmit = mockSubmit,
+  onSuccess,
   departments = documentCategories,
   lockedDepartment = null,
 }) {
@@ -154,11 +156,19 @@ function UploadDocumentModal({
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState(null); // { code, message } | null
   const [isDragging, setIsDragging] = useState(false);
-   const [rejectCount, setRejectCount] = useState(0); // lets Byte react to every rejection
+  const [rejectCount, setRejectCount] = useState(0); // lets Byte react to every rejection
 
   const pipeline = useUploadPipeline(onSubmit);
   const { phase } = pipeline;
-
+  // Remember what was submitted, and tell the parent once when ingestion finishes
+  const submitted = useRef(null);
+  const onSuccessRef = useRef(onSuccess);
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
+  useEffect(() => {
+    if (phase === "success") onSuccessRef.current?.(submitted.current);
+  }, [phase]);
   /* ---------- Derived values ---------- */
   const scopeValue = lockedDepartment ?? scope;
   const busy = phase === "uploading";
@@ -231,7 +241,9 @@ function UploadDocumentModal({
   const handleSubmit = (event) => {
     event.preventDefault(); // Enter in the title field also lands here
     if (!canSubmit) return;
-    pipeline.start({ title: title.trim(), scope: scopeValue, file });
+    const payload = { title: title.trim(), scope: scopeValue, file };
+    submitted.current = payload;
+    pipeline.start(payload);
   };
 
   /* ---------- Footer pieces ---------- */
