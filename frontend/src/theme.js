@@ -1,6 +1,9 @@
-export const DEFAULT_THEME = "sky-blue";
+export const DEFAULT_THEME = "vintage-linen";
 const STORAGE_KEY = "eka-theme";
 
+// TEMPORARY: while false, DEFAULT_THEME always wins (no saved theme is read).
+// Your friend sets this to true when the Appearance settings page is live.
+const USE_SAVED_THEME = false;
 // Single source of truth for the settings cards (id = data-theme value)
 export const THEMES = [
   { id: "sky-blue", name: "Sky blue clarity" },
@@ -18,6 +21,7 @@ export const THEMES = [
 ];
 
 export function getSavedTheme() {
+  if (!USE_SAVED_THEME) return DEFAULT_THEME;
   const saved = localStorage.getItem(STORAGE_KEY);
   return THEMES.some((t) => t.id === saved) ? saved : DEFAULT_THEME;
 }
@@ -30,4 +34,6 @@ export function applyTheme(name) {
 }
 
 // Runs once on app load, before React renders (no flash of the wrong theme).
-applyTheme(getSavedTheme());
+// Sets the attribute only. It does NOT save, so only a user's click in
+// settings ever writes to localStorage.
+document.documentElement.setAttribute("data-theme", getSavedTheme());
