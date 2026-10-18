@@ -34,14 +34,73 @@ const SETS = {
   // a negative delay starts a star partway round its lap)
   stars: [{ delay: 0 }, { delay: -0.35 }, { delay: -0.7 }, { delay: -1.05 }],
 
-  // Angry steam. x/y = start point (% of Byte's box), rise = how far it climbs,
-  // drift = sideways, dur = how long one puff lives
+  // Angry steam: two side vents and the top of the head, puffs of different sizes
+  // and lifetimes so the plume never looks synchronised.
+  // x/y = start (% of Byte's box), rise = climb, drift = sideways, s = size, dur = life
   steam: [
-    { x: "38%", y: "26%", rise: "26%", drift: "-8%", dur: "0.9s", delay: 0 },
-    { x: "52%", y: "22%", rise: "34%", drift: "6%", dur: "1s", delay: 0.11 },
-    { x: "62%", y: "26%", rise: "30%", drift: "9%", dur: "0.8s", delay: 0.22 },
-    { x: "45%", y: "20%", rise: "38%", drift: "-5%", dur: "1.1s", delay: 0.33 },
-    { x: "56%", y: "24%", rise: "28%", drift: "4%", dur: "0.95s", delay: 0.44 },
+    {
+      x: "34%",
+      y: "30%",
+      rise: "56%",
+      drift: "-16%",
+      s: "16%",
+      dur: "1.5s",
+      delay: 0,
+    },
+    {
+      x: "34%",
+      y: "30%",
+      rise: "62%",
+      drift: "-20%",
+      s: "20%",
+      dur: "1.7s",
+      delay: 0.8,
+    },
+    {
+      x: "66%",
+      y: "30%",
+      rise: "58%",
+      drift: "16%",
+      s: "17%",
+      dur: "1.5s",
+      delay: 0.25,
+    },
+    {
+      x: "66%",
+      y: "30%",
+      rise: "62%",
+      drift: "20%",
+      s: "21%",
+      dur: "1.7s",
+      delay: 1.05,
+    },
+    {
+      x: "50%",
+      y: "20%",
+      rise: "52%",
+      drift: "4%",
+      s: "15%",
+      dur: "1.4s",
+      delay: 0.5,
+    },
+    {
+      x: "46%",
+      y: "22%",
+      rise: "62%",
+      drift: "-6%",
+      s: "19%",
+      dur: "1.8s",
+      delay: 1.2,
+    },
+    {
+      x: "54%",
+      y: "22%",
+      rise: "58%",
+      drift: "8%",
+      s: "18%",
+      dur: "1.6s",
+      delay: 0.1,
+    },
   ],
 
   // Success confetti. dx = sideways (px), dy = peak height (px, negative = up),
@@ -90,6 +149,7 @@ function ByteParticles({ type }) {
             "--rise": p.rise,
             "--drift": p.drift,
             "--dur": p.dur,
+            "--s": p.s,
           }}
         />
       ))}

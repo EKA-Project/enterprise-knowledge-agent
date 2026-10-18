@@ -26,7 +26,7 @@ const CLOSE_DELAY_MS = 2600; // how long the success state shows before closing
 
 // One look shared by the title input and the select (matches the target pill)
 const CONTROL =
-  "h-9 w-full rounded-full border border-(--border-medium) bg-white px-4 text-sm text-(--text-primary) outline-none transition placeholder:text-(--text-muted) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)] disabled:cursor-not-allowed disabled:bg-(--bg-surface-subtle) disabled:text-(--text-secondary)";
+  "h-8 w-full rounded-full border border-(--border-medium) bg-white px-3 text-xs text-(--text-primary) outline-none transition placeholder:text-(--text-muted) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)] disabled:cursor-not-allowed disabled:bg-(--bg-surface-subtle) disabled:text-(--text-secondary)";
 
 // Footer hint colours (written out in full so Tailwind can see them)
 const HINT_TONES = {
@@ -269,7 +269,7 @@ function UploadDocumentModal({
 
   return (
     <Modal
-      size="confirm"
+      size="md"
       spacing="compact"
       onClose={onClose}
       icon={
@@ -345,7 +345,7 @@ function UploadDocumentModal({
         id={formId}
         onSubmit={handleSubmit}
         noValidate
-        className="mt-5 space-y-5"
+        className="mt-5 space-y-7"
       >
         {/* Title */}
         <Field htmlFor={titleId} label="Document Title" required>
