@@ -6,7 +6,7 @@ const card =
 const eyebrow = 'doc-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-(--primary)';
 
 // Left column of the AI Document Summary tab. Receives data only via props.
-function AiSummaryTab({ doc }) {
+function AiSummaryTab({ doc, onReadPage }) {
   return (
     <div className="space-y-6">
       <section className={`${card} border-l-[3px] border-l-(--primary)`}>
@@ -72,9 +72,10 @@ function AiSummaryTab({ doc }) {
                     {s.id}. {s.title}
                   </h3>
                 </div>
-                {/* Opens the reader at this page — wired in the reader step */}
+                
                 <button
                   type="button"
+                  onClick={() => onReadPage(s.page)}
                   className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-full bg-(--bg-surface) px-3 py-1 text-[11px] font-medium text-(--text-primary) shadow-(--shadow-sm) transition-colors hover:bg-(--primary-light)"
                 >
                   Read Full Page {s.page} <ChevronRight size={11} />
