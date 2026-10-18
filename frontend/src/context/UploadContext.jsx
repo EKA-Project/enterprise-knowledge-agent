@@ -1,13 +1,29 @@
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import AuthContext from "./AuthContext.jsx";
 import UploadDocumentModal from "../components/upload/UploadDocumentModal.jsx";
-
+import useToast from "../hooks/useToast.js";
 // Lets any component open the upload modal, without each one owning a copy of it.
 const UploadContext = createContext(null);
 
 export function UploadProvider({ children }) {
   const { activeRole, department } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+
+  const toast = useToast();
+
+  const handleSuccess = useCallback(
+    ({ title }) =>
+      toast.success("Document ingested", {
+        description: `"${title}" is indexed and ready for questions.`,
+      }),
+    [toast],
+  );
 
   // The single rule for "who may upload": everyone except Employees
   const canUpload = activeRole !== "Employee";
@@ -19,7 +35,10 @@ export function UploadProvider({ children }) {
   const closeUpload = useCallback(() => setOpen(false), []);
 
   // Memoised so consumers only re-render when these values really change
-  const value = useMemo(() => ({ openUpload, canUpload }), [openUpload, canUpload]);
+  const value = useMemo(
+    () => ({ openUpload, canUpload }),
+    [openUpload, canUpload],
+  );
 
   return (
     <UploadContext.Provider value={value}>
@@ -31,6 +50,7 @@ export function UploadProvider({ children }) {
         <UploadDocumentModal
           lockedDepartment={activeRole === "Manager" ? department : null}
           onClose={closeUpload}
+          onSuccess={handleSuccess}
         />
       )}
     </UploadContext.Provider>
