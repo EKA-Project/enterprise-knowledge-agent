@@ -276,73 +276,75 @@
     byte-angry-breathe 0.35s ease-in-out 0.5s infinite alternate;
 }
 
-/* Angry: pixel steam puffs rising from the head.
-   x/y = where a puff starts, rise = how far it climbs, drift = sideways,
-   dur = how long it lives (all set per puff in ByteParticles.jsx) */
+/* Angry: billowing steam, like venting from an engine.
+   Each puff is a soft cloud: a main circle plus two lobes (::before / ::after),
+   shaded from white to light grey, with a faint shadow outline so it stays visible
+   on the pale banner. Per puff (set in ByteParticles.jsx):
+     --x / --y   where it starts (% of Byte's image box)
+     --rise      how far it climbs
+     --drift     how far it moves sideways
+     --s         starting size (% of Byte's width)
+     --dur       how long one puff lives
+   To make the steam bolder: raise the 0.45 in the drop-shadow below, or darken
+   the last colour stop (#cbd5e1) of the gradients. */
 @keyframes byte-steam {
   0% {
-    opacity: 0.9;
+    opacity: 0;
     top: var(--y);
     left: var(--x);
-    scale: 0.8;
+    scale: 0.4;
+  }
+  14% {
+    opacity: 0.95;
+  }
+  55% {
+    opacity: 0.85;
+    left: calc(var(--x) + var(--drift) * 0.45);
   }
   100% {
     opacity: 0;
     top: calc(var(--y) - var(--rise));
     left: calc(var(--x) + var(--drift));
-    scale: 1.6;
+    scale: 1.9;
   }
 }
 .byte-p-steam {
-  width: 7%;
+  width: var(--s, 18%);
   aspect-ratio: 1;
-  background: #cbd5e1;
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+  translate: -50% -50%; /* centres the puff on its start point */
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #ffffff 0%,
+    #f1f5f9 55%,
+    #cbd5e1 100%
+  );
+  filter: drop-shadow(0 1px 2px rgba(71, 85, 105, 0.45));
   animation: byte-steam var(--dur) ease-out infinite;
   animation-delay: var(--delay);
 }
-
-/* Success: a soft ground shadow that shrinks while Byte is in the air.
-   Same timing as byte-victory. Move it with --byte-shadow-y. */
-.byte-shadow {
+.byte-p-steam::before,
+.byte-p-steam::after {
+  content: "";
   position: absolute;
-  left: 50%;
-  bottom: var(--byte-shadow-y, 3%);
-  width: 52%;
-  height: 9%;
-  translate: -50% 0;
-  z-index: -1; /* behind Byte */
+  width: 68%;
+  aspect-ratio: 1;
   border-radius: 50%;
-  background: rgba(15, 41, 66, 0.22);
-  filter: blur(2px);
-  animation: byte-shadow 1.4s both;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #ffffff 0%,
+    #f1f5f9 55%,
+    #cbd5e1 100%
+  );
 }
-@keyframes byte-shadow {
-  0%,
-  100% {
-    scale: 1;
-    opacity: 0.9;
-  }
-  10% {
-    scale: 1.1;
-    opacity: 1;
-  }
-  44% {
-    scale: 0.5;
-    opacity: 0.35;
-  }
-  62% {
-    scale: 1.15;
-    opacity: 1;
-  }
-  74% {
-    scale: 0.85;
-    opacity: 0.7;
-  }
-  84% {
-    scale: 1.05;
-    opacity: 0.95;
-  }
+.byte-p-steam::before {
+  left: -34%;
+  top: 30%;
+}
+.byte-p-steam::after {
+  right: -30%;
+  top: 22%;
+  width: 58%;
 }
 
 /* Success: confetti bursts out as Byte reaches the top of the jump.

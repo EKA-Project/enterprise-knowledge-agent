@@ -153,7 +153,7 @@ function ByteMascot({
               {/* Small tail and a trail dot, both pointing back toward Byte's head */}
               <span
                 aria-hidden="true"
-                className="absolute -bottom-[3px] left-2.5 h-2 w-2 rotate-45 bg-white"
+                className="absolute -bottom-0.75 left-2.5 h-2 w-2 rotate-45 bg-white"
               />
               <span
                 aria-hidden="true"
