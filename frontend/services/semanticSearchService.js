@@ -124,6 +124,7 @@ const DOCUMENTS = [
 // ---------- Grounded answers for top-ranked topics ----------
 const TOPIC_ANSWERS = {
   leave: "Full-time employees receive 20 days of paid annual leave plus 10 days of paid sick/wellness leave per calendar year. Leave requests over 3 consecutive days require 48 hours notice via HR Portal.",  remote: "You can work from home up to three days a week with manager approval, and a $1,500 annual home-office stipend covers ergonomic equipment. Core hours of 10:00 to 15:00 apply on every remote day.",
+  onboarding: "On your first day you receive Okta SSO access, your laptop and system accounts, then meet your team lead and finish the mandatory security training. A 30-day goals conversation with your manager should be scheduled by Friday.",
   travel: "Economy airfare and standard hotels are reimbursable, and meals are covered up to the daily limit. Upload receipts within 30 days of travel.",
   laptop: "Company laptops must use disk encryption and cannot be used to install personal software. Report loss or theft to IT Security within 24 hours.",
   health: "The group medical plan covers all employees from day one, and dependants can be enrolled. Dental and vision cover are optional add-ons.",

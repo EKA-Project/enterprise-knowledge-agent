@@ -20,9 +20,15 @@ export default function SearchIntelligencePanel({ query, stats }) {
 className="ssp-rise rounded-2xl border border-[#c8e2f3] bg-white p-5 shadow-sm transition-all duration-200 hover:border-[#b4d8ef] hover:shadow-md"    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="grid size-8 place-items-center rounded-lg border border-[#f6dfa0] bg-[#fff4cf] text-[#f59e0b]">
-  <Zap size={15} aria-hidden="true" />
-</span>
+          <span className="grid size-9 place-items-center rounded-xl bg-[#fdf0c4] text-[#e8590c]">
+            <Zap
+              size={17}
+              fill="currentColor"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              aria-hidden="true"
+            />
+          </span>
           <div>
             <h3 className="text-[14px] font-bold text-[#29445b]">Search Intelligence</h3>
             <p className="font-(family-name:--font-mono) text-[9.5px] uppercase tracking-widest text-[#f59e0b]">
@@ -34,8 +40,11 @@ className="ssp-rise rounded-2xl border border-[#c8e2f3] bg-white p-5 shadow-sm t
           type="button"
           onClick={() => setInspecting((v) => !v)}
           aria-expanded={inspecting}
-          className="rounded-full border border-(--border-subtle-nav) px-3 py-1 text-[11.5px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
-        >
+className={`rounded-full border px-3 py-1 text-[11.5px] font-semibold transition-all duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) ${
+  inspecting
+    ? "border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-muted)"
+    : "border-(--border-medium) bg-white text-(--text-primary) hover:-translate-y-0.5 hover:border-(--primary) hover:bg-(--primary-light) hover:text-(--primary) hover:shadow-sm"
+}`}        >
           {inspecting ? "Close" : "Inspect"}
         </button>
       </div>
