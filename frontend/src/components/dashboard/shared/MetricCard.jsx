@@ -5,23 +5,40 @@ function MetricCard({
   supportingType,
   icon: Icon,
   iconColor,
+  action,
   children,
 }) {
+  // ─────────────────────────────────────────────
+  // Icon color variants
+  // ─────────────────────────────────────────────
+
   const iconColorStyles = {
     orange: "bg-[#fff0e9] text-[#ff8a65]",
     green: "bg-[#eaf7ef] text-[#4caf50]",
     amber: "bg-[#fff6df] text-[#ffb300]",
     purple: "bg-[#f0eafb] text-[#7e57c2]",
+    red: "bg-[#fdecea] text-[#ef4444]",
   };
+
+  // ─────────────────────────────────────────────
+  // Supporting text color variants
+  // ─────────────────────────────────────────────
 
   const supportingColorStyles = {
     positive: "text-(--status-success)",
     muted: "text-(--text-muted)",
   };
 
+  // ─────────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────────
+
   return (
-    <section className="rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
-      {/* Top row: metric label and icon badge. */}
+    <section className="flex h-40 flex-col rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
+      {/* ─────────────────────────────────────────
+          Header: metric label and icon
+      ───────────────────────────────────────── */}
+
       <div className="flex items-center justify-between">
         <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-(--text-secondary)">
           {label}
@@ -38,19 +55,27 @@ function MetricCard({
         )}
       </div>
 
-      {/* Bottom row: primary value and supporting metric. */}
-      <div className="mt-7 flex min-h-24 items-end">
+      {/* ─────────────────────────────────────────
+          Content: metric value or custom content
+      ───────────────────────────────────────── */}
+
+      <div className="mt-4 flex flex-1 items-end pb-0">
         {children ? (
           children
         ) : (
           <div className="flex w-full items-end justify-between gap-4">
-            <p className="[font-family:var(--font-serif)] text-[1.85rem] font-bold tracking-tight text-(--text-primary)">
+            {/* Primary metric value */}
+            <p className="font-serif text-[2rem] font-bold tracking-tight text-(--text-primary)">
               {value}
             </p>
 
+            {/* Optional action (link or button) */}
+            {action}
+
+            {/* Supporting metric */}
             {supportingText && (
               <p
-                className={`pb-1 text-sm font-semibold ${
+                className={`pb-1 text-xs font-semibold ${
                   supportingColorStyles[supportingType]
                 }`}
               >

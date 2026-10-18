@@ -1,27 +1,55 @@
+import { Link } from "react-router-dom";
 import PageHero from "../../common/PageHero.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
 import StorageMetric from "../shared/StorageMetric.jsx";
+
 import AdminRecentQuestions from "./AdminRecentQuestions.jsx";
 import AdminKnowledgeActivity from "./AdminKnowledgeActivity.jsx";
 import AdminPinnedDocuments from "./AdminPinnedDocuments.jsx";
+import AdminGrowthTrends from "./AdminGrowthTrends.jsx";
+
 import pageMetadata from "../../../config/pageMetadata.js";
 import adminMetrics from "./adminDashboardData.js";
-
+import { BrainCircuit } from "lucide-react";
 function AdminOverview() {
+  // ─────────────────────────────────────────────
+  // Page metadata
+  // ─────────────────────────────────────────────
+
   const hero = pageMetadata.dashboard.admin;
+
+  // ─────────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────────
 
   return (
     <div className="min-h-full">
-      {/* Hero section */}
+      {/* ─────────────────────────────────────────
+          Hero section
+      ───────────────────────────────────────── */}
       <PageHero
         eyebrow={hero.eyebrow}
         title={hero.title}
         description={hero.description}
-        status={hero.status}
+        status={
+          <span className="flex items-center gap-2">
+            <BrainCircuit
+              size={15}
+              strokeWidth={1.8}
+              className="text-sky-600"
+            />
+            {hero.status}
+          </span>
+        }
       />
+
+      {/* ─────────────────────────────────────────
+          Overview metrics
+      ───────────────────────────────────────── */}
 
       <div className="mt-6 grid grid-cols-4 gap-5">
         {adminMetrics.map((metric) => {
+          // Storage metric uses custom content.
           if (metric.label === "STORAGE CAPACITY") {
             return (
               <MetricCard
@@ -35,6 +63,7 @@ function AdminOverview() {
             );
           }
 
+          // Standard metric card.
           return (
             <MetricCard
               key={metric.label}
@@ -49,36 +78,59 @@ function AdminOverview() {
         })}
       </div>
 
+      {/* ─────────────────────────────────────────
+          Recent questions & knowledge activity
+      ───────────────────────────────────────── */}
+
       <div className="mt-8 grid grid-cols-[1.4fr_1fr] gap-6">
+        {/* Recent questions */}
         <div>
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
+            <h2 className="font-serif text-[1.25rem] font-bold text-(--text-primary)">
               Recent questions
             </h2>
 
-            <button className="cursor-pointer !text-[0.78rem] font-semibold text-[#d97706] transition-colors hover:underline">
+            <Link
+              to="/ask-eka/history"
+              className="cursor-pointer text-[0.78rem]! font-semibold text-(--primary) transition-colors hover:underline"
+            >
               View all ›
-            </button>
+            </Link>
           </div>
 
           <AdminRecentQuestions />
         </div>
 
+        {/* Knowledge activity */}
         <div>
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="[font-family:var(--font-serif)] text-[1.25rem] font-bold text-(--text-primary)">
+            <h2 className="font-serif text-[1.25rem] font-bold text-(--text-primary)">
               Knowledge activity
             </h2>
 
-            <button className="cursor-pointer !text-[0.78rem] font-semibold text-[#d97706] transition-colors hover:underline">
+            <Link
+              to="/documents"
+              className="cursor-pointer text-[0.78rem]! font-semibold text-(--primary) transition-colors hover:underline"
+            >
               All documents ›
-            </button>
+            </Link>
           </div>
 
           <AdminKnowledgeActivity />
         </div>
       </div>
+
+      {/* ─────────────────────────────────────────
+          Pinned documents
+      ───────────────────────────────────────── */}
+
       <AdminPinnedDocuments />
+
+      {/* ─────────────────────────────────────────
+          Growth trends
+      ───────────────────────────────────────── */}
+
+      <AdminGrowthTrends />
     </div>
   );
 }

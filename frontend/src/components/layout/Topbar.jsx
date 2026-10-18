@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Search, Upload, Bell, ChevronDown } from "lucide-react";
 import AuthContext from "../../context/AuthContext.jsx";
-
+import useUpload from "../../hooks/useUpload.js";
 // Information displayed in the Topbar for each application route.
 const routeMetadata = {
   "/dashboard": {
@@ -12,6 +12,10 @@ const routeMetadata = {
   "/ask-eka": {
     title: "Ask EKA",
     metadata: "NEURAL RAG / 100% ISOLATED",
+  },
+  "/ask-eka/history": {
+    title: "Chat History",
+    metadata: "CONVERSATION ARCHIVE / QUERY & RESPONSE LOG",
   },
   "/knowledge-base": {
     title: "Knowledge Base",
@@ -41,6 +45,10 @@ const routeMetadata = {
     title: "Settings",
     metadata: "NORTHSTAR STUDIO / 24.11.2026",
   },
+  "/help-support": {
+    title: "Help & Support",
+    metadata: "OPERATIONAL ASSISTANT & FAQ",
+  },
 };
 
 const roles = [
@@ -53,6 +61,7 @@ function Topbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { activeRole, setActiveRole } = useContext(AuthContext);
+  const { openUpload, canUpload } = useUpload();
 
   const currentRoute = routeMetadata[location.pathname];
 
@@ -100,7 +109,13 @@ function Topbar() {
         {/* Upload control */}
         <button
           type="button"
-          disabled={activeRole === "Employee"}
+          onClick={openUpload}
+          disabled={!canUpload}
+          title={
+            canUpload
+              ? "Ingest a new document"
+              : "Uploads are limited to Admins and Managers"
+          }
           className={`flex h-auto items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-4 py-1 text-[11px] font-semibold text-(--text-primary) transition-colors duration-200 ${activeRole === "Employee" ? "cursor-not-allowed opacity-50 hover:border-(--status-danger) hover:bg-(--status-danger-bg) hover:text-(--status-danger) hover:opacity-100" : "cursor-pointer hover:border-(--primary) hover:bg-(--bg-surface-subtle) hover:text-(--primary)"}`}
         >
           <Upload size={14} strokeWidth={2} />

@@ -29,7 +29,7 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Redirect the root URL to the main dashboard. */}
-     <Route path="/" element={<Navigate to="/landing" replace />} />
+     <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
       {/* Public / authentication routes */}
       <Route path="/landing" element={<LandingPage />} />
@@ -74,6 +74,7 @@ function AppRoutes() {
       <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
+        <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
         <Route path="/documents/summary" element={<DocumentSummaryPage />} />
@@ -85,5 +86,4 @@ function AppRoutes() {
     </Routes>
   );
 }
-
 export default AppRoutes;

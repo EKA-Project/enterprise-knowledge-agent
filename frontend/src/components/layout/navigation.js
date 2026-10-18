@@ -7,6 +7,7 @@ import {
   BarChart3,
   Building2,
   Settings,
+  CircleHelp,
 } from "lucide-react";
 
 const navigation = {
@@ -43,7 +44,15 @@ const navigation = {
     },
   ],
 
-  settings: [{ label: "Settings", path: "/settings", icon: Settings }],
+  preference: [{ label: "Settings", path: "/settings", icon: Settings }],
+
+  "help & support": [
+    {
+      label: "Help & Support",
+      path: "/help-support",
+      icon: CircleHelp,
+    },
+  ],
 };
 
 export default navigation;

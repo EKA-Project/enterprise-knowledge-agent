@@ -4,7 +4,7 @@ const pageMetadata = {
       eyebrow: "MONDAY, 24 NOVEMBER",
       title: "Good morning, Maya.",
       description: "Here's what's happening across your team's memory.",
-      status: "All systems in sync",
+      status: "Knowledge engine active",
     },
 
     manager: {
@@ -15,10 +15,11 @@ const pageMetadata = {
     },
 
     employee: {
-      eyebrow: "MONDAY, 24 NOVEMBER",
-      title: "Good morning, Maya.",
-      description: "Here's what's happening across your workspace.",
-      status: "Workspace verified",
+      eyebrow: "EMPLOYEE KNOWLEDGE HUB",
+      title: "Good morning, Alex.",
+      description:
+        "Here is your personal activity summary, quick answers, FAQs, and search confidence.",
+      status: "Employee Workspace • Verified Sources",
     },
   },
 };
