@@ -29,3 +29,20 @@ export function filterDocuments(docs, { search, category, format }) {
     return matchesSearch && matchesCategory && matchesFormat;
   });
 }
+// Pure pagination helper: returns the slice for the current page + totals.
+export const PAGE_SIZES = [10, 25, 50];
+
+export function paginate(items, page, pageSize) {
+  const total = items.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const current = Math.min(page, totalPages); // never beyond last page
+  const start = (current - 1) * pageSize;
+  return {
+    pageItems: items.slice(start, start + pageSize),
+    total,
+    totalPages,
+    current,
+    from: total === 0 ? 0 : start + 1,
+    to: Math.min(start + pageSize, total),
+  };
+}

@@ -1,22 +1,50 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getDocumentSummary } from '../components/documents/summary/summaryService';
+import SummaryHeader from '../components/documents/summary/SummaryHeader';
+import SummaryTabs from '../components/documents/summary/SummaryTabs';
+import AiSummaryTab from '../components/documents/summary/AiSummaryTab';
+import SummarySidebar from '../components/documents/summary/SummarySidebar';
+import SummaryToast from '../components/documents/summary/SummaryToast';
 
-import DocumentInfoCard from "../components/documents/summary/DocumentInfoCard.jsx";
-import { summaryDocument } from "../components/documents/summary/SummaryData.js";
+function DocumentSummaryPage() {
+  const { id } = useParams();
+  const [doc, setDoc] = useState(null);
+  const [tab, setTab] = useState('summary');
+  const [toast, setToast] = useState('');
+  const closeToast = useCallback(() => setToast(''), []);
 
-export default function DocumentSummaryPage() {
+  useEffect(() => {
+    let alive = true; // ignore a late response after navigating away
+    getDocumentSummary(id).then((data) => alive && setDoc(data));
+    return () => { alive = false; };
+  }, [id]);
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setToast('Copied document link to clipboard');
+    } catch {
+      setToast('Could not copy the link');
+    }
+  };
+
+  if (!doc) return null; // add a skeleton when real loading time exists
+
   return (
-    <section className="mx-auto w-full min-w-0 max-w-[1600px] space-y-5">
+    <div className="mx-auto w-full max-w-[1100px] space-y-6 px-4 py-6 sm:px-6">
+      <SummaryHeader doc={doc} onCopyLink={copyLink} />
+      <SummaryTabs active={tab} onChange={setTab} />
 
-      <DocumentInfoCard document={summaryDocument} />
-
-      <div className="rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-(--text-primary)">
-          AI Document Summary
-        </h2>
-
-        <p className="mt-3 text-sm leading-7 text-(--text-secondary)">
-          {summaryDocument.summary}
-        </p>
+      <div className="grid grid-cols-1 gap-9 lg:grid-cols-[minmax(0,1fr)_21rem]">
+        {/* Reader and graph tabs are added in the next steps */}
+        {tab === 'summary' ? <AiSummaryTab doc={doc} /> : <div />}
+        <SummarySidebar telemetry={doc.telemetry} questions={doc.suggestedQuestions} />
       </div>
-    </section>
+
+      <SummaryToast message={toast} onClose={closeToast} />
+    </div>
   );
 }
+
+export default DocumentSummaryPage;
