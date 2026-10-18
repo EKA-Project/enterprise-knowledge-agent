@@ -70,6 +70,7 @@ function Modal({
   footer,
   closeOnClickOutside = true,
   closeOnEsc = true,
+  closeDisabled = false,
 }) {
   const titleId = useId();
   const d = density[spacing ?? (compact ? "compact" : "regular")];
@@ -120,7 +121,8 @@ function Modal({
               onClick={close}
               aria-label="Close dialog"
               title="Close dialog"
-              className={`flex shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-subtle) bg-(--primary-light) text-(--primary) transition-all duration-200 hover:-rotate-90 hover:border-[#fca5a5] hover:bg-[#fee2e2] hover:text-(--status-danger) ${d.close}`}
+              disabled={closeDisabled}
+              className={`flex shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-subtle) bg-(--primary-light) text-(--primary) transition-all duration-200 hover:-rotate-90 hover:border-[#fca5a5] hover:bg-[#fee2e2] hover:text-(--status-danger) disabled:pointer-events-none disabled:opacity-40 ${d.close}`}
             >
               <X size={d.closeIcon} strokeWidth={2} />
             </button>
