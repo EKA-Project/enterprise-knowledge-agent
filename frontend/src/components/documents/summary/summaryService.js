@@ -56,7 +56,43 @@ const mockSummary = {
     indexLatency: '284 ms',
   },
   suggestedQuestions: ['Summarize top action items', 'What are the compliance rules?'],
-    // Served by the backend later (a signed/static URL of the original file)
+    
+    // Knowledge Base articles linked to this document
+  connectedArticles: [
+    {
+      id: 'wfa-90-day',
+      title: 'Work from Anywhere (WFA) 90-Day Policy Rules',
+      excerpt:
+        'Employees may work remotely outside their primary tax country for up to 90 days per rolling calendar year. Submit travel requests at least 14 days in advance via HR Portal.',
+      verified: true,
+    },
+    {
+      id: 'data-encryption',
+      title: 'Data Encryption & Zero-Training Guarantees',
+      excerpt:
+        'All document embeddings and conversational inputs in EKA are encrypted with tenant KMS keys using AES-256 at rest and TLS 1.3 in transit. Data is never used for training.',
+      verified: true,
+    },
+  ],
+  // Other documents related to this one
+  sisterDocuments: [
+    {
+      id: 3,
+      title: '2026 Global Remote Work, Travel & Flexible Hours Policy',
+      format: 'PDF',
+      category: 'People & HR Operations',
+      author: 'Sophia Sterling (VP People & Culture)',
+    },
+    {
+      id: 2,
+      title: 'SOC 2 Type II Security & Data Governance Compliance Report',
+      format: 'PDF',
+      category: 'Security & Compliance',
+      author: 'Nadia Al-Mansoor (Chief Information Security Officer)',
+    },
+  ],
+  
+  // Served by the backend later (a signed/static URL of the original file)
   pdfUrl: '/sample/enterprise_policy.pdf',
   // Reader pages. `text` keeps the raw "###" markdown, shown as-is in the video.
   readerPages: [
@@ -87,3 +123,4 @@ export async function getDocumentSummary() {
   // id is ignored until the backend exists
   return mockSummary;
 }
+
