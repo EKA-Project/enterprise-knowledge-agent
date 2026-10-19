@@ -3,12 +3,16 @@ export default function AuditConflictBarChart({ data, activeIndex = null, onHove
   const max = Math.max(...data.map((d) => d.value));
   const lastIndex = data.length - 1;
 // Render the bar chart with bars, hover effects, and labels
+
   return (
     <div>
       <div className="flex items-end gap-3" style={{ height }}>
         {data.map((d, i) => {
           const color =
-            activeIndex === i ? "bg-(--primary)" : i === lastIndex ? "bg-(--text-primary)" : "bg-(--border-medium)";
+            activeIndex === i
+              ? "bg-(--primary)"
+              : "bg-(--border-medium)";
+
           return (
             <button
               key={d.label}
@@ -23,9 +27,13 @@ export default function AuditConflictBarChart({ data, activeIndex = null, onHove
               <span className="font-(family-name:--font-mono) text-[10.5px] font-semibold text-(--text-secondary)">
                 {d.value}
               </span>
+
               <span
                 className={`anl-grow w-full max-w-9 rounded-t-md transition-colors duration-200 ${color}`}
-                style={{ height: `${(d.value / max) * 78}%`, animationDelay: `${i * 70}ms` }}
+                style={{
+                  height: `${(d.value / max) * 78}%`,
+                  animationDelay: `${i * 70}ms`,
+                }}
               />
             </button>
           );
