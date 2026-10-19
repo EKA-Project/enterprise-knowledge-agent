@@ -1,7 +1,7 @@
 export const DEFAULT_THEME = "sky-blue";
-const STORAGE_KEY = "eka-theme";
 
-const USE_SAVED_THEME = true;
+
+
 // Single registry for the settings cards (id = data-theme value in variables.css).
 // To add a theme: add its [data-theme="id"] block in variables.css, then one line here.
 export const THEMES = [
@@ -67,20 +67,10 @@ export const THEMES = [
   },
 ];
 
-export function getSavedTheme() {
-  if (!USE_SAVED_THEME) return DEFAULT_THEME;
-  const saved = localStorage.getItem(STORAGE_KEY);
-  return THEMES.some((t) => t.id === saved) ? saved : DEFAULT_THEME;
-}
 
-// Call this when a settings card is clicked: applies AND saves the theme.
-export function applyTheme(name) {
-  const id = THEMES.some((t) => t.id === name) ? name : DEFAULT_THEME;
-  document.documentElement.setAttribute("data-theme", id);
-  localStorage.setItem(STORAGE_KEY, id);
-}
 
-// Runs once on app load, before React renders (no flash of the wrong theme).
-// Sets the attribute only. It does NOT save, so only a user's click in
-// settings ever writes to localStorage.
-document.documentElement.setAttribute("data-theme", getSavedTheme());
+// Only sets the attribute. Saving is handled by appearance.js.
+export function applyTheme(id) {
+  const valid = THEMES.some((t) => t.id === id) ? id : DEFAULT_THEME;
+  document.documentElement.setAttribute("data-theme", valid);
+}

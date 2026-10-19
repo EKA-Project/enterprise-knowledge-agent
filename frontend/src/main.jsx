@@ -5,14 +5,13 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
-
+import { initAppearance } from "./appearance/appearance";
 // Variables first so base & layout can use CSS custom properties
 import "./styles/variables.css";
 import "./styles/base.css";
 import "./styles/layout.css";
 
-// TEMPORARY: sets data-theme on <html> until the Appearance settings exist
-import "./theme.js";
+initAppearance();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

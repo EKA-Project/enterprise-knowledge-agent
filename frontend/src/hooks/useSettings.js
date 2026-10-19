@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DEFAULT_SETTINGS, applyAppearance } from "../components/settings/settingsConfig";
+import { DEFAULT_SETTINGS } from "../components/settings/settingsConfig";
 
 const KEY = "eka.settings";
 
@@ -21,7 +21,6 @@ export default function useSettings() {
     } catch {
       /* ignore */
     }
-    applyAppearance(settings);
   }, [settings]);
 
   return [settings, (patch) => setSettings((prev) => ({ ...prev, ...patch }))];
