@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { documents as initialDocuments } from './DocumentData';
+import { getDocuments, setDocumentFlag } from './documentService.js';
 
 // Small shared stores so the page hero, the health overview and the document
 // list can talk to each other without prop-drilling through three role pages.
@@ -22,20 +23,40 @@ function createStore(initial) {
 }
 
 // ---- The documents themselves (pin / bookmark flags live here) ----
-// Shared so an admin's pin or bookmark is still there after switching role,
-// like in the reference video. Swap for an API call when the backend exists.
-const docsStore = createStore(initialDocuments);
+// Loaded through documentService, and shared so an admin's pin or bookmark is
+// still there after switching role, like in the reference video.
+const docsStore = createStore({ items: [], loading: true });
+let loadStarted = false;
 
-export function toggleDocumentFlag(id, flag) {
-  docsStore.set(
-    docsStore.get().map((doc) => (doc.id === id ? { ...doc, [flag]: !doc[flag] } : doc)),
-  );
+// Fetch the list once (safe to call from every page that shows documents)
+export function loadDocuments() {
+  if (loadStarted) return;
+  loadStarted = true;
+  getDocuments().then((items) => docsStore.set({ items, loading: false }));
 }
 
+// Optimistic update: flip the flag right away, roll back if the "request" fails
+export function toggleDocumentFlag(id, flag) {
+  const doc = docsStore.get().items.find((item) => item.id === id);
+  if (!doc) return;
+  const next = !doc[flag];
+
+  const apply = (value) => {
+    const { items } = docsStore.get();
+    docsStore.set({
+      loading: false,
+      items: items.map((item) => (item.id === id ? { ...item, [flag]: value } : item)),
+    });
+  };
+
+  apply(next);
+  setDocumentFlag(id, flag, next).catch(() => apply(!next));
+}
+
+// Returns { items, loading }
 export function useDocuments() {
   return useSyncExternalStore(docsStore.subscribe, docsStore.get);
 }
-
 // ---- How many documents the current filter shows (read by the page hero) ----
 const resultsStore = createStore({ count: null, filterLabel: '' });
 

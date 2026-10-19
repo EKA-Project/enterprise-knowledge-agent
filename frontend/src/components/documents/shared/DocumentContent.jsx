@@ -16,6 +16,7 @@ import {
   useStatusFilter,
   useDocuments,
   toggleDocumentFlag,
+  loadDocuments,
 } from './documentResults.js';
 import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
@@ -55,9 +56,13 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   // Status picked in the admin Document Health Overview ("" = none)
   const status = useStatusFilter();
 
-  // Shared documents (pin / bookmark flags survive switching role)
-  const docs = useDocuments();
+  // Documents come from documentService (shared, so flags survive role switches)
+  const { items: docs, loading } = useDocuments();
   const handleToggleFlag = toggleDocumentFlag;
+
+  useEffect(() => {
+    loadDocuments();
+  }, []);
 
   const openSummary = (doc) => navigate(summaryPath(doc));
 
@@ -87,12 +92,12 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
   // Tell the page hero how many documents the current filter shows
   useEffect(() => {
+    if (loading) return;
     setDocumentResults({
       count: total,
       filterLabel: isCategoryFiltered ? categoryLabel : '',
     });
-  }, [total, isCategoryFiltered, categoryLabel]);
-
+  }, [loading, total, isCategoryFiltered, categoryLabel]);
   // Reset shared state when leaving the page
   useEffect(
     () => () => {
