@@ -131,8 +131,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             <option value={ALL_FORMATS}>All Formats</option>
 
             {documentFormats.map((fmt) => (
-              <option key={fmt} value={fmt}>
-                {fmt}
+              <option key={fmt.value} value={fmt.value}>
+                {fmt.label}
               </option>
             ))}
           </select>
