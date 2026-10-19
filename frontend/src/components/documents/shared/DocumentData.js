@@ -8,87 +8,38 @@
 const uploadDescription = (name, area) =>
   `Official document regarding ${name}. Vectorized and indexed for ${area} enterprise search and citations.`;
 
+// Uploaded sample documents share the same owner / chunk count in the video.
+const uploaded = (id, title, format, size, readTime) => ({
+  id,
+  title,
+  format,
+  category: 'Engineering & DevOps',
+  description: uploadDescription(title, 'Engineering & DevOps'),
+  readTime,
+  size,
+  pages: 7,
+  status: 'Indexed',
+  author: 'Maya Narang',
+  chunks: 42,
+});
+
+
 export const documents = [
   // ---- Uploaded documents ----
+    uploaded('doc-1', 'eka_chat_architecture-withfeedback', 'PDF', '142 KB', '4 min read'),
+  uploaded('doc-2', 'Final_chatArchitecture', 'TXT', '38 KB', '4 min read'),
+  uploaded('doc-3', 'eka_chat_architecture-withfeedback', 'PDF', '142 KB', '4 min read'),
   {
-    id: 'doc-1',
-    title: 'eka_chat_architecture-withfeedback',
-    format: 'PDF',
-    category: 'Engineering & DevOps',
-    description: uploadDescription('eka_chat_architecture-withfeedback', 'Engineering & DevOps'),
-    readTime: '4 min read',
-    size: '142 KB',
-    pages: 7,
-    status: 'Indexed',
-    author: 'Platform Engineering', // not in video
-    chunks: 18, // not in video
-  },
-  {
-    id: 'doc-2',
-    title: 'Final_chatArchitecture',
-    format: 'TXT',
-    category: 'Engineering & DevOps',
-    description: uploadDescription('Final_chatArchitecture', 'Engineering & DevOps'),
-    readTime: '4 min read',
-    size: '38 KB',
-    pages: 7,
-    status: 'Indexed',
-    author: 'Platform Engineering', // not in video
-    chunks: 14, // not in video
-  },
-  {
-    id: 'doc-3',
-    title: 'eka_chat_architecture-withfeedback',
-    format: 'PDF',
-    category: 'Engineering & DevOps',
-    description: uploadDescription('eka_chat_architecture-withfeedback', 'Engineering & DevOps'),
-    readTime: '4 min read',
-    size: '142 KB',
-    pages: 7,
-    status: 'Indexed',
-    author: 'Platform Engineering', // not in video
-    chunks: 18, // not in video
-  },
-  {
-    id: 'doc-4',
-    title: 'Enterprise Document',
-    format: 'PDF',
+    ...uploaded('doc-4', 'Enterprise Document', 'PDF', '2.1 MB', '5 min read'),
     category: 'General Knowledge',
     description: uploadDescription('Enterprise Document', 'General Knowledge'),
-    readTime: '5 min read',
-    size: '2.1 MB',
-    pages: 7,
-    status: 'Indexed',
-    author: 'EKA Admin', // not in video
-    chunks: 22, // not in video
   },
   {
-    id: 'doc-5',
-    title: 'Enterprise Document',
-    format: 'PDF',
+    ...uploaded('doc-5', 'Enterprise Document', 'PDF', '2.1 MB', '5 min read'),
     category: 'General Knowledge',
     description: uploadDescription('Enterprise Document', 'General Knowledge'),
-    readTime: '5 min read',
-    size: '2.1 MB',
-    pages: 7,
-    status: 'Indexed',
-    author: 'EKA Admin', // not in video
-    chunks: 22, // not in video
   },
-  {
-    id: 'doc-6',
-    title: 'Final_chatArchitecture',
-    format: 'PDF',
-    category: 'Engineering & DevOps',
-    description: uploadDescription('Final_chatArchitecture', 'Engineering & DevOps'),
-    readTime: '5 min read',
-    size: '2.1 MB',
-    pages: 7,
-    status: 'Indexed',
-    author: 'Platform Engineering', // not in video
-    chunks: 16, // not in video
-  },
-
+  uploaded('doc-6', 'Final_chatArchitecture', 'PDF', '2.1 MB', '5 min read'),
   // ---- Company documents ----
   {
     id: 'doc-7',

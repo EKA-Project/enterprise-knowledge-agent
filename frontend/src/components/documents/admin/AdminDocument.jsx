@@ -25,10 +25,10 @@ function AdminDocument() {
               {/* Not wired yet — compare / redline flow comes later */}
               <button
                 type="button"
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-3 text-sm font-semibold text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)"
+                className="inline-flex h-[26px] cursor-pointer items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)"
               >
-                <Columns2 size={14} />
-                <Sparkles size={13} className="text-amber-500" />
+                <Columns2 size={12} />
+                <Sparkles size={12} className="text-amber-500" />
                 Compare &amp; Redline
               </button>
 
@@ -36,7 +36,7 @@ function AdminDocument() {
                 type="button"
                 onClick={openUpload}
                 disabled={!canUpload}
-                className="cursor-pointer rounded-full bg-(--primary) px-5 py-3 text-sm font-bold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
+                className="h-[26px] cursor-pointer rounded-full bg-(--primary) px-3.5 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
               >
                 + Ingest Document
               </button>

@@ -1,6 +1,6 @@
 // Filter values + the filter function for the Documents page.
 // Today it filters the in-memory list; when the API arrives, replace
-// filterDocuments() with a request that sends { search, category, format }.
+// filterDocuments() with a request that sends { search, category, format, status }.
 
 export const ALL_CATEGORIES = 'All Categories';
 export const ALL_FORMATS = 'All Formats';
@@ -9,7 +9,7 @@ export const ALL_FORMATS = 'All Formats';
 export const SAVED_FILTER = 'Saved Bookmarks';
 export const PINNED_FILTER = 'Admin Pinned';
 
-export function filterDocuments(docs, { search, category, format }) {
+export function filterDocuments(docs, { search, category, format, status = '' }) {
   const text = search.toLowerCase().trim();
 
   return docs.filter((doc) => {
@@ -26,9 +26,13 @@ export function filterDocuments(docs, { search, category, format }) {
 
     const matchesFormat = format === ALL_FORMATS || doc.format === format;
 
-    return matchesSearch && matchesCategory && matchesFormat;
+    // Status comes from the Document Health Overview cards (empty = no filter)
+    const matchesStatus = !status || doc.status === status;
+
+    return matchesSearch && matchesCategory && matchesFormat && matchesStatus;
   });
 }
+
 // Pure pagination helper: returns the slice for the current page + totals.
 export const PAGE_SIZES = [10, 25, 50];
 

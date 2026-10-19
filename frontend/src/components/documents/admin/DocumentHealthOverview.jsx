@@ -1,110 +1,139 @@
 import { documentHealth } from '../shared/DocumentData';
+import Badge from '../../common/Badge.jsx';
+import { setStatusFilter, useStatusFilter } from '../shared/documentResults.js';
 
-// Donut geometry (the SVG viewBox is 100 x 100).
-const RADIUS = 44;
-const STROKE = 12;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+// Badge colour per status (maps to the shared Badge types)
+const BADGE_TYPE = {
+  Indexed: 'success',
+  Processing: 'info',
+  Outdated: 'warning',
+  Failed: 'danger',
+};
 
-// Smallest width a tile's progress bar may have, so tiny shares
-// (2-4%) still show a visible sliver, as in the reference design.
-const MIN_BAR_PERCENT = 20;
-
-function DocumentHealthOverview() {
-  const total = documentHealth.reduce((sum, item) => sum + item.count, 0);
-
-  // For every status work out its percentage, the arc length it needs on
-  // the donut, and where that arc starts (= everything before it).
-  const segments = documentHealth.map((item, index) => {
-    const countBefore = documentHealth
-      .slice(0, index)
-      .reduce((sum, previous) => sum + previous.count, 0);
-
-    return {
-      ...item,
-      percent: Math.round((item.count / total) * 100),
-      arc: (item.count / total) * CIRCUMFERENCE,
-      start: (countBefore / total) * CIRCUMFERENCE,
-    };
-  });
-
-  // "Indexed" is the healthy share shown in the donut centre.
-  const healthy = segments[0];
+// Ring made of one arc per status, drawn clockwise from 12 o'clock.
+function HealthDonut({ items, total, centerText, centerColor }) {
+  const radius = 42;
+  const circumference = 2 * Math.PI * radius;
+  let offset = 0;
 
   return (
-    <section className="mb-6 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm)">
-      <div className="flex items-center gap-6">
-        {/* Donut chart */}
-        <div className="relative h-24 w-24 shrink-0">
-          <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" aria-hidden="true">
-            {segments.map((segment) => (
-              <circle
-                key={segment.key}
-                cx="50"
-                cy="50"
-                r={RADIUS}
-                fill="none"
-                strokeWidth={STROKE}
-                strokeDasharray={`${segment.arc} ${CIRCUMFERENCE - segment.arc}`}
-                strokeDashoffset={-segment.start}
-                style={{ stroke: segment.color }}
-              />
-            ))}
-          </svg>
+    <div className="relative h-[94px] w-[94px] shrink-0">
+      <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" aria-hidden="true">
+        {items.map((item) => {
+          const length = (item.count / total) * circumference;
+          const circle = (
+            <circle
+              key={item.key}
+              cx="50"
+              cy="50"
+              r={radius}
+              fill="none"
+              stroke={item.color}
+              strokeWidth="9"
+              strokeDasharray={`${length} ${circumference - length}`}
+              strokeDashoffset={-offset}
+            />
+          );
+          offset += length;
+          return circle;
+        })}
+      </svg>
+      <span
+        className="absolute inset-0 flex items-center justify-center font-serif text-xl font-black"
+        style={{ color: centerColor }}
+      >
+        {centerText}
+      </span>
+    </div>
+  );
+}
 
-          <span className="doc-heading absolute inset-0 flex items-center justify-center text-2xl font-bold text-(--text-primary)">
-            {healthy.percent}%
-          </span>
+// Admin-only health snapshot. Clicking a status card highlights it, updates the
+// ring + title, and filters the document list below to that status.
+function DocumentHealthOverview() {
+  const activeStatus = useStatusFilter();
+  const total = documentHealth.reduce((sum, item) => sum + item.count, 0);
+  const percent = (count) => Math.round((count / total) * 100);
+
+  const active = documentHealth.find((item) => item.label === activeStatus);
+  const indexed = documentHealth.find((item) => item.key === 'indexed');
+
+  // Default view = overall health (indexed share); active view = that status
+  const centerItem = active ?? indexed;
+  const badgeText = active ? `${active.count} ${active.label}` : `${percent(indexed.count)}% Healthy`;
+  const badgeType = active ? BADGE_TYPE[active.label] : 'success';
+  const subtitle = active
+    ? `📌 ${active.count} documents (${percent(active.count)}%) currently ${active.label.toLowerCase()}`
+    : `Real-time ingestion & health telemetry across ${total} total repository files.`;
+
+  return (
+    <section className="mb-6 flex flex-col gap-5 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-4 shadow-(--shadow-sm) lg:flex-row lg:items-center">
+      {/* Left: ring + title */}
+      <div className="flex items-center gap-4 lg:basis-[380px] lg:shrink-0">
+        <HealthDonut
+          items={documentHealth}
+          total={total}
+          centerText={`${percent(centerItem.count)}%`}
+          centerColor={active ? active.color : 'var(--text-primary)'}
+        />
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="font-serif text-[15px] font-bold text-(--text-primary)">
+              Document Health Overview
+            </h2>
+            <Badge text={badgeText} type={badgeType} size="sm" />
+          </div>
+          <p className="mt-1 text-[11px] leading-4 text-(--text-muted)">{subtitle}</p>
         </div>
+      </div>
 
-        {/* Title and summary */}
-        <div className="min-w-[210px]">
-          <h2 className="doc-heading text-lg font-bold text-(--text-primary)">
-            Document Health Overview
-          </h2>
-          <span className="doc-mono mt-2 inline-flex rounded-full border border-(--border-medium) bg-(--bg-surface) px-2.5 py-0.5 text-[10px] font-semibold text-(--text-primary)">
-            {healthy.percent}% Healthy
-          </span>
-          <p className="mt-2 text-xs leading-5 text-(--text-secondary)">
-            Real-time ingestion &amp; health telemetry across {total} total repository files
-          </p>
-        </div>
-
-        {/* Status tiles */}
-        <div className="grid flex-1 grid-cols-4 gap-3">
-          {segments.map((segment) => (
-            <div
-              key={segment.key}
-              className="rounded-xl border border-(--border-subtle) bg-(--bg-surface-subtle) p-4"
+      {/* Right: one clickable card per status */}
+      <div className="grid flex-1 grid-cols-2 gap-3 lg:grid-cols-4">
+        {documentHealth.map((item) => {
+          const isActive = activeStatus === item.label;
+          return (
+            <button
+              key={item.key}
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => setStatusFilter(isActive ? '' : item.label)}
+              style={{ borderColor: isActive ? item.color : undefined }}
+              className={`cursor-pointer rounded-xl border px-3.5 py-3 text-left transition-colors ${
+                isActive
+                  ? 'bg-white'
+                  : 'border-transparent bg-(--bg-surface-subtle) hover:border-(--border-subtle) hover:bg-white'
+              }`}
             >
-              <div className="flex items-center justify-between text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-(--text-secondary)">
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-1.5 text-[11px] font-semibold text-(--text-secondary)">
                   <span
                     className="h-1.5 w-1.5 rounded-full"
-                    style={{ backgroundColor: segment.color }}
+                    style={{ backgroundColor: item.color }}
                   />
-                  {segment.label}
+                  {item.label}
                 </span>
-                <span className="text-[10px]" style={{ color: segment.color }}>
-                  {segment.percent}%
+                <span className="doc-mono text-[10px]" style={{ color: item.color }}>
+                  {percent(item.count)}%
                 </span>
               </div>
 
-              <p className="doc-heading mt-2 text-2xl font-bold text-(--text-primary)">
-                {segment.count}
+              <p className="mt-2 font-serif text-[26px] font-black leading-none text-(--text-primary)">
+                {item.count}
               </p>
 
-              <div className="mt-3 h-1 rounded-full bg-(--border-subtle)">
+              {/* Share bar (small shares get a minimum width so they stay visible) */}
+              <div className="mt-3 h-1 rounded-full bg-white/80">
                 <div
                   className="h-full rounded-full"
                   style={{
-                    width: `${Math.max(segment.percent, MIN_BAR_PERCENT)}%`,
-                    backgroundColor: segment.color,
+                    width: `${Math.max(percent(item.count), 16)}%`,
+                    backgroundColor: item.color,
                   }}
                 />
               </div>
-            </div>
-          ))}
-        </div>
+            </button>
+          );
+        })}
       </div>
     </section>
   );

@@ -14,7 +14,7 @@ import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
 import DocumentPagination from './DocumentPagination.jsx';
 import DocumentEmptyState from './DocumentEmptyState.jsx';
-import { setDocumentResults } from './documentResults.js';
+import { setDocumentResults, setStatusFilter, useStatusFilter } from './documentResults.js';
 
 // Single place that knows the summary URL (matches the route in AppRoutes)
 const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
@@ -30,6 +30,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [pageSize, setPageSize] = useState(10);
   // Local copy of the documents, so pin / bookmark toggles show up in the UI.
   const [docs, setDocs] = useState(documents);
+    // Status picked in the admin Document Health Overview ("" = none)
+  const status = useStatusFilter();
 
   const handleToggleFlag = (id, flag) => {
     setDocs((current) =>
@@ -41,7 +43,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
   const openSummary = (doc) => navigate(summaryPath(doc));
 
-  const filteredDocuments = filterDocuments(docs, { search, category, format });
+   const filteredDocuments = filterDocuments(docs, { search, category, format, status });
   const { pageItems, total, totalPages, current, from, to } = paginate(
     filteredDocuments,
     page,
@@ -51,19 +53,20 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   // Back to page 1 whenever the filter or page size changes
   useEffect(() => {
     setPage(1);
-  }, [search, category, format, pageSize]);
+   }, [search, category, format, status, pageSize]);
 
   const resetFilters = () => {
     setSearch('');
     setCategory(ALL_CATEGORIES);
     setFormat(ALL_FORMATS);
+        setStatusFilter('');
   };
 
   // Text shown in the "Filtered by" chip (category label, or Saved / Pinned)
   const categoryLabel =
     documentCategories.find((cat) => cat.value === category)?.label ?? category;
     const isCategoryFiltered = category !== ALL_CATEGORIES;
-    
+
     // Tell the page hero how many documents the current filter shows
   useEffect(() => {
     setDocumentResults({
@@ -72,8 +75,14 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     });
   }, [total, isCategoryFiltered, categoryLabel]);
 
-  // Reset when leaving the page
-  useEffect(() => () => setDocumentResults({ count: null, filterLabel: '' }), []);
+    // Reset shared state when leaving the page
+  useEffect(
+    () => () => {
+      setDocumentResults({ count: null, filterLabel: '' });
+      setStatusFilter('');
+    },
+    [],
+  );
 
 
   return (
@@ -103,6 +112,21 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
               type="button"
               aria-label="Clear category filter"
               onClick={() => setCategory(ALL_CATEGORIES)}
+              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full text-(--text-muted) transition-colors hover:text-(--text-primary)"
+            >
+              <X size={12} />
+            </button>
+          </span>
+        )}
+
+                {/* Active status filter chip (set from the health overview) */}
+        {status && (
+          <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) py-1.5 pl-3 pr-2 text-xs text-(--text-secondary)">
+            Status: <strong className="font-semibold text-(--text-primary)">{status}</strong>
+            <button
+              type="button"
+              aria-label="Clear status filter"
+              onClick={() => setStatusFilter('')}
               className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full text-(--text-muted) transition-colors hover:text-(--text-primary)"
             >
               <X size={12} />
@@ -204,7 +228,13 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
               ))}
             </section>
           ) : (
-            <DocumentList documents={pageItems} onOpen={openSummary} />
+                        <DocumentList
+              documents={pageItems}
+              adminMode={adminMode}
+              showActions={!isManager}
+              onToggleFlag={handleToggleFlag}
+              onOpen={openSummary}
+            />
           )}
 
           <DocumentPagination

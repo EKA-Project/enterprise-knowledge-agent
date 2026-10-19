@@ -49,10 +49,15 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
   const [showPinnedTag, setShowPinnedTag] = useState(false);
   const [showSavedTag, setShowSavedTag] = useState(false);
 
-  const handlePin = (e) => {
-    e.stopPropagation(); // don't open the summary when pinning
+  // Pin toggle (used by the pin icon and the "..." menu)
+  const togglePin = () => {
     setShowPinnedTag(!document.isPinned);
     onToggleFlag(document.id, 'isPinned');
+  };
+
+  const handlePin = (e) => {
+    e.stopPropagation(); // don't open the summary when pinning
+    togglePin();
   };
 
   // Bookmark toggle (used by the bookmark icon and the "..." menu)
@@ -151,9 +156,12 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                 </button>
 
               <DocumentCardMenu
+                adminMode={adminMode}
+                isPinned={Boolean(document.isPinned)}
                 isBookmarked={Boolean(document.isBookmarked)}
                 onOpen={() => onOpen?.(document)}
                 onToggleBookmark={toggleSave}
+                onTogglePin={togglePin}
               />
               </div>
                )}
