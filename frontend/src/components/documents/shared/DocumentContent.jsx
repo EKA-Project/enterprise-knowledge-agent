@@ -14,6 +14,7 @@ import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
 import DocumentPagination from './DocumentPagination.jsx';
 import DocumentEmptyState from './DocumentEmptyState.jsx';
+import { setDocumentResults } from './documentResults.js';
 
 // Single place that knows the summary URL (matches the route in AppRoutes)
 const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
@@ -61,6 +62,17 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   // Text shown in the "Filtered by" chip (category label, or Saved / Pinned)
   const categoryLabel =
     documentCategories.find((cat) => cat.value === category)?.label ?? category;
+  // Tell the page hero how many documents the current filter shows
+  useEffect(() => {
+    setDocumentResults({
+      count: total,
+      filterLabel: isCategoryFiltered ? categoryLabel : '',
+    });
+  }, [total, isCategoryFiltered, categoryLabel]);
+
+  // Reset when leaving the page
+  useEffect(() => () => setDocumentResults({ count: null, filterLabel: '' }), []);
+
   const isCategoryFiltered = category !== ALL_CATEGORIES;
 
   return (

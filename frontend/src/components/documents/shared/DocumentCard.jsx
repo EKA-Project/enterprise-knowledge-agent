@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Pin, Bookmark, MoreHorizontal } from 'lucide-react';
 import '../../../styles/Document.css';
+import DocumentCardMenu from './DocumentCardMenu.jsx';
 
 // File-type tile colours (keyed by document.format). Unknown formats fall back to neutral.
 // Exported so the list view and the summary page use the same colours.
@@ -42,9 +43,6 @@ function Tooltip({ children }) {
   );
 }
 
-const iconButton =
-  'rounded-md p-1 transition-colors text-(--text-muted) hover:text-(--text-primary)';
-
 function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen }) {
   // "Pinned" / "Saved" tags appear when the user toggles a flag on this card
   // (not for documents that were already pinned / saved when the page loaded).
@@ -57,10 +55,15 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
     onToggleFlag(document.id, 'isPinned');
   };
 
-  const handleSave = (e) => {
-    e.stopPropagation();
+  // Bookmark toggle (used by the bookmark icon and the "..." menu)
+  const toggleSave = () => {
     setShowSavedTag(!document.isBookmarked);
     onToggleFlag(document.id, 'isBookmarked');
+  };
+
+  const handleSave = (e) => {
+    e.stopPropagation();
+    toggleSave();
   };
 
   const status = statusMeta[document.status] ?? {
@@ -147,15 +150,11 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                   <Bookmark size={14} className={document.isBookmarked ? 'fill-current' : ''} />
                 </button>
 
-                {/* Static for now — the actions menu is a later step */}
-                <button
-                  type="button"
-                  aria-label="More document actions"
-                  onClick={(e) => e.stopPropagation()}
-                  className={`cursor-pointer ${iconButton}`}
-                >
-                  <MoreHorizontal size={16} />
-                </button>
+              <DocumentCardMenu
+                isBookmarked={Boolean(document.isBookmarked)}
+                onOpen={() => onOpen?.(document)}
+                onToggleBookmark={toggleSave}
+              />
               </div>
                )}
           </div>

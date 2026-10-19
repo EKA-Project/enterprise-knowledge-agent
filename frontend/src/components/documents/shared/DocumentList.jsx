@@ -1,102 +1,112 @@
-import { formatStyles, statusMeta } from './DocumentCard';
-import '../../../styles/Document.css';
+import DataTable from '../../common/DataTable.jsx';
+import { formatStyles, statusMeta } from './DocumentCard.jsx';
 
-const headers = ['Document Name', 'Category', 'Author / Owner', 'Size', 'Chunks', 'Status', 'Action'];
-
-// List (table) view. Data only via props, so it works with API data later.
+// List view of the documents: columns as in the reference video.
+// Built on the shared DataTable. `onOpen(document)` opens the summary page.
 function DocumentList({ documents, onOpen }) {
+  const columns = [
+    {
+      key: 'title',
+      header: 'Document Name',
+      width: '32%',
+      render: (doc) => (
+        <div className="flex items-center gap-3">
+          <span
+            className={`doc-mono flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold ${
+              formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)'
+            }`}
+          >
+            {doc.format}
+          </span>
+          <div className="min-w-0">
+            <p className="doc-heading text-sm font-bold leading-5 text-(--text-primary)">
+              {doc.title}
+            </p>
+            <p className="doc-mono mt-0.5 text-[10px] text-(--text-muted)">
+              {doc.readTime} • {doc.pages} pages
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'category',
+      header: 'Category',
+      width: '15%',
+      render: (doc) => (
+        <span className="inline-block rounded-full bg-(--bg-surface-subtle) px-3 py-1.5 text-[10px] font-semibold text-(--text-secondary)">
+          {doc.category}
+        </span>
+      ),
+    },
+    {
+      key: 'author',
+      header: 'Author / Owner',
+      width: '17%',
+      render: (doc) => <span className="text-xs text-(--text-secondary)">{doc.author}</span>,
+    },
+    {
+      key: 'size',
+      header: 'Size',
+      width: '8%',
+      render: (doc) => <span className="text-xs text-(--text-secondary)">{doc.size}</span>,
+    },
+    {
+      key: 'chunks',
+      header: 'Chunks',
+      width: '9%',
+      render: (doc) => (
+        <span className="doc-mono rounded bg-(--bg-surface-subtle) px-1.5 py-0.5 text-[11px] text-(--text-secondary)">
+          {doc.chunks} chunks
+        </span>
+      ),
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      width: '12%',
+      render: (doc) => {
+        const status = statusMeta[doc.status] ?? {
+          label: doc.status,
+          style: 'border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary)',
+        };
+        return (
+          <span
+            className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-semibold ${status.style}`}
+          >
+            {status.label}
+          </span>
+        );
+      },
+    },
+    {
+      key: 'action',
+      header: 'Action',
+      width: '9%',
+      align: 'right',
+      render: (doc) => (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation(); // the row click would open it a second time
+            onOpen?.(doc);
+          }}
+          className="cursor-pointer whitespace-nowrap rounded-full border border-(--border-medium) bg-white px-3 py-1 text-xs font-semibold text-(--text-primary) transition-colors hover:border-(--primary) hover:text-(--primary)"
+        >
+          Summary →
+        </button>
+      ),
+    },
+  ];
+
   return (
-    <div className="overflow-hidden rounded-3xl border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)">
-      {/* Horizontal scroll on small screens instead of squashing columns */}
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[900px] border-collapse text-left">
-          <thead className="bg-(--bg-surface-subtle)/60">
-            <tr className="border-b border-(--border-subtle)">
-              {headers.map((h) => (
-                <th
-                  key={h}
-                  className={`doc-mono px-6 py-4 text-[10px] font-semibold uppercase tracking-widest text-(--text-muted) ${
-                    h === 'Action' ? 'text-right' : ''
-                  }`}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            {documents.map((doc) => {
-              const status = statusMeta[doc.status] ?? statusMeta.Indexed;
-              const tile =
-                formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)';
-
-              return (
-                <tr
-                  key={doc.id}
-                  onClick={() => onOpen?.(doc)}
-                  className="cursor-pointer border-b border-(--border-subtle) transition-colors last:border-b-0 hover:bg-(--bg-surface-subtle)/60"
-                >
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`doc-mono flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[10px] font-bold ${tile}`}
-                      >
-                        {doc.format}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="doc-heading text-sm font-bold leading-5 text-(--text-primary)">
-                          {doc.title}
-                        </p>
-                        <p className="mt-0.5 text-xs text-(--text-muted)">
-                          {doc.readTime} • {doc.pages} pages
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <span className="inline-block rounded-full border border-(--border-subtle) px-3 py-1 text-xs text-(--text-secondary)">
-                      {doc.category}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-(--text-primary)">{doc.author}</td>
-
-                  <td className="px-6 py-4 text-sm text-(--text-primary)">{doc.size}</td>
-
-                  <td className="px-6 py-4">
-                    <span className="doc-mono rounded border border-(--border-subtle) bg-(--bg-surface-subtle)/60 px-1.5 py-0.5 text-[11px] text-(--text-secondary)">
-                      {doc.chunks} chunks
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold ${status.style}`}
-                    >
-                      {status.label}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 text-right">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation(); // row click would open it too
-                        onOpen?.(doc);
-                      }}
-                      className="cursor-pointer rounded-full border border-(--border-medium) bg-(--bg-surface) px-4 py-1.5 text-xs font-medium text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)"
-                    >
-                      Summary →
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+    <div className="overflow-hidden rounded-(--radius-table) border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)">
+      <DataTable
+        columns={columns}
+        rows={documents}
+        caption="Documents"
+        onRowClick={onOpen}
+      />
     </div>
   );
 }

@@ -5,16 +5,17 @@ import { documents } from '../shared/DocumentData';
 import StorageIndicator from './StorageIndicator.jsx';
 import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
+import { useDocumentCountText } from '../shared/documentResults.js';
 
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
-
+  const countText = useDocumentCountText(documents.length);
   return (
     <>
       {/* Admin header: same shared hero, plus storage usage next to the button */}
       <div className="mb-6">
         <PageHero
-          eyebrow={`Ingestion Repository / ${documents.length} Docs`}
+          eyebrow={`Ingestion Repository / ${countText}`}
           title="Raw sources, structured."
           description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
           actions={
