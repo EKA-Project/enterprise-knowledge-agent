@@ -62,7 +62,9 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   // Text shown in the "Filtered by" chip (category label, or Saved / Pinned)
   const categoryLabel =
     documentCategories.find((cat) => cat.value === category)?.label ?? category;
-  // Tell the page hero how many documents the current filter shows
+    const isCategoryFiltered = category !== ALL_CATEGORIES;
+    
+    // Tell the page hero how many documents the current filter shows
   useEffect(() => {
     setDocumentResults({
       count: total,
@@ -73,7 +75,6 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   // Reset when leaving the page
   useEffect(() => () => setDocumentResults({ count: null, filterLabel: '' }), []);
 
-  const isCategoryFiltered = category !== ALL_CATEGORIES;
 
   return (
     <>
