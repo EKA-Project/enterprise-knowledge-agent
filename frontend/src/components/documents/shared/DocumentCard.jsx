@@ -45,7 +45,7 @@ function Tooltip({ children }) {
 const iconButton =
   'rounded-md p-1 transition-colors text-(--text-muted) hover:text-(--text-primary)';
 
-function DocumentCard({ document, adminMode = false, onToggleFlag, onOpen }) {
+function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen }) {
   // "Pinned" / "Saved" tags appear when the user toggles a flag on this card
   // (not for documents that were already pinned / saved when the page loaded).
   const [showPinnedTag, setShowPinnedTag] = useState(false);
@@ -106,58 +106,58 @@ function DocumentCard({ document, adminMode = false, onToggleFlag, onOpen }) {
               )}
             </div>
 
-            {/* Actions */}
-            <div className="flex shrink-0 items-center gap-1">
-              {adminMode ? (
-                <div className="group relative">
-                  <button
-                    type="button"
-                    aria-label={document.isPinned ? 'Unpin document' : 'Pin document'}
-                    aria-pressed={Boolean(document.isPinned)}
-                    onClick={handlePin}
-                    className={`cursor-pointer rounded-md p-1 transition-colors ${
-                      document.isPinned
-                        ? 'text-(--primary)'
-                        : 'text-(--text-muted) hover:text-(--text-primary)'
+            {/* Actions (hidden in the manager view, like the video) */}
+            {showActions && (
+              <div className="flex shrink-0 items-center gap-1">
+                {adminMode ? (
+                  <div className="group relative">
+                    <button
+                      type="button"
+                      aria-label={document.isPinned ? 'Unpin document' : 'Pin document'}
+                      aria-pressed={Boolean(document.isPinned)}
+                      onClick={handlePin}
+                      className={`cursor-pointer rounded-md p-1 transition-colors ${document.isPinned
+                          ? 'text-(--primary)'
+                          : 'text-(--text-muted) hover:text-(--text-primary)'
+                        }`}
+                    >
+                      <Pin size={14} className={document.isPinned ? 'fill-current' : ''} />
+                    </button>
+                    <Tooltip>{document.isPinned ? 'Unpin Document' : 'Pin Document'}</Tooltip>
+                  </div>
+                ) : (
+                  // Employee / Manager: a pinned document just shows a static blue pin
+                  document.isPinned && (
+                    <span className="p-1 text-(--primary)" aria-label="Pinned by admin">
+                      <Pin size={14} className="fill-current" />
+                    </span>
+                  )
+                )}
+
+                <button
+                  type="button"
+                  aria-label={document.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
+                  aria-pressed={Boolean(document.isBookmarked)}
+                  onClick={handleSave}
+                  className={`cursor-pointer rounded-md p-1 transition-colors ${document.isBookmarked
+                      ? 'text-amber-500'
+                      : 'text-(--text-muted) hover:text-(--text-primary)'
                     }`}
-                  >
-                    <Pin size={14} className={document.isPinned ? 'fill-current' : ''} />
-                  </button>
-                  <Tooltip>{document.isPinned ? 'Unpin Document' : 'Pin Document'}</Tooltip>
-                </div>
-              ) : (
-                // Employee / Manager: a pinned document just shows a static blue pin
-                document.isPinned && (
-                  <span className="p-1 text-(--primary)" aria-label="Pinned by admin">
-                    <Pin size={14} className="fill-current" />
-                  </span>
-                )
-              )}
+                >
+                  <Bookmark size={14} className={document.isBookmarked ? 'fill-current' : ''} />
+                </button>
 
-              <button
-                type="button"
-                aria-label={document.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
-                aria-pressed={Boolean(document.isBookmarked)}
-                onClick={handleSave}
-                className={`cursor-pointer rounded-md p-1 transition-colors ${
-                  document.isBookmarked
-                    ? 'text-amber-500'
-                    : 'text-(--text-muted) hover:text-(--text-primary)'
-                }`}
-              >
-                <Bookmark size={14} className={document.isBookmarked ? 'fill-current' : ''} />
-              </button>
-
-              {/* Static for now — the actions menu is a later step */}
-              <button
-                type="button"
-                aria-label="More document actions"
-                onClick={(e) => e.stopPropagation()}
-                className={`cursor-pointer ${iconButton}`}
-              >
-                <MoreHorizontal size={16} />
-              </button>
-            </div>
+                {/* Static for now — the actions menu is a later step */}
+                <button
+                  type="button"
+                  aria-label="More document actions"
+                  onClick={(e) => e.stopPropagation()}
+                  className={`cursor-pointer ${iconButton}`}
+                >
+                  <MoreHorizontal size={16} />
+                </button>
+              </div>
+               )}
           </div>
 
           <h2 className="doc-heading mt-2 text-lg font-bold leading-6 text-(--text-primary)">

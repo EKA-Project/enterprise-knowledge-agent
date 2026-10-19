@@ -18,7 +18,8 @@ import DocumentEmptyState from './DocumentEmptyState.jsx';
 // Single place that knows the summary URL (matches the route in AppRoutes)
 const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
 
-function DocumentsContent({ adminMode = false }) {
+function DocumentsContent({ adminMode = false, variant = 'default' }) {
+  const isManager = variant === 'manager';
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState(ALL_CATEGORIES);
@@ -70,7 +71,11 @@ function DocumentsContent({ adminMode = false }) {
           <Search size={16} className="shrink-0 text-(--text-muted)" />
           <input
             type="text"
-            placeholder="Search by title, summary keywords, or author..."
+            placeholder={
+              isManager
+                ? 'Filter documents by name, keyword, or author…'
+                : 'Search by title, summary keywords, or author...'
+            }
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             className="min-w-0 flex-1 bg-transparent text-sm text-(--text-primary) outline-none placeholder:text-(--text-muted)"
@@ -98,7 +103,9 @@ function DocumentsContent({ adminMode = false }) {
             onChange={(event) => setCategory(event.target.value)}
             className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
-            <option value={ALL_CATEGORIES}>All Categories</option>
+            <option value={ALL_CATEGORIES}>
+              {isManager ? `All Categories (${documentCategories.length})` : 'All Categories'}
+            </option>
             <option value={SAVED_FILTER}>⭐ Saved Bookmarks</option>
             <option value={PINNED_FILTER}>📌 Admin Pinned</option>
 
@@ -177,6 +184,7 @@ function DocumentsContent({ adminMode = false }) {
                   key={document.id}
                   document={document}
                   adminMode={adminMode}
+                  showActions={!isManager}
                   onToggleFlag={handleToggleFlag}
                   onOpen={openSummary}
                 />
