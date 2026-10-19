@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react';
+import { documents as initialDocuments } from './DocumentData';
 
 // Small shared stores so the page hero, the health overview and the document
 // list can talk to each other without prop-drilling through three role pages.
@@ -18,6 +19,21 @@ function createStore(initial) {
       return () => listeners.delete(listener);
     },
   };
+}
+
+// ---- The documents themselves (pin / bookmark flags live here) ----
+// Shared so an admin's pin or bookmark is still there after switching role,
+// like in the reference video. Swap for an API call when the backend exists.
+const docsStore = createStore(initialDocuments);
+
+export function toggleDocumentFlag(id, flag) {
+  docsStore.set(
+    docsStore.get().map((doc) => (doc.id === id ? { ...doc, [flag]: !doc[flag] } : doc)),
+  );
+}
+
+export function useDocuments() {
+  return useSyncExternalStore(docsStore.subscribe, docsStore.get);
 }
 
 // ---- How many documents the current filter shows (read by the page hero) ----

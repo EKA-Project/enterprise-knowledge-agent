@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { documentHealth } from '../shared/DocumentData';
 import Badge from '../../common/Badge.jsx';
 import { setStatusFilter, useStatusFilter } from '../shared/documentResults.js';
@@ -17,7 +18,7 @@ function HealthDonut({ items, total, centerText, centerColor }) {
   let offset = 0;
 
   return (
-    <div className="relative h-[94px] w-[94px] shrink-0">
+    <div className="relative h-[99px] w-[99px] shrink-0">
       <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" aria-hidden="true">
         {items.map((item) => {
           const length = (item.count / total) * circumference;
@@ -39,7 +40,7 @@ function HealthDonut({ items, total, centerText, centerColor }) {
         })}
       </svg>
       <span
-        className="absolute inset-0 flex items-center justify-center font-serif text-xl font-black"
+        className="absolute inset-0 flex items-center justify-center font-serif text-[22px] font-black"
         style={{ color: centerColor }}
       >
         {centerText}
@@ -48,42 +49,48 @@ function HealthDonut({ items, total, centerText, centerColor }) {
   );
 }
 
-// Admin-only health snapshot. Clicking a status card highlights it, updates the
-// ring + title, and filters the document list below to that status.
+// Admin-only health snapshot.
+// Hovering a status card previews it on the ring + title; clicking selects it
+// (highlighted card) and filters the document list below to that status.
 function DocumentHealthOverview() {
   const activeStatus = useStatusFilter();
+  const [hoveredKey, setHoveredKey] = useState(null);
+
   const total = documentHealth.reduce((sum, item) => sum + item.count, 0);
   const percent = (count) => Math.round((count / total) * 100);
 
-  const active = documentHealth.find((item) => item.label === activeStatus);
   const indexed = documentHealth.find((item) => item.key === 'indexed');
+  const selected = documentHealth.find((item) => item.label === activeStatus);
+  const hovered = documentHealth.find((item) => item.key === hoveredKey);
 
-  // Default view = overall health (indexed share); active view = that status
-  const centerItem = active ?? indexed;
-  const badgeText = active ? `${active.count} ${active.label}` : `${percent(indexed.count)}% Healthy`;
-  const badgeType = active ? BADGE_TYPE[active.label] : 'success';
-  const subtitle = active
-    ? `📌 ${active.count} documents (${percent(active.count)}%) currently ${active.label.toLowerCase()}`
+  // What the ring + title show: hovered card first, then the selected one,
+  // otherwise the overall health (indexed share).
+  const shown = hovered ?? selected ?? null;
+  const centerItem = shown ?? indexed;
+  const badgeText = shown ? `${shown.count} ${shown.label}` : `${percent(indexed.count)}% Healthy`;
+  const badgeType = shown ? BADGE_TYPE[shown.label] : 'success';
+  const subtitle = shown
+    ? `📌 ${shown.count} documents (${percent(shown.count)}%) currently ${shown.label.toLowerCase()}`
     : `Real-time ingestion & health telemetry across ${total} total repository files.`;
 
   return (
-    <section className="mb-6 flex flex-col gap-5 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-4 shadow-(--shadow-sm) lg:flex-row lg:items-center">
+    <section className="mb-6 flex flex-col gap-5 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
       {/* Left: ring + title */}
-      <div className="flex items-center gap-4 lg:basis-[380px] lg:shrink-0">
+      <div className="flex items-center gap-5 lg:basis-[460px] lg:shrink-0">
         <HealthDonut
           items={documentHealth}
           total={total}
           centerText={`${percent(centerItem.count)}%`}
-          centerColor={active ? active.color : 'var(--text-primary)'}
+          centerColor={shown ? shown.color : 'var(--text-primary)'}
         />
-        <div className="min-w-0">
+        <div className="min-w-0 max-w-[300px]">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-serif text-[15px] font-bold text-(--text-primary)">
+            <h2 className="font-serif text-[17px] font-bold leading-tight text-(--text-primary)">
               Document Health Overview
             </h2>
             <Badge text={badgeText} type={badgeType} size="sm" />
           </div>
-          <p className="mt-1 text-[11px] leading-4 text-(--text-muted)">{subtitle}</p>
+          <p className="mt-1.5 text-[11px] leading-4 text-(--text-muted)">{subtitle}</p>
         </div>
       </div>
 
@@ -97,11 +104,16 @@ function DocumentHealthOverview() {
               type="button"
               aria-pressed={isActive}
               onClick={() => setStatusFilter(isActive ? '' : item.label)}
+              onMouseEnter={() => setHoveredKey(item.key)}
+              onMouseLeave={() => setHoveredKey(null)}
+              onFocus={() => setHoveredKey(item.key)}
+              onBlur={() => setHoveredKey(null)}
               style={{ borderColor: isActive ? item.color : undefined }}
-              className={`cursor-pointer rounded-xl border px-3.5 py-3 text-left transition-colors ${
+              // Resting fill #e0eef7 is the light blue measured from the reference video
+              className={`min-h-[86px] cursor-pointer rounded-xl border px-4 py-3.5 text-left transition-colors ${
                 isActive
                   ? 'bg-white'
-                  : 'border-transparent bg-(--bg-surface-subtle) hover:border-(--border-subtle) hover:bg-white'
+                  : 'border-transparent bg-[#e0eef7] hover:border-(--border-subtle) hover:bg-white'
               }`}
             >
               <div className="flex items-center justify-between gap-2">
@@ -122,7 +134,7 @@ function DocumentHealthOverview() {
               </p>
 
               {/* Share bar (small shares get a minimum width so they stay visible) */}
-              <div className="mt-3 h-1 rounded-full bg-white/80">
+              <div className="mt-3 h-1 rounded-full bg-white/70">
                 <div
                   className="h-full rounded-full"
                   style={{

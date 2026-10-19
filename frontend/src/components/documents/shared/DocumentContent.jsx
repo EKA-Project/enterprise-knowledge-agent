@@ -1,7 +1,7 @@
 import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { documents, documentCategories, documentFormats } from './DocumentData';
+import { documentCategories, documentFormats } from './DocumentData';
 import {
   ALL_CATEGORIES,
   ALL_FORMATS,
@@ -10,14 +10,37 @@ import {
   filterDocuments,
   paginate,
 } from './documentFilters';
+import {
+  setDocumentResults,
+  setStatusFilter,
+  useStatusFilter,
+  useDocuments,
+  toggleDocumentFlag,
+} from './documentResults.js';
 import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
 import DocumentPagination from './DocumentPagination.jsx';
 import DocumentEmptyState from './DocumentEmptyState.jsx';
-import { setDocumentResults, setStatusFilter, useStatusFilter } from './documentResults.js';
 
 // Single place that knows the summary URL (matches the route in AppRoutes)
 const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
+
+// Small "Filtered by: …" chip with a clear button
+function FilterChip({ label, value, clearLabel, onClear }) {
+  return (
+    <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) py-1.5 pl-3 pr-2 text-xs text-(--text-secondary)">
+      {label} <strong className="font-semibold text-(--text-primary)">{value}</strong>
+      <button
+        type="button"
+        aria-label={clearLabel}
+        onClick={onClear}
+        className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full text-(--text-muted) transition-colors hover:text-(--text-primary)"
+      >
+        <X size={12} />
+      </button>
+    </span>
+  );
+}
 
 function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const isManager = variant === 'manager';
@@ -28,22 +51,17 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [viewMode, setViewMode] = useState('grid');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  // Local copy of the documents, so pin / bookmark toggles show up in the UI.
-  const [docs, setDocs] = useState(documents);
-    // Status picked in the admin Document Health Overview ("" = none)
+  
+  // Status picked in the admin Document Health Overview ("" = none)
   const status = useStatusFilter();
 
-  const handleToggleFlag = (id, flag) => {
-    setDocs((current) =>
-      current.map((item) =>
-        item.id === id ? { ...item, [flag]: !item[flag] } : item,
-      ),
-    );
-  };
+  // Shared documents (pin / bookmark flags survive switching role)
+  const docs = useDocuments();
+  const handleToggleFlag = toggleDocumentFlag;
 
   const openSummary = (doc) => navigate(summaryPath(doc));
 
-   const filteredDocuments = filterDocuments(docs, { search, category, format, status });
+  const filteredDocuments = filterDocuments(docs, { search, category, format, status });
   const { pageItems, total, totalPages, current, from, to } = paginate(
     filteredDocuments,
     page,
@@ -53,21 +71,21 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   // Back to page 1 whenever the filter or page size changes
   useEffect(() => {
     setPage(1);
-   }, [search, category, format, status, pageSize]);
+  }, [search, category, format, status, pageSize]);
 
   const resetFilters = () => {
     setSearch('');
     setCategory(ALL_CATEGORIES);
     setFormat(ALL_FORMATS);
-        setStatusFilter('');
+    setStatusFilter('');
   };
 
   // Text shown in the "Filtered by" chip (category label, or Saved / Pinned)
   const categoryLabel =
     documentCategories.find((cat) => cat.value === category)?.label ?? category;
-    const isCategoryFiltered = category !== ALL_CATEGORIES;
+  const isCategoryFiltered = category !== ALL_CATEGORIES;
 
-    // Tell the page hero how many documents the current filter shows
+  // Tell the page hero how many documents the current filter shows
   useEffect(() => {
     setDocumentResults({
       count: total,
@@ -75,7 +93,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     });
   }, [total, isCategoryFiltered, categoryLabel]);
 
-    // Reset shared state when leaving the page
+  // Reset shared state when leaving the page
   useEffect(
     () => () => {
       setDocumentResults({ count: null, filterLabel: '' });
@@ -83,7 +101,6 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     },
     [],
   );
-
 
   return (
     <>
@@ -104,34 +121,22 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           />
         </div>
 
-        {/* Active category filter chip */}
+        {/* Active filter chips */}
         {isCategoryFiltered && (
-          <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) py-1.5 pl-3 pr-2 text-xs text-(--text-secondary)">
-            Filtered by: <strong className="font-semibold text-(--text-primary)">{categoryLabel}</strong>
-            <button
-              type="button"
-              aria-label="Clear category filter"
-              onClick={() => setCategory(ALL_CATEGORIES)}
-              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full text-(--text-muted) transition-colors hover:text-(--text-primary)"
-            >
-              <X size={12} />
-            </button>
-          </span>
+          <FilterChip
+            label="Filtered by:"
+            value={categoryLabel}
+            clearLabel="Clear category filter"
+            onClear={() => setCategory(ALL_CATEGORIES)}
+          />
         )}
-
-                {/* Active status filter chip (set from the health overview) */}
         {status && (
-          <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) py-1.5 pl-3 pr-2 text-xs text-(--text-secondary)">
-            Status: <strong className="font-semibold text-(--text-primary)">{status}</strong>
-            <button
-              type="button"
-              aria-label="Clear status filter"
-              onClick={() => setStatusFilter('')}
-              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full text-(--text-muted) transition-colors hover:text-(--text-primary)"
-            >
-              <X size={12} />
-            </button>
-          </span>
+          <FilterChip
+            label="Status:"
+            value={status}
+            clearLabel="Clear status filter"
+            onClear={() => setStatusFilter('')}
+          />
         )}
 
         <div className="relative shrink-0">
@@ -187,10 +192,11 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="Grid view"
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'grid'
-              ? 'bg-(--primary) text-(--primary-contrast)'
-              : 'text-(--text-muted) hover:text-(--text-primary)'
-              }`}
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${
+              viewMode === 'grid'
+                ? 'bg-(--primary) text-(--primary-contrast)'
+                : 'text-(--text-muted) hover:text-(--text-primary)'
+            }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -200,10 +206,11 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="List view"
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'list'
-              ? 'bg-(--primary) text-(--primary-contrast)'
-              : 'text-(--text-muted) hover:text-(--text-primary)'
-              }`}
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${
+              viewMode === 'list'
+                ? 'bg-(--primary) text-(--primary-contrast)'
+                : 'text-(--text-muted) hover:text-(--text-primary)'
+            }`}
           >
             <List size={15} />
           </button>
@@ -228,7 +235,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
               ))}
             </section>
           ) : (
-                        <DocumentList
+            <DocumentList
               documents={pageItems}
               adminMode={adminMode}
               showActions={!isManager}
