@@ -8,8 +8,8 @@ import { DENSITIES, SCALES } from "../../appearance/appearance";
 
 // ---------- Theme swatches ----------
 // Colours come from the real theme variables (via data-theme on the swatch), so they can't drift from variables.css.
-// Order: sidebar, app background, accent. Keep the token names that match your variables.css.
-const SWATCH_TOKENS = ["--sidebar-bg", "--bg-app", "--primary"];
+// The swatch tokens are defined in variables.css. Order: sidebar, app background, accent.
+const SWATCH_TOKENS = ["--theme-swatch-1", "--theme-swatch-2", "--theme-swatch-3"];
 const swatchColor = (token) => ({ backgroundColor: `var(${token})` });
 
 // ---------- Shared styles ----------
