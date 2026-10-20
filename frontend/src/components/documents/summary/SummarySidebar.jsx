@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Zap, RefreshCw, Archive, ArchiveRestore } from 'lucide-react';
+import { Zap, RefreshCw, Archive, ArchiveRestore, Link2, ArrowRight } from 'lucide-react';
+import { formatStyles } from '../shared/DocumentCard';
 import '../../../styles/Document.css';
 
 const card =
@@ -11,6 +12,8 @@ const actionBtn =
 // Right column: ingestion telemetry (+ admin actions) and suggested questions.
 function SummarySidebar({
   telemetry, questions, adminMode, archived, onReindex, onToggleArchive,
+  related = [], onOpenRelated,
+  
 }) {
   const rows = [
     ['Vector Chunks', telemetry.vectorChunks],
@@ -44,9 +47,8 @@ function SummarySidebar({
               <dt className="text-(--text-muted)">{label}</dt>
               <dd
                 // Admin sees neutral values, other roles see green on the two security rows
-                className={`doc-mono font-semibold ${
-                  good && !adminMode ? 'text-(--status-success)' : 'text-(--text-primary)'
-                }`}
+                className={`doc-mono font-semibold ${good && !adminMode ? 'text-(--status-success)' : 'text-(--text-primary)'
+                  }`}
               >
                 {value}
               </dd>
@@ -81,13 +83,41 @@ function SummarySidebar({
               key={q}
               to="/ask-eka"
               state={{ question: q }}
-              className="block rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1.5 text-xs text-(--text-secondary) transition-colors hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)"
+              className="flex items-center justify-between gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1.5 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)"
             >
-              “{q}”
+              <span>"{q}"</span>
+              <ArrowRight size={12} className="shrink-0 text-(--text-muted)" />
             </Link>
           ))}
         </div>
       </section>
+      {related.length > 0 && (
+  <section className={card}>
+    <h2 className="doc-heading flex items-center gap-2 text-base font-bold text-(--text-primary)">
+      <Link2 size={14} className="text-(--text-muted)" /> Related Knowledge
+    </h2>
+    <div className="mt-3 space-y-2">
+      {related.map((d) => (
+        <button
+          key={d.id}
+          type="button"
+          onClick={() => onOpenRelated(d)}
+          className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-(--bg-surface-subtle) px-3 py-2 text-left transition-colors hover:bg-(--primary-light)"
+        >
+          <span
+            className={`doc-mono flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[8px] font-bold ${
+              formatStyles[d.format] ?? 'bg-(--bg-surface) text-(--text-primary)'
+            }`}
+          >
+            {d.format}
+          </span>
+          <span className="min-w-0 flex-1 truncate text-xs font-medium text-(--text-primary)">{d.title}</span>
+          <ArrowRight size={12} className="shrink-0 text-(--text-muted)" />
+        </button>
+      ))}
+    </div>
+  </section>
+)}
     </aside>
   );
 }

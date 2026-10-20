@@ -81,6 +81,9 @@ function DocumentSummaryPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Entity tag → Semantic Search with that term (video: "90 Days Travel")
+  const searchTag = (tag) => navigate(`/semantic-search?q=${encodeURIComponent(tag)}`);
+
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -156,7 +159,9 @@ function DocumentSummaryPage() {
       <SummaryTabs active={tab} onChange={setTab} />
 
       <div className="grid grid-cols-1 gap-9 lg:grid-cols-[minmax(0,1fr)_21rem]">
-        {tab === 'summary' && <AiSummaryTab doc={doc} onReadPage={openReader} />}
+        {tab === 'summary' && (
+          <AiSummaryTab doc={doc} onReadPage={openReader} onSearchTag={searchTag} />
+        )}
         {tab === 'reader' && (
           <ReaderTab doc={doc} page={readerPage} onPageChange={setReaderPage} onToast={showToast} />
         )}
@@ -176,11 +181,13 @@ function DocumentSummaryPage() {
           archived={archived}
           onReindex={reindex}
           onToggleArchive={toggleArchive}
+          related={doc.sisterDocuments}
+          onOpenRelated={(d) => navigate(`/documents/summary?id=${d.id}`)}
         />
       </div>
-{editing && (
-  <EditMetadataModal doc={doc} onClose={() => setEditing(false)} onSave={saveMetadata} />
-)}
+      {editing && (
+        <EditMetadataModal doc={doc} onClose={() => setEditing(false)} onSave={saveMetadata} />
+      )}
       <SummaryToast toast={toast} onClose={closeToast} />
     </div>
   );

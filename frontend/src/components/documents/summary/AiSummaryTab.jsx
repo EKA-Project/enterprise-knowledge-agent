@@ -6,7 +6,7 @@ const card =
 const eyebrow = 'doc-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-(--primary)';
 
 // Left column of the AI Document Summary tab. Receives data only via props.
-function AiSummaryTab({ doc, onReadPage }) {
+function AiSummaryTab({ doc, onReadPage, onSearchTag }) {
   return (
     <div className="space-y-6">
       <section className={`${card} border-l-[3px] border-l-(--primary)`}>
@@ -37,12 +37,14 @@ function AiSummaryTab({ doc, onReadPage }) {
         </h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {doc.entities.map((tag) => (
-            <span
+            <button
               key={tag}
-              className="rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-medium text-(--text-secondary)"
+              type="button"
+              onClick={() => onSearchTag(tag)}
+              className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-medium text-(--text-secondary) transition-colors hover:border-(--primary) hover:text-(--primary)"
             >
               # {tag}
-            </span>
+            </button>
           ))}
         </div>
       </section>
@@ -72,7 +74,7 @@ function AiSummaryTab({ doc, onReadPage }) {
                     {s.id}. {s.title}
                   </h3>
                 </div>
-                
+
                 <button
                   type="button"
                   onClick={() => onReadPage(s.page)}

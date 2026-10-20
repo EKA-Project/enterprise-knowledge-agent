@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { Link2, ChevronRight, Bookmark, Pin } from 'lucide-react';
-import { Link2, ChevronRight, Bookmark, Pin } from 'lucide-react';
 import { formatStyles, statusMeta } from '../shared/DocumentCard';
 import '../../../styles/Document.css';
 
