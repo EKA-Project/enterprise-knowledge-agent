@@ -12,7 +12,7 @@ export const THEME_COLLECTIONS = [
 ];
 
 // Single registry for the settings cards (id = data-theme value in variables.css).
-// To add a theme: add its [data-theme="id"] block in variables.css, then one entry here
+// To add a theme: add its [data-theme="id"] block in src/styles/themes/<collection>.css, then one entry here
 // with a `collection` id from THEME_COLLECTIONS. Optional `tag` overrides the card's footer label.
 // Array order = the order of the "All Atmospheres" view.
 export const THEMES = [
