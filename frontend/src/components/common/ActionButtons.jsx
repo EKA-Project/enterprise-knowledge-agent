@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FileText, Send, Upload, UserPlus, UserX, X } from "lucide-react";
 import Button from "./Button";
-import DiceIcon from "./DiceIcon";
+import DiceIcon from "../icons/DiceIcon";
 
 /* ==========================================================================
    ActionButtons  (components/common/ActionButtons.jsx)
