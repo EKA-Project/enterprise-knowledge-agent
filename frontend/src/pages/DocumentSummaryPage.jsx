@@ -92,7 +92,14 @@ function DocumentSummaryPage() {
       showToast('Could not copy the link', 'neutral');
     }
   };
-
+  const togglePin = () => {
+    const next = !pinned;
+    toggleDocumentFlag(doc.id, 'isPinned');
+    showToast(
+      next ? `📌 Pinned "${doc.title}" for Employee Overview` : `Unpinned "${doc.title}"`,
+      next ? 'success' : 'neutral',
+    );
+  };
   const toggleSave = () => {
     const next = !saved;
     toggleDocumentFlag(doc.id, 'isBookmarked');
