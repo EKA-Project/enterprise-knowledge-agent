@@ -1,13 +1,15 @@
 import { RotateCcw } from "lucide-react";
 import { SurpriseMeButton } from "../common/ActionButtons";
 import IconBadge from "../icons/IconBadge";
+import ThemeSwatch from "./ThemeSwatch";
 import { getThemeIcon } from "../icons/themeIcons";
 
-// Order matches the labels under the bar: Sidebar • Canvas • Accent.
-// The tokens are defined in variables.css; data-theme on the bar makes them resolve to this theme.
-const SWATCH_TOKENS = ["--theme-swatch-1", "--theme-swatch-2", "--theme-swatch-3"];
-
-export default function AtmosphereHero({ theme, isDefault, onSurprise, onReset }) {
+export default function AtmosphereHero({
+  theme,
+  isDefault,
+  onSurprise,
+  onReset,
+}) {
   const Icon = getThemeIcon(theme.id);
 
   return (
@@ -27,20 +29,14 @@ export default function AtmosphereHero({ theme, isDefault, onSurprise, onReset }
             <IconBadge icon={Icon} tone="solid" box={34} size={18} />
             {theme.name}
           </h4>
-          <p className="mt-1 text-[13.5px] text-(--text-muted)">{theme.description}</p>
+          <p className="mt-1 text-[13.5px] text-(--text-muted)">
+            {theme.description}
+          </p>
         </div>
 
         <div className="flex flex-wrap items-start gap-5">
           <div>
-            <div data-theme={theme.id} className="flex h-9 w-44 overflow-hidden rounded-lg">
-              {SWATCH_TOKENS.map((token) => (
-                <span
-                  key={token}
-                  className="flex-1"
-                  style={{ backgroundColor: `var(${token})` }}
-                />
-              ))}
-            </div>
+            <ThemeSwatch themeId={theme.id} className="h-9 w-44 rounded-lg" />
             <p className="mt-2 font-mono text-[10.5px] text-(--text-muted)">
               Sidebar • Canvas • Accent
             </p>

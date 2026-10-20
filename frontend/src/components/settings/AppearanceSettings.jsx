@@ -5,28 +5,10 @@ import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import AtmosphereHero from "./AtmosphereHero";
+import ThemeCollections from "./ThemeCollections";
+import { pill, card } from "./cardStyles";
 import { ALL_FONTS, TYPOGRAPHY, loadFonts } from "../../appearance/fontStudio";
 import { DENSITIES, SCALES } from "../../appearance/appearance";
-
-// ---------- Theme swatches ----------
-// Colours come from the real theme variables (via data-theme on the swatch), so they can't drift from variables.css.
-// The swatch tokens are defined in variables.css. Order: sidebar, app background, accent.
-const SWATCH_TOKENS = [
-  "--theme-swatch-1",
-  "--theme-swatch-2",
-  "--theme-swatch-3",
-];
-const swatchColor = (token) => ({ backgroundColor: `var(${token})` });
-
-// ---------- Shared styles ----------
-const pill =
-  "rounded-full bg-(--bg-surface-subtle) px-2.5 py-0.5 text-[10.5px] font-semibold text-(--text-secondary)";
-const card = (on) =>
-  `rounded-2xl border bg-(--bg-surface) text-left transition duration-200 hover:-translate-y-1 hover:shadow-(--shadow-md) ${
-    on
-      ? "border-[1.5px] border-(--primary-deep) shadow-(--shadow-md)"
-      : "border-(--border-subtle) hover:border-(--primary)"
-  }`;
 
 export default function AppearanceSettings() {
   const toast = useToast();
@@ -93,43 +75,8 @@ export default function AppearanceSettings() {
         onReset={reset}
       />
 
-      {/* ---------- Theme cards ---------- */}
-      <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {THEMES.map((t) => {
-          const on = theme === t.id;
-          return (
-            <button
-              key={t.id}
-              type="button"
-              aria-pressed={on}
-              onClick={() => pickTheme(t)}
-              className={`${card(on)} p-3`}
-            >
-              <span
-                data-theme={t.id}
-                className="flex h-9 overflow-hidden rounded-lg"
-              >
-                {SWATCH_TOKENS.map((token) => (
-                  <span
-                    key={token}
-                    className="flex-1"
-                    style={swatchColor(token)}
-                  />
-                ))}
-              </span>
-              <span className="mt-3 flex items-center justify-between gap-2">
-                <span className="text-[13px] font-bold text-(--text-primary)">
-                  {t.name}
-                </span>
-                {on && <span className={pill}>Active</span>}
-              </span>
-              <span className="mt-1 block text-[11px] leading-snug text-(--text-muted)">
-                {t.description}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      {/* ---------- Theme collections ---------- */}
+      <ThemeCollections activeId={theme} onSelect={pickTheme} />
 
       {/* ---------- Typography ---------- */}
       <SubSection

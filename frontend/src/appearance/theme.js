@@ -4,11 +4,11 @@ export const DEFAULT_THEME = "sky-blue";
 
 // Collections group the theme cards. `tag` is the small label in each card footer.
 export const THEME_COLLECTIONS = [
-  { id: "editorial", label: "Editorial & Paper", emoji: "📜", tag: "Editorial" },
-  { id: "oceanic", label: "Oceanic & Sky", emoji: "🌊", tag: "Oceanic" },
-  { id: "botanical", label: "Botanical & Earth", emoji: "🌿", tag: "Botanical" },
-  { id: "pastel", label: "Dusk & Pastels", emoji: "✨", tag: "Pastel" },
-  { id: "executive", label: "Executive & Noir", emoji: "🏛️", tag: "Executive" },
+  { id: "editorial", label: "Editorial & Paper", tag: "Editorial", description: "Tactile warmth, linen textures & bookish serenity" },
+  { id: "oceanic", label: "Oceanic & Sky", tag: "Oceanic", description: "Abyssal depth, sky blue clarity & coastal horizons" },
+  { id: "botanical", label: "Botanical & Earth", tag: "Botanical", description: "Living greens, mineral tones & quiet earth" },
+  { id: "pastel", label: "Dusk & Pastels", tag: "Pastel", description: "Soft twilight hues, gentle lilacs & dawn light" },
+  { id: "executive", label: "Executive & Noir", tag: "Executive", description: "Authoritative darks, metallic accents & high contrast" },
 ];
 
 // Single registry for the settings cards (id = data-theme value in variables.css).
