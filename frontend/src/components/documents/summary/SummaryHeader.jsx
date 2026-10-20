@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Link2, ChevronRight, Bookmark, Pin, MoreHorizontal } from 'lucide-react';
+import { Link2, ChevronRight, Bookmark, Pin } from 'lucide-react';
+import { Link2, ChevronRight, Bookmark, Pin } from 'lucide-react';
 import { formatStyles, statusMeta } from '../shared/DocumentCard';
 import '../../../styles/Document.css';
 
@@ -10,6 +11,7 @@ const circle =
 function SummaryHeader({
   doc, adminMode, archived, saved, pinned,
   onCopyLink, onToggleSave, onTogglePin,
+  onEdit, onReindex, onArchive, onDelete,
 }) {
   const tile = formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)';
   const status = statusMeta[doc.status] ?? statusMeta.Indexed;
@@ -77,9 +79,8 @@ function SummaryHeader({
               aria-label={saved ? 'Remove bookmark' : 'Bookmark document'}
               aria-pressed={saved}
               onClick={onToggleSave}
-              className={`${circle} bg-(--bg-surface) hover:bg-(--bg-surface-subtle) ${
-                saved ? 'border-amber-400 text-amber-500' : 'border-(--border-medium) text-(--text-secondary)'
-              }`}
+              className={`${circle} bg-(--bg-surface) hover:bg-(--bg-surface-subtle) ${saved ? 'border-amber-400 text-amber-500' : 'border-(--border-medium) text-(--text-secondary)'
+                }`}
             >
               <Bookmark size={14} className={saved ? 'fill-current' : ''} />
             </button>
@@ -89,23 +90,20 @@ function SummaryHeader({
               aria-label={pinned ? 'Unpin document' : 'Pin document'}
               aria-pressed={pinned}
               onClick={onTogglePin}
-              className={`${circle} border-(--border-medium) ${
-                pinned
+              className={`${circle} border-(--border-medium) ${pinned
                   ? 'bg-(--bg-surface-subtle) text-(--primary)'
                   : 'bg-(--bg-surface) text-(--text-secondary) hover:bg-(--bg-surface-subtle)'
-              }`}
+                }`}
             >
               <Pin size={14} className={pinned ? 'fill-current' : ''} />
             </button>
 
-            {/* Actions menu: not shown open in any video, kept static */}
-            <button
-              type="button"
-              aria-label="More document actions"
-              className={`${circle} border-(--border-medium) bg-(--bg-surface) text-(--text-secondary) hover:bg-(--bg-surface-subtle)`}
-            >
-              <MoreHorizontal size={14} />
-            </button>
+            <SummaryKebabMenu
+              onEdit={onEdit}
+              onReindex={onReindex}
+              onArchive={onArchive}
+              onDelete={onDelete}
+            />
           </>
         )}
       </div>
