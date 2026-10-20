@@ -3,7 +3,8 @@ import SettingsPanel, { SubSection } from "./SettingsPanel";
 import { Select } from "../common/Input";
 import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
-import { THEMES } from "../../appearance/theme";
+import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
+import AtmosphereHero from "./AtmosphereHero";
 import { ALL_FONTS, TYPOGRAPHY, loadFonts } from "../../appearance/fontStudio";
 import { DENSITIES, SCALES } from "../../appearance/appearance";
 
@@ -48,6 +49,26 @@ export default function AppearanceSettings() {
     update({ theme: t.id });
     announce("Theme applied", t.name);
   };
+  const activeTheme =
+    THEMES.find((t) => t.id === theme) ??
+    THEMES.find((t) => t.id === DEFAULT_THEME);
+
+  // Random theme, never the one already active.
+  const surprise = () => {
+    const pool = THEMES.filter((t) => t.id !== theme);
+    const t = pool[Math.floor(Math.random() * pool.length)];
+    update({ theme: t.id });
+    announce("Surprise pick applied", t.name);
+  };
+
+  // Resets the theme only; typography, density and scale stay as chosen.
+  const reset = () => {
+    if (theme === DEFAULT_THEME) return;
+    const t = THEMES.find((x) => x.id === DEFAULT_THEME);
+    update({ theme: DEFAULT_THEME });
+    announce("Default theme restored", t.name);
+  };
+
   const pickFont = (f) => {
     if (f.id === appearance.typography) return;
     update({ typography: f.id });
@@ -56,57 +77,16 @@ export default function AppearanceSettings() {
 
   return (
     <SettingsPanel
-      title="Appearance & Atmosphere"
-      description="Choose your workspace feeling, visual themes, typography scaling, and interface density."
+      title="Appearance & Atmosphere Studio"
+      description="25 curated workspace themes, editorial typography pairings, and layout ergonomics."
     >
-      {/* ---------- Theme chips ---------- */}
-      <div className="relative rounded-2xl bg-(--bg-surface-subtle) p-5">
-        <span
-          aria-hidden="true"
-          className="absolute right-5 top-5 text-[12px] text-(--primary)"
-        >
-          ✦
-        </span>
-        <p className="text-[14px] font-bold text-(--text-primary)">
-          Choose your atmosphere
-        </p>
-        <p className="mt-1 text-[12px] text-(--text-muted)">
-          Switch the feeling of your workspace across EKA&apos;s design themes.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {THEMES.map((t) => {
-            const on = theme === t.id;
-            return (
-              <button
-                key={t.id}
-                type="button"
-                aria-pressed={on}
-                onClick={() => pickTheme(t)}
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[12px] font-semibold transition duration-200 hover:-translate-y-0.5 active:scale-95 ${
-                  on
-                    ? "border-(--primary-deep) bg-(--primary-deep) text-white"
-                    : "border-(--border-medium) bg-(--bg-surface) text-(--text-primary) hover:border-(--primary)"
-                }`}
-              >
-                <span data-theme={t.id} className="flex gap-0.5">
-                  <span
-                    className="size-2 rounded-full"
-                    style={{
-                      ...swatchColor(SWATCH_TOKENS[0]),
-                      boxShadow: on ? "0 0 0 1px #fff" : "none",
-                    }}
-                  />
-                  <span
-                    className="size-2 rounded-full"
-                    style={swatchColor(SWATCH_TOKENS[2])}
-                  />
-                </span>
-                {t.name}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* ---------- Active atmosphere hero ---------- */}
+      <AtmosphereHero
+        theme={activeTheme}
+        isDefault={theme === DEFAULT_THEME}
+        onSurprise={surprise}
+        onReset={reset}
+      />
 
       {/* ---------- Theme cards ---------- */}
       <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
