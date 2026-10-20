@@ -24,7 +24,7 @@
 
 // ---- The pill shape shared by every button ----
 const BASE =
-  "group inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+  "group inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border font-semibold transition-[color,background-color,border-color,box-shadow,transform] disabled:cursor-not-allowed disabled:opacity-50";
 
 // ---- Colour schemes: edit these to restyle every button in the app ----
 const VARIANTS = {
@@ -38,8 +38,10 @@ const VARIANTS = {
   soft: "border-(--border-subtle) bg-white text-(--primary) hover:border-(--primary)/40 hover:bg-(--accent-chip)",
   dangerSoft:
     "border-[#fca5a5] bg-[#fee2e2] text-(--status-danger) hover:border-(--status-danger) hover:bg-(--status-danger) hover:text-white",
+  // Theme-aware elevated pill that lifts on hover (no hard-coded white, so dark themes work). Used by Surprise Me.
+  surface:
+    "border-(--border-medium) bg-(--bg-surface-elevated) text-(--text-primary) shadow-(--shadow-sm) hover:-translate-y-px hover:border-(--primary) hover:bg-(--bg-surface) hover:text-(--primary) hover:shadow-[0_4px_14px_var(--primary-glow)] active:translate-y-0 active:scale-[0.97]",
 };
-
 // ---- Sizes: height + text size ----
 const SIZES = {
   xs: "h-6 text-[0.7rem]",

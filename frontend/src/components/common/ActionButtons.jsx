@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { FileText, Send, Upload, UserPlus, UserX, X } from "lucide-react";
 import Button from "./Button";
+import DiceIcon from "./DiceIcon";
 
 /* ==========================================================================
    ActionButtons  (components/common/ActionButtons.jsx)
@@ -86,6 +88,26 @@ export function RemoveFromTeamButton(props) {
       {...props}
     >
       Remove from Team
+    </Button>
+  );
+}
+
+export function SurpriseMeButton({ onClick, ...props }) {
+  // Each click changes the icon's key, so the spin restarts even on rapid clicks.
+  const [rolls, setRolls] = useState(0);
+  return (
+    <Button
+      variant="surface"
+      size="md"
+      title="Pick a random atmosphere"
+      onClick={(e) => {
+        setRolls((n) => n + 1);
+        onClick?.(e);
+      }}
+      {...props}
+    >
+      <DiceIcon key={rolls} rolling={rolls > 0} />
+      Surprise Me
     </Button>
   );
 }
