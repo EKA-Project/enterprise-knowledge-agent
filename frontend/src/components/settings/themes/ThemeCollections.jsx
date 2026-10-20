@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { THEMES, THEME_COLLECTIONS, collectionCount } from "../../appearance/theme";
-import { getCollectionIcon } from "../icons/collectionIcons";
+import { THEMES, THEME_COLLECTIONS, collectionCount } from "../../../appearance/theme";
+import { getCollectionIcon } from "../../icons/collectionIcons";
 import CollectionSection from "./CollectionSection";
-import FilterPills from "./FilterPills";
-import { SubSection } from "./SettingsPanel";
+import FilterPills from "../FilterPills";
+import { SubSection } from "../SettingsPanel";
 import ThemeCard from "./ThemeCard";
 
 const ALL = "all";

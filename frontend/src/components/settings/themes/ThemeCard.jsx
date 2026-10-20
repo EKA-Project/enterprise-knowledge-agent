@@ -1,7 +1,7 @@
-import { themeTag } from "../../appearance/theme";
-import IconBadge from "../icons/IconBadge";
-import { getThemeIcon } from "../icons/themeIcons";
-import { card } from "./cardStyles";
+import { themeTag } from "../../../appearance/theme";
+import IconBadge from "../../icons/IconBadge";
+import { getThemeIcon } from "../../icons/themeIcons";
+import { card } from "../cardStyles";
 import ThemeSwatch from "./ThemeSwatch";
 
 export default function ThemeCard({ theme, active, onSelect }) {

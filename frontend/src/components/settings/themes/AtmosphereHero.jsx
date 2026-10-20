@@ -1,8 +1,8 @@
 import { RotateCcw } from "lucide-react";
-import { SurpriseMeButton } from "../common/ActionButtons";
-import IconBadge from "../icons/IconBadge";
+import { SurpriseMeButton } from "../../common/ActionButtons";
+import IconBadge from "../../icons/IconBadge";
 import ThemeSwatch from "./ThemeSwatch";
-import { getThemeIcon } from "../icons/themeIcons";
+import { getThemeIcon } from "../../icons/themeIcons";
 
 export default function AtmosphereHero({
   theme,
