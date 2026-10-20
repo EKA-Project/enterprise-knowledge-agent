@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext.jsx';
 import {
@@ -17,8 +17,10 @@ import AiSummaryTab from '../components/documents/summary/AiSummaryTab';
 import ReaderTab from '../components/documents/summary/ReaderTab';
 import GraphTab from '../components/documents/summary/GraphTab';
 import SummarySidebar from '../components/documents/summary/SummarySidebar';
-import SummaryToast from '../components/documents/summary/SummaryToast';
 import EditMetadataModal from '../components/documents/summary/EditMetadataModal';
+import ArchiveModal from '../components/documents/summary/ArchiveModal';
+import { DocToastHost, showDocToast } from '../components/documents/shared/DocToast';
+
 
 function DocumentSummaryPage() {
   const navigate = useNavigate();
@@ -32,13 +34,11 @@ function DocumentSummaryPage() {
   const [notFound, setNotFound] = useState(false);
   const [tab, setTab] = useState('summary');
   const [readerPage, setReaderPage] = useState(1);
-  const [toast, setToast] = useState(null); // { message, variant }
   const [editing, setEditing] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
   const [archived, setArchived] = useState(false);
 
-  const closeToast = useCallback(() => setToast(null), []);
-  const showToast = (message, variant = 'success') => setToast({ message, variant });
-
+  const showToast = showDocToast; // (message, variant)
   // Pin / bookmark live in the shared documents store, so the Documents list
   // and this page always agree (and survive switching role).
   const { items } = useDocuments();
@@ -100,7 +100,7 @@ function DocumentSummaryPage() {
       next ? 'success' : 'neutral',
     );
   };
-  const toggleSave = () => {
+   const toggleSave = () => {
     const next = !saved;
     toggleDocumentFlag(doc.id, 'isBookmarked');
     showToast(
@@ -109,11 +109,19 @@ function DocumentSummaryPage() {
     );
   };
 
-  const toggleArchive = () => {
+  // Confirm button of the Archive / Unarchive modal (video: back to the Documents list with a toast)
+  const confirmArchive = async () => {
     const next = !archived;
+    setArchiveOpen(false);
     setArchived(next);
-    setDocumentArchived(doc.id, next);
-    showToast(next ? `📦 Document "${doc.title}" archived` : `Restored "${doc.title}"`, 'neutral');
+    await setDocumentArchived(doc.id, next);
+    showDocToast(
+      next
+        ? `📦 Document "${doc.title}" archived`
+        : `Document "${doc.title}" restored to active repository`,
+      'neutral',
+    );
+    navigate('/documents');
   };
 
   const reindex = async () => {
@@ -161,7 +169,7 @@ function DocumentSummaryPage() {
         onTogglePin={togglePin}
         onEdit={() => setEditing(true)}
         onReindex={reindex}
-        onArchive={toggleArchive}
+        onArchive={() => setArchiveOpen(true)}
       />
       <SummaryTabs active={tab} onChange={setTab} />
 
@@ -187,15 +195,24 @@ function DocumentSummaryPage() {
           adminMode={adminMode}
           archived={archived}
           onReindex={reindex}
-          onToggleArchive={toggleArchive}
+          onToggleArchive={() => setArchiveOpen(true)}
           related={doc.sisterDocuments}
           onOpenRelated={(d) => navigate(`/documents/summary?id=${d.id}`)}
         />
       </div>
+
       {editing && (
         <EditMetadataModal doc={doc} onClose={() => setEditing(false)} onSave={saveMetadata} />
       )}
-      <SummaryToast toast={toast} onClose={closeToast} />
+      {archiveOpen && (
+        <ArchiveModal
+          title={doc.title}
+          archived={archived}
+          onClose={() => setArchiveOpen(false)}
+          onConfirm={confirmArchive}
+        />
+      )}
+      <DocToastHost />
     </div>
   );
 }

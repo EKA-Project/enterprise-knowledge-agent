@@ -2,6 +2,7 @@ import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { documentCategories, documentFormats } from './DocumentData';
+import { DocToastHost } from './DocToast';
 import {
   ALL_CATEGORIES,
   ALL_FORMATS,
@@ -261,6 +262,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           />
         </>
       )}
+       <DocToastHost />
     </>
   );
 }

@@ -243,7 +243,7 @@ export async function getDocumentSummary(id) {
       tenantIsolation: 'Active (0 Training)',
       indexLatency: '284 ms',
     },
-    suggestedQuestions: ['Summarize top key takeaways', 'What are the compliance rules?'],,
+    suggestedQuestions: ['Summarize top key takeaways', 'What are the compliance rules?'],
     connectedArticles: content.connectedArticles,
     sisterDocuments: pickSisters(doc, content, allDocs),
 

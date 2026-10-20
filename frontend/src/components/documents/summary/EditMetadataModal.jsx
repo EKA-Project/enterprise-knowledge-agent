@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Pencil, X } from 'lucide-react';
-import { documentCategories } from '../shared/DocumentData';
 import { Pencil, X, Upload } from 'lucide-react';
+import { documentCategories } from '../shared/DocumentData';
 
 const field =
   'mt-1.5 w-full rounded-lg border border-(--border-medium) bg-(--bg-surface) px-3 py-2 text-xs text-(--text-primary) outline-none focus:border-(--primary)';
