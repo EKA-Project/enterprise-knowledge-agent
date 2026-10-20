@@ -24,7 +24,7 @@
 
 // ---- The pill shape shared by every button ----
 const BASE =
-  "group inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border font-semibold transition-[color,background-color,border-color,box-shadow,transform] disabled:cursor-not-allowed disabled:opacity-50";
+  "group inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border font-semibold transition-[color,background-color,border-color,box-shadow,transform,translate,scale] disabled:cursor-not-allowed disabled:opacity-50";
 
 // ---- Colour schemes: edit these to restyle every button in the app ----
 const VARIANTS = {
