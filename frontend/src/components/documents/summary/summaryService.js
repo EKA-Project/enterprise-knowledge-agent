@@ -123,6 +123,38 @@ const richContent = {
       },
     ],
   },
+    // 2026 Global Remote Work (Oct-20 video). Raw "###" text is shown as-is in the video.
+  'doc-9': {
+    executiveSummary:
+      'Official workplace guidelines governing remote work across 18 countries. Covers home office equipment stipends, international work-from-anywhere allowances (up to 90 days/year), and core collaboration overlap hours.',
+    keyInsights: [
+      'Employees can work internationally outside their home tax residency for up to 90 calendar days per rolling year.',
+      'Annual home office wellness stipend is $1,500 USD, claimable through Navan Expense in Q1.',
+      'Core collaboration window is 10:00 AM to 3:00 PM in regional anchor timezone.',
+      'Coworking space pass (WeWork / Industrious) is 100% subsidized upon manager approval.',
+    ],
+    entities: ['Remote Work', '$1,500 Stipend', '90 Days Travel', 'Core Hours', 'Navan Expense'],
+    sections: [
+      {
+        id: 1,
+        page: 1,
+        title: 'Remote Work & Workspace Eligibility',
+        summary:
+          'Northstar Studio operates under a high-autonomy, remote-first operational philosophy. All full-time employees are eligible for remote work, provided they maintain consistent communication channels and meet collaborative ...',
+      },
+      {
+        id: 2,
+        page: 2,
+        title: 'Working from Anywhere (WFA) Allowances',
+        summary:
+          'Employees may request short-term travel permits to work from international or alternative jurisdictions for up to 90 calendar days per rolling calendar year. This prevents corporate residency tax trigger risks. ### 2.1 ...',
+      },
+      // Section 3 is NOT visible in the video (it says "3 sections analyzed") - fill in later
+    ],
+    connectedArticles: [],
+    sisterIds: ['doc-7', 'doc-10'],
+    readerPages: [],
+  },
 };
 
 // Summary for documents without hand-written content. The uploaded sample
@@ -211,7 +243,7 @@ export async function getDocumentSummary(id) {
       tenantIsolation: 'Active (0 Training)',
       indexLatency: '284 ms',
     },
-    suggestedQuestions: SUGGESTED_QUESTIONS,
+    suggestedQuestions: ['Summarize top key takeaways', 'What are the compliance rules?'],,
     connectedArticles: content.connectedArticles,
     sisterDocuments: pickSisters(doc, content, allDocs),
 

@@ -86,17 +86,19 @@ function AiSummaryTab({ doc, onReadPage, onSearchTag }) {
 
               <p className="mt-2 text-[13px] leading-5 text-(--text-secondary)">{s.summary}</p>
 
-              <div className="mt-3 flex flex-wrap gap-2">
-                {s.keywords.map((k) => (
-                  <span
-                    key={k}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-(--bg-surface) px-3 py-1 text-[11px] text-(--text-secondary)"
-                  >
-                    <Zap size={10} className="text-(--status-warning)" />
-                    {k}
-                  </span>
-                ))}
-              </div>
+              {s.keywords?.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {s.keywords.map((k) => (
+                    <span
+                      key={k}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-(--bg-surface) px-3 py-1 text-[11px] text-(--text-secondary)"
+                    >
+                      <Zap size={10} className="text-(--status-warning)" />
+                      {k}
+                    </span>
+                  ))}
+                </div>
+              )}
             </article>
           ))}
         </div>
