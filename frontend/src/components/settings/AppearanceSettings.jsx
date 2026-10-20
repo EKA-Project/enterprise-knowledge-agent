@@ -78,7 +78,12 @@ export default function AppearanceSettings() {
   return (
     <SettingsPanel
       title="Appearance & Atmosphere Studio"
-      description="25 curated workspace themes, editorial typography pairings, and layout ergonomics."
+      description={`${THEMES.length} curated workspace themes, editorial typography pairings, and layout ergonomics.`}
+      badge={
+        <span className="ml-auto rounded-full bg-(--bg-surface-subtle) px-3 py-1 font-mono text-[11px] text-(--text-secondary)">
+          Theme System v2.5 • {THEMES.length} Atmospheres
+        </span>
+      }
     >
       {/* ---------- Active atmosphere hero ---------- */}
       <AtmosphereHero

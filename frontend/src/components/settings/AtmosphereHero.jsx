@@ -1,21 +1,30 @@
-import { Dices, RotateCcw } from "lucide-react";
-import Button from "../common/Button";
+import { RotateCcw } from "lucide-react";
+import { SurpriseMeButton } from "../common/ActionButtons";
+import IconBadge from "../icons/IconBadge";
+import { getThemeIcon } from "../icons/themeIcons";
 
 // Order matches the labels under the bar: Sidebar • Canvas • Accent.
 // The tokens are defined in variables.css; data-theme on the bar makes them resolve to this theme.
 const SWATCH_TOKENS = ["--theme-swatch-1", "--theme-swatch-2", "--theme-swatch-3"];
 
 export default function AtmosphereHero({ theme, isDefault, onSurprise, onReset }) {
+  const Icon = getThemeIcon(theme.id);
+
   return (
     <div className="relative overflow-hidden rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm)">
-      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-(--primary-deep)" />
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-(--primary-deep) to-(--accent-highlight)"
+      />
 
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="min-w-0 flex-1 basis-64">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-(--text-secondary)">
-            <span aria-hidden="true">✦</span> Current workspace atmosphere
+          <p className="flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-(--primary)">
+            <Icon size={13} aria-hidden="true" />
+            Current workspace atmosphere
           </p>
-          <h4 className="mt-2 font-serif text-[28px] font-bold leading-tight text-(--text-primary)">
+          <h4 className="mt-2 flex items-center gap-3 font-serif text-[28px] font-bold leading-tight text-(--text-primary)">
+            <IconBadge icon={Icon} tone="solid" box={34} size={18} />
             {theme.name}
           </h4>
           <p className="mt-1 text-[13.5px] text-(--text-muted)">{theme.description}</p>
@@ -23,7 +32,7 @@ export default function AtmosphereHero({ theme, isDefault, onSurprise, onReset }
 
         <div className="flex flex-wrap items-start gap-5">
           <div>
-            <div data-theme={theme.id} className="flex h-9 w-56 overflow-hidden rounded-lg">
+            <div data-theme={theme.id} className="flex h-9 w-44 overflow-hidden rounded-lg">
               {SWATCH_TOKENS.map((token) => (
                 <span
                   key={token}
@@ -38,9 +47,7 @@ export default function AtmosphereHero({ theme, isDefault, onSurprise, onReset }
           </div>
 
           <div className="flex flex-col items-start gap-2">
-            <Button size="md" icon={Dices} onClick={onSurprise}>
-              Surprise Me
-            </Button>
+            <SurpriseMeButton onClick={onSurprise} />
             <button
               type="button"
               onClick={onReset}
