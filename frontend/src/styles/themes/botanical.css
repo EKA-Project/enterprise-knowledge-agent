@@ -194,66 +194,73 @@
 }
 
 /* ==========================================================================
-   ATMOSPHERE: Night Meadow (TRUE DARK - Graphite Green & Pistachio)
+   ATMOSPHERE: Night Meadow (Sculpted Carbon & Deep Pewter Contrast)
+   Hybrid High-Contrast: Multi-stop gradient sidebar with inset bevels,
+   tactile pewter canvas, elevated crisp cards, and luminous cyan accents.
    ========================================================================== */
 [data-theme="night-meadow"] {
-  color-scheme: dark; /* dark native scrollbars, inputs, date pickers */
+  /* Sidebar Palette: Layered Carbon Shell with directional depth */
+  --sidebar-bg: #0d1117;
+  --sidebar-text: #f0f6fc;
+  --sidebar-text-muted: #8b949e;
+  --sidebar-border: rgba(240, 246, 252, 0.12);
+  --sidebar-active-bg: #1f6feb;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(31, 111, 235, 0.12);
 
-  --sidebar-bg: #0d1213;
-  --sidebar-text: #dfe9e3;
-  --sidebar-text-muted: #7f9488;
-  --sidebar-border: rgba(223, 233, 227, 0.1);
-  --sidebar-active-bg: #a8d672;
-  --sidebar-active-text: #101a0c;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.07);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+  /* Main Workspace Canvas: Deep, textured Pewter (not washed-out white/grey) */
+  --bg-app: #c4cdd6;               /* Substantial, darker grey canvas */
+  --bg-surface: #ffffff;           /* Pure white surface cards for high contrast */
+  --bg-surface-elevated: #ffffff;  /* Modals, floating popovers */
+  --bg-surface-subtle: #b6c2cc;    /* Inset search fields & wells */
+  --table-header-bg: #a8b6c4;
+  --bg-glass: rgba(196, 205, 214, 0.94);
 
-  --bg-app: #121819;
-  --bg-surface: #192123;
-  --bg-surface-elevated: #1f292b;
-  --bg-surface-subtle: #222d2f;
-  --bg-glass: rgba(18, 24, 25, 0.92);
+  /* Primary Tones: Deep Void Navy with Cobalt Anchor */
+  --primary: #091e3a;
+  --primary-hover: #102a4e;
+  --primary-deep: #051021;
+  --primary-light: #dbeafe;
+  --primary-glow: rgba(9, 30, 58, 0.16);
+  --primary-contrast: #ffffff;
 
-  --primary: #a8d672;
-  --primary-hover: #bde68c;
-  --primary-light: #22301f;
-  --primary-glow: rgba(168, 214, 114, 0.22);
-  --primary-contrast: #101a0c;
+  /* Vibrant Accent Pop: Deep Cerulean & Mint Sage */
+  --accent-highlight: #0969da;
+  --accent-highlight-hover: #0550ae;
+  --accent-secondary: #057a55;
+  --accent-chip: #d0e2ff;
+  --accent-chip-text: #053b7a;
 
-  --accent-highlight: #7fc8a9;
-  --accent-highlight-hover: #6bb999;
-  --accent-secondary: #e0b25c;
-  --accent-chip: #22301f;
-  --accent-chip-text: #bfe08f;
+  /* Borders & Dividers: Bold structural definition */
+  --border-subtle: #a2b0bf;
+  --border-medium: #798d9f;
+  --border-subtle-nav: #0969da;
+  --border-focus: #091e3a;
 
-  --border-subtle: #263234;
-  --border-medium: #35464a;
-  --border-focus: #a8d672;
+  /* Typography: Razor-sharp ink tones against pewter/white */
+  --text-primary: #0a0f14;
+  --text-secondary: #24292f;
+  --text-muted: #57606a;
+  --text-eyebrow: #0969da;
 
-  --text-primary: #e6eee9;
-  --text-secondary: #aab9b1;
-  --text-muted: #8a9b93;
-  --text-eyebrow: #a8d672;
+  /* Badges & Pills */
+  --badge-bg: #091e3a;
+  --badge-text: #ffffff;
+  --badge-border: #0969da;
 
-  --badge-bg: #22301f;
-  --badge-text: #bfe08f;
-  --badge-border: #3a4f33;
+  /* Sculpted Shadows: Pronounced depth between cards and the darker canvas */
+  --shadow-sm: 0 1px 3px rgba(13, 17, 23, 0.12), 0 1px 2px rgba(13, 17, 23, 0.08);
+  --shadow-md: 0 6px 18px rgba(13, 17, 23, 0.16), 0 2px 6px rgba(13, 17, 23, 0.08);
+  --shadow-lg: 0 16px 36px rgba(13, 17, 23, 0.22), 0 4px 12px rgba(13, 17, 23, 0.12);
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
-
-  --gradient-card: linear-gradient(180deg, #1c2527 0%, #172022 100%);
-  --gradient-brand: linear-gradient(135deg, #a8d672 0%, #5f9c4a 100%);
-
-  /* Extended tokens (kept readable on dark surfaces) */
-  --primary-deep: #8cb85a;
-  --border-subtle-nav: #5a8a50;
-  --table-header-bg: #243033;
+  /* Card and Brand Gradients: Subtle physical gloss */
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6f8fa 100%);
+  --gradient-brand: linear-gradient(135deg, #0d1117 0%, #1f6feb 100%);
 
   /* Theme Search Highlight Palette */
-  --highlight-bg: #3b4f2a;
-  --highlight-text: #f0f7e6;
-  --highlight-border: #a8d672;
-  --highlight-shadow: 0 2px 6px rgba(168, 214, 114, 0.25);
+  --highlight-bg: #ddf4ff;
+  --highlight-text: #053b7a;
+  --highlight-border: #0969da;
+  --highlight-shadow: 0 2px 8px rgba(9, 105, 218, 0.3);
 }

@@ -1,13 +1,12 @@
-import { useEffect, useRef } from "react";
-import SettingsPanel, { SubSection } from "./SettingsPanel";
+import { useRef } from "react";
+import SettingsPanel from "./SettingsPanel";
 import { Select } from "../common/Input";
 import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import AtmosphereHero from "./themes/AtmosphereHero";
 import ThemeCollections from "./themes/ThemeCollections";
-import { pill, card } from "./cardStyles";
-import { ALL_FONTS, TYPOGRAPHY, loadFonts } from "../../appearance/fontStudio";
+import FontCollections from "./typography/FontCollections";
 import { DENSITIES, SCALES } from "../../appearance/appearance";
 
 export default function AppearanceSettings() {
@@ -15,8 +14,6 @@ export default function AppearanceSettings() {
   const [appearance, update] = useAppearance();
   const { theme } = appearance;
   const lastToast = useRef(null); // quick clicks replace the toast instead of piling up
-
-  useEffect(() => loadFonts(ALL_FONTS, "eka-preview-fonts"), []); // so every font card previews in its own typeface
 
   const announce = (message, name) => {
     if (lastToast.current) toast.dismiss(lastToast.current);
@@ -79,53 +76,7 @@ export default function AppearanceSettings() {
       <ThemeCollections activeId={theme} onSelect={pickTheme} />
 
       {/* ---------- Typography ---------- */}
-      <SubSection
-        title="Typography & Font Style"
-        description="Choose curated editorial and modern typography pairings across the workspace"
-        aside={
-          <span className={`${pill} font-mono`}>
-            Current:{" "}
-            {TYPOGRAPHY.find((f) => f.id === appearance.typography)?.name}
-          </span>
-        }
-      >
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {TYPOGRAPHY.map((f) => (
-            <button
-              key={f.id}
-              type="button"
-              aria-pressed={appearance.typography === f.id}
-              onClick={() => pickFont(f)}
-              className={`${card(appearance.typography === f.id)} flex flex-col p-4`}
-            >
-              <span className="flex items-center justify-between gap-2 text-[13px] font-bold text-(--text-primary)">
-                {f.name}
-                {appearance.typography === f.id && (
-                  <span className={pill}>Active</span>
-                )}
-              </span>
-              <span
-                className="mt-2 text-[19px] font-bold leading-tight text-(--text-primary)"
-                style={{ fontFamily: `"${f.serif}", serif` }}
-              >
-                {f.sample}
-              </span>
-              <span
-                className="mt-1.5 text-[12px] leading-snug text-(--text-secondary)"
-                style={{ fontFamily: `"${f.sans}", sans-serif` }}
-              >
-                {f.desc}
-              </span>
-              <span
-                className="mt-auto block border-t border-(--border-subtle) pt-2.5 text-[10.5px] text-(--text-muted)"
-                style={{ fontFamily: `"${f.mono}", monospace` }}
-              >
-                {f.serif} • {f.sans} • {f.mono}
-              </span>
-            </button>
-          ))}
-        </div>
-      </SubSection>
+      <FontCollections activeId={appearance.typography} onSelect={pickFont} />
 
       {/* ---------- Density & scale ---------- */}
       <div className="mt-8 grid grid-cols-1 gap-5 border-t border-(--border-subtle) pt-8 sm:grid-cols-2">
