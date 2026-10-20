@@ -18,6 +18,7 @@ import ReaderTab from '../components/documents/summary/ReaderTab';
 import GraphTab from '../components/documents/summary/GraphTab';
 import SummarySidebar from '../components/documents/summary/SummarySidebar';
 import SummaryToast from '../components/documents/summary/SummaryToast';
+import EditMetadataModal from '../components/documents/summary/EditMetadataModal';
 
 function DocumentSummaryPage() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ function DocumentSummaryPage() {
   const [tab, setTab] = useState('summary');
   const [readerPage, setReaderPage] = useState(1);
   const [toast, setToast] = useState(null); // { message, variant }
+  const [editing, setEditing] = useState(false);
   const [archived, setArchived] = useState(false);
 
   const closeToast = useCallback(() => setToast(null), []);
@@ -89,14 +91,10 @@ function DocumentSummaryPage() {
   };
 
   const toggleSave = () => {
-    toggleDocumentFlag(doc.id, 'isBookmarked'); // no toast in the video
-  };
-
-  const togglePin = () => {
-    const next = !pinned;
-    toggleDocumentFlag(doc.id, 'isPinned');
+    const next = !saved;
+    toggleDocumentFlag(doc.id, 'isBookmarked');
     showToast(
-      next ? `📌 Pinned "${doc.title}" for Employee Overview` : `Unpinned "${doc.title}"`,
+      next ? `⭐ Saved "${doc.title}" to Bookmarks` : `Removed "${doc.title}" from Bookmarks`,
       next ? 'success' : 'neutral',
     );
   };
@@ -105,12 +103,20 @@ function DocumentSummaryPage() {
     const next = !archived;
     setArchived(next);
     setDocumentArchived(doc.id, next);
-    showToast(next ? `Archived "${doc.title}"` : `Restored "${doc.title}"`, 'neutral');
+    showToast(next ? `📦 Document "${doc.title}" archived` : `Restored "${doc.title}"`, 'neutral');
   };
 
   const reindex = async () => {
     await reindexDocument(doc.id);
-    showToast('Re-index started for this document');
+    showToast(`✓ Successfully re-indexed vector embeddings for "${doc.title}"`);
+  };
+
+  const saveMetadata = async (changes) => {
+    const { file, ...fields } = changes;
+    await updateDocumentMetadata(doc.id, changes);
+    setDoc((d) => ({ ...d, ...fields }));
+    setEditing(false);
+    showToast(`✓ Successfully re-indexed vector embeddings for "${fields.title}"`);
   };
 
   if (notFound) {
@@ -143,6 +149,9 @@ function DocumentSummaryPage() {
         onCopyLink={copyLink}
         onToggleSave={toggleSave}
         onTogglePin={togglePin}
+        onEdit={() => setEditing(true)}
+        onReindex={reindex}
+        onArchive={toggleArchive}
       />
       <SummaryTabs active={tab} onChange={setTab} />
 
@@ -169,7 +178,9 @@ function DocumentSummaryPage() {
           onToggleArchive={toggleArchive}
         />
       </div>
-
+{editing && (
+  <EditMetadataModal doc={doc} onClose={() => setEditing(false)} onSave={saveMetadata} />
+)}
       <SummaryToast toast={toast} onClose={closeToast} />
     </div>
   );

@@ -234,3 +234,9 @@ export async function setDocumentArchived(id, archived) {
 export async function reindexDocument(id) {
   return { id, status: 'queued' };
 }
+
+// Mock: replace with PATCH /documents/:id/metadata (+ file upload) later
+export async function updateDocumentMetadata(id, changes) {
+  await new Promise((r) => setTimeout(r, 150));
+  return { id, ...changes };
+}
