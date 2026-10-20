@@ -15,10 +15,12 @@ import {
   setDocumentResults,
   setStatusFilter,
   useStatusFilter,
-  useDocuments,
-  toggleDocumentFlag,
   loadDocuments,
 } from './documentResults.js';
+import { useRoleDocuments, setDocumentArchivedFlag } from './roleDocuments.js';
+import ArchiveModal from '../summary/ArchiveModal.jsx';
+import { showDocToast } from './DocToast';
+import { setDocumentArchived } from '../summary/summaryService';
 import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
 import DocumentPagination from './DocumentPagination.jsx';
@@ -53,13 +55,26 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [viewMode, setViewMode] = useState('grid');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  
+
   // Status picked in the admin Document Health Overview ("" = none)
   const status = useStatusFilter();
 
-  // Documents come from documentService (shared, so flags survive role switches)
-  const { items: docs, loading } = useDocuments();
-  const handleToggleFlag = toggleDocumentFlag;
+  const { items: docs, loading, toggleFlag: handleToggleFlag } = useRoleDocuments();
+  const [archiveTarget, setArchiveTarget] = useState(null); // doc waiting for Confirm Archive
+
+  const confirmArchive = async () => {
+    const doc = archiveTarget;
+    const next = !doc.isArchived;
+    setArchiveTarget(null);
+    setDocumentArchivedFlag(doc.id, next);
+    await setDocumentArchived(doc.id, next);
+    showDocToast(
+      next
+        ? `📦 Document "${doc.title}" archived`
+        : `Document "${doc.title}" restored to active repository`,
+      'neutral',
+    );
+  };
 
   useEffect(() => {
     loadDocuments();
@@ -198,11 +213,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="Grid view"
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${
-              viewMode === 'grid'
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'grid'
                 ? 'bg-(--primary) text-(--primary-contrast)'
                 : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+              }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -212,11 +226,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="List view"
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${
-              viewMode === 'list'
+            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'list'
                 ? 'bg-(--primary) text-(--primary-contrast)'
                 : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+              }`}
           >
             <List size={15} />
           </button>
@@ -234,9 +247,9 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
                   key={document.id}
                   document={document}
                   adminMode={adminMode}
-                  showActions={!isManager}
                   onToggleFlag={handleToggleFlag}
                   onOpen={openSummary}
+                  onArchive={adminMode ? setArchiveTarget : undefined}
                 />
               ))}
             </section>
@@ -244,9 +257,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             <DocumentList
               documents={pageItems}
               adminMode={adminMode}
-              showActions={!isManager}
+              shortStatus={!isManager}
               onToggleFlag={handleToggleFlag}
               onOpen={openSummary}
+              onArchive={adminMode ? setArchiveTarget : undefined}
             />
           )}
 
@@ -262,7 +276,15 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           />
         </>
       )}
-       <DocToastHost />
+            {archiveTarget && (
+        <ArchiveModal
+          title={archiveTarget.title}
+          archived={archiveTarget.isArchived}
+          onClose={() => setArchiveTarget(null)}
+          onConfirm={confirmArchive}
+        />
+      )}
+      <DocToastHost />
     </>
   );
 }

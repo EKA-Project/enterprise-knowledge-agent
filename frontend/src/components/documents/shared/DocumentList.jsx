@@ -9,7 +9,7 @@ const SHORT_LABEL = { Indexed: 'Ready' };
 
 // List view of the documents (columns as in the reference video), built on the
 // shared DataTable. Rows and the "Summary →" button open the summary page.
-function DocumentList({ documents, adminMode = false, showActions = true, onOpen, onToggleFlag }) {
+function DocumentList({ documents, adminMode = false, showActions = true, shortStatus = true, onOpen, onToggleFlag, onArchive }) {
   const iconButton = 'cursor-pointer rounded-md p-1 transition-colors';
 
   const columns = [
@@ -80,7 +80,7 @@ function DocumentList({ documents, adminMode = false, showActions = true, onOpen
           label: doc.status,
           style: 'border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary)',
         };
-        const label = showActions ? `● ${SHORT_LABEL[doc.status] ?? status.label}` : status.label;
+        const label = shortStatus ? `● ${SHORT_LABEL[doc.status] ?? status.label}` : status.label;
         return (
           <span
             className={`inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-semibold ${status.style}`}
@@ -152,6 +152,7 @@ function DocumentList({ documents, adminMode = false, showActions = true, onOpen
               onOpen={() => onOpen?.(doc)}
               onToggleBookmark={() => onToggleFlag?.(doc.id, 'isBookmarked')}
               onTogglePin={() => onToggleFlag?.(doc.id, 'isPinned')}
+               onArchive={() => onArchive?.(doc)}
             />
           )}
         </div>

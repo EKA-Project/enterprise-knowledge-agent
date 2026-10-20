@@ -43,7 +43,7 @@ function Tooltip({ children }) {
   );
 }
 
-function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen }) {
+function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen, onArchive }) {
   // "Pinned" / "Saved" tags appear when the user toggles a flag on this card
   // (not for documents that were already pinned / saved when the page loaded).
   const [showPinnedTag, setShowPinnedTag] = useState(false);
@@ -125,8 +125,8 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                       aria-pressed={Boolean(document.isPinned)}
                       onClick={handlePin}
                       className={`cursor-pointer rounded-md p-1 transition-colors ${document.isPinned
-                          ? 'text-(--primary)'
-                          : 'text-(--text-muted) hover:text-(--text-primary)'
+                        ? 'text-(--primary)'
+                        : 'text-(--text-muted) hover:text-(--text-primary)'
                         }`}
                     >
                       <Pin size={14} className={document.isPinned ? 'fill-current' : ''} />
@@ -148,23 +148,24 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                   aria-pressed={Boolean(document.isBookmarked)}
                   onClick={handleSave}
                   className={`cursor-pointer rounded-md p-1 transition-colors ${document.isBookmarked
-                      ? 'text-amber-500'
-                      : 'text-(--text-muted) hover:text-(--text-primary)'
+                    ? 'text-amber-500'
+                    : 'text-(--text-muted) hover:text-(--text-primary)'
                     }`}
                 >
                   <Bookmark size={14} className={document.isBookmarked ? 'fill-current' : ''} />
                 </button>
 
-              <DocumentCardMenu
-                adminMode={adminMode}
-                isPinned={Boolean(document.isPinned)}
-                isBookmarked={Boolean(document.isBookmarked)}
-                onOpen={() => onOpen?.(document)}
-                onToggleBookmark={toggleSave}
-                onTogglePin={togglePin}
-              />
+                <DocumentCardMenu
+                  adminMode={adminMode}
+                  isPinned={Boolean(document.isPinned)}
+                  isBookmarked={Boolean(document.isBookmarked)}
+                  onOpen={() => onOpen?.(document)}
+                  onToggleBookmark={toggleSave}
+                  onTogglePin={togglePin}
+                  onArchive={() => onArchive?.(document)}
+                />
               </div>
-               )}
+            )}
           </div>
 
           <h2 className="doc-heading mt-2 text-lg font-bold leading-6 text-(--text-primary)">
