@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Pencil, X } from 'lucide-react';
 import { documentCategories } from '../shared/DocumentData';
+import { Pencil, X, Upload } from 'lucide-react';
 
 const field =
   'mt-1.5 w-full rounded-lg border border-(--border-medium) bg-(--bg-surface) px-3 py-2 text-xs text-(--text-primary) outline-none focus:border-(--primary)';
@@ -94,12 +95,20 @@ function EditMetadataModal({ doc, onClose, onSave }) {
 
           <div>
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-semibold text-(--primary)">Replace Raw Document File &amp; Re-index</span>
-              <span className="text-(--text-muted)">Current: {doc.format} ({doc.size})</span>
+              <span className="flex items-center gap-1.5 font-semibold text-(--primary)">
+                <Upload size={13} /> Replace Raw Document File &amp; Re-index
+              </span>
+              <span className="text-(--text-muted)">
+                Current:{' '}
+                <span className="doc-mono rounded bg-(--bg-surface-subtle) px-1.5 py-0.5 text-[9px] font-bold text-(--text-secondary)">
+                  {doc.format}
+                </span>{' '}
+                ({doc.size})
+              </span>
             </div>
             <label className="mt-2 flex cursor-pointer flex-col items-center gap-1 rounded-xl border border-dashed border-(--border-medium) bg-(--bg-surface-subtle) px-4 py-4 text-center">
               <span className="text-[11px] font-semibold text-(--primary)">
-                {file ? file.name : 'Click to upload new version (PDF, DOCX, MD, TXT)'}
+                {file ? file.name : '📁 Click to upload new version (PDF, DOCX, MD, TXT)'}
               </span>
               <span className="text-[10px] text-(--text-muted)">
                 Replaces raw copy &amp; updates vector chunk embeddings automatically
