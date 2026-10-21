@@ -1,13 +1,11 @@
 import { useRef } from "react";
 import SettingsPanel from "./SettingsPanel";
-import { Select } from "../common/Input";
 import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import AtmosphereHero from "./themes/AtmosphereHero";
 import ThemeCollections from "./themes/ThemeCollections";
 import FontCollections from "./typography/FontCollections";
-import { DENSITIES, SCALES } from "../../appearance/appearance";
 
 export default function AppearanceSettings() {
   const toast = useToast();
@@ -78,31 +76,6 @@ export default function AppearanceSettings() {
       {/* ---------- Typography ---------- */}
       <FontCollections activeId={appearance.typography} onSelect={pickFont} />
 
-      {/* ---------- Density & scale ---------- */}
-      <div className="mt-8 grid grid-cols-1 gap-5 border-t border-(--border-subtle) pt-8 sm:grid-cols-2">
-        <Select
-          label="Interface Layout Density"
-          value={appearance.density}
-          onChange={(e) => update({ density: e.target.value })}
-        >
-          {DENSITIES.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.label}
-            </option>
-          ))}
-        </Select>
-        <Select
-          label="Typography Scale"
-          value={appearance.scale}
-          onChange={(e) => update({ scale: e.target.value })}
-        >
-          {SCALES.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.label}
-            </option>
-          ))}
-        </Select>
-      </div>
     </SettingsPanel>
   );
 }
