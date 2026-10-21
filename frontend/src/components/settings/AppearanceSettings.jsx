@@ -1,13 +1,6 @@
 import { useRef } from "react";
-import { Eye } from "lucide-react";
-import SettingsPanel, {
-  RadioCard,
-  RadioGroup,
-  SubSection,
-} from "./SettingsPanel";
-import IconBadge from "../icons/IconBadge";
-import { EYE_COMFORT_ICONS } from "../icons/eyeComfortIcons";
-import { EYE_COMFORT_MODES } from "../../appearance/appearance";
+import SettingsPanel from "./SettingsPanel";
+import EyeComfortSection from "./eyecomfort/EyeComfortSection";
 import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
@@ -19,11 +12,6 @@ export default function AppearanceSettings() {
   const toast = useToast();
   const [appearance, update] = useAppearance();
   const { theme } = appearance;
-  // Falls back to "off" if the saved value is ever unknown, so one tile is always selected.
-  const activeEyeMode =
-    EYE_COMFORT_MODES.find((m) => m.id === appearance.eyeComfort) ??
-    EYE_COMFORT_MODES[0];
-  const eyeActive = activeEyeMode.id !== "off";
   const lastToast = useRef(null); // quick clicks replace the toast instead of piling up
 
   const announce = (message, name) => {
@@ -66,7 +54,7 @@ export default function AppearanceSettings() {
   };
 
   const pickEyeComfort = (mode) => {
-    if (mode.id === activeEyeMode.id) return;
+    if (mode.id === appearance.eyeComfort) return;
     update({ eyeComfort: mode.id });
     announce("Eye comfort updated", `${mode.label} · ${mode.detail}`);
   };
@@ -96,55 +84,7 @@ export default function AppearanceSettings() {
       <FontCollections activeId={appearance.typography} onSelect={pickFont} />
 
       {/* ---------- Eye comfort ---------- */}
-      <SubSection
-        title={
-          <>
-            <IconBadge icon={Eye} box={26} size={14} />
-            Eye Comfort
-          </>
-        }
-        description="A soft screen tint for long sessions. Works on every theme."
-        aside={
-          <span
-            role="status"
-            className={`rounded-full px-3 py-1 font-mono text-[11px] ${
-              eyeActive
-                ? "bg-(--status-warning-bg) text-(--status-warning)"
-                : "bg-(--bg-surface-subtle) text-(--text-secondary)"
-            }`}
-          >
-            {eyeActive ? `Active · ${activeEyeMode.label}` : "Disabled"}
-          </span>
-        }
-      >
-        {/* @container: the columns follow this block's width, not the window's */}
-        <div className="@container">
-          <RadioGroup
-            label="Eye comfort mode"
-            className="grid grid-cols-1 gap-3 @lg:grid-cols-2 @4xl:grid-cols-4"
-          >
-            {EYE_COMFORT_MODES.map((mode) => (
-              <RadioCard
-                key={mode.id}
-                roving
-                dotAlign="start"
-                icon={EYE_COMFORT_ICONS[mode.id]}
-                selected={mode.id === activeEyeMode.id}
-                onSelect={() => pickEyeComfort(mode)}
-                title={
-                  <>
-                    {mode.label}
-                    <span className="font-mono text-[10.5px] font-medium text-(--text-muted)">
-                      {mode.detail}
-                    </span>
-                  </>
-                }
-                description={mode.description}
-              />
-            ))}
-          </RadioGroup>
-        </div>
-      </SubSection>
+      <EyeComfortSection activeId={appearance.eyeComfort} onSelect={pickEyeComfort} />
     </SettingsPanel>
   );
 }

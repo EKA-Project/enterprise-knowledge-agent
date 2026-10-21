@@ -6,11 +6,12 @@ const KEY = "eka.appearance";
 // ---------- Options ----------
 // Eye comfort = a soft colour tint laid over the whole screen (see styles/eye-comfort.css).
 // It warms and dims the display; it does not change what the screen emits.
-// `detail` is the small hint shown in brackets after the label.
+// `detail` is the small hint after the label: the approximate colour temperature of the
+// tint, relative to a 6500K (neutral) screen. The actual colours live in styles/eye-comfort.css.
 export const EYE_COMFORT_MODES = [
   { id: "off", label: "Off", detail: "Neutral", description: "Original colours, no tint." },
-  { id: "true-tone", label: "True Tone", detail: "~3400K", description: "Light warm tint to soften cold glare." },
-  { id: "paperwhite", label: "Paperwhite", detail: "~2800K", description: "Cream paper tone for long reading." },
+  { id: "true-tone", label: "True Tone", detail: "~6100K", description: "Light warmth for all-day use. Barely noticeable." },
+  { id: "paperwhite", label: "Paperwhite", detail: "~5100K", description: "Light cream tone for long reading sessions." },
   { id: "dark-room", label: "Dark Room", detail: "Extra Dim", description: "Dims the whole screen for dark rooms." },
 ];
 
