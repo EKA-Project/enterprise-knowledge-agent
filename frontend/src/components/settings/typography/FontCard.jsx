@@ -12,9 +12,11 @@ export default function FontCard({ font, active, onSelect }) {
       className={`${card(active)} flex flex-col p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)`}
     >
       <span className="flex items-center justify-between gap-2">
-        <span className="text-[13px] font-bold text-(--text-primary)">{font.name}</span>
+        <span className="min-w-0 text-[13px] font-bold text-(--text-primary)">
+          {font.name}
+        </span>
         {active && (
-          <span className="rounded-full bg-(--primary-light) px-2 py-px text-[10px] font-bold text-(--primary)">
+          <span className="shrink-0 whitespace-nowrap rounded-full bg-(--primary-light) px-2 py-px text-[10px] font-bold text-(--primary)">
             <span aria-hidden="true">✦</span> Applied
           </span>
         )}
