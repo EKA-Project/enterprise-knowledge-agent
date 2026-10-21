@@ -15,11 +15,18 @@ export const EYE_COMFORT_MODES = [
   { id: "dark-room", label: "Dark Room", detail: "Extra Dim", description: "Dims the whole screen for dark rooms." },
 ];
 
+// What the "Surprise Me" button randomizes. Only the ids are stored; labels are for the toggle.
+export const SURPRISE_SCOPES = [
+  { id: "theme", label: "Theme only" },
+  { id: "both", label: "Theme & Typo" },
+];
+
 // ---------- Defaults ----------
 export const DEFAULT_APPEARANCE = {
   theme: DEFAULT_THEME,
   typography: DEFAULT_TYPOGRAPHY,
   eyeComfort: "off",
+  surpriseScope: "theme",
 };
 
 // ---------- Storage ----------

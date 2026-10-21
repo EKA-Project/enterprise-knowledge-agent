@@ -5,14 +5,21 @@ import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import { TYPOGRAPHY, DEFAULT_TYPOGRAPHY } from "../../appearance/fontStudio";
+import { SURPRISE_SCOPES } from "../../appearance/appearance";
 import AtmosphereHero from "./themes/AtmosphereHero";
 import ThemeCollections from "./themes/ThemeCollections";
 import FontCollections from "./typography/FontCollections";
+
+const pickRandom = (items) => items[Math.floor(Math.random() * items.length)];
 
 export default function AppearanceSettings() {
   const toast = useToast();
   const [appearance, update] = useAppearance();
   const { theme } = appearance;
+  // Guards against a stale or hand-edited saved value: anything unknown counts as "theme".
+  const scope = SURPRISE_SCOPES.some((s) => s.id === appearance.surpriseScope)
+    ? appearance.surpriseScope
+    : "theme";
   const lastToast = useRef(null); // quick clicks replace the toast instead of piling up
 
   const announce = (message, name) => {
@@ -36,15 +43,27 @@ export default function AppearanceSettings() {
     TYPOGRAPHY.find((t) => t.id === appearance.typography) ??
     TYPOGRAPHY.find((t) => t.id === DEFAULT_TYPOGRAPHY);
 
-  // Random theme, never the one already active.
+  // Random theme, and optionally a random font pairing, never the ones already active.
+  // Compared against activeTheme/activeFont (not the raw saved ids) so an unknown saved
+  // value can't make the pick land on the look that is already showing.
   const surprise = () => {
-    const pool = THEMES.filter((t) => t.id !== theme);
-    const t = pool[Math.floor(Math.random() * pool.length)];
-    update({ theme: t.id });
-    announce("Surprise pick applied", t.name);
+    const nextTheme = pickRandom(THEMES.filter((t) => t.id !== activeTheme.id));
+
+    if (scope === "both") {
+      const nextFont = pickRandom(
+        TYPOGRAPHY.filter((t) => t.id !== activeFont.id),
+      );
+      // One update call = one apply, one save, one toast.
+      update({ theme: nextTheme.id, typography: nextFont.id });
+      announce("Surprise pick applied", `${nextTheme.name} · ${nextFont.name}`);
+      return;
+    }
+
+    update({ theme: nextTheme.id });
+    announce("Surprise pick applied", nextTheme.name);
   };
 
-  // Resets the theme only; typography, density and scale stay as chosen.
+  // Resets the theme only; typography and eye comfort stay as chosen.
   const reset = () => {
     if (theme === DEFAULT_THEME) return;
     const t = THEMES.find((x) => x.id === DEFAULT_THEME);
@@ -80,6 +99,8 @@ export default function AppearanceSettings() {
         typography={activeFont}
         isDefault={theme === DEFAULT_THEME}
         onSurprise={surprise}
+        scope={scope}
+        onScopeChange={(id) => update({ surpriseScope: id })}
         onReset={reset}
       />
 

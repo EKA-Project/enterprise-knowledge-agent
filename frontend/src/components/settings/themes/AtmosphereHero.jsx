@@ -1,8 +1,10 @@
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Shuffle } from "lucide-react";
 import { SurpriseMeButton } from "../../common/ActionButtons";
 import IconBadge from "../../icons/IconBadge";
 import ThemeSwatch from "./ThemeSwatch";
 import TypographySpecimenPill from "../typography/TypographySpecimenPill";
+import SegmentedControl from "../../common/SegmentedControl";
+import { SURPRISE_SCOPES } from "../../../appearance/appearance";
 import { getThemeIcon } from "../../icons/themeIcons";
 
 export default function AtmosphereHero({
@@ -11,6 +13,8 @@ export default function AtmosphereHero({
   typography,
   onSurprise,
   onReset,
+  scope,
+  onScopeChange,
 }) {
   const Icon = getThemeIcon(theme.id);
 
@@ -44,7 +48,14 @@ export default function AtmosphereHero({
             </p>
           </div>
 
-          <SurpriseMeButton onClick={onSurprise} />
+          <SurpriseMeButton
+            onClick={onSurprise}
+            title={
+              scope === "both"
+                ? "Pick a random theme and typography"
+                : "Pick a random theme"
+            }
+          />
         </div>
       </div>
 
@@ -53,8 +64,20 @@ export default function AtmosphereHero({
         <TypographySpecimenPill typography={typography} />
       </div>
 
-      {/* Footer. The roll-scope toggle joins on the left in the next step. */}
-      <div className="mt-5 flex flex-wrap items-center justify-end gap-3 border-t border-(--border-subtle) pt-4">
+      {/* Footer: what Surprise Me randomizes (left) and reset (right) */}
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-(--border-subtle) pt-4">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-(--text-muted)">
+            <Shuffle size={12} aria-hidden="true" />
+            Roll scope:
+          </span>
+          <SegmentedControl
+            label="What Surprise Me randomizes"
+            options={SURPRISE_SCOPES}
+            value={scope}
+            onChange={onScopeChange}
+          />
+        </div>
         <button
           type="button"
           onClick={onReset}
