@@ -4,6 +4,7 @@ import EyeComfortSection from "./eyecomfort/EyeComfortSection";
 import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
+import { TYPOGRAPHY, DEFAULT_TYPOGRAPHY } from "../../appearance/fontStudio";
 import AtmosphereHero from "./themes/AtmosphereHero";
 import ThemeCollections from "./themes/ThemeCollections";
 import FontCollections from "./typography/FontCollections";
@@ -30,6 +31,10 @@ export default function AppearanceSettings() {
   const activeTheme =
     THEMES.find((t) => t.id === theme) ??
     THEMES.find((t) => t.id === DEFAULT_THEME);
+  // Same fallback as applyFonts(), so an unknown saved id still shows the default pairing.
+  const activeFont =
+    TYPOGRAPHY.find((t) => t.id === appearance.typography) ??
+    TYPOGRAPHY.find((t) => t.id === DEFAULT_TYPOGRAPHY);
 
   // Random theme, never the one already active.
   const surprise = () => {
@@ -72,6 +77,7 @@ export default function AppearanceSettings() {
       {/* ---------- Active atmosphere hero ---------- */}
       <AtmosphereHero
         theme={activeTheme}
+        typography={activeFont}
         isDefault={theme === DEFAULT_THEME}
         onSurprise={surprise}
         onReset={reset}
@@ -84,7 +90,10 @@ export default function AppearanceSettings() {
       <FontCollections activeId={appearance.typography} onSelect={pickFont} />
 
       {/* ---------- Eye comfort ---------- */}
-      <EyeComfortSection activeId={appearance.eyeComfort} onSelect={pickEyeComfort} />
+      <EyeComfortSection
+        activeId={appearance.eyeComfort}
+        onSelect={pickEyeComfort}
+      />
     </SettingsPanel>
   );
 }

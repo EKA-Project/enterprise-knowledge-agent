@@ -2,11 +2,13 @@ import { RotateCcw } from "lucide-react";
 import { SurpriseMeButton } from "../../common/ActionButtons";
 import IconBadge from "../../icons/IconBadge";
 import ThemeSwatch from "./ThemeSwatch";
+import TypographySpecimenPill from "../typography/TypographySpecimenPill";
 import { getThemeIcon } from "../../icons/themeIcons";
 
 export default function AtmosphereHero({
   theme,
   isDefault,
+  typography,
   onSurprise,
   onReset,
 }) {
@@ -42,19 +44,26 @@ export default function AtmosphereHero({
             </p>
           </div>
 
-          <div className="flex flex-col items-start gap-2">
-            <SurpriseMeButton onClick={onSurprise} />
-            <button
-              type="button"
-              onClick={onReset}
-              disabled={isDefault}
-              className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px] font-medium text-(--text-secondary) transition-colors hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) disabled:cursor-default disabled:opacity-50 disabled:hover:text-(--text-secondary)"
-            >
-              <RotateCcw size={13} />
-              Reset Default
-            </button>
-          </div>
+          <SurpriseMeButton onClick={onSurprise} />
         </div>
+      </div>
+
+      {/* Active typography pairing, shown in its own fonts */}
+      <div className="mt-5">
+        <TypographySpecimenPill typography={typography} />
+      </div>
+
+      {/* Footer. The roll-scope toggle joins on the left in the next step. */}
+      <div className="mt-5 flex flex-wrap items-center justify-end gap-3 border-t border-(--border-subtle) pt-4">
+        <button
+          type="button"
+          onClick={onReset}
+          disabled={isDefault}
+          className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px] font-medium text-(--text-secondary) transition-colors hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) disabled:cursor-default disabled:opacity-50 disabled:hover:text-(--text-secondary)"
+        >
+          <RotateCcw size={13} />
+          Reset Default
+        </button>
       </div>
     </div>
   );
