@@ -17,7 +17,8 @@ import {
   useStatusFilter,
   loadDocuments,
 } from './documentResults.js';
-import { useRoleDocuments, setDocumentArchivedFlag } from './roleDocuments.js';
+import { useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from './roleDocuments.js';
+import EditMetadataModal from '../summary/EditMetadataModal.jsx';
 import ArchiveModal from '../summary/ArchiveModal.jsx';
 import { showDocToast } from './DocToast';
 import { setDocumentArchived } from '../summary/summaryService';
@@ -61,6 +62,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
   const { items: docs, loading, toggleFlag: handleToggleFlag } = useRoleDocuments();
   const [archiveTarget, setArchiveTarget] = useState(null); // doc waiting for Confirm Archive
+  const [editTarget, setEditTarget] = useState(null);
 
   const confirmArchive = async () => {
     const doc = archiveTarget;
@@ -214,8 +216,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
             className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'grid'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
               }`}
           >
             <LayoutGrid size={15} />
@@ -227,8 +229,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
             className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'list'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
               }`}
           >
             <List size={15} />
@@ -250,6 +252,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
                   onToggleFlag={handleToggleFlag}
                   onOpen={openSummary}
                   onArchive={adminMode ? setArchiveTarget : undefined}
+                  onEditMetadata={adminMode ? setEditTarget : undefined}
+                  onReindex={adminMode ? startReindex : undefined}
                 />
               ))}
             </section>
@@ -261,6 +265,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
               onToggleFlag={handleToggleFlag}
               onOpen={openSummary}
               onArchive={adminMode ? setArchiveTarget : undefined}
+              onEditMetadata={adminMode ? setEditTarget : undefined}
+              onReindex={adminMode ? startReindex : undefined}
             />
           )}
 
@@ -276,12 +282,23 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           />
         </>
       )}
-            {archiveTarget && (
+      {archiveTarget && (
         <ArchiveModal
           title={archiveTarget.title}
           archived={archiveTarget.isArchived}
           onClose={() => setArchiveTarget(null)}
           onConfirm={confirmArchive}
+        />
+        
+      )}
+            {editTarget && (
+        <EditMetadataModal
+          doc={{ ...editTarget, executiveSummary: editTarget.description }}
+          onClose={() => setEditTarget(null)}
+          onSave={(changes) => {
+            saveDocumentMetadata(editTarget, changes);
+            setEditTarget(null);
+          }}
         />
       )}
       <DocToastHost />

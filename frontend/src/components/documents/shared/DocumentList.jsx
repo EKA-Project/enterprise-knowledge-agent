@@ -20,9 +20,8 @@ function DocumentList({ documents, adminMode = false, showActions = true, shortS
       render: (doc) => (
         <div className="flex items-center gap-3">
           <span
-            className={`doc-mono flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[10px] font-bold ${
-              formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-            }`}
+            className={`doc-mono flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[10px] font-bold ${formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)'
+              }`}
           >
             {doc.format}
           </span>
@@ -108,9 +107,8 @@ function DocumentList({ documents, adminMode = false, showActions = true, shortS
                 aria-label={doc.isPinned ? 'Unpin document' : 'Pin document'}
                 aria-pressed={Boolean(doc.isPinned)}
                 onClick={() => onToggleFlag?.(doc.id, 'isPinned')}
-                className={`${iconButton} ${
-                  doc.isPinned ? 'text-(--primary)' : 'text-(--text-muted) hover:text-(--text-primary)'
-                }`}
+                className={`${iconButton} ${doc.isPinned ? 'text-(--primary)' : 'text-(--text-muted) hover:text-(--text-primary)'
+                  }`}
               >
                 <Pin size={14} className={doc.isPinned ? 'fill-current' : ''} />
               </button>
@@ -128,9 +126,8 @@ function DocumentList({ documents, adminMode = false, showActions = true, shortS
               aria-label={doc.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
               aria-pressed={Boolean(doc.isBookmarked)}
               onClick={() => onToggleFlag?.(doc.id, 'isBookmarked')}
-              className={`${iconButton} ${
-                doc.isBookmarked ? 'text-amber-500' : 'text-(--text-muted) hover:text-(--text-primary)'
-              }`}
+              className={`${iconButton} ${doc.isBookmarked ? 'text-amber-500' : 'text-(--text-muted) hover:text-(--text-primary)'
+                }`}
             >
               <Bookmark size={14} className={doc.isBookmarked ? 'fill-current' : ''} />
             </button>
@@ -152,7 +149,9 @@ function DocumentList({ documents, adminMode = false, showActions = true, shortS
               onOpen={() => onOpen?.(doc)}
               onToggleBookmark={() => onToggleFlag?.(doc.id, 'isBookmarked')}
               onTogglePin={() => onToggleFlag?.(doc.id, 'isPinned')}
-               onArchive={() => onArchive?.(doc)}
+              onArchive={() => onArchive?.(doc)}
+              onEditMetadata={() => onEditMetadata?.(doc)}
+              onReindex={() => onReindex?.(doc)}
             />
           )}
         </div>

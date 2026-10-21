@@ -1,14 +1,19 @@
 import { useContext, useMemo, useSyncExternalStore } from 'react';
 import AuthContext from '../../../context/AuthContext.jsx';
 import { useDocuments, toggleDocumentFlag } from './documentResults.js';
+import { showDocToast } from './DocToast';
+import { reindexDocument, updateDocumentMetadata } from '../summary/summaryService';
 
-// Per-role bookmarks + shared archived flag, layered over the shared documents store.
-//  - Pin stays global (admin pins, everyone sees it) -> handled by toggleDocumentFlag
-//  - Bookmark is private to each role: bookmarks[role][docId]
-//  - Archived is global: archived[docId]
-// Backend-ready: swap these two maps for API calls (GET/PUT /me/bookmarks, PATCH /documents/:id).
+// Layer over the shared documents store (backend-ready: each map = one API resource).
+//  bookmarks[role][id]  private per role      | archived[id]   global
+//  edits[id]            metadata edits, global | processing[id] re-index running
+//  reindexed[id]        "Just now (Re-indexed)"
+// Pin stays global via toggleDocumentFlag.
 let bookmarks = {};
 let archived = {};
+let edits = {};
+let processing = {};
+let reindexed = {};
 let version = 0;
 const listeners = new Set();
 const subscribe = (l) => {
@@ -25,6 +30,30 @@ export function setDocumentArchivedFlag(id, value) {
   emit();
 }
 
+// Re-index flow from the video: "Queued" toast + Processing card, then success toast.
+export async function startReindex(doc) {
+  if (processing[doc.id]) return;
+  processing = { ...processing, [doc.id]: true };
+  emit();
+  showDocToast(`⏳ Queued vector re-indexing for "${doc.title}"…`, 'neutral');
+  await reindexDocument(doc.id);
+  await new Promise((r) => setTimeout(r, 3000)); // mock pipeline time, remove with the real API
+  processing = { ...processing, [doc.id]: false };
+  reindexed = { ...reindexed, [doc.id]: true };
+  emit();
+  showDocToast(`✓ Successfully re-indexed vector embeddings for "${doc.title}"`, 'success');
+}
+
+// "Save Changes & Re-index" of the Edit Metadata modal
+export async function saveDocumentMetadata(doc, changes) {
+  // eslint-disable-next-line no-unused-vars
+  const { file, ...fields } = changes;
+  edits = { ...edits, [doc.id]: fields };
+  emit();
+  await updateDocumentMetadata(doc.id, changes);
+  return startReindex({ ...doc, title: fields.title });
+}
+
 // Same shape as useDocuments(), plus toggleFlag(id, 'isPinned' | 'isBookmarked').
 export function useRoleDocuments() {
   const { activeRole } = useContext(AuthContext);
@@ -34,13 +63,17 @@ export function useRoleDocuments() {
   const docs = useMemo(
     () =>
       items.map((d) => {
+        const e = edits[d.id];
         const isArchived = archived[d.id] ?? false;
         return {
           ...d,
-          // seed value from DocumentData until this role changes it
+          ...(e
+            ? { title: e.title, category: e.category, author: e.author, description: e.executiveSummary, edited: true }
+            : {}),
           isBookmarked: bookmarks[activeRole]?.[d.id] ?? Boolean(d.isBookmarked),
           isArchived,
-          status: isArchived ? 'Archived' : d.status,
+          reindexedNow: Boolean(reindexed[d.id]),
+          status: isArchived ? 'Archived' : processing[d.id] ? 'Processing' : d.status,
         };
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,7 +82,7 @@ export function useRoleDocuments() {
 
   const toggleFlag = (id, flag) => {
     if (flag !== 'isBookmarked') {
-      toggleDocumentFlag(id, flag); // pin: shared by every role
+      toggleDocumentFlag(id, flag);
       return;
     }
     const current = docs.find((d) => d.id === id)?.isBookmarked;

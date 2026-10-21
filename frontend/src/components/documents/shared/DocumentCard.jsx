@@ -163,6 +163,8 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                   onToggleBookmark={toggleSave}
                   onTogglePin={togglePin}
                   onArchive={() => onArchive?.(document)}
+                  onEditMetadata={() => onEditMetadata?.(document)}
+                  onReindex={() => onReindex?.(document)}
                 />
               </div>
             )}

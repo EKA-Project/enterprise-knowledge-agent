@@ -1,15 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext.jsx';
 import {
   getDocumentSummary,
   setDocumentArchived,
-  reindexDocument,
 } from '../components/documents/summary/summaryService';
 import {
   loadDocuments,
 } from '../components/documents/shared/documentResults.js';
-import { useRoleDocuments, setDocumentArchivedFlag } from '../components/documents/shared/roleDocuments.js';
+import { useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from '../components/documents/shared/roleDocuments.js';
 import SummaryHeader from '../components/documents/summary/SummaryHeader';
 import SummaryTabs from '../components/documents/summary/SummaryTabs';
 import AiSummaryTab from '../components/documents/summary/AiSummaryTab';
@@ -29,7 +28,7 @@ function DocumentSummaryPage() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id'); // /documents/summary?id=doc-7
 
-  const [doc, setDoc] = useState(null);
+   const [baseDoc, setDoc] = useState(null);
   const [notFound, setNotFound] = useState(false);
   const [tab, setTab] = useState('summary');
   const [readerPage, setReaderPage] = useState(1);
@@ -40,11 +39,24 @@ function DocumentSummaryPage() {
   const showToast = showDocToast; // (message, variant)
   // Pin / bookmark live in the shared documents store, so the Documents list
   // and this page always agree (and survive switching role).
- const { items, toggleFlag } = useRoleDocuments();
-  const live = doc ? items.find((item) => item.id === doc.id) : null;
-  const saved = Boolean(live ? live.isBookmarked : doc?.isBookmarked);
-  const pinned = Boolean(live ? live.isPinned : doc?.isPinned);
-  const archived = Boolean(live ? live.isArchived : doc?.archived);
+
+  const { items, toggleFlag } = useRoleDocuments();
+  const live = baseDoc ? items.find((item) => item.id === baseDoc.id) : null;
+  const saved = Boolean(live ? live.isBookmarked : baseDoc?.isBookmarked);
+  const pinned = Boolean(live ? live.isPinned : baseDoc?.isPinned);
+  const archived = Boolean(live ? live.isArchived : baseDoc?.archived);
+
+  // Page data + edits / re-index made anywhere (list or here)
+  const doc = useMemo(() => {
+    if (!baseDoc) return null;
+    return {
+      ...baseDoc,
+      ...(live?.edited
+        ? { title: live.title, category: live.category, author: live.author, executiveSummary: live.description }
+        : {}),
+      ...(live?.reindexedNow ? { uploaded: 'Just now (Re-indexed)' } : {}),
+    };
+  }, [baseDoc, live]);
   // Make sure the shared list is loaded even when this page is opened directly
   useEffect(() => {
     loadDocuments();
@@ -122,17 +134,16 @@ function DocumentSummaryPage() {
     navigate('/documents');
   };
 
-  const reindex = async () => {
-    await reindexDocument(doc.id);
-    showToast(`✓ Successfully re-indexed vector embeddings for "${doc.title}"`);
+  // Video: Re-index sends you to the Documents list, where the toasts and Processing card show
+  const reindex = () => {
+    startReindex(doc);
+    navigate('/documents');
   };
 
-  const saveMetadata = async (changes) => {
-    const { file, ...fields } = changes;
-    await updateDocumentMetadata(doc.id, changes);
-    setDoc((d) => ({ ...d, ...fields }));
+  const saveMetadata = (changes) => {
     setEditing(false);
-    showToast(`✓ Successfully re-indexed vector embeddings for "${fields.title}"`);
+    saveDocumentMetadata(doc, changes);
+    navigate('/documents');
   };
 
   if (notFound) {
