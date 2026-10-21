@@ -11,12 +11,21 @@ const rest = "border-(--border-subtle)";
 const applied = "border-[1.5px] border-(--primary-deep) shadow-(--shadow-md)";
 
 export default function ThemeCard({ theme, active, onSelect }) {
+  const handleClick = () => {
+    // Prevent repeated clicks on the active card
+    if (!active) onSelect(theme);
+  };
+
   return (
     <button
       type="button"
       aria-pressed={active}
-      onClick={() => onSelect(theme)}
-      className={`${base} ${active ? applied : rest}`}
+      onClick={handleClick}
+      className={`${base} ${active ? applied : rest} ${
+        active
+          ? "motion-safe:!hover:translate-y-0 motion-safe:!hover:scale-100 cursor-not-allowed"
+          : ""
+      }`}
     >
       {/* data-theme on this overlay makes --primary / --primary-glow resolve to the hovered theme */}
       <span
@@ -28,8 +37,22 @@ export default function ThemeCard({ theme, active, onSelect }) {
       <ThemeSwatch themeId={theme.id} shine />
 
       <span className="mt-3 flex items-center gap-2">
-        <IconBadge icon={getThemeIcon(theme.id)} className="motion-safe:group-hover:-rotate-6" />
-        <span className="text-[13.5px] font-bold text-(--text-primary)">{theme.name}</span>
+        <IconBadge
+          icon={getThemeIcon(theme.id)}
+          tone={active ? "solid" : "soft"}
+          className={`${
+            active
+              ? "motion-safe:group-hover:scale-100"
+              : "motion-safe:group-hover:-rotate-6"
+          } ${
+            !active
+              ? "border border-(--border-subtle) motion-safe:group-hover:border-(--primary)"
+              : ""
+          }`}
+        />
+        <span className="text-[13.5px] font-bold text-(--text-primary)">
+          {theme.name}
+        </span>
       </span>
       <span className="mb-3 mt-1 block text-[12px] leading-snug text-(--text-muted)">
         {theme.description}
