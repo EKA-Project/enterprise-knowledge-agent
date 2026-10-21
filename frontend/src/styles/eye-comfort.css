@@ -1,0 +1,50 @@
+/* ==========================================================================
+   Eye Comfort overlay
+   --------------------------------------------------------------------------
+   A fixed, click-through colour layer over the whole app. The mode is set by
+   src/appearance/appearance.js as <html data-eye-comfort="...">; each mode
+   below only sets two variables, and html::after reads them.
+
+   Why an overlay and not `filter` on <body>: a filter turns <body> into the
+   containing block for position:fixed children, which would misplace modals,
+   toasts and drawers.
+
+   Note: the warm modes use `multiply`, so they are subtle on dark themes.
+   ========================================================================== */
+
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647; /* above modals, toasts and tooltips */
+  pointer-events: none; /* never blocks clicks */
+  background-color: var(--eye-tint, transparent);
+  mix-blend-mode: var(--eye-blend, multiply);
+  transition: background-color 350ms ease;
+}
+
+html[data-eye-comfort="true-tone"] {
+  --eye-tint: rgb(255 200 90 / 0.07);
+}
+
+html[data-eye-comfort="paperwhite"] {
+  --eye-tint: rgb(246 226 175 / 0.12);
+}
+
+html[data-eye-comfort="dark-room"] {
+  --eye-tint: rgb(0 0 0 / 0.32);
+  --eye-blend: normal; /* multiply with black would add little; plain dimming reads better */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html::after {
+    transition: none;
+  }
+}
+
+/* The tint is for the screen only, never the paper. */
+@media print {
+  html::after {
+    display: none;
+  }
+}
