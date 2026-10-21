@@ -12,14 +12,21 @@ export default function SettingsPanel({
     <section
       className={`set-rise rounded-[24px] border border-(--border-subtle) bg-(--bg-surface) p-8 shadow-(--shadow-sm) ${className}`}
     >
-      <div className="flex flex-wrap items-center gap-3">
-        <h3 className="font-serif text-[24px] font-bold leading-tight text-(--text-primary)">
-          {title}
-        </h3>
-        {badge}
-      </div>
-      <p className="mt-1 text-[12.5px] text-(--text-muted)">{description}</p>
-      <div className="mb-6 mt-5 border-t border-(--border-medium)/70" />
+      {/* A tab that brings its own header (Appearance) simply omits `title`. */}
+      {title && (
+        <>
+          <div className="flex flex-wrap items-center gap-3">
+            <h3 className="font-serif text-[24px] font-bold leading-tight text-(--text-primary)">
+              {title}
+            </h3>
+            {badge}
+          </div>
+          <p className="mt-1 text-[12.5px] text-(--text-muted)">
+            {description}
+          </p>
+          <div className="mb-6 mt-5 border-t border-(--border-medium)/70" />
+        </>
+      )}
       {children}
     </section>
   );
@@ -138,13 +145,14 @@ export function RadioCard({
   );
 }
 
-
 // Wraps a set of RadioCards (use `roving` on each card).
 // Gives screen readers a named group and lets the arrow keys move between the options.
 // Selection follows focus, like native radio buttons.
 export function RadioGroup({ label, className = "", children }) {
   const handleKeyDown = (event) => {
-    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
+    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[
+      event.key
+    ];
     if (!step) return;
 
     const radios = [...event.currentTarget.querySelectorAll('[role="radio"]')];
@@ -158,7 +166,12 @@ export function RadioGroup({ label, className = "", children }) {
   };
 
   return (
-    <div role="radiogroup" aria-label={label} onKeyDown={handleKeyDown} className={className}>
+    <div
+      role="radiogroup"
+      aria-label={label}
+      onKeyDown={handleKeyDown}
+      className={className}
+    >
       {children}
     </div>
   );

@@ -4,11 +4,14 @@ import Button from "../../common/Button";
 import SearchInput from "../../common/SearchInput";
 import { getCollectionIcon } from "../../icons/collectionIcons";
 import FilterPills from "../FilterPills";
-import { SubSection } from "../SettingsPanel";
+import AppearanceHeader from "../appearance/AppearanceHeader";
+import { Diamond } from "lucide-react";
 import CollectionRow from "./CollectionRow";
 
 const ALL = "all";
-const labelOf = Object.fromEntries(THEME_COLLECTIONS.map((c) => [c.id, c.label]));
+const labelOf = Object.fromEntries(
+  THEME_COLLECTIONS.map((c) => [c.id, c.label]),
+);
 
 // Every word typed must appear in the theme's name, description, tag or collection name.
 function matches(theme, words) {
@@ -27,7 +30,9 @@ export default function ThemeCollections({ activeId, onSelect }) {
   // Matching themes per collection, in collection order.
   const found = THEME_COLLECTIONS.map((collection) => ({
     collection,
-    themes: THEMES.filter((t) => t.collection === collection.id && matches(t, words)),
+    themes: THEMES.filter(
+      (t) => t.collection === collection.id && matches(t, words),
+    ),
   }));
 
   // Pill counts follow the search, so typing shows where the matches are.
@@ -48,17 +53,26 @@ export default function ThemeCollections({ activeId, onSelect }) {
 
   // All = every collection with matches. A collection id = only that one.
   const visible = found.filter(
-    (g) => (filter === ALL || g.collection.id === filter) && g.themes.length > 0,
+    (g) =>
+      (filter === ALL || g.collection.id === filter) && g.themes.length > 0,
   );
   const shown = visible.reduce((n, g) => n + g.themes.length, 0);
 
   return (
-    <div className="mt-8">
-      <SubSection
-        first
+    <div className="mt-12">
+      <AppearanceHeader
+        icon={Diamond}
+        eyebrow="Workspace Palettes"
         title="Atmosphere Collections"
-        description={`Showing ${shown} of ${THEMES.length} atmospheres`}
-      >
+        description={`Color shapes cognitive rhythm. Explore ${THEMES.length} chromatic environments crafted to quiet the eye, dissolve distractions, and set your ideal focus state.`}
+        meta={
+          <span className="inline-flex rounded-full border border-(--border-medium) px-3 py-1 font-mono text-[11px] text-(--text-secondary)">
+            Showing {shown} of {THEMES.length} atmospheres
+          </span>
+        }
+      />
+
+      <div>
         <FilterPills
           label="Atmosphere collections"
           options={options}
@@ -87,7 +101,11 @@ export default function ThemeCollections({ activeId, onSelect }) {
                 Clear search
               </Button>
               {filter !== ALL && (
-                <Button variant="surface" size="xs" onClick={() => setFilter(ALL)}>
+                <Button
+                  variant="surface"
+                  size="xs"
+                  onClick={() => setFilter(ALL)}
+                >
                   Search all collections
                 </Button>
               )}
@@ -103,12 +121,14 @@ export default function ThemeCollections({ activeId, onSelect }) {
                 activeId={activeId}
                 onSelect={onSelect}
                 focused={filter === collection.id}
-                onToggleFocus={() => setFilter(filter === collection.id ? ALL : collection.id)}
+                onToggleFocus={() =>
+                  setFilter(filter === collection.id ? ALL : collection.id)
+                }
               />
             ))}
           </div>
         )}
-      </SubSection>
+      </div>
     </div>
   );
 }

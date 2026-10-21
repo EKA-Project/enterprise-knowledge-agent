@@ -7,6 +7,9 @@ import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import { TYPOGRAPHY, DEFAULT_TYPOGRAPHY } from "../../appearance/fontStudio";
 import { SURPRISE_SCOPES } from "../../appearance/appearance";
 import AtmosphereHero from "./themes/AtmosphereHero";
+import { Droplet } from "lucide-react";
+import AppearanceHeader from "./appearance/AppearanceHeader";
+import StudioStatsPill from "./appearance/StudioStatsPill";
 import ThemeCollections from "./themes/ThemeCollections";
 import FontCollections from "./typography/FontCollections";
 
@@ -99,15 +102,20 @@ export default function AppearanceSettings() {
   };
 
   return (
-    <SettingsPanel
-      title="Appearance & Atmosphere Studio"
-      description={`${THEMES.length} curated workspace themes, editorial typography pairings, and layout ergonomics.`}
-      badge={
-        <span className="ml-auto rounded-full bg-(--bg-surface-subtle) px-3 py-1 font-mono text-[11px] text-(--text-secondary)">
-          Theme System v2.5 • {THEMES.length} Atmospheres
-        </span>
-      }
-    >
+    <SettingsPanel>
+      <AppearanceHeader
+        level="page"
+        icon={Droplet}
+        eyebrow="Workspace Visual Identity"
+        title="Appearance & Atmosphere Studio"
+        description={`${THEMES.length} curated workspace themes, editorial typography pairings, and layout ergonomics.`}
+        aside={
+          <StudioStatsPill
+            atmospheres={THEMES.length}
+            typeSuites={TYPOGRAPHY.length}
+          />
+        }
+      />
       {/* ---------- Active atmosphere hero ---------- */}
       <AtmosphereHero
         theme={activeTheme}
