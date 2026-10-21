@@ -1,7 +1,8 @@
-import { RotateCcw, Shuffle } from "lucide-react";
+import { Shuffle } from "lucide-react";
 import { SurpriseMeButton } from "../../common/ActionButtons";
 import IconBadge from "../../icons/IconBadge";
 import ThemeSwatch from "./ThemeSwatch";
+import ResetDefaultButton from "./ResetDefaultButton";
 import TypographySpecimenPill from "../typography/TypographySpecimenPill";
 import SegmentedControl from "../../common/SegmentedControl";
 import { SURPRISE_SCOPES } from "../../../appearance/appearance";
@@ -78,15 +79,7 @@ export default function AtmosphereHero({
             onChange={onScopeChange}
           />
         </div>
-        <button
-          type="button"
-          onClick={onReset}
-          disabled={isDefault}
-          className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px] font-medium text-(--text-secondary) transition-colors hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) disabled:cursor-default disabled:opacity-50 disabled:hover:text-(--text-secondary)"
-        >
-          <RotateCcw size={13} />
-          Reset Default
-        </button>
+        <ResetDefaultButton onClick={onReset} disabled={isDefault} />
       </div>
     </div>
   );

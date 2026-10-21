@@ -42,6 +42,9 @@ export default function AppearanceSettings() {
   const activeFont =
     TYPOGRAPHY.find((t) => t.id === appearance.typography) ??
     TYPOGRAPHY.find((t) => t.id === DEFAULT_TYPOGRAPHY);
+  // Reset is available while either the theme or the font pairing differs from the default.
+  const isDefault =
+    activeTheme.id === DEFAULT_THEME && activeFont.id === DEFAULT_TYPOGRAPHY;
 
   // Random theme, and optionally a random font pairing, never the ones already active.
   // Compared against activeTheme/activeFont (not the raw saved ids) so an unknown saved
@@ -63,12 +66,24 @@ export default function AppearanceSettings() {
     announce("Surprise pick applied", nextTheme.name);
   };
 
-  // Resets the theme only; typography and eye comfort stay as chosen.
+  // Restores whichever of theme / typography is not already the default.
+  // Eye comfort has its own card and is left as chosen.
   const reset = () => {
-    if (theme === DEFAULT_THEME) return;
-    const t = THEMES.find((x) => x.id === DEFAULT_THEME);
-    update({ theme: DEFAULT_THEME });
-    announce("Default theme restored", t.name);
+    const patch = {};
+    const restored = []; // names shown in the toast
+
+    if (activeTheme.id !== DEFAULT_THEME) {
+      patch.theme = DEFAULT_THEME;
+      restored.push(THEMES.find((t) => t.id === DEFAULT_THEME).name);
+    }
+    if (activeFont.id !== DEFAULT_TYPOGRAPHY) {
+      patch.typography = DEFAULT_TYPOGRAPHY;
+      restored.push(TYPOGRAPHY.find((t) => t.id === DEFAULT_TYPOGRAPHY).name);
+    }
+    if (restored.length === 0) return;
+
+    update(patch); // one update = one apply, one save, one toast
+    announce("Defaults restored", restored.join(" · "));
   };
 
   const pickFont = (f) => {
@@ -97,7 +112,7 @@ export default function AppearanceSettings() {
       <AtmosphereHero
         theme={activeTheme}
         typography={activeFont}
-        isDefault={theme === DEFAULT_THEME}
+        isDefault={isDefault}
         onSurprise={surprise}
         scope={scope}
         onScopeChange={(id) => update({ surpriseScope: id })}
