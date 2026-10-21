@@ -1,4 +1,4 @@
-export const DEFAULT_THEME = "vintage-linen";
+export const DEFAULT_THEME = "sky-blue";
 const STORAGE_KEY = "eka-theme";
 
 // TEMPORARY: while false, DEFAULT_THEME always wins (no saved theme is read).
