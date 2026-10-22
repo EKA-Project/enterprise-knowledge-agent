@@ -2,8 +2,6 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext.jsx';
 import DeleteModal from '../components/documents/summary/DeleteModal';
-// roleDocuments import me deleteDocument add karo
-const [deleteOpen, setDeleteOpen] = useState(false);
 import {
   getDocumentSummary,
   setDocumentArchived,
@@ -11,7 +9,7 @@ import {
 import {
   loadDocuments,
 } from '../components/documents/shared/documentResults.js';
-import { useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from '../components/documents/shared/roleDocuments.js';
+import { useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata, deleteDocument } from '../components/documents/shared/roleDocuments.js';
 import SummaryHeader from '../components/documents/summary/SummaryHeader';
 import SummaryTabs from '../components/documents/summary/SummaryTabs';
 import AiSummaryTab from '../components/documents/summary/AiSummaryTab';
@@ -37,7 +35,7 @@ function DocumentSummaryPage() {
   const [readerPage, setReaderPage] = useState(1);
   const [editing, setEditing] = useState(false);
   const [archiveOpen, setArchiveOpen] = useState(false);
-
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const showToast = showDocToast; // (message, variant)
   // Pin / bookmark live in the shared documents store, so the Documents list

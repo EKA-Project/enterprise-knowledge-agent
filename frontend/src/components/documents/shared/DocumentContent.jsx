@@ -17,7 +17,7 @@ import {
   useStatusFilter,
   loadDocuments,
 } from './documentResults.js';
-import {deleteDocument,useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from './roleDocuments.js';
+import { deleteDocument, useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from './roleDocuments.js';
 import EditMetadataModal from '../summary/EditMetadataModal.jsx';
 import ArchiveModal from '../summary/ArchiveModal.jsx';
 import { showDocToast } from './DocToast';
@@ -30,7 +30,6 @@ import DeleteModal from '../summary/DeleteModal.jsx';
 
 // Single place that knows the summary URL (matches the route in AppRoutes)
 const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
-const [deleteTarget, setDeleteTarget] = useState(null);
 // Small "Filtered by: …" chip with a clear button
 function FilterChip({ label, value, clearLabel, onClear }) {
   return (
@@ -64,6 +63,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const { items: docs, loading, toggleFlag: handleToggleFlag } = useRoleDocuments();
   const [archiveTarget, setArchiveTarget] = useState(null); // doc waiting for Confirm Archive
   const [editTarget, setEditTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
 
   const confirmArchive = async () => {
     const doc = archiveTarget;
@@ -292,9 +293,9 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           onClose={() => setArchiveTarget(null)}
           onConfirm={confirmArchive}
         />
-        
+
       )}
-            {editTarget && (
+      {editTarget && (
         <EditMetadataModal
           doc={{ ...editTarget, executiveSummary: editTarget.description }}
           onClose={() => setEditTarget(null)}
@@ -304,7 +305,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           }}
         />
       )}
-            {deleteTarget && (
+      {deleteTarget && (
         <DeleteModal
           doc={deleteTarget}
           onClose={() => setDeleteTarget(null)}
