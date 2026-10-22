@@ -1,6 +1,9 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext.jsx';
+import DeleteModal from '../components/documents/summary/DeleteModal';
+// roleDocuments import me deleteDocument add karo
+const [deleteOpen, setDeleteOpen] = useState(false);
 import {
   getDocumentSummary,
   setDocumentArchived,
@@ -179,6 +182,7 @@ function DocumentSummaryPage() {
         onEdit={() => setEditing(true)}
         onReindex={reindex}
         onArchive={() => setArchiveOpen(true)}
+        onDelete={() => setDeleteOpen(true)}
       />
       <SummaryTabs active={tab} onChange={setTab} />
 
@@ -219,6 +223,17 @@ function DocumentSummaryPage() {
           archived={archived}
           onClose={() => setArchiveOpen(false)}
           onConfirm={confirmArchive}
+        />
+      )}
+            {deleteOpen && (
+        <DeleteModal
+          doc={doc}
+          onClose={() => setDeleteOpen(false)}
+          onConfirm={() => {
+            deleteDocument(doc.id);
+            showDocToast(`🗑 Document "${doc.title}" deleted`, 'neutral');
+            navigate('/documents');
+          }}
         />
       )}
       <DocToastHost />

@@ -9,6 +9,7 @@ import { reindexDocument, updateDocumentMetadata } from '../summary/summaryServi
 //  edits[id]            metadata edits, global | processing[id] re-index running
 //  reindexed[id]        "Just now (Re-indexed)"
 // Pin stays global via toggleDocumentFlag.
+let deleted = {};
 let bookmarks = {};
 let archived = {};
 let edits = {};
@@ -24,6 +25,12 @@ const emit = () => {
   version += 1;
   listeners.forEach((l) => l());
 };
+
+
+export function deleteDocument(id) {
+  deleted = { ...deleted, [id]: true }; // backend: DELETE /documents/:id
+  emit();
+}
 
 export function setDocumentArchivedFlag(id, value) {
   archived = { ...archived, [id]: value };
@@ -62,20 +69,22 @@ export function useRoleDocuments() {
 
   const docs = useMemo(
     () =>
-      items.map((d) => {
-        const e = edits[d.id];
-        const isArchived = archived[d.id] ?? false;
-        return {
-          ...d,
-          ...(e
-            ? { title: e.title, category: e.category, author: e.author, description: e.executiveSummary, edited: true }
-            : {}),
-          isBookmarked: bookmarks[activeRole]?.[d.id] ?? Boolean(d.isBookmarked),
-          isArchived,
-          reindexedNow: Boolean(reindexed[d.id]),
-          status: isArchived ? 'Archived' : processing[d.id] ? 'Processing' : d.status,
-        };
-      }),
+      items
+        .filter((d) => !deleted[d.id])
+        .map((d) => {
+          const e = edits[d.id];
+          const isArchived = archived[d.id] ?? false;
+          return {
+            ...d,
+            ...(e
+              ? { title: e.title, category: e.category, author: e.author, description: e.executiveSummary, edited: true }
+              : {}),
+            isBookmarked: bookmarks[activeRole]?.[d.id] ?? Boolean(d.isBookmarked),
+            isArchived,
+            reindexedNow: Boolean(reindexed[d.id]),
+            status: isArchived ? 'Archived' : processing[d.id] ? 'Processing' : d.status,
+          };
+        }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [items, activeRole, v],
   );

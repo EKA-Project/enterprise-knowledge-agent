@@ -17,7 +17,7 @@ import {
   useStatusFilter,
   loadDocuments,
 } from './documentResults.js';
-import { useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from './roleDocuments.js';
+import {deleteDocument,useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from './roleDocuments.js';
 import EditMetadataModal from '../summary/EditMetadataModal.jsx';
 import ArchiveModal from '../summary/ArchiveModal.jsx';
 import { showDocToast } from './DocToast';
@@ -26,10 +26,11 @@ import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
 import DocumentPagination from './DocumentPagination.jsx';
 import DocumentEmptyState from './DocumentEmptyState.jsx';
+import DeleteModal from '../summary/DeleteModal.jsx';
 
 // Single place that knows the summary URL (matches the route in AppRoutes)
 const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
-
+const [deleteTarget, setDeleteTarget] = useState(null);
 // Small "Filtered by: …" chip with a clear button
 function FilterChip({ label, value, clearLabel, onClear }) {
   return (
@@ -169,7 +170,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
             <option value={ALL_CATEGORIES}>
-              {isManager ? `All Categories (${documentCategories.length})` : 'All Categories'}
+              {isManager ? `All Categories (${documentCategories.length})` : 'All Departments'}
             </option>
             <option value={SAVED_FILTER}>⭐ Saved Bookmarks</option>
             <option value={PINNED_FILTER}>📌 Admin Pinned</option>
@@ -254,6 +255,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
                   onArchive={adminMode ? setArchiveTarget : undefined}
                   onEditMetadata={adminMode ? setEditTarget : undefined}
                   onReindex={adminMode ? startReindex : undefined}
+                  onDelete={adminMode ? setDeleteTarget : undefined}
                 />
               ))}
             </section>
@@ -267,6 +269,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
               onArchive={adminMode ? setArchiveTarget : undefined}
               onEditMetadata={adminMode ? setEditTarget : undefined}
               onReindex={adminMode ? startReindex : undefined}
+              onDelete={adminMode ? setDeleteTarget : undefined}
             />
           )}
 
@@ -298,6 +301,17 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           onSave={(changes) => {
             saveDocumentMetadata(editTarget, changes);
             setEditTarget(null);
+          }}
+        />
+      )}
+            {deleteTarget && (
+        <DeleteModal
+          doc={deleteTarget}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={() => {
+            deleteDocument(deleteTarget.id);
+            showDocToast(`🗑 Document "${deleteTarget.title}" deleted`, 'neutral');
+            setDeleteTarget(null);
           }}
         />
       )}

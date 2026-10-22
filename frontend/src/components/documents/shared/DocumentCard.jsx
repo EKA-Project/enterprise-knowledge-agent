@@ -165,6 +165,7 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                   onArchive={() => onArchive?.(document)}
                   onEditMetadata={() => onEditMetadata?.(document)}
                   onReindex={() => onReindex?.(document)}
+                  onDelete={() => onDelete?.(document)}
                 />
               </div>
             )}
