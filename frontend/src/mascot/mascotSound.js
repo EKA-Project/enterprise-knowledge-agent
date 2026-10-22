@@ -1,4 +1,4 @@
-// Byte's sound effects: tiny 8-bit sounds generated with the Web Audio API
+// Mascot sound effects: tiny 8-bit sounds generated with the Web Audio API
 // (no audio files). Ported from the original EKA mascot.js.
 
 const STORAGE_KEY = "eka_mascot_sound"; // same key as the original build; "false" = muted
@@ -149,7 +149,7 @@ function angryBuzz() {
 }
 
 /* ==========================================================================
-   The sounds (names are used by the `sound` field in byteStates.js)
+   The sounds (names are used by the `sound` field in mascotStates.js)
    ========================================================================== */
 
 const SOUNDS = {
@@ -228,7 +228,7 @@ const SOUNDS = {
    The one function the rest of the app calls
    ========================================================================== */
 
-export function playByteSound(name) {
+export function playMascotSound(name) {
   if (!soundOn) return; // muted
   if (document.visibilityState === "hidden") return; // nobody is looking at this tab
   const play = SOUNDS[name];
@@ -236,6 +236,6 @@ export function playByteSound(name) {
   try {
     play();
   } catch (error) {
-    console.warn("[byte-sound]", error); // a sound problem must never break the UI
+    console.warn("[mascot-sound]", error);// a sound problem must never break the UI
   }
 }

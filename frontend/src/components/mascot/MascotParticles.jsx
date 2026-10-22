@@ -124,19 +124,19 @@ const SETS = {
 };
 
 // type: "drool" | "crumbs" | "bits" | "sparkles" | null
-function ByteParticles({ type }) {
+function MascotParticles({ type }) {
   const items = SETS[type];
   if (!items) return null; // no particles for this state
 
-  // "crumbs" -> class "byte-p-crumb" (drop the trailing "s", except "drool")
+  // "crumbs" -> class "mascot-p-crumb" (drop the trailing "s", except "drool")
   const kind = type === "drool" ? "drool" : type.replace(/s$/, "");
 
   return (
-    <div className="byte-particles" aria-hidden="true">
+    <div className="mascot-particles" aria-hidden="true">
       {items.map((p, i) => (
         <span
           key={i}
-          className={`byte-p byte-p-${kind}`}
+          className={`mascot-p mascot-p-${kind}`}
           style={{
             "--dx": `${p.dx ?? 0}px`,
             "--dy": `${p.dy ?? 0}px`,
@@ -157,4 +157,4 @@ function ByteParticles({ type }) {
   );
 }
 
-export default ByteParticles;
+export default MascotParticles;

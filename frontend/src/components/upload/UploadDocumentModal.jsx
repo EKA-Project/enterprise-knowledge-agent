@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Modal from "../common/Modal.jsx";
 import Button from "../common/Button.jsx";
-import ByteMascot from "../mascot/ByteMascot.jsx";
+import Mascot from "../mascot/Mascot.jsx";
 import { documentCategories } from "../documents/shared/DocumentData.js";
 import UploadDropzone from "./UploadDropzone.jsx";
 import UploadProgress from "./UploadProgress.jsx";
@@ -35,7 +35,7 @@ const HINT_TONES = {
   danger: "text-(--status-danger)",
 };
 
-// validateFile error code -> Byte state
+// validateFile error code -> mascot state
 const FILE_ERROR_MASCOT = {
   type: "invalidType",
   size: "tooLarge",
@@ -344,8 +344,8 @@ function UploadDocumentModal({
         </div>
       )}
     >
-      {/* Byte reacts to everything below. Pokeable only while nothing is running. */}
-      <ByteMascot
+      {/* The Mascot reacts to everything below. Pokeable only while nothing is running. */}
+      <Mascot
         state={mascotState}
         pokeable={phase === "idle"}
         frameClassName="h-32"

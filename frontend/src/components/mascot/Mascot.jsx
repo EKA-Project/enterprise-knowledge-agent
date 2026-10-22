@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { MASCOT_STATES } from "./byteStates.js";
+import { MASCOT_STATES } from "./mascotStates.js";
 import usePokeReaction from "./usePokeReaction.js";
-import ByteParticles from "./ByteParticles.jsx";
+import MascotParticles from "./MascotParticles.jsx";
 import "../../styles/mascot.css";
 import { Volume2, VolumeX } from "lucide-react";
-import { playByteSound } from "./byteSound.js";
+import { playMascotSound } from "../../mascot/mascotSound.js";
 import useMascotSound from "./useMascotSound.js";
 // Banner background + border for each tone.
 // (Full class names are written out so Tailwind can detect them.)
@@ -18,7 +18,7 @@ const TONES = {
  * state?: a key of MASCOT_STATES (default "empty")
  * message?: string, overrides the bubble text (e.g. a specific error)
  */
-function ByteMascot({
+function Mascot({
   state = "empty",
   message,
   framed = true, // true: tinted banner box (upload modal); false: just Byte
@@ -64,7 +64,7 @@ function ByteMascot({
   const { soundOn, toggleSound } = useMascotSound();
   useEffect(() => {
     if (!config.sound) return;
-    const play = () => playByteSound(config.sound);
+    const play = () => playMascotSound(config.sound);
     const first = setTimeout(play, config.soundDelay ?? 0);
     const loop = config.soundEvery
       ? setInterval(play, config.soundEvery)
@@ -80,7 +80,7 @@ function ByteMascot({
   const boopRef = useRef(null);
   useEffect(() => {
     if (!boopId) return; // 0 = no tap yet
-    playByteSound("poke");
+    playMascotSound("poke");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     boopRef.current?.animate(
       [
@@ -115,7 +115,7 @@ function ByteMascot({
         {config.shadow && (
           <span
             key={`shadow-${playKey}`}
-            className="byte-shadow"
+            className="mascot-shadow"
             aria-hidden="true"
           />
         )}
@@ -124,29 +124,29 @@ function ByteMascot({
           <Stage
             key={playKey}
             {...stageProps}
-            className={`byte-stage block ${config.motion} ${pokeable ? "cursor-pointer" : ""}`}
+            className={`mascot-stage block ${config.motion} ${pokeable ? "cursor-pointer" : ""}`}
           >
             <img
               src={config.image}
               alt="" // decorative: the bubble text carries the meaning
               draggable={false}
-              className={`byte-swap block w-auto select-none ${imageClassName}`}
+              className={`mascot-swap block w-auto select-none ${imageClassName}`}
             />
           </Stage>
         </div>
 
         {/* Particles float around Byte (nothing for states without them) */}
-        <ByteParticles key={`particles-${playKey}`} type={config.particles} />
+        <MascotParticles key={`particles-${playKey}`} type={config.particles} />
 
-        {/* Speech bubble: sits up and to the right of Byte's head (see .byte-bubble-anchor
+        {/* Speech bubble: sits up and to the right of Byte's head (see .mascot-bubble-anchor
             in variables.css). role="status" makes screen readers read changes aloud. */}
-        <div role="status" aria-live="polite" className="byte-bubble-anchor">
+        <div role="status" aria-live="polite" className="mascot-bubble-anchor">
           {bubbleText && (
             <p
               key={bubbleText} // replay the pop-in when the text changes
               aria-hidden={bubbleHidden}
-              className={`byte-bubble relative rounded-xl bg-white px-2.5 py-1 text-xs leading-snug font-medium text-(--text-primary) shadow-md ${
-                bubbleHidden ? "byte-bubble-hidden" : ""
+              className={`mascot-bubble relative rounded-xl bg-white px-2.5 py-1 text-xs leading-snug font-medium text-(--text-primary) shadow-md ${
+                bubbleHidden ? "mascot-bubble-hidden" : ""
               }`}
             >
               {bubbleText}
@@ -175,7 +175,7 @@ function ByteMascot({
           }`}
         >
           {/* key remounts the icon on every toggle, which replays the small pop-in */}
-          <span key={soundOn ? "on" : "off"} className="byte-swap flex">
+          <span key={soundOn ? "on" : "off"} className="mascot-swap flex">
             {soundOn ? (
               <Volume2 size={14} strokeWidth={2} />
             ) : (
@@ -188,4 +188,4 @@ function ByteMascot({
   );
 }
 
-export default ByteMascot;
+export default Mascot;
