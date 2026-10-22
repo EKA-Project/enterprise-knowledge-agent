@@ -28,11 +28,11 @@ function SummarySidebar({
       <section className={card}>
         <div className="flex items-start justify-between gap-3">
           <h2 className="doc-heading flex items-center gap-2 text-base font-bold text-(--text-primary)">
-            {adminMode && <Zap size={14} className="shrink-0 text-(--status-warning)" />}
+            {adminMode && <Zap size={14} className="shrink-0 fill-current text-[#e8801a]" />}
             AI Ingestion Telemetry
           </h2>
           {adminMode && (
-            <span className="shrink-0 rounded-full border border-(--border-subtle) px-3 py-1 text-[10px] font-medium text-(--text-secondary)">
+            <span className="shrink-0 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-[10px] font-medium text-emerald-600">
               ✓ Indexed
             </span>
           )}
@@ -58,14 +58,14 @@ function SummarySidebar({
 
         {adminMode && (
           <div className="mt-4 flex gap-2">
-            <button type="button" onClick={onReindex} className={actionBtn}>
+            <button type="button" onClick={onReindex} className={`${actionBtn} text-[#1b79a8]`}>
               <RefreshCw size={12} className="text-sky-600" /> Re-index Chunks
             </button>
             <button type="button" onClick={onToggleArchive} className={actionBtn}>
               {archived ? (
-                <ArchiveRestore size={12} className="text-amber-700" />
+                <ArchiveRestore size={12} className="text-(--text-secondary)" />
               ) : (
-                <Archive size={12} className="text-amber-700" />
+                <Archive size={12} className="text-(--text-secondary)" />
               )}
               {archived ? 'Unarchive' : 'Archive'}
             </button>

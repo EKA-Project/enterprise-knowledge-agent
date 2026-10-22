@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Link2, ChevronRight, Bookmark, Pin } from 'lucide-react';
+import { Link as LinkIcon, Bookmark, Pin } from 'lucide-react';
 import SummaryKebabMenu from './SummaryKebabMenu';
 import { formatStyles, statusMeta } from '../shared/DocumentCard';
 import '../../../styles/Document.css';
@@ -58,18 +58,19 @@ function SummaryHeader({
         <Link
           to="/ask-eka"
           state={{ question: `Tell me about "${doc.title}"` }}
-          className="inline-flex items-center gap-1 rounded-full bg-(--primary) px-4 py-2 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover)"
+          className="inline-flex items-center gap-1.5 rounded-full bg-[#193e36] px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#12302a]"
         >
-          Ask About This Doc <ChevronRight size={12} />
+          Ask About This Doc →
         </Link>
 
         <button
           type="button"
           aria-label="Copy document link"
           onClick={onCopyLink}
-          className={`${circle} border-(--border-medium) bg-(--bg-surface) text-(--text-secondary) hover:bg-(--bg-surface-subtle)`}
+
+          className={`${circle} border-(--border-medium) bg-white text-(--text-secondary) hover:bg-(--bg-surface-subtle)`}
         >
-          <Link2 size={14} />
+          <LinkIcon size={14} />
         </button>
 
         {adminMode && (
@@ -90,9 +91,7 @@ function SummaryHeader({
               aria-label={pinned ? 'Unpin document' : 'Pin document'}
               aria-pressed={pinned}
               onClick={onTogglePin}
-              className={`${circle} border-(--border-medium) ${pinned
-                  ? 'bg-(--bg-surface-subtle) text-(--primary)'
-                  : 'bg-(--bg-surface) text-(--text-secondary) hover:bg-(--bg-surface-subtle)'
+              className={`${circle} border-(--border-medium) bg-white hover:bg-(--bg-surface-subtle) ${pinned ? 'text-[#3561bb]' : 'text-(--text-secondary)'
                 }`}
             >
               <Pin size={14} className={pinned ? 'fill-current' : ''} />

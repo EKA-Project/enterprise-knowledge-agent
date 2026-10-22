@@ -148,7 +148,7 @@ function DocumentSummaryPage() {
 
   if (notFound) {
     return (
-      <div className="mx-auto w-full max-w-[1100px] px-4 py-16 text-center sm:px-6">
+      <div className="w-full space-y-6 px-4 py-6 sm:px-9">
         <h1 className="font-serif text-2xl font-black text-(--text-primary)">Document not found</h1>
         <p className="mt-2 text-sm text-(--text-muted)">
           This document doesn&apos;t exist or is no longer available.
@@ -166,7 +166,7 @@ function DocumentSummaryPage() {
   if (!doc) return null; // add a skeleton when real loading time exists
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] space-y-6 px-4 py-6 sm:px-6">
+    <div className="w-full space-y-6 px-4 py-6 sm:px-9">
       <SummaryHeader
         doc={doc}
         adminMode={adminMode}

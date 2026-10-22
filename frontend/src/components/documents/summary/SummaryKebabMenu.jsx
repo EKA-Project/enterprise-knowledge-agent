@@ -40,7 +40,11 @@ export default function SummaryKebabMenu({ onEdit, onReindex, onArchive, onDelet
         onClick={() => setOpen((o) => !o)}
         className="w-9 h-9 rounded-full border border-(--border) bg-white grid place-items-center hover:bg-[#e0eef7]"
       >
-        ⋯
+        <span className="flex gap-[3px]" aria-hidden="true">
+          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
+          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
+          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
+        </span>
       </button>
       {open && (
         <div className="absolute right-0 mt-2 w-52 p-1.5 rounded-xl border border-(--border) bg-white shadow-lg z-30">
