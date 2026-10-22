@@ -17,9 +17,11 @@
    imported below. The active theme is set on <html> by src/appearance/theme.js.
    ========================================================================== */
 
-/* ---------- Common (never change per theme) ---------- */
+/* ==========================================================================
+   Common tokens (never change per theme)
+   ========================================================================== */
 :root {
-  /* System Radii */
+  /* ---------- Radii ---------- */
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -29,7 +31,7 @@
   --radius-full: 9999px;
   --radius-table: 28px;
 
-  /* Typography */
+  /* ---------- Typography: font families ---------- */
   --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
   --font-sans:
     "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -37,12 +39,67 @@
   --font-mono:
     "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Layout Dimensions */
+  /* ---------- Typography: size scale ----------
+     Sizes are in rem so they follow the root font size. The px values in the
+     comments are approximate and assume a root of ~14.5px (Standard) and
+     ~16.5px (Large). */
+
+  /* Adaptive T-Shirt Font Scale (the source of truth; everything below points here) */
+  --font-size-3xs: 0.58rem; /* ~8.4px  (Standard) | ~9.6px  (Large) - Micro badges, tiny indicators, keycap subtext */
+  --font-size-2xs: 0.65rem; /* ~9.4px  (Standard) | ~10.7px (Large) - Compact badges, metadata pills, timestamps */
+  --font-size-xs:  0.72rem; /* ~10.4px (Standard) | ~11.9px (Large) - Eyebrows, caption metadata, helper text */
+  --font-size-sm:  0.78rem; /* ~11.3px (Standard) | ~12.9px (Large) - Table headers/cells, hints, compact buttons */
+  --font-size-md:  0.84rem; /* ~12.2px (Standard) | ~13.9px (Large) - Standard buttons, dropdown items, inputs, tabs */
+  --font-size-base:0.95rem; /* ~13.8px (Standard) | ~15.7px (Large) - Primary body copy, chat messages, modal copy */
+  --font-size-lg:  1.10rem; /* ~16.0px (Standard) | ~18.2px (Large) - Card titles, FAQ questions, lead paragraphs, H4 */
+  --font-size-xl:  1.25rem; /* ~18.1px (Standard) | ~20.6px (Large) - Subheadings, modal upload titles, metric stats */
+  --font-size-2xl: 1.35rem; /* ~19.6px (Standard) | ~22.3px (Large) - Section titles, modal headers, H3 */
+  --font-size-3xl: 1.60rem; /* ~23.2px (Standard) | ~26.4px (Large) - Major headlines, drawer titles, H2 */
+  --font-size-4xl: 2.20rem; /* ~31.9px (Standard) | ~36.3px (Large) - Page titles, article hero heads, H1 */
+  --font-size-5xl: 2.80rem; /* ~40.6px (Standard) | ~46.2px (Large) - Display hero titles, landing page banners */
+
+  /* Ergonomic shorthand aliases (same values, shorter names) */
+  --fs-3xs: var(--font-size-3xs);
+  --fs-2xs: var(--font-size-2xs);
+  --fs-xs:  var(--font-size-xs);
+  --fs-sm:  var(--font-size-sm);
+  --fs-md:  var(--font-size-md);
+  --fs-base:var(--font-size-base);
+  --fs-lg:  var(--font-size-lg);
+  --fs-xl:  var(--font-size-xl);
+  --fs-2xl: var(--font-size-2xl);
+  --fs-3xl: var(--font-size-3xl);
+  --fs-4xl: var(--font-size-4xl);
+  --fs-5xl: var(--font-size-5xl);
+
+  /* Semantic aliases (name the role, not the size) */
+  --font-size-micro:      var(--font-size-3xs);
+  --font-size-badge:      var(--font-size-2xs);
+  --font-size-eyebrow:    var(--font-size-xs);
+  --font-size-caption:    var(--font-size-xs);
+  --font-size-hint:       var(--font-size-sm);
+  --font-size-control:    var(--font-size-md);
+  --font-size-body:       var(--font-size-base);
+  --font-size-title-sm:   var(--font-size-lg);
+  --font-size-title-md:   var(--font-size-xl);
+  --font-size-title-lg:   var(--font-size-2xl);
+  --font-size-title-xl:   var(--font-size-3xl);
+  --font-size-title-page: var(--font-size-4xl);
+  --font-size-display:    var(--font-size-5xl);
+
+  /* Heading scale aliases (for h1-h5 elements) */
+  --font-size-h1: var(--font-size-4xl); /* 2.20rem */
+  --font-size-h2: var(--font-size-3xl); /* 1.60rem */
+  --font-size-h3: var(--font-size-2xl); /* 1.35rem */
+  --font-size-h4: var(--font-size-lg);  /* 1.10rem */
+  --font-size-h5: var(--font-size-base);/* 0.95rem */
+
+  /* ---------- Layout dimensions ---------- */
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 72px;
   --header-height: 72px;
 
-  /* Transitions */
+  /* ---------- Transitions ---------- */
   --transition-fast: 160ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 260ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 420ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -150,7 +207,9 @@
   --file-fig-border: var(--doc-fig-border);
 }
 
-/* ---------- Modal animation ---------- */
+/* ==========================================================================
+   Modal animation
+   ========================================================================== */
 @keyframes modal-fade-in {
   from {
     opacity: 0;
@@ -210,7 +269,9 @@
   }
 }
 
-/* ---------- Modal scroll area ---------- */
+/* ==========================================================================
+   Modal scroll area
+   ========================================================================== */
 .modal-scroll::-webkit-scrollbar {
   width: 8px;
 }
@@ -232,7 +293,10 @@
     scrollbar-color: var(--border-subtle) transparent;
   }
 }
-/* ---------- Surprise Me dice (components/common/DiceIcon.jsx) ---------- */
+
+/* ==========================================================================
+   Surprise Me dice (components/common/DiceIcon.jsx)
+   ========================================================================== */
 /* Animates the individual rotate/scale properties so the spin replaces the hover tilt while it plays. */
 @keyframes dice-spin {
   0% {

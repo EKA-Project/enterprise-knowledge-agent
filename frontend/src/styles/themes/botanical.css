@@ -209,13 +209,13 @@
   --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
   --sidebar-tip-bg: rgba(31, 111, 235, 0.12);
 
-  /* Main Workspace Canvas: Deep, textured Pewter (not washed-out white/grey) */
-  --bg-app: #c4cdd6;               /* Substantial, darker grey canvas */
-  --bg-surface: #ffffff;           /* Pure white surface cards for high contrast */
-  --bg-surface-elevated: #ffffff;  /* Modals, floating popovers */
-  --bg-surface-subtle: #b6c2cc;    /* Inset search fields & wells */
-  --table-header-bg: #a8b6c4;
-  --bg-glass: rgba(196, 205, 214, 0.94);
+  /* Main Workspace Canvas: Deep, textured Pewter */
+  --bg-app: #c4cdd6;
+  --bg-surface: #edf3f8;           /* Luminous Frosted Pearl - clean & bright without glaring white */
+  --bg-surface-elevated: #f4f8fc;  /* Elevated hero cards & modals */
+  --bg-surface-subtle: #dbe4ec;    /* Refined tactile inset wells & fields */
+  --table-header-bg: #ccd8e4;
+  --bg-glass: rgba(237, 243, 248, 0.92);
 
   /* Primary Tones: Deep Void Navy with Cobalt Anchor */
   --primary: #091e3a;
@@ -232,16 +232,16 @@
   --accent-chip: #d0e2ff;
   --accent-chip-text: #053b7a;
 
-  /* Borders & Dividers: Bold structural definition */
-  --border-subtle: #a2b0bf;
-  --border-medium: #798d9f;
+  /* Borders & Dividers: Semi-translucent frosted rims */
+  --border-subtle: rgba(135, 160, 185, 0.42);
+  --border-medium: rgba(105, 135, 165, 0.55);
   --border-subtle-nav: #0969da;
-  --border-focus: #091e3a;
+  --border-focus: #1f6feb;
 
-  /* Typography: Razor-sharp ink tones against pewter/white */
+  /* Typography: Razor-sharp ink tones against frosted pearl */
   --text-primary: #0a0f14;
   --text-secondary: #24292f;
-  --text-muted: #57606a;
+  --text-muted: #52606d;
   --text-eyebrow: #0969da;
 
   /* Badges & Pills */
@@ -249,13 +249,13 @@
   --badge-text: #ffffff;
   --badge-border: #0969da;
 
-  /* Sculpted Shadows: Pronounced depth between cards and the darker canvas */
-  --shadow-sm: 0 1px 3px rgba(13, 17, 23, 0.12), 0 1px 2px rgba(13, 17, 23, 0.08);
-  --shadow-md: 0 6px 18px rgba(13, 17, 23, 0.16), 0 2px 6px rgba(13, 17, 23, 0.08);
-  --shadow-lg: 0 16px 36px rgba(13, 17, 23, 0.22), 0 4px 12px rgba(13, 17, 23, 0.12);
+  /* Sculpted Shadows: Specular crystalline top rim + soft ambient depth */
+  --shadow-sm: 0 1px 2px rgba(13, 17, 23, 0.05), 0 3px 12px -1px rgba(13, 17, 23, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-md: 0 4px 14px -2px rgba(13, 17, 23, 0.11), 0 12px 28px -4px rgba(13, 17, 23, 0.14), inset 0 1px 0 #ffffff;
+  --shadow-lg: 0 12px 36px -6px rgba(13, 17, 23, 0.18), 0 24px 56px -10px rgba(13, 17, 23, 0.22), inset 0 1px 0 #ffffff;
 
-  /* Card and Brand Gradients: Subtle physical gloss */
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6f8fa 100%);
+  /* Card and Brand Gradients: Luminous frosted pearl vertical sheen */
+  --gradient-card: linear-gradient(180deg, #f9fbfd 0%, #eaf0f6 100%);
   --gradient-brand: linear-gradient(135deg, #0d1117 0%, #1f6feb 100%);
 
   /* Theme Search Highlight Palette */
