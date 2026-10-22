@@ -12,7 +12,7 @@ const BADGE_TYPE = {
 };
 
 // Ring made of one arc per status, drawn clockwise from 12 o'clock.
-function HealthDonut({ items, total, centerText, centerColor }) {
+function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
   const radius = 42;
   const circumference = 2 * Math.PI * radius;
   let offset = 0;
@@ -30,7 +30,9 @@ function HealthDonut({ items, total, centerText, centerColor }) {
               r={radius}
               fill="none"
               stroke={item.color}
-              strokeWidth="9"
+              strokeWidth={activeKey === item.key ? 11 : 9}
+              opacity={activeKey && activeKey !== item.key ? 0.25 : 1}
+              style={{ transition: 'opacity 150ms, stroke-width 150ms' }}
               strokeDasharray={`${length} ${circumference - length}`}
               strokeDashoffset={-offset}
             />
@@ -82,6 +84,7 @@ function DocumentHealthOverview() {
           total={total}
           centerText={`${percent(centerItem.count)}%`}
           centerColor={shown ? shown.color : 'var(--text-primary)'}
+          activeKey={shown?.key}
         />
         <div className="min-w-0 max-w-[300px]">
           <div className="flex flex-wrap items-center gap-2">
@@ -90,7 +93,12 @@ function DocumentHealthOverview() {
             </h2>
             <Badge text={badgeText} type={badgeType} size="sm" />
           </div>
-          <p className="mt-1.5 text-[11px] leading-4 text-(--text-muted)">{subtitle}</p>
+          <p
+            className="mt-1.5 text-[11px] leading-4 text-(--text-muted)"
+            style={shown ? { color: shown.color } : undefined}
+          >
+            {subtitle}
+          </p>
         </div>
       </div>
 
@@ -108,12 +116,13 @@ function DocumentHealthOverview() {
               onMouseLeave={() => setHoveredKey(null)}
               onFocus={() => setHoveredKey(item.key)}
               onBlur={() => setHoveredKey(null)}
-              style={{ borderColor: isActive ? item.color : undefined }}
-              // Resting fill #e0eef7 is the light blue measured from the reference video
+              style={{
+                borderColor: isActive || hoveredKey === item.key ? item.color : undefined,
+              }}
               className={`min-h-[86px] cursor-pointer rounded-xl border px-4 py-3.5 text-left transition-colors ${
-                isActive
+                isActive || hoveredKey === item.key
                   ? 'bg-white'
-                  : 'border-transparent bg-[#e0eef7] hover:border-(--border-subtle) hover:bg-white'
+                  : 'border-transparent bg-[#e1f0fa]'
               }`}
             >
               <div className="flex items-center justify-between gap-2">

@@ -240,6 +240,7 @@
   --primary-deep: #33163c;
   --border-subtle-nav: #9c7194;
   --table-header-bg: #ded3ed;
+    --table-row-hover: #e1f0fa;
 
   /* Theme Search Highlight Palette */
   --highlight-bg: #e6e6fa;

@@ -6,6 +6,7 @@ import StorageIndicator from './StorageIndicator.jsx';
 import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
 import { useDocumentCountText } from '../shared/documentResults.js';
+import { Upload } from 'lucide-react';
 
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
@@ -25,10 +26,11 @@ function AdminDocument() {
               {/* Not wired yet — compare / redline flow comes later */}
               <button
                 type="button"
-                className="inline-flex h-[26px] cursor-pointer items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)"
+                className="inline-flex h-[26px] cursor-pointer items-center gap-2 rounded-full border border-[#cfe3f3] bg-white pl-1.5 pr-3 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-[#e1f0fa]"
               >
-                <Columns2 size={12} />
-                <Sparkles size={12} className="text-amber-500" />
+                <span className="flex h-4 w-4 items-center justify-center rounded bg-[#e1f0fa] text-[#1f718e]">
+                  <Columns2 size={10} />
+                </span>
                 Compare &amp; Redline
               </button>
 
@@ -36,9 +38,12 @@ function AdminDocument() {
                 type="button"
                 onClick={openUpload}
                 disabled={!canUpload}
-                className="h-[26px] cursor-pointer rounded-full bg-(--primary) px-3.5 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-[26px] cursor-pointer items-center gap-2 rounded-full bg-(--primary) pl-1.5 pr-3.5 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
               >
-                + Ingest Document
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/25">
+                  <Upload size={10} />
+                </span>
+                Ingest Document
               </button>
             </div>
           }
