@@ -1,12 +1,12 @@
 import { Shuffle } from "lucide-react";
-import { SurpriseMeButton } from "../../common/ActionButtons";
-import IconBadge from "../../icons/IconBadge";
+import { SurpriseMeButton } from "../../../common/ActionButtons"
+import IconBadge from "../../../icons/IconBadge";
 import ThemeSwatch from "./ThemeSwatch";
 import ResetDefaultButton from "./ResetDefaultButton";
 import TypographySpecimenPill from "../typography/TypographySpecimenPill";
-import SegmentedControl from "../../common/SegmentedControl";
-import { SURPRISE_SCOPES } from "../../../appearance/appearance";
-import { getThemeIcon } from "../../icons/themeIcons";
+import SegmentedControl from "../../../common/SegmentedControl";
+import { SURPRISE_SCOPES } from "../../../../appearance/appearance";
+import { getThemeIcon } from "../../../icons/themeIcons";
 
 export default function AtmosphereHero({
   theme,

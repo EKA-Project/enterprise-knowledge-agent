@@ -1,17 +1,17 @@
 import { useRef } from "react";
 import SettingsPanel from "./SettingsPanel";
-import EyeComfortSection from "./eyecomfort/EyeComfortSection";
+import EyeComfortSection from "./appearance/eyecomfort/EyeComfortSection";
 import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import { TYPOGRAPHY, DEFAULT_TYPOGRAPHY } from "../../appearance/fontStudio";
 import { SURPRISE_SCOPES } from "../../appearance/appearance";
-import AtmosphereHero from "./themes/AtmosphereHero";
+import AtmosphereHero from "./appearance/themes/AtmosphereHero";
 import { Droplet } from "lucide-react";
 import AppearanceHeader from "./appearance/AppearanceHeader";
 import StudioStatsPill from "./appearance/StudioStatsPill";
-import ThemeCollections from "./themes/ThemeCollections";
-import FontCollections from "./typography/FontCollections";
+import ThemeCollections from  "./appearance/themes/ThemeCollections";
+import FontCollections from "./appearance/typography/FontCollections";
 
 const pickRandom = (items) => items[Math.floor(Math.random() * items.length)];
 

@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
-import { themeTag } from "../../../appearance/theme";
-import IconBadge from "../../icons/IconBadge";
-import { getThemeIcon } from "../../icons/themeIcons";
+import { themeTag } from "../../../../appearance/theme";
+import IconBadge from "../../../icons/IconBadge";
+import { getThemeIcon } from "../../../icons/themeIcons";
 import ThemeSwatch from "./ThemeSwatch";
 
 // Spring-eased lift on hover; the glow ring inside previews THAT theme's own colours.

@@ -1,4 +1,4 @@
-import { fontTag } from "../../../appearance/fontStudio";
+import { fontTag } from "../../../../appearance/fontStudio";
 import { card } from "../cardStyles";
 
 // One typography pairing. The heading specimen uses the pairing's heading font (the `serif` slot),

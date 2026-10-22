@@ -1,8 +1,8 @@
 import { Eye } from "lucide-react";
-import { RadioCard, RadioGroup } from "../SettingsPanel";
-import AppearanceHeader from "../appearance/AppearanceHeader";
-import { EYE_COMFORT_ICONS } from "../../icons/eyeComfortIcons";
-import { EYE_COMFORT_MODES } from "../../../appearance/appearance";
+import { RadioCard, RadioGroup } from "../../SettingsPanel";
+import AppearanceHeader from  "../AppearanceHeader";
+import { EYE_COMFORT_ICONS } from "../../../icons/eyeComfortIcons";
+import { EYE_COMFORT_MODES } from "../../../../appearance/appearance";
 
 // "Eye Comfort" card in Appearance settings: status pill + one tile per tint mode.
 // The parent decides what happens on select (update state, show a toast).

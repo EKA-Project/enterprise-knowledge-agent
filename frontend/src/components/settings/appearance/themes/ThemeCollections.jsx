@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { THEMES, THEME_COLLECTIONS, themeTag } from "../../../appearance/theme";
-import Button from "../../common/Button";
-import SearchInput from "../../common/SearchInput";
-import { getCollectionIcon } from "../../icons/collectionIcons";
+import { THEMES, THEME_COLLECTIONS, themeTag } from "../../../../appearance/theme";
+import Button from "../../../common/Button";
+import SearchInput from "../../../common/SearchInput";
+import { getCollectionIcon } from "../../../icons/collectionIcons";
 import FilterPills from "../FilterPills";
-import AppearanceHeader from "../appearance/AppearanceHeader";
+import AppearanceHeader from "../AppearanceHeader";
 import { Diamond } from "lucide-react";
 import CollectionRow from "./CollectionRow";
 

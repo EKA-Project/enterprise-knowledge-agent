@@ -1,6 +1,6 @@
-import Button from "../../common/Button";
-import IconBadge from "../../icons/IconBadge";
-import { getCollectionIcon } from "../../icons/collectionIcons";
+import Button from "../../../common/Button";
+import IconBadge from "../../../icons/IconBadge";
+import { getCollectionIcon } from "../../../icons/collectionIcons";
 
 export default function CollectionSection({
   collection,

@@ -5,10 +5,10 @@ import {
   TYPOGRAPHY,
   fontCollectionCount,
   loadFonts,
-} from "../../../appearance/fontStudio";
+} from "../../../../appearance/fontStudio";
 import FilterPills from "../FilterPills";
 import { pill } from "../cardStyles";
-import AppearanceHeader from "../appearance/AppearanceHeader";
+import AppearanceHeader from "../AppearanceHeader";
 import { Type } from "lucide-react";
 import FontCard from "./FontCard";
 
