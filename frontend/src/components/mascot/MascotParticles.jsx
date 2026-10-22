@@ -1,4 +1,4 @@
-// Small decorative particles that float around Byte.
+// Small decorative particles that float around the mascot.
 // Each effect is a list of tiny spans; the CSS in variables.css animates them.
 // The numbers are just positions/timing: dx/dy = where a particle flies to (px),
 // delay = when it starts (s), x = left position for rising bits.
@@ -36,7 +36,7 @@ const SETS = {
 
   // Angry steam: two side vents and the top of the head, puffs of different sizes
   // and lifetimes so the plume never looks synchronised.
-  // x/y = start (% of Byte's box), rise = climb, drift = sideways, s = size, dur = life
+  // x/y = start (% of the mascot's box), rise = climb, drift = sideways, s = size, dur = life
   steam: [
     {
       x: "34%",

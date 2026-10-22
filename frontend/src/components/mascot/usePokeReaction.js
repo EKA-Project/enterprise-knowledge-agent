@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 // ---- Tune the feel here ----
 const WINDOW_MS = 2000; // taps are counted inside a sliding window this long
-const ANGRY_AFTER = 5; // taps inside the window that make Byte angry
-const DIZZY_AFTER = 4; // MORE taps (while angry) inside the window that make Byte dizzy
+const ANGRY_AFTER = 5; // taps inside the window that make the mascot angry
+const DIZZY_AFTER = 4; // MORE taps (while angry) inside the window that make the mascot dizzy
 const ANGRY_MS = 3000; // how long the angry reaction lasts
 const DIZZY_MS = 3000; // how long the dizzy reaction lasts (taps are ignored meanwhile)
 
@@ -56,7 +56,7 @@ function usePokeReaction(enabled = false) {
     if (!enabled) return;
 
     const now = Date.now();
-    if (now < dizzyUntil.current) return; // let Byte finish being dizzy
+    if (now < dizzyUntil.current) return; // let the mascot finish being dizzy
 
     // Keep only the taps from the last WINDOW_MS, then add this one
     taps.current = [...taps.current.filter((t) => now - t <= WINDOW_MS), now];

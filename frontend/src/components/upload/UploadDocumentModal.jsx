@@ -157,7 +157,7 @@ function UploadDocumentModal({
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState(null); // { code, message } | null
   const [isDragging, setIsDragging] = useState(false);
-  const [rejectCount, setRejectCount] = useState(0); // lets Byte react to every rejection
+  const [rejectCount, setRejectCount] = useState(0); // lets the mascot react to every rejection
 
   const pipeline = useUploadPipeline(onSubmit);
   const { phase } = pipeline;

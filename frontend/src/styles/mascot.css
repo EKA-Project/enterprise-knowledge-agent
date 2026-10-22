@@ -1,7 +1,7 @@
 /* ==========================================================================
-   Byte mascot styles (motions, particles, speech bubble)
+   Mascot styles (motions, particles, speech bubble)
    --------------------------------------------------------------------------
-   Imported by components/mascot/ByteMascot.jsx, so it loads wherever the
+   Imported by components/mascot/Mascot.jsx, so it loads wherever the
    mascot is used. Plain CSS: it needs no tokens from variables.css.
    ========================================================================== */
 
@@ -45,7 +45,7 @@
   transform-origin: bottom left;
 }
 
-/* Squash & stretch pivots at Byte's feet, not the centre */
+/* Squash & stretch pivots at the mascot's feet, not the centre */
 .mascot-stage {
   transform-origin: 50% 90%;
 }
@@ -172,7 +172,7 @@
 }
 
 /* Success: crouch, launch with a flip, hang, land, two small bounces, then idle bob.
-   Heights are % of Byte's own size, so the jump scales with the mascot.
+   Heights are % of the mascot's own size, so the jump scales with the mascot.
    Raise the two big numbers (-30% launch, -40% peak) for a higher jump. */
 @keyframes mascot-victory {
   0% {
@@ -279,11 +279,11 @@
 /* Angry: billowing steam, like venting from an engine.
    Each puff is a soft cloud: a main circle plus two lobes (::before / ::after),
    shaded from white to light grey, with a faint shadow outline so it stays visible
-   on the pale banner. Per puff (set in ByteParticles.jsx):
-     --x / --y   where it starts (% of Byte's image box)
+   on the pale banner. Per puff (set in MascotParticles.jsx):
+     --x / --y   where it starts (% of the mascot's image box)
      --rise      how far it climbs
      --drift     how far it moves sideways
-     --s         starting size (% of Byte's width)
+     --s         starting size (% of the mascot's width)
      --dur       how long one puff lives
    To make the steam bolder: raise the 0.45 in the drop-shadow below, or darken
    the last colour stop (#cbd5e1) of the gradients. */
@@ -347,9 +347,9 @@
   width: 58%;
 }
 
-/* Success: confetti bursts out as Byte reaches the top of the jump.
+/* Success: confetti bursts out as the mascot reaches the top of the jump.
    dx = sideways (px), dy = peak height (px, negative = up), fall = where it lands,
-   rot = spin, all set per piece in ByteParticles.jsx */
+   rot = spin, all set per piece in MascotParticles.jsx */
 @keyframes mascot-confetti {
   0% {
     opacity: 0;
@@ -541,11 +541,11 @@
   animation: mascot-dizzy 0.6s ease-in-out infinite;
 }
 
-/* Dizzy: a halo of stars orbiting Byte's head.
+/* Dizzy: a halo of stars orbiting the mascot's head.
    --mascot-a is an ANGLE that we animate from 0 to 360deg. Each star's position,
    size, brightness and spin are calculated from it with cos()/sin(), so the
-   stars travel on a real ellipse. Percentages are relative to Byte's image box,
-   so the halo scales with Byte's size.
+   stars travel on a real ellipse. Percentages are relative to the mascot's image box,
+   so the halo scales with the mascot's size.
 
    Tweak the halo with the four variables at the top of .mascot-p-star:
      --halo-y    height of the orbit's centre   (bigger = lower on the head)
@@ -565,7 +565,7 @@
     --mascot-a: 360deg;
   }
 }
-/* Front half of the lap draws OVER Byte, back half goes BEHIND Byte */
+/* Front half of the lap draws OVER the mascot, back half goes BEHIND the mascot */
 @keyframes mascot-halo-depth {
   0%,
   49.99% {
@@ -629,7 +629,7 @@
   }
 }
 
-/* Where the speech bubble sits, measured from Byte's image box.
+/* Where the speech bubble sits, measured from the mascot's image box.
    Raise --mascot-bubble-x to push it farther right, --mascot-bubble-y to push it higher.
    These two numbers are the ones to tweak if the gap doesn't look right. */
 .mascot-bubble-anchor {
@@ -638,11 +638,11 @@
   bottom: var(--mascot-bubble-y, 80%);
   width: max-content;
   max-width: 12rem;
-  pointer-events: none; /* the bubble never blocks taps on Byte */
+  pointer-events: none; /* the bubble never blocks taps on the mascot */
   z-index: 10;
 }
 
-/* Reaction bubbles shrink and fade out (class added by ByteMascot after bubbleMs) */
+/* Reaction bubbles shrink and fade out (class added by Mascot after bubbleMs) */
 .mascot-bubble-hidden {
   opacity: 0;
   transform: scale(0.6);

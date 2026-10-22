@@ -90,7 +90,15 @@ function tone(freq, type, duration, offset = 0, level = 0.14) {
 
 // A note that slides from one pitch to another. `fade` lets the volume
 // outlast the slide slightly (the sad sound needs that).
-function glide(type, fromHz, toHz, duration, offset = 0, level = 0.12, fade = duration) {
+function glide(
+  type,
+  fromHz,
+  toHz,
+  duration,
+  offset = 0,
+  level = 0.12,
+  fade = duration,
+) {
   const audio = getContext();
   if (!audio) return;
   const t = audio.currentTime + offset;
@@ -167,9 +175,12 @@ const SOUNDS = {
     tone(1046.5, "square", 0.2, 0.24, 0.16); // C6
   },
 
-  // Waiting for a file: low tummy rumble
+  // Waiting for a file: a low tummy rumble, three overlapping growls that
+  // slide down in pitch (glide(type, fromHz, toHz, duration, offset, level, fade))
   hungry() {
-    glide("triangle", 120, 95, 0.35, 0, 0.12);
+    glide("sawtooth", 95, 70, 0.5, 0, 0.1, 0.55);
+    glide("triangle", 140, 90, 0.45, 0.12, 0.12, 0.5);
+    glide("sawtooth", 80, 62, 0.4, 0.3, 0.08, 0.45);
   },
 
   // File hovering over the drop zone
@@ -236,6 +247,6 @@ export function playMascotSound(name) {
   try {
     play();
   } catch (error) {
-    console.warn("[mascot-sound]", error);// a sound problem must never break the UI
+    console.warn("[mascot-sound]", error); // a sound problem must never break the UI
   }
 }

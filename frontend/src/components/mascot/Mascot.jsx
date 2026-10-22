@@ -28,9 +28,9 @@ function Mascot({
   state = "idle",
   states, // optional: page-specific states, checked before the common ones
   message,
-  framed = true, // true: tinted banner box (upload modal); false: just Byte
-  pokeable = false, // true: tapping Byte makes it angry, repeated taps make it dizzy
-  imageClassName = "h-24", // size of Byte, e.g. "h-16" for a small one
+  framed = true, // true: tinted banner box (upload modal); false: just the mascot
+  pokeable = false, // true: tapping the mascot makes it angry, repeated taps make it dizzy
+  imageClassName = "h-24", // size of the mascot, e.g. "h-16" for a small one
   frameClassName = "h-36", // height of the tinted banner (only when framed)
   showSoundToggle = framed, // the speaker button; shown in the banner by default
   replayKey = 0, // change this to replay the animation and sound for the SAME state
@@ -41,7 +41,7 @@ function Mascot({
   const reacting = pokeable ? override : null;
   const activeState = reacting ?? state;
 
-  // The mascot (byte / orbit) the user picked in Settings
+  // The mascot (the mascot / orbit) the user picked in Settings
   const { mascotId, mascot } = useMascot();
 
   // Page states first, then the common ones. Unknown state? Fall back to idle
@@ -55,7 +55,7 @@ function Mascot({
   // During a reaction use its own bubble, not the page's custom message
   const bubbleText = reacting ? config.bubble : (message ?? config.bubble);
 
-  // Pokeable: Byte is a real <button> (keyboard and screen-reader friendly)
+  // Pokeable: the mascot is a real <button> (keyboard and screen-reader friendly)
   const Stage = pokeable ? "button" : "div";
   const stageProps = pokeable
     ? { type: "button", onClick: poke, "aria-label": `Poke ${mascot.name}` }
@@ -91,7 +91,7 @@ function Mascot({
   }, [playKey, config.sound, config.soundDelay, config.soundEvery]);
 
   // Tiny squish on taps that don't (yet) cause a reaction.
-  // It animates a wrapper, so it never restarts Byte's own motion.
+  // It animates a wrapper, so it never restarts the mascot's own motion.
   const boopRef = useRef(null);
   useEffect(() => {
     if (!boopId) return; // 0 = no tap yet
@@ -127,7 +127,7 @@ function Mascot({
       <div className="relative isolate">
         {/* The stage plays this state's motion; the img pops in.
             Changing playKey remounts both, so the animation replays. */}
-        {/* Ground shadow (success only): shrinks while Byte is in the air */}
+        {/* Ground shadow (success only): shrinks while the mascot is in the air */}
         {config.shadow && (
           <span
             key={`shadow-${playKey}`}
@@ -151,10 +151,10 @@ function Mascot({
           </Stage>
         </div>
 
-        {/* Particles float around Byte (nothing for states without them) */}
+        {/* Particles float around the mascot (nothing for states without them) */}
         <MascotParticles key={`particles-${playKey}`} type={config.particles} />
 
-        {/* Speech bubble: sits up and to the right of Byte's head (see .mascot-bubble-anchor
+        {/* Speech bubble: sits up and to the right of the mascot's head (see .mascot-bubble-anchor
             in variables.css). role="status" makes screen readers read changes aloud. */}
         <div role="status" aria-live="polite" className="mascot-bubble-anchor">
           {bubbleText && (
@@ -166,7 +166,7 @@ function Mascot({
               }`}
             >
               {bubbleText}
-              {/* Small tail and a trail dot, both pointing back toward Byte's head */}
+              {/* Small tail and a trail dot, both pointing back toward the mascot's head */}
               <span
                 aria-hidden="true"
                 className="absolute -bottom-0.75 left-2.5 h-2 w-2 rotate-45 bg-white"

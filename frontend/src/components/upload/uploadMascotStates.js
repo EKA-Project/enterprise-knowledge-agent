@@ -11,6 +11,7 @@ export const UPLOAD_MASCOT_STATES = {
     motion: "mascot-m-hungry",
     particles: "drool",
     sound: "hungry",
+    soundEvery: 3500, // grumbles again every 3.5s while waiting for a file
   },
   dragging: {
     image: "drop",
