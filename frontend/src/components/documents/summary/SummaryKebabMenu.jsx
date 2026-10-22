@@ -38,7 +38,7 @@ export default function SummaryKebabMenu({ onEdit, onReindex, onArchive, onDelet
         type="button"
         aria-label="More actions"
         onClick={() => setOpen((o) => !o)}
-        className="w-9 h-9 rounded-full border border-(--border) bg-white grid place-items-center hover:bg-[#e0eef7]"
+       className="w-9 h-9 rounded-full bg-white grid place-items-center hover:bg-[#e1f0fa]"
       >
         <span className="flex gap-[3px]" aria-hidden="true">
           <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />

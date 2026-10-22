@@ -13,7 +13,7 @@ const actionBtn =
 function SummarySidebar({
   telemetry, questions, adminMode, archived, onReindex, onToggleArchive,
   related = [], onOpenRelated,
-  
+
 }) {
   const rows = [
     ['Vector Chunks', telemetry.vectorChunks],
@@ -58,8 +58,12 @@ function SummarySidebar({
 
         {adminMode && (
           <div className="mt-4 flex gap-2">
-            <button type="button" onClick={onReindex} className={`${actionBtn} text-[#1b79a8]`}>
-              <RefreshCw size={12} className="text-sky-600" /> Re-index Chunks
+            <button
+              type="button"
+              onClick={onReindex}
+              className={`${actionBtn} group text-[#1b79a8] hover:border-[#1f718e] hover:bg-[#1f718e] hover:text-white`}
+            >
+              <RefreshCw size={12} className="text-sky-600 group-hover:text-white" /> Re-index Chunks
             </button>
             <button type="button" onClick={onToggleArchive} className={actionBtn}>
               {archived ? (
@@ -83,7 +87,7 @@ function SummarySidebar({
               key={q}
               to="/ask-eka"
               state={{ question: q }}
-              className="flex items-center justify-between gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1.5 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)"
+              className="flex items-center justify-between gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1.5 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-[#e1f0fa]"
             >
               <span>"{q}"</span>
               <ArrowRight size={12} className="shrink-0 text-(--text-muted)" />
@@ -92,32 +96,31 @@ function SummarySidebar({
         </div>
       </section>
       {related.length > 0 && (
-  <section className={card}>
-    <h2 className="doc-heading flex items-center gap-2 text-base font-bold text-(--text-primary)">
-      <Link2 size={14} className="text-(--text-muted)" /> Related Knowledge
-    </h2>
-    <div className="mt-3 space-y-2">
-      {related.map((d) => (
-        <button
-          key={d.id}
-          type="button"
-          onClick={() => onOpenRelated(d)}
-          className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-(--bg-surface-subtle) px-3 py-2 text-left transition-colors hover:bg-(--primary-light)"
-        >
-          <span
-            className={`doc-mono flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[8px] font-bold ${
-              formatStyles[d.format] ?? 'bg-(--bg-surface) text-(--text-primary)'
-            }`}
-          >
-            {d.format}
-          </span>
-          <span className="min-w-0 flex-1 truncate text-xs font-medium text-(--text-primary)">{d.title}</span>
-          <ArrowRight size={12} className="shrink-0 text-(--text-muted)" />
-        </button>
-      ))}
-    </div>
-  </section>
-)}
+        <section className={card}>
+          <h2 className="doc-heading flex items-center gap-2 text-base font-bold text-(--text-primary)">
+            <Link2 size={14} className="text-(--text-muted)" /> Related Knowledge
+          </h2>
+          <div className="mt-3 space-y-2">
+            {related.map((d) => (
+              <button
+                key={d.id}
+                type="button"
+                onClick={() => onOpenRelated(d)}
+                className="flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-[#dce8f2] bg-white px-3 py-2 text-left transition-colors hover:border-transparent hover:bg-[#e1f0fa]"
+              >
+                <span
+                  className={`doc-mono flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[8px] font-bold ${formatStyles[d.format] ?? 'bg-(--bg-surface) text-(--text-primary)'
+                    }`}
+                >
+                  {d.format}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-xs font-medium text-(--text-primary)">{d.title}</span>
+                <ArrowRight size={12} className="shrink-0 text-(--text-muted)" />
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
     </aside>
   );
 }

@@ -60,7 +60,7 @@ function EditMetadataModal({ doc, onClose, onSave }) {
             aria-label="Close dialog"
             title="Close dialog"
             onClick={onClose}
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-(--border-medium) text-(--text-secondary) hover:border-red-300 hover:bg-red-50 hover:text-red-500"
+           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-[#e1f0fa] text-(--text-secondary) transition-all duration-200 hover:rotate-90 hover:bg-red-50 hover:text-red-500 active:rotate-90"
           >
             <X size={14} />
           </button>

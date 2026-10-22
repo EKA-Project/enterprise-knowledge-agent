@@ -33,22 +33,20 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
         <button
           type="button"
           onClick={() => setMode('text')}
-          className={`${pill} ${
-            mode === 'text'
-              ? 'bg-(--primary) text-(--primary-contrast)'
-              : 'bg-(--bg-surface-subtle) text-(--primary) hover:bg-(--primary-light)'
-          }`}
+          className={`${pill} ${mode === 'text'
+            ? 'bg-[#153830] text-white'
+            : 'bg-[#e1f0fa] text-[#3d5a73] hover:bg-[#d4e8f7]'
+            }`}
         >
           <FileText size={13} /> Interactive Text Pages
         </button>
         <button
           type="button"
           onClick={() => setMode('pdf')}
-          className={`${pill} ${
-            mode === 'pdf'
-              ? 'bg-(--primary) text-(--primary-contrast)'
-              : 'bg-(--bg-surface-subtle) text-(--primary) hover:bg-(--primary-light)'
-          }`}
+          className={`${pill} ${mode === 'pdf'
+            ? 'bg-[#153830] text-white'
+            : 'bg-[#e1f0fa] text-[#3d5a73] hover:bg-[#d4e8f7]'
+            }`}
         >
           <FileIcon size={13} /> Original PDF Document
         </button>
@@ -78,14 +76,13 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
                   key={p.page}
                   type="button"
                   onClick={() => go(p.page)}
-                  className={`min-w-0 flex-1 cursor-pointer rounded-xl px-3 py-2 text-left transition-colors md:flex-none ${
-                    p.page === current?.page
-                      ? 'bg-(--primary) text-(--primary-contrast)'
-                      : 'bg-(--bg-surface-subtle) text-(--text-primary) hover:bg-(--primary-light)'
-                  }`}
+                  className={`min-w-0 flex-1 cursor-pointer rounded-xl px-3 py-2 text-left transition-colors md:flex-none ${p.page === current?.page
+                    ? 'bg-[#153830] text-white'
+                    : 'bg-[#e1f0fa] text-(--text-primary) hover:bg-[#d4e8f7]'
+                    }`}
                 >
                   <span className="block text-xs font-semibold">Page {p.page}</span>
-                  <span className="block truncate text-[10px] opacity-70">{p.title}</span>
+                 <span className={`block truncate text-[10px] ${p.page === current?.page ? 'text-[#a8e6cf]' : 'text-[#7c949a]'}`}>{p.title}</span>
                 </button>
               ))}
             </div>
@@ -98,7 +95,7 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
                 type="button"
                 disabled={!current || current.page <= 1}
                 onClick={() => go(current.page - 1)}
-                className="cursor-pointer rounded-full border border-(--border-medium) px-3 py-1 text-[11px] font-semibold text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-40"
+                className="cursor-pointer rounded-full border border-[#cfe3f3] px-3 py-1 text-[11px] font-semibold text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-40"
               >
                 ← Prev
               </button>

@@ -5,7 +5,7 @@ import { formatStyles, statusMeta } from '../shared/DocumentCard';
 import '../../../styles/Document.css';
 
 const circle =
-  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-colors';
+  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-medium) bg-white transition-colors hover:bg-[#e1f0fa]';
 
 // Top card. Admin gets bookmark / pin / kebab next to the link button.
 function SummaryHeader({
@@ -17,40 +17,45 @@ function SummaryHeader({
   const status = statusMeta[doc.status] ?? statusMeta.Indexed;
 
   return (
-    <header className="flex flex-col gap-4 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) sm:flex-row sm:items-start">
+    <header className="flex flex-col gap-4 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) px-8 py-7 shadow-(--shadow-sm) sm:flex-row sm:items-start">
       <span
-        className={`doc-mono flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-[10px] font-bold ${tile}`}
+        className={`doc-mono flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#f5b9bd] text-[11px] font-bold ${tile}`}
       >
         {doc.format}
       </span>
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-(--bg-surface-subtle) px-3 py-1 text-[10px] font-semibold text-(--text-secondary)">
+         <span className="rounded-full bg-[#e1f0fa] px-3 py-1 text-[11px] font-semibold text-[#3d5a73]">
             {doc.category}
           </span>
           {archived ? (
-            <span className="rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[10px] font-semibold text-(--text-primary)">
+            <span className="rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary)">
               Archived
             </span>
           ) : (
-            <span className={`rounded-full px-3 py-1 text-[10px] font-semibold ${status.style}`}>
+            <span
+              className={`rounded-full px-3 py-1 text-[11px] font-semibold ${doc.status === 'Indexed'
+                  ? 'border border-[#bdeedb] bg-[#edfdf7] text-[#0f8f63]'
+                  : status.style
+                }`}
+            >
               {status.label}
             </span>
           )}
-          <span className="text-[11px] text-(--text-muted)">
+          <span className="doc-mono text-xs text-[#7c949a]">
             {doc.size} • {doc.readTime} • {doc.pages} pages
           </span>
         </div>
 
-        <h1 className="doc-heading mt-2 text-2xl font-bold leading-tight text-(--text-primary) sm:text-[28px]">
+        <h1 className="doc-heading mt-2 text-3xl font-bold leading-[1.15] text-[#10283f] sm:text-[36px]">
           {doc.title}
         </h1>
 
-        <p className="mt-1.5 flex flex-wrap gap-x-4 gap-y-0.5 text-[11px] text-(--text-muted)">
-          <span>Author: {doc.author}</span>
-          <span>Uploaded: {doc.uploaded}</span>
-          <span>Indexed Chunks: {doc.chunks}</span>
+        <p className="mt-2 flex flex-wrap gap-x-6 gap-y-0.5 text-sm text-[#7c949a]">
+          <span>Author: <b className="font-medium text-[#3d4f63]">{doc.author}</b></span>
+          <span>Uploaded: <b className="font-medium text-[#3d4f63]">{doc.uploaded}</b></span>
+          <span>Indexed Chunks: <b className="font-medium text-[#3d4f63]">{doc.chunks}</b></span>
         </p>
       </div>
 
@@ -58,7 +63,7 @@ function SummaryHeader({
         <Link
           to="/ask-eka"
           state={{ question: `Tell me about "${doc.title}"` }}
-          className="inline-flex items-center gap-1.5 rounded-full bg-[#193e36] px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#12302a]"
+          className="inline-flex items-center gap-1.5 rounded-full bg-[#153830] px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#0f2b25]"
         >
           Ask About This Doc →
         </Link>
@@ -67,8 +72,7 @@ function SummaryHeader({
           type="button"
           aria-label="Copy document link"
           onClick={onCopyLink}
-
-          className={`${circle} border-(--border-medium) bg-white text-(--text-secondary) hover:bg-(--bg-surface-subtle)`}
+          className={`${circle} text-(--text-secondary)`}
         >
           <LinkIcon size={14} />
         </button>
@@ -80,8 +84,7 @@ function SummaryHeader({
               aria-label={saved ? 'Remove bookmark' : 'Bookmark document'}
               aria-pressed={saved}
               onClick={onToggleSave}
-              className={`${circle} bg-(--bg-surface) hover:bg-(--bg-surface-subtle) ${saved ? 'border-amber-400 text-amber-500' : 'border-(--border-medium) text-(--text-secondary)'
-                }`}
+              className={`${circle} ${saved ? 'text-[#f39c0a]' : 'text-(--text-secondary)'}`}
             >
               <Bookmark size={14} className={saved ? 'fill-current' : ''} />
             </button>
@@ -91,8 +94,7 @@ function SummaryHeader({
               aria-label={pinned ? 'Unpin document' : 'Pin document'}
               aria-pressed={pinned}
               onClick={onTogglePin}
-              className={`${circle} border-(--border-medium) bg-white hover:bg-(--bg-surface-subtle) ${pinned ? 'text-[#3561bb]' : 'text-(--text-secondary)'
-                }`}
+              className={`${circle} ${pinned ? 'text-[#3561bb]' : 'text-(--text-secondary)'}`}
             >
               <Pin size={14} className={pinned ? 'fill-current' : ''} />
             </button>

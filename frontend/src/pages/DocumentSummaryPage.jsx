@@ -28,13 +28,13 @@ function DocumentSummaryPage() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id'); // /documents/summary?id=doc-7
 
-   const [baseDoc, setDoc] = useState(null);
+  const [baseDoc, setDoc] = useState(null);
   const [notFound, setNotFound] = useState(false);
   const [tab, setTab] = useState('summary');
   const [readerPage, setReaderPage] = useState(1);
   const [editing, setEditing] = useState(false);
   const [archiveOpen, setArchiveOpen] = useState(false);
-  
+
 
   const showToast = showDocToast; // (message, variant)
   // Pin / bookmark live in the shared documents store, so the Documents list
@@ -110,7 +110,7 @@ function DocumentSummaryPage() {
       next ? 'success' : 'neutral',
     );
   };
-   const toggleSave = () => {
+  const toggleSave = () => {
     const next = !saved;
     toggleFlag(doc.id, 'isBookmarked');
     showToast(
@@ -148,7 +148,7 @@ function DocumentSummaryPage() {
 
   if (notFound) {
     return (
-      <div className="w-full space-y-6 px-4 py-6 sm:px-9">
+            <div className="mx-auto w-full max-w-[1100px] px-4 py-16 text-center sm:px-6">
         <h1 className="font-serif text-2xl font-black text-(--text-primary)">Document not found</h1>
         <p className="mt-2 text-sm text-(--text-muted)">
           This document doesn&apos;t exist or is no longer available.
@@ -166,7 +166,7 @@ function DocumentSummaryPage() {
   if (!doc) return null; // add a skeleton when real loading time exists
 
   return (
-    <div className="w-full space-y-6 px-4 py-6 sm:px-9">
+        <div className="w-full space-y-6 py-6">
       <SummaryHeader
         doc={doc}
         adminMode={adminMode}

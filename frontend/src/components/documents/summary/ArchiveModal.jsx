@@ -26,7 +26,7 @@ function ArchiveModal({ title, archived, onClose, onConfirm }) {
             <p className="text-[10px] font-semibold uppercase tracking-wide text-(--text-muted)">Department Management</p>
           </div>
           <button type="button" aria-label="Close dialog" onClick={onClose}
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary)">
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-[#e1f0fa] text-(--text-secondary) transition-all duration-200 hover:rotate-90 hover:bg-red-50 hover:text-red-500 active:rotate-90">
             <X size={14} />
           </button>
         </div>
