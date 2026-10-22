@@ -1,0 +1,143 @@
+import { useRef } from "react";
+import SettingsPanel from "./SettingsPanel";
+import EyeComfortSection from "./appearance/eyecomfort/EyeComfortSection";
+import useAppearance from "../../hooks/useAppearance";
+import useToast from "../../hooks/useToast";
+import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
+import { TYPOGRAPHY, DEFAULT_TYPOGRAPHY } from "../../appearance/fontStudio";
+import { SURPRISE_SCOPES } from "../../appearance/appearance";
+import AtmosphereHero from "./appearance/themes/AtmosphereHero";
+import { Droplet } from "lucide-react";
+import AppearanceHeader from "./appearance/AppearanceHeader";
+import StudioStatsPill from "./appearance/StudioStatsPill";
+import ThemeCollections from  "./appearance/themes/ThemeCollections";
+import FontCollections from "./appearance/typography/FontCollections";
+
+const pickRandom = (items) => items[Math.floor(Math.random() * items.length)];
+
+export default function AppearanceSettings() {
+  const toast = useToast();
+  const [appearance, update] = useAppearance();
+  const { theme } = appearance;
+  // Guards against a stale or hand-edited saved value: anything unknown counts as "theme".
+  const scope = SURPRISE_SCOPES.some((s) => s.id === appearance.surpriseScope)
+    ? appearance.surpriseScope
+    : "theme";
+  const lastToast = useRef(null); // quick clicks replace the toast instead of piling up
+
+  const announce = (message, name) => {
+    if (lastToast.current) toast.dismiss(lastToast.current);
+    lastToast.current = toast.success(message, {
+      description: name,
+      duration: 2500,
+    });
+  };
+
+  const pickTheme = (t) => {
+    if (t.id === theme) return; // already active, nothing to announce
+    update({ theme: t.id });
+    announce("Theme applied", t.name);
+  };
+  const activeTheme =
+    THEMES.find((t) => t.id === theme) ??
+    THEMES.find((t) => t.id === DEFAULT_THEME);
+  // Same fallback as applyFonts(), so an unknown saved id still shows the default pairing.
+  const activeFont =
+    TYPOGRAPHY.find((t) => t.id === appearance.typography) ??
+    TYPOGRAPHY.find((t) => t.id === DEFAULT_TYPOGRAPHY);
+  // Reset is available while either the theme or the font pairing differs from the default.
+  const isDefault =
+    activeTheme.id === DEFAULT_THEME && activeFont.id === DEFAULT_TYPOGRAPHY;
+
+  // Random theme, and optionally a random font pairing, never the ones already active.
+  // Compared against activeTheme/activeFont (not the raw saved ids) so an unknown saved
+  // value can't make the pick land on the look that is already showing.
+  const surprise = () => {
+    const nextTheme = pickRandom(THEMES.filter((t) => t.id !== activeTheme.id));
+
+    if (scope === "both") {
+      const nextFont = pickRandom(
+        TYPOGRAPHY.filter((t) => t.id !== activeFont.id),
+      );
+      // One update call = one apply, one save, one toast.
+      update({ theme: nextTheme.id, typography: nextFont.id });
+      announce("Surprise pick applied", `${nextTheme.name} · ${nextFont.name}`);
+      return;
+    }
+
+    update({ theme: nextTheme.id });
+    announce("Surprise pick applied", nextTheme.name);
+  };
+
+  // Restores whichever of theme / typography is not already the default.
+  // Eye comfort has its own card and is left as chosen.
+  const reset = () => {
+    const patch = {};
+    const restored = []; // names shown in the toast
+
+    if (activeTheme.id !== DEFAULT_THEME) {
+      patch.theme = DEFAULT_THEME;
+      restored.push(THEMES.find((t) => t.id === DEFAULT_THEME).name);
+    }
+    if (activeFont.id !== DEFAULT_TYPOGRAPHY) {
+      patch.typography = DEFAULT_TYPOGRAPHY;
+      restored.push(TYPOGRAPHY.find((t) => t.id === DEFAULT_TYPOGRAPHY).name);
+    }
+    if (restored.length === 0) return;
+
+    update(patch); // one update = one apply, one save, one toast
+    announce("Defaults restored", restored.join(" · "));
+  };
+
+  const pickFont = (f) => {
+    if (f.id === appearance.typography) return;
+    update({ typography: f.id });
+    announce("Typography applied", f.name);
+  };
+
+  const pickEyeComfort = (mode) => {
+    if (mode.id === appearance.eyeComfort) return;
+    update({ eyeComfort: mode.id });
+    announce("Eye comfort updated", `${mode.label} · ${mode.detail}`);
+  };
+
+  return (
+    <SettingsPanel>
+      <AppearanceHeader
+        level="page"
+        icon={Droplet}
+        eyebrow="Workspace Visual Identity"
+        title="Appearance & Atmosphere Studio"
+        description={`${THEMES.length} curated workspace themes, editorial typography pairings, and layout ergonomics.`}
+        aside={
+          <StudioStatsPill
+            atmospheres={THEMES.length}
+            typeSuites={TYPOGRAPHY.length}
+          />
+        }
+      />
+      {/* ---------- Active atmosphere hero ---------- */}
+      <AtmosphereHero
+        theme={activeTheme}
+        typography={activeFont}
+        isDefault={isDefault}
+        onSurprise={surprise}
+        scope={scope}
+        onScopeChange={(id) => update({ surpriseScope: id })}
+        onReset={reset}
+      />
+
+      {/* ---------- Theme collections ---------- */}
+      <ThemeCollections activeId={theme} onSelect={pickTheme} />
+
+      {/* ---------- Typography ---------- */}
+      <FontCollections activeId={appearance.typography} onSelect={pickFont} />
+
+      {/* ---------- Eye comfort ---------- */}
+      <EyeComfortSection
+        activeId={appearance.eyeComfort}
+        onSelect={pickEyeComfort}
+      />
+    </SettingsPanel>
+  );
+}

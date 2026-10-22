@@ -1,0 +1,400 @@
+/* ==========================================================================
+   Theme collection: Oceanic & Sky  (collection id "oceanic")
+   One [data-theme="<id>"] block per theme; each id is registered in src/appearance/theme.js.
+   Imported by src/styles/variables.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   ATMOSPHERE 2: Lagoon Glass (Ocean Deep Slate & Turquoise)
+   ========================================================================== */
+[data-theme="lagoon-glass"] {
+  --sidebar-bg: #0c2630;
+  --sidebar-text: #b9d7e0;
+  --sidebar-text-muted: #6e94a1;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-active-bg: #4fd1c5;
+  --sidebar-active-text: #08212a;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
+
+  --bg-app: #f1f7f6;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e2edeb;
+  --bg-glass: rgba(241, 247, 246, 0.92);
+
+  --primary: #0d9488;
+  --primary-hover: #0f766e;
+  --primary-light: #ccfbf1;
+  --primary-glow: rgba(13, 148, 136, 0.2);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #4fd1c5;
+  --accent-highlight-hover: #2dd4bf;
+  --accent-secondary: #0284c7;
+  --accent-chip: #ccfbf1;
+  --accent-chip-text: #115e59;
+
+  --border-subtle: #dbe9e7;
+  --border-medium: #c7dcd9;
+  --border-focus: #0d9488;
+
+  --text-primary: #0f272e;
+  --text-secondary: #4a666e;
+  --text-muted: #79979f;
+  --text-eyebrow: #0284c7;
+
+  --badge-bg: #e0f2fe;
+  --badge-text: #0369a1;
+  --badge-border: #bae6fd;
+
+  --shadow-sm: 0 1px 3px rgba(12, 38, 48, 0.04);
+  --shadow-md: 0 4px 16px rgba(12, 38, 48, 0.06);
+  --shadow-lg: 0 12px 32px rgba(12, 38, 48, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f7fbfa 100%);
+  --gradient-brand: linear-gradient(135deg, #4fd1c5 0%, #0284c7 100%);
+
+  /* Extended tokens */
+  --primary-deep: #134e4a;
+  --border-subtle-nav: #38b2ac;
+  --table-header-bg: #cfe3e0;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #99f6e4;
+  --highlight-text: #08212a;
+  --highlight-border: #0d9488;
+  --highlight-shadow: 0 2px 6px rgba(13, 148, 136, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE 10: Nordic Sunset (Aqua, Amber & Ochre)
+   ========================================================================== */
+[data-theme="nordic-sunset"] {
+  --sidebar-bg: #023047;
+  --sidebar-text: #8ecae6;
+  --sidebar-text-muted: #219ebc;
+  --sidebar-border: rgba(142, 202, 230, 0.15);
+  --sidebar-active-bg: #ffb703;
+  --sidebar-active-text: #023047;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #f0f7fa; /* Sky mist grey background */
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e1eff5;
+  --bg-glass: rgba(240, 247, 250, 0.94);
+
+  --primary: #023047;
+  --primary-hover: #219ebc;
+  --primary-light: #8ecae6;
+  --primary-glow: rgba(2, 48, 71, 0.08);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #ffb703;
+  --accent-highlight-hover: #fb8500;
+  --accent-secondary: #fb8500;
+  --accent-chip: #8ecae6;
+  --accent-chip-text: #023047;
+
+  --border-subtle: #cbe3f0;
+  --border-medium: #219ebc;
+  --border-focus: #023047;
+
+  --text-primary: #023047;
+  --text-secondary: #219ebc;
+  --text-muted: #7aa1b8;
+  --text-eyebrow: #fb8500;
+
+  --badge-bg: #023047;
+  --badge-text: #ffffff;
+  --badge-border: #ffb703;
+
+  --shadow-sm: 0 1px 3px rgba(2, 48, 71, 0.03);
+  --shadow-md: 0 4px 16px rgba(2, 48, 71, 0.05);
+  --shadow-lg: 0 12px 32px rgba(2, 48, 71, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6fbfd 100%);
+  --gradient-brand: linear-gradient(135deg, #023047 0%, #fb8500 100%);
+
+  /* Extended tokens */
+  --primary-deep: #011b27;
+  --border-subtle-nav: #ea8c00;
+  --table-header-bg: #cee2ec;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fed7aa;
+  --highlight-text: #023047;
+  --highlight-border: #fb8500;
+  --highlight-shadow: 0 2px 6px rgba(251, 133, 0, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE 14: Sky Blue Clarity (Minimal Morning Sky, Azure & Slate Ink)
+   YOUR TUNED VERSION (default via src/theme.js until Appearance settings exist)
+   Eye-Comfort Light Canvas + Deep Midnight Sky Sidebar + Luminous Azure Accents
+   ========================================================================== */
+[data-theme="sky-blue"] {
+  /* Sidebar Palette (Deep Midnight Sky / Celestial Blue) */
+  --sidebar-bg: #0c233c;
+  --sidebar-text: #e0f2fe;
+  --sidebar-text-muted: #7ea9c8;
+  --sidebar-border: rgba(224, 242, 254, 0.1);
+  --sidebar-active-bg: #38bdf8;
+  --sidebar-active-text: #082035;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  /* Main Workspace Canvas (Soft Morning Mist / Pale Sky Blue White) */
+  --bg-app: #f0f6fc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e2f0fb;
+  --table-header-bg: #cfe4f5;
+  --bg-glass: rgba(240, 246, 252, 0.94);
+
+  /* Primary & Accent Tones (Calm Sky Blue 600 & Vivid Sky Azure) */
+  --primary: #0a75aa;
+  --primary-hover: #4eb4eb;
+  --primary-deep: #075f8c;
+  --primary-light: #e0f2fe;
+  --primary-glow: rgba(2, 132, 199, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #38bdf8;
+  --accent-highlight-hover: #0ea5e9;
+  --accent-secondary: #0284c7;
+  --accent-chip: #e0f2fe;
+  --accent-chip-text: #0369a1;
+
+  /* Borders & Dividers (Ultra-Soft Sky Tinted Lines) */
+  --border-subtle: #d9eaf5;
+  --border-subtle-nav: #4aa9e9;
+  --border-medium: #b9daee;
+  --border-focus: #0284c7;
+
+  /* Typography Colors (Deep Slate Ink - Soothing on the eyes) */
+  --text-primary: #0f2942;
+  --text-secondary: #3b5e7e;
+  --text-muted: #7293b0;
+  --text-eyebrow: #0284c7;
+
+  /* Badges & Pills */
+  --badge-bg: #e0f2fe;
+  --badge-text: #0369a1;
+  --badge-border: #bae6fd;
+
+  /* Shadows (Soft Cerulean-Tinted Ambient Shadows) */
+  --shadow-sm: 0 1px 3px rgba(12, 35, 60, 0.04);
+  --shadow-md: 0 4px 16px rgba(12, 35, 60, 0.06);
+  --shadow-lg: 0 12px 32px rgba(12, 35, 60, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f4f9fe 100%);
+  --gradient-brand: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #bae6fd;
+  --highlight-text: #082035;
+  --highlight-border: #0284c7;
+  --highlight-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Moonlight Ocean (Noir, Deep Ocean, Midnight Sky & Moonlight)
+   Palette: Moonlight (#E1E2E1), Midnight Sky (#34495E), Deep Ocean (#1B3B6F), Noir (#001B2A)
+   ========================================================================== */
+[data-theme="moonlight-ocean"] {
+  /* Sidebar Palette (Noir #001B2A + Moonlight #E1E2E1) */
+  --sidebar-bg: #001b2a;
+  --sidebar-text: #e1e2e1;
+  --sidebar-text-muted: #8aa2b8;
+  --sidebar-border: rgba(225, 226, 225, 0.1);
+  --sidebar-active-bg: #1b3b6f;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  /* Main Workspace Canvas (Soft Moonlight Cool Mist) */
+  --bg-app: #f0f3f6;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e1e8ee;
+  --bg-glass: rgba(240, 243, 246, 0.94);
+
+  /* Primary & Accent Tones (Deep Ocean #1B3B6F & Midnight Sky #34495E) */
+  --primary: #1b3b6f;
+  --primary-hover: #132a50;
+  --primary-light: #e4ebf5;
+  --primary-glow: rgba(27, 59, 111, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #34495e;
+  --accent-highlight-hover: #263645;
+  --accent-secondary: #1b3b6f;
+  --accent-chip: #e1e8ee;
+  --accent-chip-text: #001b2a;
+
+  /* Borders & Dividers */
+  --border-subtle: #d6dfe7;
+  --border-medium: #b4c3d2;
+  --border-focus: #1b3b6f;
+
+  /* Typography Colors */
+  --text-primary: #001b2a;
+  --text-secondary: #34495e;
+  --text-muted: #687e94;
+  --text-eyebrow: #1b3b6f;
+
+  /* Badges & Pills */
+  --badge-bg: #e4ebf5;
+  --badge-text: #1b3b6f;
+  --badge-border: #b4c3d2;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 27, 42, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 27, 42, 0.06);
+  --shadow-lg: 0 12px 32px rgba(0, 27, 42, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%);
+  --gradient-brand: linear-gradient(135deg, #34495e 0%, #1b3b6f 100%);
+
+  /* Extended tokens */
+  --primary-deep: #0c1a32;
+  --border-subtle-nav: #64829f;
+  --table-header-bg: #cfe0eb;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #d5e2f0;
+  --highlight-text: #001b2a;
+  --highlight-border: #1b3b6f;
+  --highlight-shadow: 0 2px 6px rgba(27, 59, 111, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Deep Sea (Abyssal Navy, Foggy Dusk & Arctic White)
+   ========================================================================== */
+[data-theme="deep-sea"] {
+  --sidebar-bg: #0d1b2a;
+  --sidebar-text: #e0e1dd;
+  --sidebar-text-muted: #778da9;
+  --sidebar-border: rgba(224, 225, 221, 0.08);
+  --sidebar-active-bg: #415a77;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-hover-text: #ffffff;
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #e0e1dd;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #d2d6d3;
+  --bg-glass: rgba(224, 225, 221, 0.94);
+
+  --primary: #1b263b;
+  --primary-hover: #0d1b2a;
+  --primary-light: #d6dde6;
+  --primary-glow: rgba(27, 38, 59, 0.2);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #415a77;
+  --accent-highlight-hover: #354a63;
+  --accent-secondary: #778da9;
+  --accent-chip: #d6dde6;
+  --accent-chip-text: #0d1b2a;
+
+  --border-subtle: #d3d7d4;
+  --border-medium: #c0c6c1;
+  --border-focus: #1b263b;
+
+  --text-primary: #0d1b2a;
+  --text-secondary: #3c4b5c;
+  --text-muted: #6b7c8f;
+  --text-eyebrow: #415a77;
+
+  --badge-bg: #d6dde6;
+  --badge-text: #1b263b;
+  --badge-border: #b8c4d2;
+
+  --shadow-sm: 0 1px 3px rgba(13, 27, 42, 0.06);
+  --shadow-md: 0 4px 16px rgba(13, 27, 42, 0.08);
+  --shadow-lg: 0 12px 32px rgba(13, 27, 42, 0.12);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f4f6f5 100%);
+  --gradient-brand: linear-gradient(135deg, #415a77 0%, #1b263b 100%);
+
+  /* Extended tokens */
+  --primary-deep: #0d1b2a;
+  --border-subtle-nav: #778da9;
+  --table-header-bg: #d5d9d6;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #c5d4e6;
+  --highlight-text: #0d1b2a;
+  --highlight-border: #415a77;
+  --highlight-shadow: 0 2px 6px rgba(65, 90, 119, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Coastal Crimson (Oxford Navy, Honeydew & Imperial Crimson)
+   ========================================================================== */
+[data-theme="coastal-crimson"] {
+  --sidebar-bg: #1d3557;
+  --sidebar-text: #f1faee;
+  --sidebar-text-muted: #a8dadc;
+  --sidebar-border: rgba(241, 250, 238, 0.12);
+  --sidebar-active-bg: #e63946;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-hover-text: #ffffff;
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #f1faee;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e3ede4;
+  --bg-glass: rgba(241, 250, 238, 0.94);
+
+  --primary: #e63946;
+  --primary-hover: #d62839;
+  --primary-light: #fbebee;
+  --primary-glow: rgba(230, 57, 70, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #457b9d;
+  --accent-highlight-hover: #376480;
+  --accent-secondary: #a8dadc;
+  --accent-chip: #e2f1f2;
+  --accent-chip-text: #1d3557;
+
+  --border-subtle: #dbe7df;
+  --border-medium: #c2d5cb;
+  --border-focus: #457b9d;
+
+  --text-primary: #1d3557;
+  --text-secondary: #457b9d;
+  --text-muted: #6b889d;
+  --text-eyebrow: #e63946;
+
+  --badge-bg: #e2f1f2;
+  --badge-text: #1d3557;
+  --badge-border: #a8dadc;
+
+  --shadow-sm: 0 1px 3px rgba(29, 53, 87, 0.05);
+  --shadow-md: 0 4px 16px rgba(29, 53, 87, 0.08);
+  --shadow-lg: 0 12px 32px rgba(29, 53, 87, 0.12);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f7fcf8 100%);
+  --gradient-brand: linear-gradient(135deg, #1d3557 0%, #457b9d 50%, #e63946 100%);
+
+  /* Extended tokens */
+  --primary-deep: #14243b;
+  --border-subtle-nav: #457b9d;
+  --table-header-bg: #e3ede4;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fee2e2;
+  --highlight-text: #1d3557;
+  --highlight-border: #e63946;
+  --highlight-shadow: 0 2px 6px rgba(230, 57, 70, 0.25);
+}

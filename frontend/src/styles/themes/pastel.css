@@ -1,0 +1,393 @@
+/* ==========================================================================
+   Theme collection: Dusk & Pastels  (collection id "pastel")
+   One [data-theme="<id>"] block per theme; each id is registered in src/appearance/theme.js.
+   Imported by src/styles/variables.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   ATMOSPHERE: Orchid Dusk (Soft Lavender, Pastel Plum, Deep Violet & Royal Aubergine)
+   Palette: Soft Lavender (#E6E6FA), Pastel Plum (#A87CA0), Deep Violet (#5E2B6D), Royal Aubergine (#2A0E3C)
+   ========================================================================== */
+[data-theme="orchid-dusk"] {
+  /* Sidebar Palette (Royal Aubergine #2A0E3C + Soft Lavender #E6E6FA) */
+  --sidebar-bg: #2a0e3c;
+  --sidebar-text: #e6e6fa;
+  --sidebar-text-muted: #a87ca0;
+  --sidebar-border: rgba(230, 230, 250, 0.12);
+  --sidebar-active-bg: #5e2b6d;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  /* Main Workspace Canvas (Soft Lavender Tinted Mist & Pure White Surfaces) */
+  --bg-app: #f6f3fa;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #ede7f6;
+  --bg-glass: rgba(246, 243, 250, 0.94);
+
+  /* Primary & Accent Tones (Deep Violet #5E2B6D & Pastel Plum #A87CA0) */
+  --primary: #5e2b6d;
+  --primary-hover: #451f50;
+  --primary-light: #f3eff9;
+  --primary-glow: rgba(94, 43, 109, 0.2);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #a87ca0;
+  --accent-highlight-hover: #92668a;
+  --accent-secondary: #5e2b6d;
+  --accent-chip: #e6e6fa;
+  --accent-chip-text: #2a0e3c;
+
+  /* Borders & Dividers */
+  --border-subtle: #e4dbf0;
+  --border-medium: #cbb9df;
+  --border-focus: #5e2b6d;
+
+  /* Typography Colors (Royal Aubergine #2A0E3C & Deep Violet #5E2B6D) */
+  --text-primary: #2a0e3c;
+  --text-secondary: #5e2b6d;
+  --text-muted: #8c6e8e;
+  --text-eyebrow: #5e2b6d;
+
+  /* Badges & Pills */
+  --badge-bg: #f3eff9;
+  --badge-text: #5e2b6d;
+  --badge-border: #a87ca0;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(42, 14, 60, 0.04);
+  --shadow-md: 0 4px 16px rgba(42, 14, 60, 0.06);
+  --shadow-lg: 0 12px 32px rgba(42, 14, 60, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf7fd 100%);
+  --gradient-brand: linear-gradient(135deg, #a87ca0 0%, #5e2b6d 100%);
+
+  /* Extended tokens */
+  --primary-deep: #33163c;
+  --border-subtle-nav: #9c7194;
+  --table-header-bg: #ded3ed;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #e6e6fa;
+  --highlight-text: #2a0e3c;
+  --highlight-border: #5e2b6d;
+  --highlight-shadow: 0 2px 6px rgba(94, 43, 109, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Lilac Haze (Dusky Slate-Violet, Lilac Mist & Soft Lavender)
+   ========================================================================== */
+[data-theme="lilac-haze"] {
+  --sidebar-bg: #2d2a43;
+  --sidebar-text: #e8e6f5;
+  --sidebar-text-muted: #9a96bf;
+  --sidebar-border: rgba(232, 230, 245, 0.12);
+  --sidebar-active-bg: #c4b8e8;
+  --sidebar-active-text: #2d2a43;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #f6f4fa;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #ebe7f4;
+  --bg-glass: rgba(246, 244, 250, 0.94);
+
+  --primary: #6a5a9a;
+  --primary-hover: #584a85;
+  --primary-light: #efebf8;
+  --primary-glow: rgba(106, 90, 154, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #c4b8e8;
+  --accent-highlight-hover: #b3a5de;
+  --accent-secondary: #8fa3c7;
+  --accent-chip: #efebf8;
+  --accent-chip-text: #4a3d78;
+
+  --border-subtle: #e6e1f0;
+  --border-medium: #d0c8e3;
+  --border-focus: #6a5a9a;
+
+  --text-primary: #26223a;
+  --text-secondary: #565073;
+  --text-muted: #706a90;
+  --text-eyebrow: #6a5a9a;
+
+  --badge-bg: #efebf8;
+  --badge-text: #4a3d78;
+  --badge-border: #d6cdee;
+
+  --shadow-sm: 0 1px 3px rgba(45, 42, 67, 0.04);
+  --shadow-md: 0 4px 16px rgba(45, 42, 67, 0.06);
+  --shadow-lg: 0 12px 32px rgba(45, 42, 67, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf9fd 100%);
+  --gradient-brand: linear-gradient(135deg, #c4b8e8 0%, #6a5a9a 100%);
+
+  /* Extended tokens */
+  --primary-deep: #46396e;
+  --border-subtle-nav: #9d8fd0;
+  --table-header-bg: #e1dbef;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #e0d9f5;
+  --highlight-text: #2d2a43;
+  --highlight-border: #6a5a9a;
+  --highlight-shadow: 0 2px 6px rgba(106, 90, 154, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Peach Dawn (Soft Slate, Cream Canvas, Peach & Dusty Blue)
+   ========================================================================== */
+[data-theme="peach-dawn"] {
+  --sidebar-bg: #2f3b4c;
+  --sidebar-text: #e9eef5;
+  --sidebar-text-muted: #9aaabe;
+  --sidebar-border: rgba(233, 238, 245, 0.12);
+  --sidebar-active-bg: #f2b79c;
+  --sidebar-active-text: #2f3b4c;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #fcf7f3;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #f4ebe4;
+  --bg-glass: rgba(252, 247, 243, 0.94);
+
+  --primary: #4a6585;
+  --primary-hover: #3b5370;
+  --primary-light: #e9eff6;
+  --primary-glow: rgba(74, 101, 133, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #f2b79c;
+  --accent-highlight-hover: #eba58a;
+  --accent-secondary: #d98f72;
+  --accent-chip: #fbeae1;
+  --accent-chip-text: #8a4a33;
+
+  --border-subtle: #f0e6de;
+  --border-medium: #e2d3c7;
+  --border-focus: #4a6585;
+
+  --text-primary: #26303d;
+  --text-secondary: #556375;
+  --text-muted: #617185;
+  --text-eyebrow: #a8573a;
+
+  --badge-bg: #fbeae1;
+  --badge-text: #8a4a33;
+  --badge-border: #f3d3c2;
+
+  --shadow-sm: 0 1px 3px rgba(47, 59, 76, 0.04);
+  --shadow-md: 0 4px 16px rgba(47, 59, 76, 0.06);
+  --shadow-lg: 0 12px 32px rgba(47, 59, 76, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fdfaf7 100%);
+  --gradient-brand: linear-gradient(135deg, #4a6585 0%, #f2b79c 100%);
+
+  /* Extended tokens */
+  --primary-deep: #2f4560;
+  --border-subtle-nav: #d98f72;
+  --table-header-bg: #efe3da;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fbe0d2;
+  --highlight-text: #2f3b4c;
+  --highlight-border: #4a6585;
+  --highlight-shadow: 0 2px 6px rgba(74, 101, 133, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Rose Quartz (Dusky Plum-Gray, Blush Canvas & Dusty Rose)
+   ========================================================================== */
+[data-theme="rose-quartz"] {
+  --sidebar-bg: #3b3140;
+  --sidebar-text: #f3e8ee;
+  --sidebar-text-muted: #a897a8;
+  --sidebar-border: rgba(243, 232, 238, 0.12);
+  --sidebar-active-bg: #e8b9c8;
+  --sidebar-active-text: #3b3140;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #fbf6f7;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #f3e9ec;
+  --bg-glass: rgba(251, 246, 247, 0.94);
+
+  --primary: #9a566f;
+  --primary-hover: #814660;
+  --primary-light: #f9e9ef;
+  --primary-glow: rgba(154, 86, 111, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #e8b9c8;
+  --accent-highlight-hover: #dea6b8;
+  --accent-secondary: #b8869a;
+  --accent-chip: #f9e9ef;
+  --accent-chip-text: #7a3c55;
+
+  --border-subtle: #f0e3e8;
+  --border-medium: #e1ccd5;
+  --border-focus: #9a566f;
+
+  --text-primary: #2e2330;
+  --text-secondary: #62525f;
+  --text-muted: #74647a;
+  --text-eyebrow: #9a566f;
+
+  --badge-bg: #f9e9ef;
+  --badge-text: #7a3c55;
+  --badge-border: #efcddb;
+
+  --shadow-sm: 0 1px 3px rgba(59, 49, 64, 0.04);
+  --shadow-md: 0 4px 16px rgba(59, 49, 64, 0.06);
+  --shadow-lg: 0 12px 32px rgba(59, 49, 64, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fdf9fa 100%);
+  --gradient-brand: linear-gradient(135deg, #e8b9c8 0%, #9a566f 100%);
+
+  /* Extended tokens */
+  --primary-deep: #6f3a50;
+  --border-subtle-nav: #c98aa3;
+  --table-header-bg: #f0dfe5;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #f7d9e4;
+  --highlight-text: #3b3140;
+  --highlight-border: #9a566f;
+  --highlight-shadow: 0 2px 6px rgba(154, 86, 111, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Soft Pastels (Amethyst Twilight, Periwinkle Dream & Pastel Cloud)
+   ========================================================================== */
+[data-theme="soft-pastels"] {
+  --sidebar-bg: #2a223e;
+  --sidebar-text: #f3e8fc;
+  --sidebar-text-muted: #b8a6d4;
+  --sidebar-border: rgba(200, 182, 255, 0.12);
+  --sidebar-active-bg: #c8b6ff;
+  --sidebar-active-text: #1e1630;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-hover-text: #ffffff;
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
+
+  --bg-app: #f7f4fc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #eee7f7;
+  --bg-glass: rgba(247, 244, 252, 0.94);
+
+  --primary: #7c5cbf;
+  --primary-hover: #6949ad;
+  --primary-light: #ede4fa;
+  --primary-glow: rgba(124, 92, 191, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #c8b6ff;
+  --accent-highlight-hover: #b8a3fa;
+  --accent-secondary: #ffd6ff;
+  --accent-chip: #ede4fa;
+  --accent-chip-text: #5e3da8;
+
+  --border-subtle: #e8def4;
+  --border-medium: #d6c6ea;
+  --border-focus: #7c5cbf;
+
+  --text-primary: #231b33;
+  --text-secondary: #5a4c73;
+  --text-muted: #8c7ba8;
+  --text-eyebrow: #7c5cbf;
+
+  --badge-bg: #ede4fa;
+  --badge-text: #5e3da8;
+  --badge-border: #d7c5f2;
+
+  --shadow-sm: 0 1px 3px rgba(42, 34, 62, 0.05);
+  --shadow-md: 0 4px 16px rgba(42, 34, 62, 0.07);
+  --shadow-lg: 0 12px 32px rgba(42, 34, 62, 0.09);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fbf9fe 100%);
+  --gradient-brand: linear-gradient(135deg, #c8b6ff 0%, #ffd6ff 100%);
+
+  /* Extended tokens */
+  --primary-deep: #5e3da8;
+  --border-subtle-nav: #b8a6d4;
+  --table-header-bg: #ede4fa;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #ffd6ff;
+  --highlight-text: #231b33;
+  --highlight-border: #7c5cbf;
+  --highlight-shadow: 0 2px 6px rgba(124, 92, 191, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Enchanted Forest (Midnight Forest, Dusty Heather & Snow Mist)
+   ========================================================================== */
+[data-theme="enchanted-forest"] {
+  --sidebar-bg: #1d1e2c;
+  --sidebar-text: #f7ebec;
+  --sidebar-text-muted: #9594a8;
+  --sidebar-border: rgba(247, 235, 236, 0.09);
+  --sidebar-active-bg: #ac9fbb;
+  --sidebar-active-text: #1d1e2c;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.07);
+  --sidebar-hover-text: #ffffff;
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #f7ebec;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #ebe0e2;
+  --bg-glass: rgba(247, 235, 236, 0.94);
+
+  --primary: #59656f;
+  --primary-hover: #48535c;
+  --primary-light: #ece3eb;
+  --primary-glow: rgba(89, 101, 111, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #ac9fbb;
+  --accent-highlight-hover: #9b8da9;
+  --accent-secondary: #ddbdd5;
+  --accent-chip: #ece3eb;
+  --accent-chip-text: #41334f;
+
+  --border-subtle: #e5d8da;
+  --border-medium: #d4c4c7;
+  --border-focus: #59656f;
+
+  --text-primary: #1d1e2c;
+  --text-secondary: #4a4d61;
+  --text-muted: #797c91;
+  --text-eyebrow: #59656f;
+
+  --badge-bg: #ece3eb;
+  --badge-text: #41334f;
+  --badge-border: #ddbdd5;
+
+  --shadow-sm: 0 1px 3px rgba(29, 30, 44, 0.05);
+  --shadow-md: 0 4px 16px rgba(29, 30, 44, 0.07);
+  --shadow-lg: 0 12px 32px rgba(29, 30, 44, 0.09);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf3f4 100%);
+  --gradient-brand: linear-gradient(135deg, #ac9fbb 0%, #59656f 100%);
+
+  /* Extended tokens */
+  --primary-deep: #48535c;
+  --border-subtle-nav: #ac9fbb;
+  --table-header-bg: #ebe0e2;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #ddbdd5;
+  --highlight-text: #1d1e2c;
+  --highlight-border: #ac9fbb;
+  --highlight-shadow: 0 2px 6px rgba(172, 159, 187, 0.25);
+}

@@ -2,17 +2,26 @@
 
 @import "tailwindcss";
 
+/* Theme atmospheres: one file per collection */
+@import "./themes/editorial.css";
+@import "./themes/oceanic.css";
+@import "./themes/pastel.css";
+@import "./themes/botanical.css";
+@import "./themes/executive.css";
+
 /* ==========================================================================
-   EKA Design System - Variables & Theme Atmospheres
-   :root holds only values that are the SAME for every theme.
-   Every theme (including sky-blue) is a [data-theme="..."] block.
-   The active theme is set on <html> by src/theme.js (temporary) and later
-   by the Appearance settings page.
+   EKA Design System - shared tokens
+   :root holds only values that are the SAME for every theme (radii, fonts, layout,
+   status and document-type colours) plus shared animations.
+   Every theme is a [data-theme="..."] block in src/styles/themes/<collection>.css,
+   imported below. The active theme is set on <html> by src/appearance/theme.js.
    ========================================================================== */
 
-/* ---------- Common (never change per theme) ---------- */
+/* ==========================================================================
+   Common tokens (never change per theme)
+   ========================================================================== */
 :root {
-  /* System Radii */
+  /* ---------- Radii ---------- */
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -22,7 +31,7 @@
   --radius-full: 9999px;
   --radius-table: 28px;
 
-  /* Typography */
+  /* ---------- Typography: font families ---------- */
   --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
   --font-sans:
     "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -30,806 +39,78 @@
   --font-mono:
     "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Layout Dimensions */
+  /* ---------- Typography: size scale ----------
+     Sizes are in rem so they follow the root font size. The px values in the
+     comments are approximate and assume a root of ~14.5px (Standard) and
+     ~16.5px (Large). */
+
+  /* Adaptive T-Shirt Font Scale (the source of truth; everything below points here) */
+  --font-size-3xs: 0.58rem; /* ~8.4px  (Standard) | ~9.6px  (Large) - Micro badges, tiny indicators, keycap subtext */
+  --font-size-2xs: 0.65rem; /* ~9.4px  (Standard) | ~10.7px (Large) - Compact badges, metadata pills, timestamps */
+  --font-size-xs:  0.72rem; /* ~10.4px (Standard) | ~11.9px (Large) - Eyebrows, caption metadata, helper text */
+  --font-size-sm:  0.78rem; /* ~11.3px (Standard) | ~12.9px (Large) - Table headers/cells, hints, compact buttons */
+  --font-size-md:  0.84rem; /* ~12.2px (Standard) | ~13.9px (Large) - Standard buttons, dropdown items, inputs, tabs */
+  --font-size-base:0.95rem; /* ~13.8px (Standard) | ~15.7px (Large) - Primary body copy, chat messages, modal copy */
+  --font-size-lg:  1.10rem; /* ~16.0px (Standard) | ~18.2px (Large) - Card titles, FAQ questions, lead paragraphs, H4 */
+  --font-size-xl:  1.25rem; /* ~18.1px (Standard) | ~20.6px (Large) - Subheadings, modal upload titles, metric stats */
+  --font-size-2xl: 1.35rem; /* ~19.6px (Standard) | ~22.3px (Large) - Section titles, modal headers, H3 */
+  --font-size-3xl: 1.60rem; /* ~23.2px (Standard) | ~26.4px (Large) - Major headlines, drawer titles, H2 */
+  --font-size-4xl: 2.20rem; /* ~31.9px (Standard) | ~36.3px (Large) - Page titles, article hero heads, H1 */
+  --font-size-5xl: 2.80rem; /* ~40.6px (Standard) | ~46.2px (Large) - Display hero titles, landing page banners */
+
+  /* Ergonomic shorthand aliases (same values, shorter names) */
+  --fs-3xs: var(--font-size-3xs);
+  --fs-2xs: var(--font-size-2xs);
+  --fs-xs:  var(--font-size-xs);
+  --fs-sm:  var(--font-size-sm);
+  --fs-md:  var(--font-size-md);
+  --fs-base:var(--font-size-base);
+  --fs-lg:  var(--font-size-lg);
+  --fs-xl:  var(--font-size-xl);
+  --fs-2xl: var(--font-size-2xl);
+  --fs-3xl: var(--font-size-3xl);
+  --fs-4xl: var(--font-size-4xl);
+  --fs-5xl: var(--font-size-5xl);
+
+  /* Semantic aliases (name the role, not the size) */
+  --font-size-micro:      var(--font-size-3xs);
+  --font-size-badge:      var(--font-size-2xs);
+  --font-size-eyebrow:    var(--font-size-xs);
+  --font-size-caption:    var(--font-size-xs);
+  --font-size-hint:       var(--font-size-sm);
+  --font-size-control:    var(--font-size-md);
+  --font-size-body:       var(--font-size-base);
+  --font-size-title-sm:   var(--font-size-lg);
+  --font-size-title-md:   var(--font-size-xl);
+  --font-size-title-lg:   var(--font-size-2xl);
+  --font-size-title-xl:   var(--font-size-3xl);
+  --font-size-title-page: var(--font-size-4xl);
+  --font-size-display:    var(--font-size-5xl);
+
+  /* Heading scale aliases (for h1-h5 elements) */
+  --font-size-h1: var(--font-size-4xl); /* 2.20rem */
+  --font-size-h2: var(--font-size-3xl); /* 1.60rem */
+  --font-size-h3: var(--font-size-2xl); /* 1.35rem */
+  --font-size-h4: var(--font-size-lg);  /* 1.10rem */
+  --font-size-h5: var(--font-size-base);/* 0.95rem */
+
+  /* ---------- Layout dimensions ---------- */
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 72px;
   --header-height: 72px;
 
-  /* Transitions */
+  /* ---------- Transitions ---------- */
   --transition-fast: 160ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 260ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 420ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ==========================================================================
-   ATMOSPHERE 1: Sunlit Paper (Warm Parchment & Forest Pine)
-   ========================================================================== */
-[data-theme="sunlit-paper"] {
-  /* Sidebar Palette (Deep Forest Pine / Evergreen) */
-  --sidebar-bg: #163830;
-  --sidebar-text: #c5d8d1;
-  --sidebar-text-muted: #7e9d94;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-active-bg: #f5cb68;
-  --sidebar-active-text: #192520;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
-
-  /* Main Workspace Canvas (Sunlit Paper Parchment) */
-  --bg-app: #fbf7ee;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #f3ece0;
-  --bg-glass: rgba(251, 247, 238, 0.92);
-
-  /* Primary & Accent Tones */
-  --primary: #1e453b;
-  --primary-hover: #163830;
-  --primary-light: #e8f0eb;
-  --primary-glow: rgba(22, 56, 48, 0.15);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #f5cb68;
-  --accent-highlight-hover: #e8be58;
-  --accent-secondary: #d97757;
-  --accent-chip: #dbe8de;
-  --accent-chip-text: #214336;
-
-  /* Borders & Dividers */
-  --border-subtle: #eee6d8;
-  --border-medium: #e2d7c5;
-  --border-focus: #163830;
-
-  /* Typography Colors */
-  --text-primary: #1a2722;
-  --text-secondary: #5a6e66;
-  --text-muted: #8b9c95;
-  --text-eyebrow: #d97757;
-
-  /* Badges & Pills */
-  --badge-bg: #eef4f0;
-  --badge-text: #1c4538;
-  --badge-border: #d4e3db;
-
-  /* Shadows */
-  --shadow-sm:
-    0 1px 3px rgba(35, 30, 20, 0.04), 0 1px 2px rgba(35, 30, 20, 0.03);
-  --shadow-md:
-    0 4px 16px rgba(35, 30, 20, 0.06), 0 2px 6px rgba(35, 30, 20, 0.03);
-  --shadow-lg:
-    0 12px 32px rgba(35, 30, 20, 0.08), 0 4px 12px rgba(35, 30, 20, 0.04);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);
-  --gradient-brand: linear-gradient(135deg, #f5cb68 0%, #d97757 100%);
-
-  /* Extended tokens */
-  --primary-deep: #0f2b24;
-  --border-subtle-nav: #d4a338;
-  --table-header-bg: #e9ded0;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #fef08a;
-  --highlight-text: #192520;
-  --highlight-border: #d97757;
-  --highlight-shadow: 0 2px 6px rgba(217, 119, 87, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE 2: Lagoon Glass (Ocean Deep Slate & Turquoise)
-   ========================================================================== */
-[data-theme="lagoon-glass"] {
-  --sidebar-bg: #0c2630;
-  --sidebar-text: #b9d7e0;
-  --sidebar-text-muted: #6e94a1;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-active-bg: #4fd1c5;
-  --sidebar-active-text: #08212a;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
-
-  --bg-app: #f1f7f6;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #e2edeb;
-  --bg-glass: rgba(241, 247, 246, 0.92);
-
-  --primary: #0d9488;
-  --primary-hover: #0f766e;
-  --primary-light: #ccfbf1;
-  --primary-glow: rgba(13, 148, 136, 0.2);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #4fd1c5;
-  --accent-highlight-hover: #2dd4bf;
-  --accent-secondary: #0284c7;
-  --accent-chip: #ccfbf1;
-  --accent-chip-text: #115e59;
-
-  --border-subtle: #dbe9e7;
-  --border-medium: #c7dcd9;
-  --border-focus: #0d9488;
-
-  --text-primary: #0f272e;
-  --text-secondary: #4a666e;
-  --text-muted: #79979f;
-  --text-eyebrow: #0284c7;
-
-  --badge-bg: #e0f2fe;
-  --badge-text: #0369a1;
-  --badge-border: #bae6fd;
-
-  --shadow-sm: 0 1px 3px rgba(12, 38, 48, 0.04);
-  --shadow-md: 0 4px 16px rgba(12, 38, 48, 0.06);
-  --shadow-lg: 0 12px 32px rgba(12, 38, 48, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f7fbfa 100%);
-  --gradient-brand: linear-gradient(135deg, #4fd1c5 0%, #0284c7 100%);
-
-  /* Extended tokens */
-  --primary-deep: #134e4a;
-  --border-subtle-nav: #38b2ac;
-  --table-header-bg: #cfe3e0;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #99f6e4;
-  --highlight-text: #08212a;
-  --highlight-border: #0d9488;
-  --highlight-shadow: 0 2px 6px rgba(13, 148, 136, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE: Orchid Dusk (Soft Lavender, Pastel Plum, Deep Violet & Royal Aubergine)
-   Palette: Soft Lavender (#E6E6FA), Pastel Plum (#A87CA0), Deep Violet (#5E2B6D), Royal Aubergine (#2A0E3C)
-   ========================================================================== */
-[data-theme="orchid-dusk"] {
-  /* Sidebar Palette (Royal Aubergine #2A0E3C + Soft Lavender #E6E6FA) */
-  --sidebar-bg: #2a0e3c;
-  --sidebar-text: #e6e6fa;
-  --sidebar-text-muted: #a87ca0;
-  --sidebar-border: rgba(230, 230, 250, 0.12);
-  --sidebar-active-bg: #5e2b6d;
-  --sidebar-active-text: #ffffff;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  /* Main Workspace Canvas (Soft Lavender Tinted Mist & Pure White Surfaces) */
-  --bg-app: #f6f3fa;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #ede7f6;
-  --bg-glass: rgba(246, 243, 250, 0.94);
-
-  /* Primary & Accent Tones (Deep Violet #5E2B6D & Pastel Plum #A87CA0) */
-  --primary: #5e2b6d;
-  --primary-hover: #451f50;
-  --primary-light: #f3eff9;
-  --primary-glow: rgba(94, 43, 109, 0.2);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #a87ca0;
-  --accent-highlight-hover: #92668a;
-  --accent-secondary: #5e2b6d;
-  --accent-chip: #e6e6fa;
-  --accent-chip-text: #2a0e3c;
-
-  /* Borders & Dividers */
-  --border-subtle: #e4dbf0;
-  --border-medium: #cbb9df;
-  --border-focus: #5e2b6d;
-
-  /* Typography Colors (Royal Aubergine #2A0E3C & Deep Violet #5E2B6D) */
-  --text-primary: #2a0e3c;
-  --text-secondary: #5e2b6d;
-  --text-muted: #8c6e8e;
-  --text-eyebrow: #5e2b6d;
-
-  /* Badges & Pills */
-  --badge-bg: #f3eff9;
-  --badge-text: #5e2b6d;
-  --badge-border: #a87ca0;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(42, 14, 60, 0.04);
-  --shadow-md: 0 4px 16px rgba(42, 14, 60, 0.06);
-  --shadow-lg: 0 12px 32px rgba(42, 14, 60, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf7fd 100%);
-  --gradient-brand: linear-gradient(135deg, #a87ca0 0%, #5e2b6d 100%);
-
-  /* Extended tokens */
-  --primary-deep: #33163c;
-  --border-subtle-nav: #9c7194;
-  --table-header-bg: #ded3ed;
-    --table-row-hover: #e1f0fa;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #e6e6fa;
-  --highlight-text: #2a0e3c;
-  --highlight-border: #5e2b6d;
-  --highlight-shadow: 0 2px 6px rgba(94, 43, 109, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE 4: Citrus Studio (Deep Hunter Moss & Golden Zest)
-   ========================================================================== */
-[data-theme="citrus-studio"] {
-  --sidebar-bg: #1c2b1e;
-  --sidebar-text: #cde0cf;
-  --sidebar-text-muted: #79977c;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-active-bg: #facc15;
-  --sidebar-active-text: #1a261c;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
-
-  --bg-app: #f6f5ec;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #eae8d9;
-  --bg-glass: rgba(246, 245, 236, 0.92);
-
-  --primary: #4d7c0f;
-  --primary-hover: #3f6212;
-  --primary-light: #ecfccb;
-  --primary-glow: rgba(77, 124, 15, 0.2);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #facc15;
-  --accent-highlight-hover: #eab308;
-  --accent-secondary: #ea580c;
-  --accent-chip: #ecfccb;
-  --accent-chip-text: #3f6212;
-
-  --border-subtle: #e6e3ce;
-  --border-medium: #d4cfb6;
-  --border-focus: #4d7c0f;
-
-  --text-primary: #1f2a1e;
-  --text-secondary: #576554;
-  --text-muted: #889885;
-  --text-eyebrow: #ea580c;
-
-  --badge-bg: #fef9c3;
-  --badge-text: #854d0e;
-  --badge-border: #fef08a;
-
-  --shadow-sm: 0 1px 3px rgba(28, 43, 30, 0.04);
-  --shadow-md: 0 4px 16px rgba(28, 43, 30, 0.06);
-  --shadow-lg: 0 12px 32px rgba(28, 43, 30, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f9f9f2 100%);
-  --gradient-brand: linear-gradient(135deg, #facc15 0%, #84cc16 100%);
-
-  /* Extended tokens */
-  --primary-deep: #2d4610;
-  --border-subtle-nav: #d4a012;
-  --table-header-bg: #dedbc4;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #fef08a;
-  --highlight-text: #1f2a1e;
-  --highlight-border: #ea580c;
-  --highlight-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE: Noir Expressionist (Film Noir Stark High-Contrast)
-   ========================================================================== */
-[data-theme="noir-expressionist"] {
-  --sidebar-bg: #0b0b0c;
-  --sidebar-text: #f4f4f5;
-  --sidebar-text-muted: #8e8e93;
-  --sidebar-border: rgba(255, 255, 255, 0.12);
-  --sidebar-active-bg: #ffffff;
-  --sidebar-active-text: #0b0b0c;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  --bg-app: #f5f5f7; /* Soft Mist Grey background to protect the eyes */
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #e5e5ea;
-  --bg-glass: rgba(245, 245, 247, 0.94);
-
-  --primary: #000000;
-  --primary-hover: #1c1c1e;
-  --primary-light: #e5e5ea;
-  --primary-glow: rgba(0, 0, 0, 0.06);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #000000;
-  --accent-highlight-hover: #2c2c2e;
-  --accent-secondary: #1c1c1e;
-  --accent-chip: #e5e5ea;
-  --accent-chip-text: #000000;
-
-  --border-subtle: #1c1c1e; /* Dark Charcoal Borders instead of solid pitch black */
-  --border-medium: #1c1c1e;
-  --border-focus: #000000;
-
-  --text-primary: #1c1c1e; /* Deep charcoal for eye comfort */
-  --text-secondary: #48484a;
-  --text-muted: #8e8e93;
-  --text-eyebrow: #000000;
-
-  --badge-bg: #ffffff;
-  --badge-text: #000000;
-  --badge-border: #1c1c1e;
-
-  /* Expressive Film Noir Hybrid Shadows (Soft Smoky Blur + Hard Edge woodcut offset) */
-  --shadow-sm: 2px 2px 6px rgba(0, 0, 0, 0.12), 1px 1px 0px #000000;
-  --shadow-md: 5px 5px 12px rgba(0, 0, 0, 0.15), 2px 2px 0px #000000;
-  --shadow-lg: 10px 10px 24px rgba(0, 0, 0, 0.18), 3px 3px 0px #000000;
-
-  --gradient-card: none;
-  --gradient-brand: linear-gradient(135deg, #000000 0%, #48484a 100%);
-
-  /* Extended tokens */
-  --primary-deep: #000000;
-  --border-subtle-nav: #737377;
-  --table-header-bg: #d6d6dc;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #000000;
-  --highlight-text: #ffffff;
-  --highlight-border: #000000;
-  --highlight-shadow: 2px 2px 0px #000000;
-}
-
-/* ==========================================================================
-   ATMOSPHERE 8: Space Steel (Refined Metallic Slate & Navy)
-   ========================================================================== */
-[data-theme="space-steel"] {
-  --sidebar-bg: #0b132b;
-  --sidebar-text: #e2e8f0;
-  --sidebar-text-muted: #8a99ad;
-  --sidebar-border: rgba(226, 232, 240, 0.12);
-  --sidebar-active-bg: #1c2541;
-  --sidebar-active-text: #ffffff;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.04);
-
-  --bg-app: #e6e8ea; /* Clean, polished metallic silver-grey */
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #f1f3f5;
-  --bg-glass: rgba(230, 232, 234, 0.94);
-
-  --primary: #1c2541;
-  --primary-hover: #0b132b;
-  --primary-light: #e6e8ea;
-  --primary-glow: rgba(28, 37, 65, 0.08);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #8a99ad;
-  --accent-highlight-hover: #1c2541;
-  --accent-secondary: #1c2541;
-  --accent-chip: #e6e8ea;
-  --accent-chip-text: #1c2541;
-
-  --border-subtle: #cbd5e1;
-  --border-medium: #8a99ad;
-  --border-focus: #1c2541;
-
-  --text-primary: #0b132b;
-  --text-secondary: #1c2541;
-  --text-muted: #5e6b7c;
-  --text-eyebrow: #8a99ad;
-
-  --badge-bg: #e6e8ea;
-  --badge-text: #0b132b;
-  --badge-border: #8a99ad;
-
-  --shadow-sm: 0 1px 3px rgba(11, 19, 43, 0.03);
-  --shadow-md: 0 4px 16px rgba(11, 19, 43, 0.05);
-  --shadow-lg: 0 12px 32px rgba(11, 19, 43, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f5f7f8 100%);
-  --gradient-brand: linear-gradient(135deg, #0b132b 0%, #1c2541 100%);
-
-  /* Extended tokens */
-  --primary-deep: #050914;
-  --border-subtle-nav: #7a8b9f;
-  --table-header-bg: #dbe0e5;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #bae6fd;
-  --highlight-text: #0b132b;
-  --highlight-border: #1c2541;
-  --highlight-shadow: 0 2px 6px rgba(28, 37, 65, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE 9: Executive Gold (Luxury Alabaster & Gold Contrast)
-   ========================================================================== */
-[data-theme="executive-gold"] {
-  --sidebar-bg: #000000; /* Pure black sidebar */
-  --sidebar-text: #e5e5e5;
-  --sidebar-text-muted: #fca311;
-  --sidebar-border: rgba(252, 163, 17, 0.25);
-  --sidebar-active-bg: #fca311; /* Rich Gold */
-  --sidebar-active-text: #000000;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  --bg-app: #f4f4f6; /* Warm Alabaster grey */
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #eaeaea;
-  --bg-glass: rgba(244, 244, 246, 0.94);
-
-  --primary: #14213d;
-  --primary-hover: #000000;
-  --primary-light: #e5e5e5;
-  --primary-glow: rgba(20, 33, 61, 0.08);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #fca311;
-  --accent-highlight-hover: #000000;
-  --accent-secondary: #fca311;
-  --accent-chip: #e5e5e5;
-  --accent-chip-text: #14213d;
-
-  --border-subtle: #d5d5d8;
-  --border-medium: #14213d;
-  --border-focus: #fca311;
-
-  --text-primary: #000000;
-  --text-secondary: #14213d;
-  --text-muted: #7f8c8d;
-  --text-eyebrow: #fca311;
-
-  --badge-bg: #14213d;
-  --badge-text: #ffffff;
-  --badge-border: #fca311;
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-  --gradient-brand: linear-gradient(135deg, #14213d 0%, #fca311 100%);
-
-  /* Extended tokens */
-  --primary-deep: #000000;
-  --border-subtle-nav: #e5930e;
-  --table-header-bg: #dededf;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #fde047;
-  --highlight-text: #000000;
-  --highlight-border: #fca311;
-  --highlight-shadow: 0 2px 6px rgba(252, 163, 17, 0.3);
-}
-
-/* ==========================================================================
-   ATMOSPHERE 10: Nordic Sunset (Aqua, Amber & Ochre)
-   ========================================================================== */
-[data-theme="nordic-sunset"] {
-  --sidebar-bg: #023047;
-  --sidebar-text: #8ecae6;
-  --sidebar-text-muted: #219ebc;
-  --sidebar-border: rgba(142, 202, 230, 0.15);
-  --sidebar-active-bg: #ffb703;
-  --sidebar-active-text: #023047;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  --bg-app: #f0f7fa; /* Sky mist grey background */
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #e1eff5;
-  --bg-glass: rgba(240, 247, 250, 0.94);
-
-  --primary: #023047;
-  --primary-hover: #219ebc;
-  --primary-light: #8ecae6;
-  --primary-glow: rgba(2, 48, 71, 0.08);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #ffb703;
-  --accent-highlight-hover: #fb8500;
-  --accent-secondary: #fb8500;
-  --accent-chip: #8ecae6;
-  --accent-chip-text: #023047;
-
-  --border-subtle: #cbe3f0;
-  --border-medium: #219ebc;
-  --border-focus: #023047;
-
-  --text-primary: #023047;
-  --text-secondary: #219ebc;
-  --text-muted: #7aa1b8;
-  --text-eyebrow: #fb8500;
-
-  --badge-bg: #023047;
-  --badge-text: #ffffff;
-  --badge-border: #ffb703;
-
-  --shadow-sm: 0 1px 3px rgba(2, 48, 71, 0.03);
-  --shadow-md: 0 4px 16px rgba(2, 48, 71, 0.05);
-  --shadow-lg: 0 12px 32px rgba(2, 48, 71, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6fbfd 100%);
-  --gradient-brand: linear-gradient(135deg, #023047 0%, #fb8500 100%);
-
-  /* Extended tokens */
-  --primary-deep: #011b27;
-  --border-subtle-nav: #ea8c00;
-  --table-header-bg: #cee2ec;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #fed7aa;
-  --highlight-text: #023047;
-  --highlight-border: #fb8500;
-  --highlight-shadow: 0 2px 6px rgba(251, 133, 0, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE 11: Vintage Linen (Slate, Mauve & Linen)
-   ========================================================================== */
-[data-theme="vintage-linen"] {
-  --sidebar-bg: #22223b;
-  --sidebar-text: #f2e9e4;
-  --sidebar-text-muted: #c9ada7;
-  --sidebar-border: rgba(201, 173, 167, 0.15);
-  --sidebar-active-bg: #c9ada7;
-  --sidebar-active-text: #22223b;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  --bg-app: #f2e9e4; /* Warm linen canvas */
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #e6ded9;
-  --bg-glass: rgba(242, 233, 228, 0.94);
-
-  --primary: #4a4e69;
-  --primary-hover: #22223b;
-  --primary-light: #f2e9e4;
-  --primary-glow: rgba(74, 78, 105, 0.08);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #c9ada7;
-  --accent-highlight-hover: #9a8c98;
-  --accent-secondary: #9a8c98;
-  --accent-chip: #c9ada7;
-  --accent-chip-text: #22223b;
-
-  --border-subtle: #d3c2bd;
-  --border-medium: #9a8c98;
-  --border-focus: #4a4e69;
-
-  --text-primary: #22223b;
-  --text-secondary: #4a4e69;
-  --text-muted: #9a8c98;
-  --text-eyebrow: #c9ada7;
-
-  --badge-bg: #22223b;
-  --badge-text: #ffffff;
-  --badge-border: #c9ada7;
-
-  --shadow-sm: 0 1px 3px rgba(34, 34, 59, 0.03);
-  --shadow-md: 0 4px 16px rgba(34, 34, 59, 0.05);
-  --shadow-lg: 0 12px 32px rgba(34, 34, 59, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf8f7 100%);
-  --gradient-brand: linear-gradient(135deg, #22223b 0%, #c9ada7 100%);
-
-  /* Extended tokens */
-  --primary-deep: #161626;
-  --border-subtle-nav: #b59b95;
-  --table-header-bg: #dad0c9;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #e2d5de;
-  --highlight-text: #22223b;
-  --highlight-border: #4a4e69;
-  --highlight-shadow: 0 2px 6px rgba(74, 78, 105, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE: Midnight Copper (Celestial Midnight, Ivory & Burnt Copper)
-   ========================================================================== */
-[data-theme="midnight-copper"] {
-  --sidebar-bg: #0f172a;
-  --sidebar-text: #cbd5e1;
-  --sidebar-text-muted: #64748b;
-  --sidebar-border: rgba(203, 213, 225, 0.12);
-  --sidebar-active-bg: #f97316;
-  --sidebar-active-text: #ffffff;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  --bg-app: #f8fafc; /* Elegant ivory slate background */
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #f1f5f9;
-  --bg-glass: rgba(248, 250, 252, 0.94);
-
-  --primary: #ea580c;
-  --primary-hover: #c2410c;
-  --primary-light: #ffedd5;
-  --primary-glow: rgba(234, 88, 12, 0.12);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #f97316;
-  --accent-highlight-hover: #ea580c;
-  --accent-secondary: #ea580c;
-  --accent-chip: #ffedd5;
-  --accent-chip-text: #9a3412;
-
-  --border-subtle: #e2e8f0;
-  --border-medium: #cbd5e1;
-  --border-focus: #ea580c;
-
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --text-eyebrow: #ea580c;
-
-  --badge-bg: #0f172a;
-  --badge-text: #ffffff;
-  --badge-border: #f97316;
-
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
-  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.09);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fafbfd 100%);
-  --gradient-brand: linear-gradient(135deg, #0f172a 0%, #f97316 100%);
-
-  /* Extended tokens */
-  --primary-deep: #7c2d12;
-  --border-subtle-nav: #ea580c;
-  --table-header-bg: #e2e8f0;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #ffedd5;
-  --highlight-text: #0f172a;
-  --highlight-border: #ea580c;
-  --highlight-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE 14: Sky Blue Clarity (Minimal Morning Sky, Azure & Slate Ink)
-   YOUR TUNED VERSION (default via src/theme.js until Appearance settings exist)
-   Eye-Comfort Light Canvas + Deep Midnight Sky Sidebar + Luminous Azure Accents
-   ========================================================================== */
-[data-theme="sky-blue"] {
-  /* Sidebar Palette (Deep Midnight Sky / Celestial Blue) */
-  --sidebar-bg: #0c233c;
-  --sidebar-text: #e0f2fe;
-  --sidebar-text-muted: #7ea9c8;
-  --sidebar-border: rgba(224, 242, 254, 0.1);
-  --sidebar-active-bg: #38bdf8;
-  --sidebar-active-text: #082035;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  /* Main Workspace Canvas (Soft Morning Mist / Pale Sky Blue White) */
-  --bg-app: #f0f6fc;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #e2f0fb;
-  --table-header-bg: #cfe4f5;
-  --bg-glass: rgba(240, 246, 252, 0.94);
-
-  /* Primary & Accent Tones (Calm Sky Blue 600 & Vivid Sky Azure) */
-  --primary: #0a75aa;
-  --primary-hover: #4eb4eb;
-  --primary-deep: #075f8c;
-  --primary-light: #e0f2fe;
-  --primary-glow: rgba(2, 132, 199, 0.18);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #38bdf8;
-  --accent-highlight-hover: #0ea5e9;
-  --accent-secondary: #0284c7;
-  --accent-chip: #e0f2fe;
-  --accent-chip-text: #0369a1;
-
-  /* Borders & Dividers (Ultra-Soft Sky Tinted Lines) */
-  --border-subtle: #d9eaf5;
-  --border-subtle-nav: #4aa9e9;
-  --border-medium: #b9daee;
-  --border-focus: #0284c7;
-
-  /* Typography Colors (Deep Slate Ink - Soothing on the eyes) */
-  --text-primary: #0f2942;
-  --text-secondary: #3b5e7e;
-  --text-muted: #7293b0;
-  --text-eyebrow: #0284c7;
-
-  /* Badges & Pills */
-  --badge-bg: #e0f2fe;
-  --badge-text: #0369a1;
-  --badge-border: #bae6fd;
-
-  /* Shadows (Soft Cerulean-Tinted Ambient Shadows) */
-  --shadow-sm: 0 1px 3px rgba(12, 35, 60, 0.04);
-  --shadow-md: 0 4px 16px rgba(12, 35, 60, 0.06);
-  --shadow-lg: 0 12px 32px rgba(12, 35, 60, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f4f9fe 100%);
-  --gradient-brand: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #bae6fd;
-  --highlight-text: #082035;
-  --highlight-border: #0284c7;
-  --highlight-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
-}
-
-/* ==========================================================================
-   ATMOSPHERE: Moonlight Ocean (Noir, Deep Ocean, Midnight Sky & Moonlight)
-   Palette: Moonlight (#E1E2E1), Midnight Sky (#34495E), Deep Ocean (#1B3B6F), Noir (#001B2A)
-   ========================================================================== */
-[data-theme="moonlight-ocean"] {
-  /* Sidebar Palette (Noir #001B2A + Moonlight #E1E2E1) */
-  --sidebar-bg: #001b2a;
-  --sidebar-text: #e1e2e1;
-  --sidebar-text-muted: #8aa2b8;
-  --sidebar-border: rgba(225, 226, 225, 0.1);
-  --sidebar-active-bg: #1b3b6f;
-  --sidebar-active-text: #ffffff;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
-
-  /* Main Workspace Canvas (Soft Moonlight Cool Mist) */
-  --bg-app: #f0f3f6;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --bg-surface-subtle: #e1e8ee;
-  --bg-glass: rgba(240, 243, 246, 0.94);
-
-  /* Primary & Accent Tones (Deep Ocean #1B3B6F & Midnight Sky #34495E) */
-  --primary: #1b3b6f;
-  --primary-hover: #132a50;
-  --primary-light: #e4ebf5;
-  --primary-glow: rgba(27, 59, 111, 0.18);
-  --primary-contrast: #ffffff;
-
-  --accent-highlight: #34495e;
-  --accent-highlight-hover: #263645;
-  --accent-secondary: #1b3b6f;
-  --accent-chip: #e1e8ee;
-  --accent-chip-text: #001b2a;
-
-  /* Borders & Dividers */
-  --border-subtle: #d6dfe7;
-  --border-medium: #b4c3d2;
-  --border-focus: #1b3b6f;
-
-  /* Typography Colors */
-  --text-primary: #001b2a;
-  --text-secondary: #34495e;
-  --text-muted: #687e94;
-  --text-eyebrow: #1b3b6f;
-
-  /* Badges & Pills */
-  --badge-bg: #e4ebf5;
-  --badge-text: #1b3b6f;
-  --badge-border: #b4c3d2;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 27, 42, 0.04);
-  --shadow-md: 0 4px 16px rgba(0, 27, 42, 0.06);
-  --shadow-lg: 0 12px 32px rgba(0, 27, 42, 0.08);
-
-  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%);
-  --gradient-brand: linear-gradient(135deg, #34495e 0%, #1b3b6f 100%);
-
-  /* Extended tokens */
-  --primary-deep: #0c1a32;
-  --border-subtle-nav: #64829f;
-  --table-header-bg: #cfe0eb;
-
-  /* Theme Search Highlight Palette */
-  --highlight-bg: #d5e2f0;
-  --highlight-text: #001b2a;
-  --highlight-border: #1b3b6f;
-  --highlight-shadow: 0 2px 6px rgba(27, 59, 111, 0.25);
+/* Swatch preview tokens: resolved per element, so a swatch with data-theme="x" shows theme x's colours */
+:root,
+[data-theme] {
+  --theme-swatch-1: var(--sidebar-bg);
+  --theme-swatch-2: var(--bg-app);
+  --theme-swatch-3: var(--accent-highlight, var(--primary));
 }
 
 /* ==========================================================================
@@ -926,7 +207,9 @@
   --file-fig-border: var(--doc-fig-border);
 }
 
-/* ---------- Modal animation ---------- */
+/* ==========================================================================
+   Modal animation
+   ========================================================================== */
 @keyframes modal-fade-in {
   from {
     opacity: 0;
@@ -986,7 +269,9 @@
   }
 }
 
-/* ---------- Modal scroll area ---------- */
+/* ==========================================================================
+   Modal scroll area
+   ========================================================================== */
 .modal-scroll::-webkit-scrollbar {
   width: 8px;
 }
@@ -1006,5 +291,33 @@
   .modal-scroll {
     scrollbar-width: thin;
     scrollbar-color: var(--border-subtle) transparent;
+  }
+}
+
+/* ==========================================================================
+   Surprise Me dice (components/common/DiceIcon.jsx)
+   ========================================================================== */
+/* Animates the individual rotate/scale properties so the spin replaces the hover tilt while it plays. */
+@keyframes dice-spin {
+  0% {
+    rotate: 0deg;
+    scale: 0.9;
+  }
+  50% {
+    rotate: 180deg;
+    scale: 1.3;
+    color: var(--accent-highlight, var(--primary));
+  }
+  100% {
+    rotate: 360deg;
+    scale: 1;
+  }
+}
+.dice-rolling {
+  animation: dice-spin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dice-rolling {
+    animation: none;
   }
 }

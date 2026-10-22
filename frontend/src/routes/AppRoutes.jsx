@@ -23,13 +23,14 @@ import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMember
 import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
+import SettingsPage from "../pages/SettingsPage.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
   return (
     <Routes>
       {/* Redirect the root URL to the main dashboard. */}
-     <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
       {/* Public / authentication routes */}
       <Route path="/landing" element={<LandingPage />} />
@@ -71,17 +72,42 @@ function AppRoutes() {
       />
 
       {/* EKA application */}
-      <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
+      <Route
+        element={
+          <AuthProvider>
+            <AppLayout />
+          </AuthProvider>
+        }
+      >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
         <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
-        <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
-        <Route path="/documents" element={<DocumentsPage/>} />
+        <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
+        <Route path="/documents" element={<DocumentsPage />} />
         <Route path="/documents/summary" element={<DocumentSummaryPage />} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
-        <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
-        <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
-        <Route path="/settings" element={<h1>Settings</h1>} />
+
+        <Route
+          path="/analytics"
+          element={
+            <RoleGuard allowedRoles={["Admin"]}>
+              <h1>AnalyticsPage </h1>
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/organization"
+          element={
+            <RoleGuard allowedRoles={["Admin"]}>
+              <h1>OrganizationPage </h1>
+            </RoleGuard>
+          }
+        />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route
+          path="/help-support"
+          element={<h1>Answers whenever you need them.</h1>}
+        />
       </Route>
     </Routes>
   );
