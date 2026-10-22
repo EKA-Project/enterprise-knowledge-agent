@@ -124,7 +124,14 @@ function Mascot({
           : ""
       }`}
     >
-      <div className="relative isolate">
+      <div
+        className="relative isolate"
+        // Per-mascot bubble position (values come from mascotRegistry.js)
+        style={{
+          "--mascot-bubble-x": mascot.bubble.x,
+          "--mascot-bubble-y": mascot.bubble.y,
+        }}
+      >
         {/* The stage plays this state's motion; the img pops in.
             Changing playKey remounts both, so the animation replays. */}
         {/* Ground shadow (success only): shrinks while the mascot is in the air */}
