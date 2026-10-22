@@ -10,18 +10,37 @@ const IMAGES = import.meta.glob("../assets/mascot/*/*.png", {
 
 // The image-name contract: every mascot folder must contain these 19 files.
 export const IMAGE_NAMES = [
-  "angry", "cool", "copied", "deep", "digesting", "dizzy", "drop",
-  "eating", "happy", "help", "hungry", "idle", "newThread", "sad",
-  "searching", "sleep", "thinking", "uploaded", "yell",
+  "angry",
+  "cool",
+  "copied",
+  "deep",
+  "digesting",
+  "dizzy",
+  "drop",
+  "eating",
+  "happy",
+  "help",
+  "hungry",
+  "idle",
+  "newThread",
+  "sad",
+  "searching",
+  "sleep",
+  "thinking",
+  "uploaded",
+  "yell",
 ];
 
-// Selectable mascots. Orbit is added in step 5.
+// Selectable mascots. To add one: drop its 19 pngs in assets/mascot/<id>/ and add a line here.
+//   bubble.x / bubble.y: where the speech bubble sits, measured from the mascot's
+//   image box (bigger x = further right, bigger y = higher). Tune per character.
 export const MASCOTS = [
-  { id: "byte", name: "Byte" },
+  { id: "byte", name: "Byte", bubble: { x: "80%", y: "80%" } },
+  { id: "orbit", name: "Orbit", bubble: { x: "80%", y: "80%" } },
 ];
 
-// Used for fresh users and for unknown or removed ids (flips to "orbit" in step 5)
-export const DEFAULT_MASCOT_ID = "byte";
+// Used for fresh users and for unknown or removed ids
+export const DEFAULT_MASCOT_ID = "orbit";
 
 const imagePath = (id, imageName) => `../assets/mascot/${id}/${imageName}.png`;
 
