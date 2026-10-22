@@ -82,6 +82,7 @@ function AppRoutes() {
         <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>AnalyticsPage </h1></RoleGuard>} />
         <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>OrganizationPage </h1></RoleGuard>} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/help-support" element={<h1>Answers whenever you need them.</h1>} />
 
       </Route>
     </Routes>
