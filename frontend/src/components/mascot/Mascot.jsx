@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { MASCOT_STATES } from "./mascotStates.js";
+import { COMMON_STATES } from "../../mascot/mascotStates.js";
+import {
+  getMascotImage,
+  getMascotImages,
+} from "../../mascot/mascotRegistry.js";
+import { useMascot } from "../../hooks/useMascot.js";
 import usePokeReaction from "./usePokeReaction.js";
 import MascotParticles from "./MascotParticles.jsx";
 import "../../styles/mascot.css";
@@ -15,11 +20,13 @@ const TONES = {
 };
 
 /**
- * state?: a key of MASCOT_STATES (default "empty")
+ * state?: a state name (default "idle"), looked up in `states` first, then in COMMON_STATES
+ * states?: a page's own state table (same shape as COMMON_STATES)
  * message?: string, overrides the bubble text (e.g. a specific error)
  */
 function Mascot({
-  state = "empty",
+  state = "idle",
+  states, // optional: page-specific states, checked before the common ones
   message,
   framed = true, // true: tinted banner box (upload modal); false: just Byte
   pokeable = false, // true: tapping Byte makes it angry, repeated taps make it dizzy
@@ -34,8 +41,16 @@ function Mascot({
   const reacting = pokeable ? override : null;
   const activeState = reacting ?? state;
 
-  // Unknown state? Fall back to "empty" instead of crashing
-  const config = MASCOT_STATES[activeState] ?? MASCOT_STATES.empty;
+  // The mascot (byte / orbit) the user picked in Settings
+  const { mascotId, mascot } = useMascot();
+
+  // Page states first, then the common ones. Unknown state? Fall back to idle
+  // instead of crashing.
+  const config =
+    states?.[activeState] ?? COMMON_STATES[activeState] ?? COMMON_STATES.idle;
+
+  // A state stores an image NAME; the registry turns it into this mascot's file
+  const imageSrc = getMascotImage(mascotId, config.image);
 
   // During a reaction use its own bubble, not the page's custom message
   const bubbleText = reacting ? config.bubble : (message ?? config.bubble);
@@ -43,7 +58,7 @@ function Mascot({
   // Pokeable: Byte is a real <button> (keyboard and screen-reader friendly)
   const Stage = pokeable ? "button" : "div";
   const stageProps = pokeable
-    ? { type: "button", onClick: poke, "aria-label": "Poke Byte" }
+    ? { type: "button", onClick: poke, "aria-label": `Poke ${mascot.name}` }
     : {};
   // Changing this key remounts the stage and replays the animation, even on repeat taps
   const playKey = `${activeState}-${pokeId}-${replayKey}`;
@@ -92,13 +107,14 @@ function Mascot({
       { duration: 320, easing: "ease-out" },
     );
   }, [boopId]);
-  // Preload every image once, so changing state never shows a blank flash
+  // Preload only the ACTIVE mascot's images, so changing state never shows a
+  // blank flash. Runs again if the user switches mascot.
   useEffect(() => {
-    Object.values(MASCOT_STATES).forEach(({ image }) => {
+    getMascotImages(mascotId).forEach((src) => {
       const img = new Image();
-      img.src = image;
+      img.src = src;
     });
-  }, []);
+  }, [mascotId]);
 
   return (
     <div
@@ -127,7 +143,7 @@ function Mascot({
             className={`mascot-stage block ${config.motion} ${pokeable ? "cursor-pointer" : ""}`}
           >
             <img
-              src={config.image}
+              src={imageSrc}
               alt="" // decorative: the bubble text carries the meaning
               draggable={false}
               className={`mascot-swap block w-auto select-none ${imageClassName}`}

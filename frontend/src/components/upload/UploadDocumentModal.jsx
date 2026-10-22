@@ -12,6 +12,7 @@ import {
 import Modal from "../common/Modal.jsx";
 import Button from "../common/Button.jsx";
 import Mascot from "../mascot/Mascot.jsx";
+import { UPLOAD_MASCOT_STATES } from "./uploadMascotStates.js";
 import { documentCategories } from "../documents/shared/DocumentData.js";
 import UploadDropzone from "./UploadDropzone.jsx";
 import UploadProgress from "./UploadProgress.jsx";
@@ -347,6 +348,7 @@ function UploadDocumentModal({
       {/* The Mascot reacts to everything below. Pokeable only while nothing is running. */}
       <Mascot
         state={mascotState}
+        states={UPLOAD_MASCOT_STATES}
         pokeable={phase === "idle"}
         frameClassName="h-32"
         imageClassName="h-20"
