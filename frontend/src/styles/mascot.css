@@ -6,7 +6,7 @@
    ========================================================================== */
 
 /* ---------- Small helpers ---------- */
-@keyframes byte-swap {
+@keyframes mascot-swap {
   from {
     opacity: 0;
     transform: scale(0.85);
@@ -26,7 +26,7 @@
     transform: none;
   }
 }
-@keyframes byte-bob {
+@keyframes mascot-bob {
   /* gentle idle float, used after one-shot moves finish */
   0%,
   100% {
@@ -37,23 +37,23 @@
   }
 }
 
-.byte-swap {
-  animation: byte-swap 220ms cubic-bezier(0.16, 1, 0.3, 1);
+.mascot-swap {
+  animation: mascot-swap 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.byte-bubble {
+.mascot-bubble {
   animation: bubble-pop 220ms cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: bottom left;
 }
 
 /* Squash & stretch pivots at Byte's feet, not the centre */
-.byte-stage {
+.mascot-stage {
   transform-origin: 50% 90%;
 }
 
 /* ---------- Body motions (one per state) ---------- */
 
 /* Waiting for a file: slow hungry sway */
-@keyframes byte-hungry {
+@keyframes mascot-hungry {
   0%,
   100% {
     transform: translateY(-4px) rotate(3deg) scale(0.98, 1.03);
@@ -62,12 +62,12 @@
     transform: translateY(4px) rotate(3deg) scale(1.02, 0.98);
   }
 }
-.byte-m-hungry {
-  animation: byte-hungry 2.6s ease-in-out infinite;
+.mascot-m-hungry {
+  animation: mascot-hungry 2.6s ease-in-out infinite;
 }
 
 /* File hovering over the zone: eager fast bounce */
-@keyframes byte-eager {
+@keyframes mascot-eager {
   0%,
   100% {
     transform: translateY(-6px) rotate(6deg) scale(0.94, 1.12);
@@ -76,12 +76,12 @@
     transform: translateY(0) rotate(-2deg) scale(1.02, 1.04);
   }
 }
-.byte-m-eager {
-  animation: byte-eager 0.5s ease-in-out infinite;
+.mascot-m-eager {
+  animation: mascot-eager 0.5s ease-in-out infinite;
 }
 
 /* File accepted: one happy hop, then idle bob */
-@keyframes byte-happy {
+@keyframes mascot-happy {
   0% {
     transform: scale(1.2, 0.8);
   }
@@ -95,14 +95,14 @@
     transform: none;
   }
 }
-.byte-m-happy {
+.mascot-m-happy {
   animation:
-    byte-happy 0.6s ease-out,
-    byte-bob 3s ease-in-out 0.6s infinite;
+    mascot-happy 0.6s ease-out,
+    mascot-bob 3s ease-in-out 0.6s infinite;
 }
 
 /* File rejected: head-tilt wobble, once */
-@keyframes byte-confused {
+@keyframes mascot-confused {
   0% {
     transform: rotate(0);
   }
@@ -119,12 +119,12 @@
     transform: rotate(0);
   }
 }
-.byte-m-confused {
-  animation: byte-confused 0.9s ease-in-out;
+.mascot-m-confused {
+  animation: mascot-confused 0.9s ease-in-out;
 }
 
 /* Sending: chewing squash loop */
-@keyframes byte-eating {
+@keyframes mascot-eating {
   0%,
   100% {
     transform: scale(1, 1);
@@ -139,12 +139,12 @@
     transform: scale(1.1, 0.9);
   }
 }
-.byte-m-eating {
-  animation: byte-eating 0.9s ease-in-out infinite;
+.mascot-m-eating {
+  animation: mascot-eating 0.9s ease-in-out infinite;
 }
 
 /* Chunking: slow belly breathing */
-@keyframes byte-digesting {
+@keyframes mascot-digesting {
   0%,
   100% {
     transform: translateY(-3px) scale(0.96, 1.06);
@@ -153,12 +153,12 @@
     transform: translateY(3px) scale(1.04, 0.96);
   }
 }
-.byte-m-digesting {
-  animation: byte-digesting 2.4s ease-in-out infinite;
+.mascot-m-digesting {
+  animation: mascot-digesting 2.4s ease-in-out infinite;
 }
 
 /* Embedding: slow thoughtful sway */
-@keyframes byte-thinking {
+@keyframes mascot-thinking {
   0%,
   100% {
     transform: translateY(0) rotate(-4deg);
@@ -167,14 +167,14 @@
     transform: translateY(-4px) rotate(4deg);
   }
 }
-.byte-m-thinking {
-  animation: byte-thinking 3s ease-in-out infinite;
+.mascot-m-thinking {
+  animation: mascot-thinking 3s ease-in-out infinite;
 }
 
 /* Success: crouch, launch with a flip, hang, land, two small bounces, then idle bob.
    Heights are % of Byte's own size, so the jump scales with the mascot.
    Raise the two big numbers (-30% launch, -40% peak) for a higher jump. */
-@keyframes byte-victory {
+@keyframes mascot-victory {
   0% {
     transform: translateY(0) scale(1, 1);
     animation-timing-function: ease-out;
@@ -211,15 +211,15 @@
     transform: translateY(0) scale(1, 1);
   }
 }
-.byte-m-victory {
+.mascot-m-victory {
   animation:
-    byte-victory 1.4s,
-    byte-bob 3s ease-in-out 1.4s infinite; /* idle bob takes over after the jump */
+    mascot-victory 1.4s,
+    mascot-bob 3s ease-in-out 1.4s infinite; /* idle bob takes over after the jump */
 }
 
 /* The flip spins only the image, using the separate `rotate` property, so it
    doesn't fight with the jump's `transform` on the stage around it. */
-@keyframes byte-flip {
+@keyframes mascot-flip {
   from {
     rotate: 0deg;
   }
@@ -227,14 +227,14 @@
     rotate: 360deg;
   }
 }
-.byte-m-victory > .byte-swap {
+.mascot-m-victory > .mascot-swap {
   animation:
-    byte-swap 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    byte-flip 0.55s cubic-bezier(0.4, 0.1, 0.3, 1) 0.3s;
+    mascot-swap 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    mascot-flip 0.55s cubic-bezier(0.4, 0.1, 0.3, 1) 0.3s;
 }
 
 /* Angry (after rapid taps): decaying shake, then grumpy breathing, with a red glow */
-@keyframes byte-angry-shake {
+@keyframes mascot-angry-shake {
   0%,
   100% {
     transform: translateX(0);
@@ -261,7 +261,7 @@
     transform: translateX(-1px);
   }
 }
-@keyframes byte-angry-breathe {
+@keyframes mascot-angry-breathe {
   from {
     transform: scale(1, 1);
   }
@@ -269,11 +269,11 @@
     transform: scale(0.99, 1.04);
   }
 }
-.byte-m-angry {
+.mascot-m-angry {
   filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.45));
   animation:
-    byte-angry-shake 0.5s ease-out,
-    byte-angry-breathe 0.35s ease-in-out 0.5s infinite alternate;
+    mascot-angry-shake 0.5s ease-out,
+    mascot-angry-breathe 0.35s ease-in-out 0.5s infinite alternate;
 }
 
 /* Angry: billowing steam, like venting from an engine.
@@ -287,7 +287,7 @@
      --dur       how long one puff lives
    To make the steam bolder: raise the 0.45 in the drop-shadow below, or darken
    the last colour stop (#cbd5e1) of the gradients. */
-@keyframes byte-steam {
+@keyframes mascot-steam {
   0% {
     opacity: 0;
     top: var(--y);
@@ -308,7 +308,7 @@
     scale: 1.9;
   }
 }
-.byte-p-steam {
+.mascot-p-steam {
   width: var(--s, 18%);
   aspect-ratio: 1;
   translate: -50% -50%; /* centres the puff on its start point */
@@ -320,11 +320,11 @@
     #cbd5e1 100%
   );
   filter: drop-shadow(0 1px 2px rgba(71, 85, 105, 0.45));
-  animation: byte-steam var(--dur) ease-out infinite;
+  animation: mascot-steam var(--dur) ease-out infinite;
   animation-delay: var(--delay);
 }
-.byte-p-steam::before,
-.byte-p-steam::after {
+.mascot-p-steam::before,
+.mascot-p-steam::after {
   content: "";
   position: absolute;
   width: 68%;
@@ -337,11 +337,11 @@
     #cbd5e1 100%
   );
 }
-.byte-p-steam::before {
+.mascot-p-steam::before {
   left: -34%;
   top: 30%;
 }
-.byte-p-steam::after {
+.mascot-p-steam::after {
   right: -30%;
   top: 22%;
   width: 58%;
@@ -350,7 +350,7 @@
 /* Success: confetti bursts out as Byte reaches the top of the jump.
    dx = sideways (px), dy = peak height (px, negative = up), fall = where it lands,
    rot = spin, all set per piece in ByteParticles.jsx */
-@keyframes byte-confetti {
+@keyframes mascot-confetti {
   0% {
     opacity: 0;
     transform: translate(0, 0) rotate(0deg);
@@ -367,18 +367,18 @@
     transform: translate(var(--dx), var(--fall)) rotate(var(--rot));
   }
 }
-.byte-p-confetti {
+.mascot-p-confetti {
   left: 50%;
   top: 12%;
   width: 6px;
   height: 9px;
   background: var(--c);
-  animation: byte-confetti 1.3s cubic-bezier(0.2, 0.7, 0.4, 1) both;
+  animation: mascot-confetti 1.3s cubic-bezier(0.2, 0.7, 0.4, 1) both;
   animation-delay: var(--delay);
 }
 
 /* Failed: quick angry shake, once */
-@keyframes byte-shake {
+@keyframes mascot-shake {
   0%,
   100% {
     transform: translateX(0);
@@ -396,23 +396,23 @@
     transform: translateX(4px);
   }
 }
-.byte-m-shake {
-  animation: byte-shake 0.5s ease-in-out;
+.mascot-m-shake {
+  animation: mascot-shake 0.5s ease-in-out;
 }
 
 /* ---------- Particles ---------- */
-.byte-particles {
+.mascot-particles {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
-.byte-p {
+.mascot-p {
   position: absolute;
   opacity: 0;
 }
 
 /* Hungry: a drop of drool */
-@keyframes byte-drool {
+@keyframes mascot-drool {
   0%,
   20% {
     opacity: 0;
@@ -426,18 +426,18 @@
     transform: translateY(16px);
   }
 }
-.byte-p-drool {
+.mascot-p-drool {
   left: 52%;
   top: 62%;
   width: 3px;
   height: 5px;
   border-radius: 50%;
   background: #38bdf8;
-  animation: byte-drool 2.2s ease-in infinite;
+  animation: mascot-drool 2.2s ease-in infinite;
 }
 
 /* Eating: crumbs fly out from the mouth */
-@keyframes byte-crumb {
+@keyframes mascot-crumb {
   0% {
     opacity: 0;
     transform: translate(0, 0) scale(1);
@@ -450,19 +450,19 @@
     transform: translate(var(--dx), var(--dy)) scale(0.6);
   }
 }
-.byte-p-crumb {
+.mascot-p-crumb {
   left: 50%;
   top: 58%;
   width: 5px;
   height: 5px;
   border-radius: 1px;
   background: var(--c);
-  animation: byte-crumb 0.9s ease-out infinite;
+  animation: mascot-crumb 0.9s ease-out infinite;
   animation-delay: var(--delay);
 }
 
 /* Chunking / embedding: data bits rise up */
-@keyframes byte-bit {
+@keyframes mascot-bit {
   0% {
     opacity: 0;
     transform: translateY(0);
@@ -475,7 +475,7 @@
     transform: translateY(-34px);
   }
 }
-.byte-p-bit {
+.mascot-p-bit {
   left: var(--x);
   top: 40%;
   width: 4px;
@@ -483,12 +483,12 @@
   border-radius: 1px;
   background: #38bdf8;
   box-shadow: 0 0 4px #818cf8;
-  animation: byte-bit 1.4s ease-in infinite;
+  animation: mascot-bit 1.4s ease-in infinite;
   animation-delay: var(--delay);
 }
 
 /* Success: a one-time burst of sparkles */
-@keyframes byte-sparkle {
+@keyframes mascot-sparkle {
   0% {
     opacity: 0;
     transform: translate(0, 0) scale(0);
@@ -503,7 +503,7 @@
     transform: translate(var(--dx), var(--dy)) scale(0.4);
   }
 }
-.byte-p-sparkle {
+.mascot-p-sparkle {
   left: 50%;
   top: 45%;
   width: 8px;
@@ -519,16 +519,16 @@
     0 50%,
     38% 38%
   );
-  animation: byte-sparkle 1s ease-out forwards;
+  animation: mascot-sparkle 1s ease-out forwards;
   animation-delay: var(--delay);
 }
 /* Idle (generic pages): just a gentle float */
-.byte-m-idle {
-  animation: byte-bob 3s ease-in-out infinite;
+.mascot-m-idle {
+  animation: mascot-bob 3s ease-in-out infinite;
 }
 
 /* Dizzy: wobbling side to side */
-@keyframes byte-dizzy {
+@keyframes mascot-dizzy {
   0%,
   100% {
     transform: rotate(-10deg) translateX(-3px);
@@ -537,36 +537,36 @@
     transform: rotate(10deg) translateX(3px);
   }
 }
-.byte-m-dizzy {
-  animation: byte-dizzy 0.6s ease-in-out infinite;
+.mascot-m-dizzy {
+  animation: mascot-dizzy 0.6s ease-in-out infinite;
 }
 
 /* Dizzy: a halo of stars orbiting Byte's head.
-   --byte-a is an ANGLE that we animate from 0 to 360deg. Each star's position,
+   --mascot-a is an ANGLE that we animate from 0 to 360deg. Each star's position,
    size, brightness and spin are calculated from it with cos()/sin(), so the
    stars travel on a real ellipse. Percentages are relative to Byte's image box,
    so the halo scales with Byte's size.
 
-   Tweak the halo with the four variables at the top of .byte-p-star:
+   Tweak the halo with the four variables at the top of .mascot-p-star:
      --halo-y    height of the orbit's centre   (bigger = lower on the head)
      --halo-rx   half-width of the orbit
      --halo-ry   half-height of the orbit       (bigger = more tilted ellipse)
      --star-size size of each star              */
-@property --byte-a {
+@property --mascot-a {
   syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
 }
-@keyframes byte-orbit {
+@keyframes mascot-orbit {
   from {
-    --byte-a: 0deg;
+    --mascot-a: 0deg;
   }
   to {
-    --byte-a: 360deg;
+    --mascot-a: 360deg;
   }
 }
 /* Front half of the lap draws OVER Byte, back half goes BEHIND Byte */
-@keyframes byte-halo-depth {
+@keyframes mascot-halo-depth {
   0%,
   49.99% {
     z-index: 3;
@@ -576,30 +576,30 @@
     z-index: -1;
   }
 }
-.byte-p-star {
+.mascot-p-star {
   --halo-y: 14%;
   --halo-rx: 34%;
   --halo-ry: 10%;
   --star-size: 22%;
-  left: calc(50% + cos(var(--byte-a)) * var(--halo-rx));
-  top: calc(var(--halo-y) + sin(var(--byte-a)) * var(--halo-ry));
+  left: calc(50% + cos(var(--mascot-a)) * var(--halo-rx));
+  top: calc(var(--halo-y) + sin(var(--mascot-a)) * var(--halo-ry));
   width: var(--star-size);
   aspect-ratio: 1;
   translate: -50% -50%; /* centres the star on its point */
   scale: calc(
-    0.72 + 0.4 * (sin(var(--byte-a)) + 1) / 2
+    0.72 + 0.4 * (sin(var(--mascot-a)) + 1) / 2
   ); /* far = small, near = big */
-  rotate: calc(var(--byte-a) * 0.6); /* slow twinkle spin */
-  opacity: calc(0.55 + 0.45 * (sin(var(--byte-a)) + 1) / 2); /* far = dimmer */
+  rotate: calc(var(--mascot-a) * 0.6); /* slow twinkle spin */
+  opacity: calc(0.55 + 0.45 * (sin(var(--mascot-a)) + 1) / 2); /* far = dimmer */
   filter: drop-shadow(0 0 3px #38bdf8)
     drop-shadow(0 0 7px rgba(56, 189, 248, 0.7));
   animation:
-    byte-orbit 1.4s linear infinite,
-    byte-halo-depth 1.4s linear infinite;
+    mascot-orbit 1.4s linear infinite,
+    mascot-halo-depth 1.4s linear infinite;
   animation-delay: var(--delay), var(--delay);
 }
 /* The star shape is a pseudo-element so the glow above isn't clipped by it */
-.byte-p-star::before {
+.mascot-p-star::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -617,25 +617,25 @@
 }
 /* ---------- Reduced motion: everything stands still ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .byte-stage,
-  .byte-swap,
-  .byte-bubble,
-  .byte-m-victory > .byte-swap,
-  .byte-shadow {
+  .mascot-stage,
+  .mascot-swap,
+  .mascot-bubble,
+  .mascot-m-victory > .mascot-swap,
+  .mascot-shadow {
     animation: none;
   }
-  .byte-particles {
+  .mascot-particles {
     display: none;
   }
 }
 
 /* Where the speech bubble sits, measured from Byte's image box.
-   Raise --byte-bubble-x to push it farther right, --byte-bubble-y to push it higher.
+   Raise --mascot-bubble-x to push it farther right, --mascot-bubble-y to push it higher.
    These two numbers are the ones to tweak if the gap doesn't look right. */
-.byte-bubble-anchor {
+.mascot-bubble-anchor {
   position: absolute;
-  left: var(--byte-bubble-x, 80%);
-  bottom: var(--byte-bubble-y, 80%);
+  left: var(--mascot-bubble-x, 80%);
+  bottom: var(--mascot-bubble-y, 80%);
   width: max-content;
   max-width: 12rem;
   pointer-events: none; /* the bubble never blocks taps on Byte */
@@ -643,7 +643,7 @@
 }
 
 /* Reaction bubbles shrink and fade out (class added by ByteMascot after bubbleMs) */
-.byte-bubble-hidden {
+.mascot-bubble-hidden {
   opacity: 0;
   transform: scale(0.6);
   transition:
