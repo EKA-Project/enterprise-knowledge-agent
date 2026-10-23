@@ -5,18 +5,46 @@ import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import { TYPOGRAPHY, DEFAULT_TYPOGRAPHY } from "../../appearance/fontStudio";
-import { SURPRISE_SCOPES } from "../../appearance/appearance";
+import { SURPRISE_SCOPES, pickRandom } from "../../appearance/appearance";
 import AtmosphereHero from "./appearance/themes/AtmosphereHero";
-import { Droplet } from "lucide-react";
+import { Droplet, Globe, Sun, Type } from "lucide-react";
 import AppearanceHeader from "./appearance/AppearanceHeader";
 import StudioStatsPill from "./appearance/StudioStatsPill";
-import ThemeCollections from  "./appearance/themes/ThemeCollections";
+import ThemeCollections from "./appearance/themes/ThemeCollections";
 import FontCollections from "./appearance/typography/FontCollections";
+import AppearanceTabs, {
+  appearanceTabId,
+  appearancePanelId,
+} from "./appearance/AppearanceTabs";
+import StudioDivider from "./appearance/StudioDivider";
+import usePersistedState from "../../hooks/usePersistedState";
 
-const pickRandom = (items) => items[Math.floor(Math.random() * items.length)];
+// One entry per tab. The ids are what gets saved in localStorage.
+const TABS = [
+  {
+    id: "themes",
+    label: "Atmospheres & Themes",
+    icon: Globe,
+    count: THEMES.length,
+  },
+  {
+    id: "typography",
+    label: "Typography Studio",
+    icon: Type,
+    count: TYPOGRAPHY.length,
+  },
+  { id: "eye", label: "Eye Comfort & Ergonomics", icon: Sun },
+];
+const TAB_IDS = TABS.map((t) => t.id);
 
 export default function AppearanceSettings() {
   const toast = useToast();
+  // The selected tab survives a refresh; an unknown saved id falls back to the first tab.
+  const [tab, setTab] = usePersistedState(
+    "eka.appearanceTab",
+    TAB_IDS[0],
+    (id) => TAB_IDS.includes(id),
+  );
   const [appearance, update] = useAppearance();
   const { theme } = appearance;
   // Guards against a stale or hand-edited saved value: anything unknown counts as "theme".
@@ -116,28 +144,45 @@ export default function AppearanceSettings() {
           />
         }
       />
-      {/* ---------- Active atmosphere hero ---------- */}
-      <AtmosphereHero
-        theme={activeTheme}
-        typography={activeFont}
-        isDefault={isDefault}
-        onSurprise={surprise}
-        scope={scope}
-        onScopeChange={(id) => update({ surpriseScope: id })}
-        onReset={reset}
-      />
+      <AppearanceTabs tabs={TABS} value={tab} onChange={setTab} />
+      <StudioDivider />
 
-      {/* ---------- Theme collections ---------- */}
-      <ThemeCollections activeId={theme} onSelect={pickTheme} />
+      {/* Only the active section renders. The panel supplies the gap under the divider. */}
+      <div
+        role="tabpanel"
+        id={appearancePanelId(tab)}
+        aria-labelledby={appearanceTabId(tab)}
+        className="mt-12"
+      >
+        {tab === "themes" && (
+          <>
+            <AtmosphereHero
+              theme={activeTheme}
+              typography={activeFont}
+              isDefault={isDefault}
+              onSurprise={surprise}
+              scope={scope}
+              onScopeChange={(id) => update({ surpriseScope: id })}
+              onReset={reset}
+            />
+            <ThemeCollections activeId={theme} onSelect={pickTheme} />
+          </>
+        )}
 
-      {/* ---------- Typography ---------- */}
-      <FontCollections activeId={appearance.typography} onSelect={pickFont} />
+        {tab === "typography" && (
+          <FontCollections
+            activeId={appearance.typography}
+            onSelect={pickFont}
+          />
+        )}
 
-      {/* ---------- Eye comfort ---------- */}
-      <EyeComfortSection
-        activeId={appearance.eyeComfort}
-        onSelect={pickEyeComfort}
-      />
+        {tab === "eye" && (
+          <EyeComfortSection
+            activeId={appearance.eyeComfort}
+            onSelect={pickEyeComfort}
+          />
+        )}
+      </div>
     </SettingsPanel>
   );
 }

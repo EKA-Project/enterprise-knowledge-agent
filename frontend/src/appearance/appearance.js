@@ -21,6 +21,11 @@ export const SURPRISE_SCOPES = [
   { id: "both", label: "Theme & Typo" },
 ];
 
+// Picks one random item from a non-empty array (used by Surprise Me).
+export function pickRandom(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
 // ---------- Defaults ----------
 export const DEFAULT_APPEARANCE = {
   theme: DEFAULT_THEME,

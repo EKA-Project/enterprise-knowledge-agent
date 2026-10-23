@@ -13,7 +13,7 @@ export default function EyeComfortSection({ activeId, onSelect }) {
   const isActive = activeMode.id !== "off";
 
   return (
-    <div className="mt-12">
+    <div>
       <AppearanceHeader
         icon={Eye}
         eyebrow="Ergonomics & Comfort"

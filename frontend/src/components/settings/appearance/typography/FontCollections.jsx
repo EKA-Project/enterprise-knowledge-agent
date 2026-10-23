@@ -36,7 +36,7 @@ export default function FontCollections({ activeId, onSelect }) {
   const current = TYPOGRAPHY.find((f) => f.id === activeId);
 
   return (
-    <div className="mt-12">
+    <div >
       <AppearanceHeader
         icon={Type}
         eyebrow="Typography System"
