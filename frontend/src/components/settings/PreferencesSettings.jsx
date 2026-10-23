@@ -6,6 +6,7 @@ import SettingsPanel, {
 import { Select } from "../common/Input";
 import Checkbox from "../common/Checkbox";
 import { LANGUAGES } from "./settingsConfig";
+import MascotPicker from "../mascot/MascotPicker";
 
 const answerStyles = [
   [
@@ -28,6 +29,13 @@ export default function PreferencesSettings({ settings, update }) {
     >
       <SubSection
         first
+        title="Mascot"
+        description="Choose the companion that reacts to your uploads, questions and taps."
+      >
+        <MascotPicker />
+      </SubSection>
+
+      <SubSection
         title="Answer Style"
         description="Choose how EKA presents its answers to your questions."
       >

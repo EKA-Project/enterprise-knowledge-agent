@@ -35,8 +35,18 @@ export const IMAGE_NAMES = [
 //   bubble.x / bubble.y: where the speech bubble sits, measured from the mascot's
 //   image box (bigger x = further right, bigger y = higher). Tune per character.
 export const MASCOTS = [
-  { id: "byte", name: "Byte", bubble: { x: "80%", y: "80%" } },
-  { id: "orbit", name: "Orbit", bubble: { x: "80%", y: "80%" } },
+  {
+    id: "byte",
+    name: "Byte",
+    description: "The hungry little data muncher.",
+    bubble: { x: "80%", y: "80%" },
+  },
+  {
+    id: "orbit",
+    name: "Orbit",
+    description: "A calm, floating knowledge companion.",
+    bubble: { x: "80%", y: "80%" },
+  },
 ];
 
 // Used for fresh users and for unknown or removed ids
@@ -60,6 +70,12 @@ export function getMascotImage(id, imageName) {
     IMAGES[imagePath(mascotId, imageName)] ??
     IMAGES[imagePath(mascotId, "idle")]
   );
+}
+
+// Picker thumbnail: <id>/preview.png, falling back to idle.png if it is missing.
+// preview.png is not part of IMAGE_NAMES, so it is never preloaded in-app.
+export function getMascotPreview(id) {
+  return getMascotImage(id, "preview");
 }
 
 // All image URLs of one mascot (used to preload only the active mascot).
