@@ -262,3 +262,44 @@ export function playMascotSound(name) {
     console.warn("[mascot-sound]", error); // a sound problem must never break the UI
   }
 }
+
+
+
+/* ==========================================================================
+   Per-mascot "chosen" sounds
+   --------------------------------------------------------------------------
+   The ONLY sounds that differ between mascots: played once when a mascot is
+   selected in Settings > Preferences. Every other sound (poke, angry, ...) is
+   shared. Keyed by mascot id (see mascotRegistry.js).
+   ========================================================================== */
+
+const SELECT_SOUNDS = {
+  // Byte: rising 8-bit arcade power-up, held top note
+  byte() {
+    [440, 554.37, 659.25, 880, 1108.73].forEach((hz, i) =>
+      tone(hz, "square", 0.04, i * 0.03, 0.15),
+    );
+    tone(1318.51, "square", 0.2, 0.15, 0.18);
+  },
+
+  // Orbit: friendly two-tone chirp ("Bwip-twee!") with a sparkle overtone
+  orbit() {
+    glide("sine", 540, 760, 0.08, 0, 0.2, 0.11); // "Bwip"
+    glide("sine", 840, 1260, 0.11, 0.11, 0.22, 0.34); // "twee"
+    glide("triangle", 1680, 2520, 0.13, 0.13, 0.07, 0.27); // sparkle
+  },
+};
+
+// Same rules as playMascotSound: respects mute, silent in a hidden tab, and a
+// sound problem never breaks the UI.
+export function playMascotSelectSound(id) {
+  if (!soundOn) return;
+  if (document.visibilityState === "hidden") return;
+  const play = SELECT_SOUNDS[id];
+  if (!play) return;
+  try {
+    play();
+  } catch (error) {
+    console.warn("[mascot-sound]", error);
+  }
+}

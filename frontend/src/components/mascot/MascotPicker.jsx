@@ -1,6 +1,7 @@
 import { RadioCard, RadioGroup } from "../settings/SettingsPanel";
 import { MASCOTS, getMascotPreview } from "../../mascot/mascotRegistry";
 import { useMascot } from "../../hooks/useMascot";
+import { playMascotSelectSound } from "../../mascot/mascotSound";
 import useToast from "../../hooks/useToast"; // match the import style from check 0
 
 export default function MascotPicker() {
@@ -10,6 +11,7 @@ export default function MascotPicker() {
   const handleSelect = (mascot) => {
     if (mascot.id === mascotId) return; // already selected: no toast
     setMascotId(mascot.id); // saves to localStorage "eka.mascot"
+    playMascotSelectSound(mascot.id); // this mascot's own sound (mute is respected)
     toast.success(`${mascot.name} is now your mascot`, {
       description: "You'll see it across EKA.",
       duration: 3000,
