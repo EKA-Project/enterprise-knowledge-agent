@@ -66,9 +66,9 @@ function DocumentList({
         const d = deptStyle[doc.category];
         const Icon = d?.icon;
         return (
-          <span className="inline-flex items-center gap-2 text-[13px] font-medium text-(--text-primary)">
+          <span className="inline-flex items-center gap-2 text-[11px] font-medium text-(--text-primary)">
             {Icon && (
-              <span className={`flex h-6 w-6 items-center justify-center rounded-md ${d.cls}`}>
+              <span className={`flex h-5 w-5 items-center justify-center rounded-md ${d.cls}`}>
                 <Icon size={13} />
               </span>
             )}

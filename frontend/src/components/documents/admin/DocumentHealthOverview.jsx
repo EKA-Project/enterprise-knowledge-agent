@@ -76,7 +76,7 @@ function DocumentHealthOverview() {
     : `Real-time ingestion & health telemetry across ${total} total repository files.`;
 
   return (
-    <section className="mb-6 flex flex-col gap-5 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
+    <section className="mb-6 flex flex-col gap-2 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
       {/* Left: ring + title */}
       <div className="flex items-center gap-5 lg:basis-[460px] lg:shrink-0">
         <HealthDonut
@@ -88,7 +88,7 @@ function DocumentHealthOverview() {
         />
         <div className="min-w-0 max-w-[300px]">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-serif text-[17px] font-bold leading-tight text-(--text-primary)">
+            <h2 className="font-serif text-[19px] font-bold leading-tight text-(--text-primary)">
               Document Health Overview
             </h2>
             <Badge text={badgeText} type={badgeType} size="sm" />
@@ -103,7 +103,7 @@ function DocumentHealthOverview() {
       </div>
 
       {/* Right: one clickable card per status */}
-      <div className="grid flex-1 grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid flex-8 grid-cols-2 gap-4 lg:grid-cols-4">
         {documentHealth.map((item) => {
           const isActive = activeStatus === item.label;
           return (
@@ -119,31 +119,31 @@ function DocumentHealthOverview() {
               style={{
                 borderColor: isActive || hoveredKey === item.key ? item.color : undefined,
               }}
-              className={`min-h-[86px] cursor-pointer rounded-xl border px-4 py-3.5 text-left transition-colors ${
+              className={`min-h-[86px] cursor-pointer rounded-xl border px-4 py-1.5 text-left transition-colors ${
                 isActive || hoveredKey === item.key
                   ? 'bg-white'
                   : 'border-transparent bg-[#e1f0fa]'
               }`}
             >
-              <div className="flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5 text-[11px] font-semibold text-(--text-secondary)">
+              <div className="flex items-center justify-between gap-">
+                <span className="flex items-center gap-1.5 text-[10px] font-semibold text-(--text-secondary)">
                   <span
-                    className="h-1.5 w-1.5 rounded-full"
+                    className="h-1 w-1 rounded-full"
                     style={{ backgroundColor: item.color }}
                   />
                   {item.label}
                 </span>
-                <span className="doc-mono text-[10px]" style={{ color: item.color }}>
+                <span className="doc-mono text-[9px]" style={{ color: item.color }}>
                   {percent(item.count)}%
                 </span>
               </div>
 
-              <p className="mt-2 font-serif text-[26px] font-black leading-none text-(--text-primary)">
+              <p className="mt-2 font-serif text-[17px] font-black leading-none text-(--text-primary)">
                 {item.count}
               </p>
 
               {/* Share bar (small shares get a minimum width so they stay visible) */}
-              <div className="mt-3 h-1 rounded-full bg-white/70">
+              <div className="mt-2 h-1 rounded-full bg-white/70">
                 <div
                   className="h-full rounded-full"
                   style={{

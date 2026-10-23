@@ -131,7 +131,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     <>
       {/* Filter controls */}
       <section className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-3 shadow-(--shadow-sm)">
-        <div className="flex w-full min-w-0 items-center gap-4 rounded-full bg-(--bg-surface-subtle) px-2.5 py-2 lg:w-auto lg:flex-1">
+        <div className="flex w-full min-w-0 items-center gap-4 rounded-full bg-(--bg-surface-subtle) px-2.5 py-3 lg:w-auto lg:flex-1">
           <Search size={16} className="shrink-0 text-(--text-muted)" />
           <input
             type="text"
@@ -168,7 +168,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           <select
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
+            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-1 pl-3 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
             <option value={ALL_CATEGORIES}>
               {isManager ? `All Categories (${documentCategories.length})` : 'All Departments'}
@@ -185,7 +185,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
           <ChevronDown
             size={14}
-            className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-(--text-muted)"
+            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-(--text-muted)"
           />
         </div>
 
@@ -193,7 +193,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           <select
             value={format}
             onChange={(event) => setFormat(event.target.value)}
-            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
+            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-1 pl-3 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
             <option value={ALL_FORMATS}>All Formats</option>
 
@@ -206,18 +206,18 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
           <ChevronDown
             size={14}
-            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-(--text-muted)"
+            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-(--text-muted)"
           />
         </div>
 
         {/* Grid / list toggle: active button is solid */}
-        <div className="flex shrink-0 items-center gap-1 rounded-xl border border-(--border-subtle) p-1">
+        <div className="flex shrink-0 items-center gap-1 rounded-xl border border-(--border-subtle) p-0">
           <button
             type="button"
             aria-label="Grid view"
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'grid'
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'grid'
               ? 'bg-(--primary) text-(--primary-contrast)'
               : 'text-(--text-muted) hover:text-(--text-primary)'
               }`}
@@ -230,12 +230,12 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="List view"
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'list'
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'list'
               ? 'bg-(--primary) text-(--primary-contrast)'
               : 'text-(--text-muted) hover:text-(--text-primary)'
               }`}
           >
-            <List size={15} />
+            <List size={14} />
           </button>
         </div>
       </section>
