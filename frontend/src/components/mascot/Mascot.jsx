@@ -33,9 +33,18 @@ function Mascot({
   imageClassName = "h-24", // size of the mascot, e.g. "h-16" for a small one
   frameClassName = "h-36", // height of the tinted banner (only when framed)
   showSoundToggle = framed, // the speaker button; shown in the banner by default
+  onReaction, // optional: (kind) => void, called when a reaction starts ("grumble", "yell", "poked", "dizzy"); a page can wake a sleeping mascot on "yell"
   replayKey = 0, // change this to replay the animation and sound for the SAME state
 }) {
-  const { override, pokeId, boopId, poke } = usePokeReaction(pokeable);
+  // The state the PAGE asked for decides whether the first tap triggers its own
+  // reaction (a sleeping mascot yells). Looked up before the poke hook runs.
+  const baseConfig =
+    states?.[state] ?? COMMON_STATES[state] ?? COMMON_STATES.idle;
+  const { override, pokeId, boopId, poke } = usePokeReaction(
+    pokeable,
+    baseConfig.pokeReaction,
+    onReaction,
+  );
 
   // A poke reaction temporarily replaces the state the page asked for
   const reacting = pokeable ? override : null;
@@ -58,7 +67,11 @@ function Mascot({
   // Pokeable: the mascot is a real <button> (keyboard and screen-reader friendly)
   const Stage = pokeable ? "button" : "div";
   const stageProps = pokeable
-    ? { type: "button", onClick: poke, "aria-label": `Poke ${mascot.name}` }
+    ? {
+        type: "button",
+        onClick: poke,
+        "aria-label": `Poke ${mascot.name}`,
+      }
     : {};
   // Changing this key remounts the stage and replays the animation, even on repeat taps
   const playKey = `${activeState}-${pokeId}-${replayKey}`;

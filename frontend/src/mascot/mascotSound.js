@@ -226,6 +226,18 @@ const SOUNDS = {
 
   angry: angryBuzz,
 
+  // Slow tap on a sleeping mascot: a low, short sleepy mumble
+  grumble() {
+    glide("triangle", 190, 120, 0.28, 0, 0.1, 0.32);
+  },
+
+  // Poked quickly while sleeping: a sharp startled squawk that jumps up, then drops
+  yell() {
+    glide("sawtooth", 260, 900, 0.1, 0, 0.22, 0.2);
+    glide("square", 700, 380, 0.22, 0.1, 0.18, 0.3);
+    tone(330, "sawtooth", 0.12, 0.32, 0.14);
+  },
+
   // Too many taps: a wobbling four-note sequence
   dizzy() {
     tone(440, "sawtooth", 0.08, 0, 0.14);

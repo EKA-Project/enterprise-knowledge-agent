@@ -14,6 +14,9 @@
 //   soundEvery: repeat the sound every N ms while the state lasts (optional)
 //   bubbleMs:   fade the bubble out after N ms (optional, used by reactions)
 //   shadow:     show the ground shadow under a jump (optional)
+//     //   pokeReaction: how tapping behaves WHILE IN THIS state (optional), handled by
+//               usePokeReaction: { soft, hard, taps, withinMs }. A slow tap plays
+//               the `soft` state; `taps` taps inside `withinMs` play `hard`.
 
 export const COMMON_STATES = {
   // Resting state: no bubble, no sound
@@ -63,6 +66,91 @@ export const COMMON_STATES = {
     motion: "mascot-m-confused",
     particles: null,
     sound: "sad",
+  },
+
+  // Help & Support page
+  help: {
+    image: "help",
+    bubble: "Need a hand?",
+    tone: "neutral",
+    motion: "mascot-m-eager",
+    particles: null,
+  },
+
+  // Deep research mode: like "thinking", but a longer job
+  deep: {
+    image: "deep",
+    bubble: "Digging deep…",
+    tone: "neutral",
+    motion: "mascot-m-thinking",
+    particles: "bits",
+    sound: "searching",
+    soundEvery: 900,
+  },
+
+  // ---- Short moments: the page shows one, then goes back to its normal state.
+  // bubbleMs fades the bubble so the animation stays visible. Replay the same
+  // state with Mascot's `replayKey` prop. ----
+  newThread: {
+    image: "newThread",
+    bubble: "Fresh thread, fresh start!",
+    bubbleMs: 1600,
+    tone: "neutral",
+    motion: "mascot-m-happy",
+    particles: null,
+    sound: "drop",
+  },
+  copied: {
+    image: "copied",
+    bubble: "Copied!",
+    bubbleMs: 1200,
+    tone: "neutral",
+    motion: "mascot-m-happy",
+    particles: null,
+    sound: "poke",
+  },
+  cool: {
+    image: "cool",
+    bubble: "Nice one!",
+    bubbleMs: 1600,
+    tone: "neutral",
+    motion: "mascot-m-happy",
+    particles: null,
+    sound: "happy",
+  },
+
+  // Long idle: the page switches to this after a quiet spell
+  sleep: {
+    image: "sleep",
+    bubble: "Zzz… tap to wake me",
+    tone: "neutral",
+    motion: "mascot-m-idle",
+    particles: null,
+    // A slow tap grumbles; 3 quick taps inside 1s wake it up angrily.
+    // Change `taps` to 2 if a double-tap should be enough.
+    pokeReaction: { soft: "grumble", hard: "yell", taps: 3, withinMs: 1000 },
+  },
+
+  // A slow tap on a sleeping mascot: it mumbles and stays asleep
+  grumble: {
+    image: "sleep",
+    bubble: "Five more seconds…",
+    bubbleMs: 1300,
+    tone: "neutral",
+    motion: "mascot-m-idle",
+    particles: null,
+    sound: "grumble",
+  },
+
+  // Poked quickly while asleep (started by usePokeReaction, see pokeReaction above)
+  yell: {
+    image: "yell",
+    bubble: "HEY! I was sleeping!",
+    bubbleMs: 2000, // bubble fades so the animation stays visible
+    tone: "neutral",
+    motion: "mascot-m-shake", // existing motion for now, see the note below
+    particles: null,
+    sound: "yell",
   },
 
   // ---- Poke reactions (started by usePokeReaction) ----
