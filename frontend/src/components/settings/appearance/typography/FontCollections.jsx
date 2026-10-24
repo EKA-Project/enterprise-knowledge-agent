@@ -36,16 +36,30 @@ export default function FontCollections({ activeId, onSelect }) {
   const current = TYPOGRAPHY.find((f) => f.id === activeId);
 
   return (
-    <div >
+    <div>
       <AppearanceHeader
         icon={Type}
         eyebrow="Typography System"
         title="Typography & Font Studio"
-        description="Type is the quiet voice of your thoughts. Curated specimens inspired by literary broadsheets, Swiss modernist grids, and heritage print houses."
+        description="Curated editorial, modern tech, and avant-garde typographic trios crafted for deep reading and authority."
         aside={
-          <span className={`${pill} font-mono shrink-0`}>
-            Active: {current?.name}
-          </span>
+          current && (
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-(--border-medium) bg-(--bg-surface) py-1 pl-1.5 pr-3 text-[12.5px]">
+              <span
+                aria-hidden="true"
+                className="grid size-5 place-items-center rounded-full bg-(--status-success-bg) text-(--status-success)"
+              >
+                ✓
+              </span>
+              <span className="font-semibold text-(--text-primary)">
+                Active
+              </span>
+              <span aria-hidden="true" className="text-(--text-muted)">
+                •
+              </span>
+              <span className="text-(--text-secondary)">{current.name}</span>
+            </span>
+          )
         }
       />
 

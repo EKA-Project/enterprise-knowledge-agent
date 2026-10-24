@@ -99,7 +99,7 @@ export default function AtmosphereToolbar({
           onScroll={updateScroll}
           role="region"
           aria-label="Atmosphere categories"
-          className="flex items-center gap-1.5 overflow-x-auto w-full py-0.5 px-1 scroll-smooth select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex items-center gap-1.5 overflow-x-auto w-full py-0.5 px-1 scroll-smooth select-none scrollbar-none [&::-webkit-scrollbar]:hidden"
         >
           {options.map(({ id, label: text, count, icon: Icon }) => {
             const isActive = value === id;
@@ -168,7 +168,7 @@ export default function AtmosphereToolbar({
       </div>
 
       {/* ============ Full-Pill Docked Search Box ============ */}
-      <div className="relative shrink-0 w-[190px] focus-within:w-[245px] transition-[width] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)]">
+      <div className="relative shrink-0 w-47.5 focus-within:w-61.25 transition-[width] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)]">
         <Search
           size={14}
           strokeWidth={2}
@@ -197,7 +197,7 @@ export default function AtmosphereToolbar({
             type="button"
             aria-label="Clear search"
             onClick={clearSearch}
-            className="absolute right-2 top-1/2 -translate-y-1/2 grid size-[18px] place-items-center rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-muted) transition-colors hover:bg-(--bg-surface) hover:border-(--border-medium) hover:text-(--text-primary)"
+            className="absolute right-2 top-1/2 -translate-y-1/2 grid size-4.5 place-items-center rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-muted) transition-colors hover:bg-(--bg-surface) hover:border-(--border-medium) hover:text-(--text-primary)"
           >
             <X size={11} strokeWidth={2.5} />
           </button>
