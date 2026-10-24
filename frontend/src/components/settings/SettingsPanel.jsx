@@ -5,10 +5,10 @@ export default function SettingsPanel({ title, description, badge, className = "
   return (
     <section className={`set-rise rounded-[24px] border border-(--border-subtle) bg-(--bg-surface) p-8 shadow-(--shadow-sm) ${className}`}>
       <div className="flex flex-wrap items-center gap-3">
-        <h3 className="font-serif text-[26px] font-bold leading-tight text-(--text-primary)">{title}</h3>
+        <h3 className="font-serif text-[24px] font-bold leading-tight text-(--text-primary)">{title}</h3>
         {badge}
       </div>
-      <p className="mt-1 text-[13.5px] text-(--text-muted)">{description}</p>
+      <p className="mt-1 text-[12.5px] text-(--text-muted)">{description}</p>
       <div className="mb-6 mt-5 border-t border-(--border-medium)/70" />
       {children}
     </section>
@@ -21,8 +21,8 @@ export function SubSection({ title, description, first = false, aside, children 
     <div className={first ? "" : "mt-8 border-t border-(--border-subtle) pt-8"}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h4 className="flex flex-wrap items-center gap-2 font-serif text-[19px] font-bold text-(--text-primary)">{title}</h4>
-          {description && <p className="mt-1 text-[13px] text-(--text-secondary)">{description}</p>}
+          <h4 className="flex flex-wrap items-center gap-2 font-serif text-[18px] font-bold text-(--text-primary)">{title}</h4>
+          {description && <p className="mt-1 text-[12px] text-(--text-secondary)">{description}</p>}
         </div>
         {aside}
       </div>

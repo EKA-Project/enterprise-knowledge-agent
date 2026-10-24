@@ -1,0 +1,334 @@
+/* ==========================================================================
+   Theme collection: Editorial & Paper  (collection id "editorial")
+   One [data-theme="<id>"] block per theme; each id is registered in src/appearance/theme.js.
+   Imported by src/styles/variables.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   ATMOSPHERE 1: Sunlit Paper (Warm Parchment & Forest Pine)
+   ========================================================================== */
+[data-theme="sunlit-paper"] {
+  /* Sidebar Palette (Deep Forest Pine / Evergreen) */
+  --sidebar-bg: #163830;
+  --sidebar-text: #c5d8d1;
+  --sidebar-text-muted: #7e9d94;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-active-bg: #f5cb68;
+  --sidebar-active-text: #192520;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
+
+  /* Main Workspace Canvas (Sunlit Paper Parchment) */
+  --bg-app: #fbf7ee;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #f3ece0;
+  --bg-glass: rgba(251, 247, 238, 0.92);
+
+  /* Primary & Accent Tones */
+  --primary: #1e453b;
+  --primary-hover: #163830;
+  --primary-light: #e8f0eb;
+  --primary-glow: rgba(22, 56, 48, 0.15);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #f5cb68;
+  --accent-highlight-hover: #e8be58;
+  --accent-secondary: #d97757;
+  --accent-chip: #dbe8de;
+  --accent-chip-text: #214336;
+
+  /* Borders & Dividers */
+  --border-subtle: #eee6d8;
+  --border-medium: #e2d7c5;
+  --border-focus: #163830;
+
+  /* Typography Colors */
+  --text-primary: #1a2722;
+  --text-secondary: #5a6e66;
+  --text-muted: #8b9c95;
+  --text-eyebrow: #d97757;
+
+  /* Badges & Pills */
+  --badge-bg: #eef4f0;
+  --badge-text: #1c4538;
+  --badge-border: #d4e3db;
+
+  /* Shadows */
+  --shadow-sm:
+    0 1px 3px rgba(35, 30, 20, 0.04), 0 1px 2px rgba(35, 30, 20, 0.03);
+  --shadow-md:
+    0 4px 16px rgba(35, 30, 20, 0.06), 0 2px 6px rgba(35, 30, 20, 0.03);
+  --shadow-lg:
+    0 12px 32px rgba(35, 30, 20, 0.08), 0 4px 12px rgba(35, 30, 20, 0.04);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);
+  --gradient-brand: linear-gradient(135deg, #f5cb68 0%, #d97757 100%);
+
+  /* Extended tokens */
+  --primary-deep: #0f2b24;
+  --border-subtle-nav: #d4a338;
+  --table-header-bg: #e9ded0;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fef08a;
+  --highlight-text: #192520;
+  --highlight-border: #d97757;
+  --highlight-shadow: 0 2px 6px rgba(217, 119, 87, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE 11: Vintage Linen (Slate, Mauve & Linen)
+   ========================================================================== */
+[data-theme="vintage-linen"] {
+  --sidebar-bg: #22223b;
+  --sidebar-text: #f2e9e4;
+  --sidebar-text-muted: #c9ada7;
+  --sidebar-border: rgba(201, 173, 167, 0.15);
+  --sidebar-active-bg: #c9ada7;
+  --sidebar-active-text: #22223b;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #f2e9e4; /* Warm linen canvas */
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e6ded9;
+  --bg-glass: rgba(242, 233, 228, 0.94);
+
+  --primary: #4a4e69;
+  --primary-hover: #22223b;
+  --primary-light: #f2e9e4;
+  --primary-glow: rgba(74, 78, 105, 0.08);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #c9ada7;
+  --accent-highlight-hover: #9a8c98;
+  --accent-secondary: #9a8c98;
+  --accent-chip: #c9ada7;
+  --accent-chip-text: #22223b;
+
+  --border-subtle: #d3c2bd;
+  --border-medium: #9a8c98;
+  --border-focus: #4a4e69;
+
+  --text-primary: #22223b;
+  --text-secondary: #4a4e69;
+  --text-muted: #9a8c98;
+  --text-eyebrow: #c9ada7;
+
+  --badge-bg: #22223b;
+  --badge-text: #ffffff;
+  --badge-border: #c9ada7;
+
+  --shadow-sm: 0 1px 3px rgba(34, 34, 59, 0.03);
+  --shadow-md: 0 4px 16px rgba(34, 34, 59, 0.05);
+  --shadow-lg: 0 12px 32px rgba(34, 34, 59, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf8f7 100%);
+  --gradient-brand: linear-gradient(135deg, #22223b 0%, #c9ada7 100%);
+
+  /* Extended tokens */
+  --primary-deep: #161626;
+  --border-subtle-nav: #b59b95;
+  --table-header-bg: #dad0c9;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #e2d5de;
+  --highlight-text: #22223b;
+  --highlight-border: #4a4e69;
+  --highlight-shadow: 0 2px 6px rgba(74, 78, 105, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Honey Oat (Warm Charcoal-Olive, Oat Cream & Soft Honey)
+   ========================================================================== */
+[data-theme="honey-oat"] {
+  --sidebar-bg: #38362f;
+  --sidebar-text: #f1ede2;
+  --sidebar-text-muted: #a9a392;
+  --sidebar-border: rgba(241, 237, 226, 0.12);
+  --sidebar-active-bg: #e5c97f;
+  --sidebar-active-text: #38362f;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #faf8f1;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #f0ebdc;
+  --bg-glass: rgba(250, 248, 241, 0.94);
+
+  --primary: #6b7240;
+  --primary-hover: #585e33;
+  --primary-light: #f1f2e2;
+  --primary-glow: rgba(107, 114, 64, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #e5c97f;
+  --accent-highlight-hover: #dbbb66;
+  --accent-secondary: #a8b07a;
+  --accent-chip: #f6efd4;
+  --accent-chip-text: #5f5420;
+
+  --border-subtle: #ece6d3;
+  --border-medium: #ddd4b9;
+  --border-focus: #6b7240;
+
+  --text-primary: #2b2a24;
+  --text-secondary: #5c5a4c;
+  --text-muted: #6c6957;
+  --text-eyebrow: #6b7240;
+
+  --badge-bg: #f6efd4;
+  --badge-text: #5f5420;
+  --badge-border: #eadfa8;
+
+  --shadow-sm: 0 1px 3px rgba(56, 54, 47, 0.04);
+  --shadow-md: 0 4px 16px rgba(56, 54, 47, 0.06);
+  --shadow-lg: 0 12px 32px rgba(56, 54, 47, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fcfaf5 100%);
+  --gradient-brand: linear-gradient(135deg, #e5c97f 0%, #6b7240 100%);
+
+  /* Extended tokens */
+  --primary-deep: #4a5028;
+  --border-subtle-nav: #c9a94f;
+  --table-header-bg: #ebe4cc;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #f4e6b4;
+  --highlight-text: #38362f;
+  --highlight-border: #6b7240;
+  --highlight-shadow: 0 2px 6px rgba(107, 114, 64, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Washi Vermilion (DARK INK SIDEBAR - Warm Paper & Vermilion)
+   ========================================================================== */
+[data-theme="washi-vermilion"] {
+  --sidebar-bg: #3a3330;
+  --sidebar-text: #f3ece1;
+  --sidebar-text-muted: #b0a498;
+  --sidebar-border: rgba(243, 236, 225, 0.1);
+  --sidebar-active-bg: #c0402b;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-hover-text: #ffffff;
+  --sidebar-hover-border: rgba(255, 255, 255, 0.12);
+  --sidebar-hover-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  --sidebar-brand-text: #ffffff;
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
+
+  --bg-app: #eef3f2; /* Serene cool mist washi canvas */
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e2eae8;
+  --bg-glass: rgba(238, 243, 242, 0.94);
+
+  --primary: #c0402b;
+  --primary-hover: #a53422;
+  --primary-light: #fbe9e4;
+  --primary-glow: rgba(192, 64, 43, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #e8714f;
+  --accent-highlight-hover: #dc603d;
+  --accent-secondary: #2f4a6d;
+  --accent-chip: #fbe9e4;
+  --accent-chip-text: #8a2a1a;
+
+  --border-subtle: #dfe7e5;
+  --border-medium: #cdd8d5;
+  --border-focus: #c0402b;
+
+  --text-primary: #222625;
+  --text-secondary: #535c59;
+  --text-muted: #788481;
+  --text-eyebrow: #c0402b;
+
+  --badge-bg: #fbe9e4;
+  --badge-text: #8a2a1a;
+  --badge-border: #f2c8bd;
+
+  --shadow-sm: 0 1px 3px rgba(35, 45, 42, 0.05);
+  --shadow-md: 0 4px 16px rgba(35, 45, 42, 0.07);
+  --shadow-lg: 0 12px 32px rgba(35, 45, 42, 0.09);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f4f8f7 100%);
+  --gradient-brand: linear-gradient(135deg, #e8714f 0%, #b23a25 100%);
+
+  /* Extended tokens */
+  --primary-deep: #8a2a1a;
+  --border-subtle-nav: #dfa595;
+  --table-header-bg: #e2eae8;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fbd9cf;
+  --highlight-text: #2a2420;
+  --highlight-border: #c0402b;
+  --highlight-shadow: 0 2px 6px rgba(192, 64, 43, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Mulberry (MID-TONE SIDEBAR - Plum, Blush Canvas & Orchid Pink)
+   ========================================================================== */
+[data-theme="mulberry"] {
+  --sidebar-bg: #7a2f6e;
+  --sidebar-text: #fbeaf8;
+  --sidebar-text-muted: #e0b5d8;
+  --sidebar-border: rgba(251, 234, 248, 0.16);
+  --sidebar-active-bg: #ffffff;
+  --sidebar-active-text: #6a2560;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.08);
+
+  --bg-app: #faf4f9;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #f2e6f0;
+  --bg-glass: rgba(250, 244, 249, 0.94);
+
+  --primary: #9b2f87;
+  --primary-hover: #812672;
+  --primary-light: #f7e6f4;
+  --primary-glow: rgba(155, 47, 135, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #e58fd0;
+  --accent-highlight-hover: #d974c1;
+  --accent-secondary: #2f9c8f;
+  --accent-chip: #f7e6f4;
+  --accent-chip-text: #6b2160;
+
+  --border-subtle: #efdcec;
+  --border-medium: #dfc2da;
+  --border-focus: #9b2f87;
+
+  --text-primary: #2b1829;
+  --text-secondary: #5f4a5c;
+  --text-muted: #765f73;
+  --text-eyebrow: #9b2f87;
+
+  --badge-bg: #f7e6f4;
+  --badge-text: #6b2160;
+  --badge-border: #ebc8e4;
+
+  --shadow-sm: 0 1px 3px rgba(122, 47, 110, 0.05);
+  --shadow-md: 0 4px 16px rgba(122, 47, 110, 0.07);
+  --shadow-lg: 0 12px 32px rgba(122, 47, 110, 0.09);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #fcf8fb 100%);
+  --gradient-brand: linear-gradient(135deg, #e58fd0 0%, #9b2f87 100%);
+
+  /* Extended tokens */
+  --primary-deep: #5e1b52;
+  --border-subtle-nav: #d38bc4;
+  --table-header-bg: #eadbe8;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #f6d6f0;
+  --highlight-text: #3a1535;
+  --highlight-border: #9b2f87;
+  --highlight-shadow: 0 2px 6px rgba(155, 47, 135, 0.25);
+}

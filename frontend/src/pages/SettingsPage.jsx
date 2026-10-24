@@ -102,7 +102,7 @@ export default function SettingsPage() {
   );
 
   return (
-    <div className="settings-page mx-auto w-full max-w-[1400px] space-y-4">
+    <div className="-mt-3 settings-page mx-auto w-full max-w-350 space-y-4">
       <PageHero
         eyebrow="Workspace & account"
         title="Make EKA Yours."

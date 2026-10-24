@@ -1,0 +1,266 @@
+/* ==========================================================================
+   Theme collection: Botanical & Earth  (collection id "botanical")
+   One [data-theme="<id>"] block per theme; each id is registered in src/appearance/theme.js.
+   Imported by src/styles/variables.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   ATMOSPHERE 4: Citrus Studio (Deep Hunter Moss & Golden Zest)
+   ========================================================================== */
+[data-theme="citrus-studio"] {
+  --sidebar-bg: #1c2b1e;
+  --sidebar-text: #cde0cf;
+  --sidebar-text-muted: #79977c;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-active-bg: #facc15;
+  --sidebar-active-text: #1a261c;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.06);
+
+  --bg-app: #f6f5ec;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #eae8d9;
+  --bg-glass: rgba(246, 245, 236, 0.92);
+
+  --primary: #4d7c0f;
+  --primary-hover: #3f6212;
+  --primary-light: #ecfccb;
+  --primary-glow: rgba(77, 124, 15, 0.2);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #facc15;
+  --accent-highlight-hover: #eab308;
+  --accent-secondary: #ea580c;
+  --accent-chip: #ecfccb;
+  --accent-chip-text: #3f6212;
+
+  --border-subtle: #e6e3ce;
+  --border-medium: #d4cfb6;
+  --border-focus: #4d7c0f;
+
+  --text-primary: #1f2a1e;
+  --text-secondary: #576554;
+  --text-muted: #889885;
+  --text-eyebrow: #ea580c;
+
+  --badge-bg: #fef9c3;
+  --badge-text: #854d0e;
+  --badge-border: #fef08a;
+
+  --shadow-sm: 0 1px 3px rgba(28, 43, 30, 0.04);
+  --shadow-md: 0 4px 16px rgba(28, 43, 30, 0.06);
+  --shadow-lg: 0 12px 32px rgba(28, 43, 30, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f9f9f2 100%);
+  --gradient-brand: linear-gradient(135deg, #facc15 0%, #84cc16 100%);
+
+  /* Extended tokens */
+  --primary-deep: #2d4610;
+  --border-subtle-nav: #d4a012;
+  --table-header-bg: #dedbc4;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fef08a;
+  --highlight-text: #1f2a1e;
+  --highlight-border: #ea580c;
+  --highlight-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Sage Mist (Eucalyptus, Gray-Green Mist & Soft Sage)
+   ========================================================================== */
+[data-theme="sage-mist"] {
+  --sidebar-bg: #2a3b34;
+  --sidebar-text: #e4efe8;
+  --sidebar-text-muted: #8fa89b;
+  --sidebar-border: rgba(228, 239, 232, 0.12);
+  --sidebar-active-bg: #b9d4c2;
+  --sidebar-active-text: #1f2e27;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #f4f7f4;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e8efe9;
+  --bg-glass: rgba(244, 247, 244, 0.94);
+
+  --primary: #4a7860;
+  --primary-hover: #3b6350;
+  --primary-light: #e6f0e9;
+  --primary-glow: rgba(74, 120, 96, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #9fc4ad;
+  --accent-highlight-hover: #8ab69a;
+  --accent-secondary: #b99a5b;
+  --accent-chip: #e6f0e9;
+  --accent-chip-text: #2f5a45;
+
+  --border-subtle: #e0eae3;
+  --border-medium: #c9d9ce;
+  --border-focus: #4a7860;
+
+  --text-primary: #1e2b25;
+  --text-secondary: #4f6258;
+  --text-muted: #5f7267;
+  --text-eyebrow: #4a7860;
+
+  --badge-bg: #e6f0e9;
+  --badge-text: #2f5a45;
+  --badge-border: #c5dccb;
+
+  --shadow-sm: 0 1px 3px rgba(42, 59, 52, 0.04);
+  --shadow-md: 0 4px 16px rgba(42, 59, 52, 0.06);
+  --shadow-lg: 0 12px 32px rgba(42, 59, 52, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f8faf8 100%);
+  --gradient-brand: linear-gradient(135deg, #9fc4ad 0%, #4a7860 100%);
+
+  /* Extended tokens */
+  --primary-deep: #2f5543;
+  --border-subtle-nav: #7fa890;
+  --table-header-bg: #dce8df;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #d3e7d9;
+  --highlight-text: #2a3b34;
+  --highlight-border: #4a7860;
+  --highlight-shadow: 0 2px 6px rgba(74, 120, 96, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Sea Glass (Deep Spruce, Aqua Mist & Muted Seafoam)
+   ========================================================================== */
+[data-theme="sea-glass"] {
+  --sidebar-bg: #243a3d;
+  --sidebar-text: #e2f0ef;
+  --sidebar-text-muted: #8fb0ae;
+  --sidebar-border: rgba(226, 240, 239, 0.12);
+  --sidebar-active-bg: #b5dcd8;
+  --sidebar-active-text: #1d3033;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #f2f8f7;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e3eeec;
+  --bg-glass: rgba(242, 248, 247, 0.94);
+
+  --primary: #387572;
+  --primary-hover: #2d5f5c;
+  --primary-light: #e2f1ef;
+  --primary-glow: rgba(56, 117, 114, 0.18);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #9fd0cb;
+  --accent-highlight-hover: #88c2bc;
+  --accent-secondary: #7f9fbf;
+  --accent-chip: #e2f1ef;
+  --accent-chip-text: #285c59;
+
+  --border-subtle: #d9e8e6;
+  --border-medium: #c0d7d4;
+  --border-focus: #387572;
+
+  --text-primary: #1b2e30;
+  --text-secondary: #4a6466;
+  --text-muted: #5a7275;
+  --text-eyebrow: #387572;
+
+  --badge-bg: #e2f1ef;
+  --badge-text: #285c59;
+  --badge-border: #bcdcd8;
+
+  --shadow-sm: 0 1px 3px rgba(36, 58, 61, 0.04);
+  --shadow-md: 0 4px 16px rgba(36, 58, 61, 0.06);
+  --shadow-lg: 0 12px 32px rgba(36, 58, 61, 0.08);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6fafa 100%);
+  --gradient-brand: linear-gradient(135deg, #9fd0cb 0%, #387572 100%);
+
+  /* Extended tokens */
+  --primary-deep: #285755;
+  --border-subtle-nav: #6fb0aa;
+  --table-header-bg: #d6e7e4;
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #cfe9e5;
+  --highlight-text: #243a3d;
+  --highlight-border: #387572;
+  --highlight-shadow: 0 2px 6px rgba(56, 117, 114, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Night Meadow (Sculpted Carbon & Deep Pewter Contrast)
+   Hybrid High-Contrast: Multi-stop gradient sidebar with inset bevels,
+   tactile pewter canvas, elevated crisp cards, and luminous cyan accents.
+   ========================================================================== */
+[data-theme="night-meadow"] {
+  /* Sidebar Palette: Layered Carbon Shell with directional depth */
+  --sidebar-bg: #0d1117;
+  --sidebar-text: #f0f6fc;
+  --sidebar-text-muted: #8b949e;
+  --sidebar-border: rgba(240, 246, 252, 0.12);
+  --sidebar-active-bg: #1f6feb;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(31, 111, 235, 0.12);
+
+  /* Main Workspace Canvas: Deep, textured Pewter (not washed-out white/grey) */
+  --bg-app: #c4cdd6;               /* Substantial, darker grey canvas */
+  --bg-surface: #ffffff;           /* Pure white surface cards for high contrast */
+  --bg-surface-elevated: #ffffff;  /* Modals, floating popovers */
+  --bg-surface-subtle: #b6c2cc;    /* Inset search fields & wells */
+  --table-header-bg: #a8b6c4;
+  --bg-glass: rgba(196, 205, 214, 0.94);
+
+  /* Primary Tones: Deep Void Navy with Cobalt Anchor */
+  --primary: #091e3a;
+  --primary-hover: #102a4e;
+  --primary-deep: #051021;
+  --primary-light: #dbeafe;
+  --primary-glow: rgba(9, 30, 58, 0.16);
+  --primary-contrast: #ffffff;
+
+  /* Vibrant Accent Pop: Deep Cerulean & Mint Sage */
+  --accent-highlight: #0969da;
+  --accent-highlight-hover: #0550ae;
+  --accent-secondary: #057a55;
+  --accent-chip: #d0e2ff;
+  --accent-chip-text: #053b7a;
+
+  /* Borders & Dividers: Bold structural definition */
+  --border-subtle: #a2b0bf;
+  --border-medium: #798d9f;
+  --border-subtle-nav: #0969da;
+  --border-focus: #091e3a;
+
+  /* Typography: Razor-sharp ink tones against pewter/white */
+  --text-primary: #0a0f14;
+  --text-secondary: #24292f;
+  --text-muted: #57606a;
+  --text-eyebrow: #0969da;
+
+  /* Badges & Pills */
+  --badge-bg: #091e3a;
+  --badge-text: #ffffff;
+  --badge-border: #0969da;
+
+  /* Sculpted Shadows: Pronounced depth between cards and the darker canvas */
+  --shadow-sm: 0 1px 3px rgba(13, 17, 23, 0.12), 0 1px 2px rgba(13, 17, 23, 0.08);
+  --shadow-md: 0 6px 18px rgba(13, 17, 23, 0.16), 0 2px 6px rgba(13, 17, 23, 0.08);
+  --shadow-lg: 0 16px 36px rgba(13, 17, 23, 0.22), 0 4px 12px rgba(13, 17, 23, 0.12);
+
+  /* Card and Brand Gradients: Subtle physical gloss */
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6f8fa 100%);
+  --gradient-brand: linear-gradient(135deg, #0d1117 0%, #1f6feb 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #ddf4ff;
+  --highlight-text: #053b7a;
+  --highlight-border: #0969da;
+  --highlight-shadow: 0 2px 8px rgba(9, 105, 218, 0.3);
+}
