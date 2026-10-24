@@ -5,7 +5,7 @@ import useAppearance from "../../hooks/useAppearance";
 import useToast from "../../hooks/useToast";
 import { THEMES, DEFAULT_THEME } from "../../appearance/theme";
 import { TYPOGRAPHY, DEFAULT_TYPOGRAPHY } from "../../appearance/fontStudio";
-import { SURPRISE_SCOPES, pickRandom } from "../../appearance/appearance";
+import { SURPRISE_SCOPES } from "../../appearance/appearance";
 import AtmosphereHero from "./appearance/themes/AtmosphereHero";
 import { Droplet, Globe, Sun, Type } from "lucide-react";
 import AppearanceHeader from "./appearance/AppearanceHeader";
@@ -18,6 +18,9 @@ import AppearanceTabs, {
 } from "./appearance/AppearanceTabs";
 import StudioDivider from "./appearance/StudioDivider";
 import usePersistedState from "../../hooks/usePersistedState";
+
+
+const pickRandom = (items) => items[Math.floor(Math.random() * items.length)];
 
 // One entry per tab. The ids are what gets saved in localStorage.
 const TABS = [

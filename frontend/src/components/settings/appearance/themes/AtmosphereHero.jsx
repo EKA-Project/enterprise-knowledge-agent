@@ -1,5 +1,5 @@
 import { Shuffle } from "lucide-react";
-import { SurpriseMeButton } from "../../../common/ActionButtons"
+import { SurpriseMeButton } from "../../../common/ActionButtons";
 import IconBadge from "../../../icons/IconBadge";
 import ThemeSwatch from "./ThemeSwatch";
 import ResetDefaultButton from "./ResetDefaultButton";
@@ -7,7 +7,7 @@ import TypographySpecimenPill from "../typography/TypographySpecimenPill";
 import SegmentedControl from "../../../common/SegmentedControl";
 import { SURPRISE_SCOPES } from "../../../../appearance/appearance";
 import { getThemeIcon } from "../../../icons/themeIcons";
-
+import { DEFAULT_THEME } from "../../../../appearance/theme";
 export default function AtmosphereHero({
   theme,
   isDefault,
@@ -32,9 +32,14 @@ export default function AtmosphereHero({
             <Icon size={13} aria-hidden="true" />
             Current workspace atmosphere
           </p>
-          <h4 className="mt-2 flex items-center gap-3 font-serif text-[28px] font-bold leading-tight text-(--text-primary)">
+          <h4 className="mt-2 flex flex-wrap items-center gap-3 font-serif text-[28px] font-bold leading-tight text-(--text-primary)">
             <IconBadge icon={Icon} tone="solid" box={34} size={18} />
             {theme.name}
+            {theme.id === DEFAULT_THEME && (
+              <span className="rounded-full bg-(--bg-surface-subtle) px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-(--text-secondary)">
+                System default
+              </span>
+            )}
           </h4>
           <p className="mt-1 text-[13.5px] text-(--text-muted)">
             {theme.description}
