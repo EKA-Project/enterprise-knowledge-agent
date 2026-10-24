@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Eye Comfort overlay
+   --------------------------------------------------------------------------
+   A fixed, click-through colour layer over the whole app. The mode is set by
+   src/appearance/appearance.js as <html data-eye-comfort="...">; each mode
+   below only sets --eye-tint, and html::after reads it.
+
+   How the colours were chosen: `multiply` multiplies every pixel by the
+   overlay colour, so the colour IS the white-point shift. Each warm value is
+   the RGB ratio between the target colour temperature and a 6500K screen
+   (blackbody approximation, normalised so red stays at 255). To make a mode
+   warmer, lower its green and blue numbers.
+
+   Why an overlay and not `filter` on <body>: a filter turns <body> into the
+   containing block for position:fixed children, which would misplace modals,
+   toasts and drawers.
+
+   Limit: this is a CSS approximation, not a hardware or gamma-ramp change, and
+   it cannot reduce what the display emits. On very dark themes it is subtle,
+   because multiplying a dark colour changes it very little.
+   ========================================================================== */
+
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647; /* above modals, toasts and tooltips */
+  pointer-events: none; /* never blocks clicks */
+  /* Multiplying by white changes nothing, so "off" is white and every mode fades smoothly. */
+  background-color: var(--eye-tint, rgb(255 255 255));
+  mix-blend-mode: multiply;
+  transition: background-color 350ms ease;
+}
+
+/* ~6100K: light, all-day warmth (blue -5%, green -2%) */
+html[data-eye-comfort="true-tone"] {
+  --eye-tint: rgb(255 251 243);
+}
+
+
+/* ~5300K: soft cream paper tone (blue -14%, green -7%) */
+html[data-eye-comfort="paperwhite"] {
+  --eye-tint: rgb(255 241 230);
+}
+
+/* Neutral grey = pure dimming, no colour cast. 173/255 is 68% brightness. */
+html[data-eye-comfort="dark-room"] {
+  --eye-tint: rgb(173 173 173);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html::after {
+    transition: none;
+  }
+}
+
+/* The tint is for the screen only, never the paper. */
+@media print {
+  html::after {
+    display: none;
+  }
+}

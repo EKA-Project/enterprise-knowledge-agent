@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import useScrollPager from "../../../hooks/useScrollPager";
-import useWheelScroll from "../../../hooks/useWheelScroll";
+import useScrollPager from "../../../../hooks/useScrollPager";
+import useWheelScroll from "../../../../hooks/useWheelScroll";
 import CollectionSection from "./CollectionSection";
 import RowPager from "./RowPager";
 import ThemeCard from "./ThemeCard";

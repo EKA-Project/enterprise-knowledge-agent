@@ -4,31 +4,42 @@ import { DEFAULT_TYPOGRAPHY, applyFonts } from "./fontStudio";
 const KEY = "eka.appearance";
 
 // ---------- Options ----------
-export const DENSITIES = [
-  { id: "comfortable", label: "Comfortable (Default Editorial Spacing)" },
-  { id: "compact", label: "Compact (Tighter Spacing)" },
-  { id: "spacious", label: "Spacious (Extra Breathing Room)" },
+// Eye comfort = a soft colour tint laid over the whole screen (see styles/eye-comfort.css).
+// It warms and dims the display; it does not change what the screen emits.
+// `detail` is the small hint after the label: the approximate colour temperature of the
+// tint, relative to a 6500K (neutral) screen. The actual colours live in styles/eye-comfort.css.
+export const EYE_COMFORT_MODES = [
+  { id: "off", label: "Off", detail: "Neutral", description: "Original colours, no tint." },
+  { id: "true-tone", label: "True Tone", detail: "~6100K", description: "Light warmth for all-day use. Barely noticeable." },
+  { id: "paperwhite", label: "Paperwhite", detail: "~5100K", description: "Light cream tone for long reading sessions." },
+  { id: "dark-room", label: "Dark Room", detail: "Extra Dim", description: "Dims the whole screen for dark rooms." },
 ];
 
-// root = font-size of <html>. "Standard" is empty, so the app stays exactly as it is.
-export const SCALES = [
-  { id: "small", label: "Small (13px Base)", root: "92.8%" },
-  { id: "standard", label: "Standard (14px Base)", root: "" },
-  { id: "large", label: "Large (16px Base)", root: "114.3%" },
+// What the "Surprise Me" button randomizes. Only the ids are stored; labels are for the toggle.
+export const SURPRISE_SCOPES = [
+  { id: "theme", label: "Theme only" },
+  { id: "both", label: "Theme & Typo" },
 ];
 
 // ---------- Defaults ----------
 export const DEFAULT_APPEARANCE = {
   theme: DEFAULT_THEME,
   typography: DEFAULT_TYPOGRAPHY,
-  density: "comfortable",
-  scale: "standard",
+  eyeComfort: "off",
+  surpriseScope: "theme",
 };
 
 // ---------- Storage ----------
 export function loadAppearance() {
   try {
-    return { ...DEFAULT_APPEARANCE, ...JSON.parse(localStorage.getItem(KEY) ?? "{}") };
+    const saved = JSON.parse(localStorage.getItem(KEY) ?? "{}");
+    // Keep only the keys we still use, so old saved values (density, scale) are dropped.
+    return Object.fromEntries(
+      Object.entries(DEFAULT_APPEARANCE).map(([key, fallback]) => [
+        key,
+        saved[key] ?? fallback,
+      ]),
+    );
   } catch {
     return { ...DEFAULT_APPEARANCE };
   }
@@ -42,13 +53,14 @@ export function saveAppearance(appearance) {
   }
 }
 
-// ---------- Applying ----------
-export function applyAppearance({ theme, typography, density, scale }) {
+export function applyAppearance({ theme, typography, eyeComfort }) {
   applyTheme(theme);
   applyFonts(typography);
+
+  // "off" removes the attribute, so the overlay CSS has nothing to match.
   const root = document.documentElement;
-  root.dataset.density = density;
-  root.style.fontSize = SCALES.find((s) => s.id === scale)?.root ?? "";
+  if (eyeComfort && eyeComfort !== "off") root.dataset.eyeComfort = eyeComfort;
+  else delete root.dataset.eyeComfort;
 }
 
 // Call once in main.jsx before React renders, so there is no flash of the wrong look.

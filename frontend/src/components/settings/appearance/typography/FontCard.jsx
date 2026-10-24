@@ -1,20 +1,26 @@
-import { fontTag } from "../../../appearance/fontStudio";
+import { fontTag } from "../../../../appearance/fontStudio";
 import { card } from "../cardStyles";
 
 // One typography pairing. The heading specimen uses the pairing's heading font (the `serif` slot),
 // the description its body font (the `sans` slot) and the footer its code font (the `mono` slot).
 export default function FontCard({ font, active, onSelect }) {
+  const handleClick = () => {
+    if (!active) onSelect(font);
+  };
+
   return (
     <button
       type="button"
       aria-pressed={active}
-      onClick={() => onSelect(font)}
-      className={`${card(active)} flex flex-col p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)`}
+      onClick={handleClick}
+      className={`${card(active)} ${active ? "cursor-not-allowed" : ""} flex flex-col p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)`}
     >
       <span className="flex items-center justify-between gap-2">
-        <span className="text-[13px] font-bold text-(--text-primary)">{font.name}</span>
+        <span className="min-w-0 text-[13px] font-bold text-(--text-primary)">
+          {font.name}
+        </span>
         {active && (
-          <span className="rounded-full bg-(--primary-light) px-2 py-px text-[10px] font-bold text-(--primary)">
+          <span className="shrink-0 whitespace-nowrap rounded-full bg-(--primary-light) px-2 py-px text-[10px] font-bold text-(--primary)">
             <span aria-hidden="true">✦</span> Applied
           </span>
         )}
