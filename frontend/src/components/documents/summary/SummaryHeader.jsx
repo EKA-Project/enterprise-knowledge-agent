@@ -94,9 +94,9 @@ function SummaryHeader({
               aria-label={pinned ? 'Unpin document' : 'Pin document'}
               aria-pressed={pinned}
               onClick={onTogglePin}
-              className={`${circle} ${pinned ? 'text-[#3561bb]' : 'text-(--text-secondary)'}`}
+              className={`group ${circle} ${pinned ? 'text-[#e5484d]' : 'text-(--text-secondary) hover:text-[#e5484d]'}`}
             >
-              <Pin size={14} className={pinned ? 'fill-current' : ''} />
+              <Pin size={14} className={pinned ? 'fill-current' : 'group-hover:fill-current'} />
             </button>
 
             <SummaryKebabMenu

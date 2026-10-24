@@ -1,15 +1,18 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext.jsx';
-import DeleteModal from '../components/documents/summary/DeleteModal';
 import {
   getDocumentSummary,
   setDocumentArchived,
 } from '../components/documents/summary/summaryService';
+import { loadDocuments } from '../components/documents/shared/documentResults.js';
 import {
-  loadDocuments,
-} from '../components/documents/shared/documentResults.js';
-import { useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata, deleteDocument } from '../components/documents/shared/roleDocuments.js';
+  useRoleDocuments,
+  setDocumentArchivedFlag,
+  startReindex,
+  saveDocumentMetadata,
+  deleteDocument,
+} from '../components/documents/shared/roleDocuments.js';
 import SummaryHeader from '../components/documents/summary/SummaryHeader';
 import SummaryTabs from '../components/documents/summary/SummaryTabs';
 import AiSummaryTab from '../components/documents/summary/AiSummaryTab';
@@ -18,8 +21,8 @@ import GraphTab from '../components/documents/summary/GraphTab';
 import SummarySidebar from '../components/documents/summary/SummarySidebar';
 import EditMetadataModal from '../components/documents/summary/EditMetadataModal';
 import ArchiveModal from '../components/documents/summary/ArchiveModal';
+import DeleteModal from '../components/documents/summary/DeleteModal';
 import { DocToastHost, showDocToast } from '../components/documents/shared/DocToast';
-
 
 function DocumentSummaryPage() {
   const navigate = useNavigate();
@@ -38,9 +41,9 @@ function DocumentSummaryPage() {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const showToast = showDocToast; // (message, variant)
+
   // Pin / bookmark live in the shared documents store, so the Documents list
   // and this page always agree (and survive switching role).
-
   const { items, toggleFlag } = useRoleDocuments();
   const live = baseDoc ? items.find((item) => item.id === baseDoc.id) : null;
   const saved = Boolean(live ? live.isBookmarked : baseDoc?.isBookmarked);
@@ -53,11 +56,17 @@ function DocumentSummaryPage() {
     return {
       ...baseDoc,
       ...(live?.edited
-        ? { title: live.title, category: live.category, author: live.author, executiveSummary: live.description }
+        ? {
+            title: live.title,
+            category: live.category,
+            author: live.author,
+            executiveSummary: live.description,
+          }
         : {}),
       ...(live?.reindexedNow ? { uploaded: 'Just now (Re-indexed)' } : {}),
     };
   }, [baseDoc, live]);
+
   // Make sure the shared list is loaded even when this page is opened directly
   useEffect(() => {
     loadDocuments();
@@ -103,6 +112,7 @@ function DocumentSummaryPage() {
       showToast('Could not copy the link', 'neutral');
     }
   };
+
   const togglePin = () => {
     const next = !pinned;
     toggleFlag(doc.id, 'isPinned');
@@ -111,6 +121,7 @@ function DocumentSummaryPage() {
       next ? 'success' : 'neutral',
     );
   };
+
   const toggleSave = () => {
     const next = !saved;
     toggleFlag(doc.id, 'isBookmarked');
@@ -149,7 +160,7 @@ function DocumentSummaryPage() {
 
   if (notFound) {
     return (
-            <div className="mx-auto w-full max-w-[1100px] px-4 py-16 text-center sm:px-6">
+      <div className="mx-auto w-full max-w-[1100px] px-4 py-16 text-center sm:px-6">
         <h1 className="font-serif text-2xl font-black text-(--text-primary)">Document not found</h1>
         <p className="mt-2 text-sm text-(--text-muted)">
           This document doesn&apos;t exist or is no longer available.
@@ -167,7 +178,7 @@ function DocumentSummaryPage() {
   if (!doc) return null; // add a skeleton when real loading time exists
 
   return (
-        <div className="w-full space-y-6 py-6">
+    <div className="w-full space-y-7 py-6">
       <SummaryHeader
         doc={doc}
         adminMode={adminMode}
@@ -184,7 +195,8 @@ function DocumentSummaryPage() {
       />
       <SummaryTabs active={tab} onChange={setTab} />
 
-      <div className="grid grid-cols-1 gap-9 lg:grid-cols-[minmax(0,1fr)_21rem]">
+      {/* Left column 1.85fr (970px) + right column 1fr (524px), 28px gap */}
+      <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[minmax(0,1.85fr)_minmax(0,1fr)]">
         {tab === 'summary' && (
           <AiSummaryTab doc={doc} onReadPage={openReader} onSearchTag={searchTag} />
         )}
@@ -201,12 +213,14 @@ function DocumentSummaryPage() {
         )}
 
         <SummarySidebar
+          doc={doc}
           telemetry={doc.telemetry}
           questions={doc.suggestedQuestions}
           adminMode={adminMode}
           archived={archived}
           onReindex={reindex}
           onToggleArchive={() => setArchiveOpen(true)}
+          onAsk={(q) => navigate(`/ask-eka?q=${encodeURIComponent(q)}`)}
           related={doc.sisterDocuments}
           onOpenRelated={(d) => navigate(`/documents/summary?id=${d.id}`)}
         />
@@ -223,7 +237,7 @@ function DocumentSummaryPage() {
           onConfirm={confirmArchive}
         />
       )}
-            {deleteOpen && (
+      {deleteOpen && (
         <DeleteModal
           doc={doc}
           onClose={() => setDeleteOpen(false)}

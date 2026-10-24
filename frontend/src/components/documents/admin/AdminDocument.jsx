@@ -39,7 +39,7 @@ function AdminDocument() {
             type="button"
             onClick={openUpload}
             disabled={!canUpload}
-            className="inline-flex h-[34px] cursor-pointer items-center gap-2 rounded-full bg-(--primary) pl-2 pr-4 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
+            className="ml-auto inline-flex h-[34px] cursor-pointer items-center gap-2 rounded-full bg-(--primary) pl-1.5 pr-3.5 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/25">
               <Upload size={11} />

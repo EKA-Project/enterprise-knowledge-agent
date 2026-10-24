@@ -116,7 +116,7 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
 
             {/* Actions (hidden in the manager view, like the video) */}
             {showActions && (
-              <div className="flex shrink-0 items-center gap-1">
+           <div className="flex shrink-0 items-center gap-1">
                 {adminMode ? (
                   <div className="group relative">
                     <button
@@ -125,18 +125,21 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                       aria-pressed={Boolean(document.isPinned)}
                       onClick={handlePin}
                       className={`cursor-pointer rounded-md p-1 transition-colors ${document.isPinned
-                        ? 'text-(--primary)'
-                        : 'text-(--text-muted) hover:text-(--text-primary)'
+                        ? 'text-[#e5484d]'
+                        : 'text-(--text-muted) hover:text-[#e5484d]'
                         }`}
                     >
-                      <Pin size={14} className={document.isPinned ? 'fill-current' : ''} />
+                      <Pin
+                        size={14}
+                        className={document.isPinned ? 'fill-current' : 'group-hover:fill-current'}
+                      />
                     </button>
                     <Tooltip>{document.isPinned ? 'Unpin Document' : 'Pin Document'}</Tooltip>
                   </div>
                 ) : (
-                  // Employee / Manager: a pinned document just shows a static blue pin
+                  // Employee / Manager: a pinned document just shows a static red pin
                   document.isPinned && (
-                    <span className="p-1 text-(--primary)" aria-label="Pinned by admin">
+                    <span className="p-1 text-[#e5484d]" aria-label="Pinned by admin">
                       <Pin size={14} className="fill-current" />
                     </span>
                   )

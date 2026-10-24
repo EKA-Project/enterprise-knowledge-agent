@@ -15,7 +15,7 @@ function GraphTab({ articles, sisters, onOpenArticle, onOpenDocument }) {
         <h2 className="doc-heading text-lg font-bold text-(--text-primary)">
           Connected Knowledge Articles
         </h2>
-        <div className="mt-4 space-y-3">
+        <div className="mt-0 space-y-1">
           {articles.map((a) => (
             <button key={a.id} type="button" onClick={() => onOpenArticle(a)} className={`${item} p-6`}>
               <div className="flex items-start justify-between gap-3">
@@ -43,7 +43,7 @@ function GraphTab({ articles, sisters, onOpenArticle, onOpenDocument }) {
               type="button"
               onClick={() => onOpenDocument(d)}
               // min-h copies the tall cards seen in the reference video
-              className={`${item} flex min-h-56 items-start gap-3 p-6`}
+              className={`${item} flex min-h-5 items-start gap-3 p-6`}
             >
               <span
                 className={`doc-mono flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-[9px] font-bold ${
