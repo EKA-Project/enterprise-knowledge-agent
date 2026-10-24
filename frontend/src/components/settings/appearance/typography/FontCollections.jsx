@@ -73,13 +73,14 @@ export default function FontCollections({ activeId, onSelect }) {
 
         {/* @container: column count follows this block's width, not the browser window's */}
         <div className="@container mt-4">
-          <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2 @3xl:grid-cols-3">
-            {visible.map((f) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {visible.map((f, idx) => (
               <FontCard
                 key={f.id}
                 font={f}
                 active={activeId === f.id}
                 onSelect={onSelect}
+                index={TYPOGRAPHY.indexOf(f)}
               />
             ))}
           </div>
