@@ -3,7 +3,7 @@
 
 // ---------- Defaults ----------
 export const DEFAULT_SETTINGS = {
-  mascot: "orbit", answerStyle: "concise", language: "English (United States)", recommended: true,
+  answerStyle: "concise", language: "English (United States)", recommended: true,
   notifications: { digest: true, answers: true, ingestion: true, security: true },
   privacy: { saveHistory: true, retention: "90 Days", presence: true },
   admin: {

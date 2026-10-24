@@ -1,4 +1,4 @@
-// Small decorative particles that float around Byte.
+// Small decorative particles that float around the mascot.
 // Each effect is a list of tiny spans; the CSS in variables.css animates them.
 // The numbers are just positions/timing: dx/dy = where a particle flies to (px),
 // delay = when it starts (s), x = left position for rising bits.
@@ -36,7 +36,7 @@ const SETS = {
 
   // Angry steam: two side vents and the top of the head, puffs of different sizes
   // and lifetimes so the plume never looks synchronised.
-  // x/y = start (% of Byte's box), rise = climb, drift = sideways, s = size, dur = life
+  // x/y = start (% of the mascot's box), rise = climb, drift = sideways, s = size, dur = life
   steam: [
     {
       x: "34%",
@@ -124,19 +124,19 @@ const SETS = {
 };
 
 // type: "drool" | "crumbs" | "bits" | "sparkles" | null
-function ByteParticles({ type }) {
+function MascotParticles({ type }) {
   const items = SETS[type];
   if (!items) return null; // no particles for this state
 
-  // "crumbs" -> class "byte-p-crumb" (drop the trailing "s", except "drool")
+  // "crumbs" -> class "mascot-p-crumb" (drop the trailing "s", except "drool")
   const kind = type === "drool" ? "drool" : type.replace(/s$/, "");
 
   return (
-    <div className="byte-particles" aria-hidden="true">
+    <div className="mascot-particles" aria-hidden="true">
       {items.map((p, i) => (
         <span
           key={i}
-          className={`byte-p byte-p-${kind}`}
+          className={`mascot-p mascot-p-${kind}`}
           style={{
             "--dx": `${p.dx ?? 0}px`,
             "--dy": `${p.dy ?? 0}px`,
@@ -157,4 +157,4 @@ function ByteParticles({ type }) {
   );
 }
 
-export default ByteParticles;
+export default MascotParticles;

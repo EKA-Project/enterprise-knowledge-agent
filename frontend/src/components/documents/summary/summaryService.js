@@ -1,0 +1,274 @@
+import {
+  getDocumentById,
+  getDocuments,
+  setDocumentFlag as saveDocumentFlag,
+} from '../shared/documentService.js';
+
+// Mock API for the Document Summary page. Later replace getDocumentSummary with:
+//   const res = await fetch(`/api/documents/${id}/summary`); return res.json();
+// The document's own facts (title, size, author, chunks, flags) come from
+// documentService; only the AI-generated parts are written here.
+
+// Only one real PDF exists for now; the backend will serve each document's own file.
+const SAMPLE_PDF = '/sample/enterprise_policy.pdf';
+
+const SUGGESTED_QUESTIONS = ['Summarize top action items', 'What are the compliance rules?'];
+
+// Hand-written summaries, keyed by document id. Documents without an entry get
+// a generic summary built from their own data (see buildGenericContent).
+const richContent = {
+  // Corporate Governance & Compliance Policy (the detailed one in the video)
+  'doc-7': {
+    uploaded: '2026-08-12',
+    executiveSummary:
+      'Official binding charter detailing corporate governance, whistleblower rules, information security, WFA guidelines, IP ownership, and incident escalation protocols at Northstar Studio.',
+    keyInsights: [
+      'Standard Code of Conduct requires professional behavior and carries strict compliance SLA rules.',
+      'Secure AES-256 and TLS 1.3 encryption required with isolated zero model-training vaults.',
+      'Work from Anywhere (WFA) limited to 90 days globally per rolling calendar year.',
+      'Incident responses mandate Commander assignment within 4 minutes on Sev-1 cases.',
+    ],
+    entities: ['Corporate Governance', 'AES-256', '90-Day WFA', 'Zero-Training Vaults', 'ICS Command'],
+    sections: [
+      {
+        id: 1,
+        page: 1,
+        title: 'Corporate Governance & Ethics',
+        summary:
+          'Establishes mandatory Code of Conduct rules, zero-tolerance harassment standards, and confidential whistleblower protection channels handled by Legal Ops.',
+        keywords: [
+          'Zero-tolerance harassment policy',
+          'Anonymous whistleblower channels',
+          'Managed by Legal Ops Committee',
+        ],
+      },
+      {
+        id: 2,
+        page: 2,
+        title: 'Information Security & Data Protection',
+        summary:
+          'Defines enterprise information security mandates including AES-256 encryption at rest, TLS 1.3 in transit, 90-day KMS key rotation, and 16-character MFA workstation controls.',
+        keywords: ['AES-256 & TLS 1.3 Encryption', '90-day KMS key rotation', '16-character MFA passphrases'],
+      },
+      {
+        id: 3,
+        page: 3,
+        title: 'Remote Work & Global Travel',
+        summary:
+          'Governs remote-first operations, Work From Anywhere (WFA) limits up to 90 days internationally locally, $1,500 annual wellness stipends, and Novan travel expense caps.',
+        keywords: ['90-day WFA international limit', '$1,500 annual home stipend', 'Novan travel expense caps'],
+      },
+      {
+        id: 4,
+        page: 4,
+        title: 'Intellectual Property & AI Usage',
+        summary:
+          'Outlines intellectual property ownership rules and enforces zero model-training agreements to ensure enterprise data is never used to train LLMs.',
+        keywords: ['100% IP ownership retained', 'Zero LLM model-training guarantee', 'Isolated tenant container'],
+      },
+      {
+        id: 5,
+        page: 5,
+        title: 'Incident Command & SRE SLAs',
+        summary:
+          'Mandates Site Reliability Engineering response SLAs, requiring Incident Commander assignment within 4 minutes on Sev-1 cases.',
+        keywords: ['4-minute Commander assignment', 'Sev-1 response SLAs', 'Blameless post-mortems'],
+      },
+    ],
+    // Knowledge Base articles linked to this document
+    connectedArticles: [
+      {
+        id: 'wfa-90-day',
+        title: 'Work from Anywhere (WFA) 90-Day Policy Rules',
+        excerpt:
+          'Employees may work remotely outside their primary tax country for up to 90 days per rolling calendar year. Submit travel requests at least 14 days in advance via HR Portal.',
+        verified: true,
+      },
+      {
+        id: 'data-encryption',
+        title: 'Data Encryption & Zero-Training Guarantees',
+        excerpt:
+          'All document embeddings and conversational inputs in EKA are encrypted with tenant KMS keys using AES-256 at rest and TLS 1.3 in transit. Data is never used for training.',
+        verified: true,
+      },
+    ],
+    // Other documents related to this one (ids of documents in documentService)
+    sisterIds: ['doc-9', 'doc-11'],
+    // Reader pages. `text` keeps the raw "###" markdown, shown as-is in the video.
+    readerPages: [
+      {
+        page: 1,
+        title: '1. Corporate Governance & Ethics',
+        text: 'This document outlines the operational frameworks, compliance mandates, and corporate governance protocols for Northstar Studio Inc. (the "Company"). As a modern, remote-first organization operating across multiple jurisdictions, these rules ensure operational integrity, regulatory compliance, and consistent behavior globally.\n\n### 1.1 Code of Conduct & Workplace Standards The Company is dedicated to providing a professional, respectful, and safe environment for all employees, contractors, and partners. All members are expected to conduct business with honesty, fairness, and the highest standards of professional ethics. Harassment, discrimination, or retaliation of any kind will not be tolerated and represents grounds for immediate termination.\n\n### 1.2 Whistleblower Protection Protocols We encourage open dialogue and encourage reporting of any unethical behavior. The Company provides anonymous reporting channels where suspected violations of law, regulations, or policies can be submitted without fear of retaliation. Investigations will be handled with strict confidentiality by the Legal Operations Committee.',
+      },
+      {
+        page: 2,
+        title: '2. Information Security & Data Protection',
+        text: "Data security is paramount to the trust our customers place in Northstar Studio. EKA's cloud infrastructure utilizes strict multi-tenant database isolation, advanced cryptographic keys, and mandatory threat modeling. All members must adhere to strict protection guidelines.\n\n### 2.1 Encryption Standards & KMS Management All data ingested into the EKA enterprise assistant must be encrypted at rest using AES-256 with unique tenant KMS keys. Data in transit requires TLS 1.3 encryption. Key rotation occurs automatically every 90 days. Decryption keys are isolated within a secure vault, inaccessible to model-training pipelines.\n\n### 2.2 Device & IAM Access Controls Workstations must run corporate MDM profiles, enforce full disk encryption (BitLocker/FileVault), and require phishing-resistant Multi-Factor Authentication (MFA) via hardware keys or certified authenticator apps. Password strength must be 16-character minimum passphrases.",
+      },
+      {
+        page: 3,
+        title: '3. Remote Work & Global Travel',
+        text: 'Northstar Studio operates as a high-autonomy, remote-first workplace. While flexibility is core to our operations, specific legal, tax, and collaborative structures must be maintained to ensure seamless business continuity across multiple timezones.\n\n### 3.1 Work From Anywhere (WFA) Policy Employees are permitted to work outside their primary tax residency state or country for up to 90 calendar days per rolling calendar year. WFA requests require 14 days advance notification via HR portals to evaluate potential permanent establishment tax risks.\n\n### 3.2 Reimbursements & Travel Allowances The Company subsidizes co-working memberships up to $300 USD per month. Approved corporate travel reimbursements are managed via Navan Expense. Lodging thresholds are capped at $250 USD/night for Tier 1 cities, and daily meal allowances are capped at $75 USD per day.',
+      },
+      {
+        page: 4,
+        title: '4. Intellectual Property & AI Usage',
+        text: 'Proprietary knowledge is our core competitive advantage. Employees must protect intellectual assets, ensure correct usage of AI assistance, and guarantee that no client data leaks into public domains.\n\n### 4.1 Ownership of Inventions & Works All software code, graphic designs, vectors, and documentation developed during employment remain the sole intellectual property of Northstar Studio. Departing employees must surrender access to all repositories and return all corporate devices immediately upon termination.\n\n### 4.2 Zero Model-Training & AI Governance Agreements To comply with enterprise security agreements, EKA integrations operate on zero-training LLM APIs. All queries, indexes, and document content remain strictly localized to the tenant container. No user prompts or document vectors may be used for model fine-tuning or training purposes.',
+      },
+      {
+        page: 5,
+        title: '5. Incident Command & SRE SLAs',
+        text: 'Sustaining platform availability is vital. In the event of system outages or degraded performance, the Site Reliability Engineering (SRE) team will coordinate response metrics under the Incident Command System (ICS) to restore target levels.\n\n### 5.1 Response SLAs & Notification Schedules For Sev-1 outages, an Incident Commander must be assigned within 4 minutes. Ingress routing failover triggers automatically if packet loss exceeds 15% for 3 minutes. Public status page logs must be updated within 10 minutes, with subsequent progress reports posted every 20 minutes.\n\n### 5.2 Blameless Post-Mortems Following resolution, technical leads must schedule a blameless post-mortem within 48 hours. The objective is to analyze timeline events, identify root causes, and log preventative software or infrastructure tickets in Jira, ensuring continuous reliability improvements.',
+      },
+    ],
+  },
+    // 2026 Global Remote Work (Oct-20 video). Raw "###" text is shown as-is in the video.
+  'doc-9': {
+    executiveSummary:
+      'Official workplace guidelines governing remote work across 18 countries. Covers home office equipment stipends, international work-from-anywhere allowances (up to 90 days/year), and core collaboration overlap hours.',
+    keyInsights: [
+      'Employees can work internationally outside their home tax residency for up to 90 calendar days per rolling year.',
+      'Annual home office wellness stipend is $1,500 USD, claimable through Navan Expense in Q1.',
+      'Core collaboration window is 10:00 AM to 3:00 PM in regional anchor timezone.',
+      'Coworking space pass (WeWork / Industrious) is 100% subsidized upon manager approval.',
+    ],
+    entities: ['Remote Work', '$1,500 Stipend', '90 Days Travel', 'Core Hours', 'Navan Expense'],
+    sections: [
+      {
+        id: 1,
+        page: 1,
+        title: 'Remote Work & Workspace Eligibility',
+        summary:
+          'Northstar Studio operates under a high-autonomy, remote-first operational philosophy. All full-time employees are eligible for remote work, provided they maintain consistent communication channels and meet collaborative ...',
+      },
+      {
+        id: 2,
+        page: 2,
+        title: 'Working from Anywhere (WFA) Allowances',
+        summary:
+          'Employees may request short-term travel permits to work from international or alternative jurisdictions for up to 90 calendar days per rolling calendar year. This prevents corporate residency tax trigger risks. ### 2.1 ...',
+      },
+      // Section 3 is NOT visible in the video (it says "3 sections analyzed") - fill in later
+    ],
+    connectedArticles: [],
+    sisterIds: ['doc-7', 'doc-10'],
+    readerPages: [],
+  },
+};
+
+// Summary for documents without hand-written content. The uploaded sample
+// documents in the video look like this: description as the TL;DR, three
+// insights built from the document's own data. Entities, the single overview
+// section and the reader text are our own placeholders (not in the video).
+function buildGenericContent(doc) {
+  const isUploadedSample = Number(doc.id.replace('doc-', '')) <= 6;
+
+  return {
+    uploaded: isUploadedSample ? '2026-10-12' : '2026-08-12', // seed dates are our own
+    executiveSummary: doc.description,
+    keyInsights: [
+      `Uploaded directly by ${doc.author}`,
+      '100% encrypted with tenant KMS key',
+      `${doc.chunks} searchable semantic vector chunks indexed`,
+    ],
+    entities: [doc.category, `${doc.format} Document`, 'Tenant KMS Encryption'],
+    sections: [
+      {
+        id: 1,
+        page: 1,
+        title: 'Document Overview',
+        summary: doc.description,
+        keywords: [doc.category, `${doc.pages} pages`, doc.size],
+      },
+    ],
+    connectedArticles: [],
+    sisterIds: null, // picked from the same category in getDocumentSummary
+    readerPages: [
+      {
+        page: 1,
+        title: '1. Document Overview',
+        text: `${doc.description}\n\n### 1.1 Document Details Author: ${doc.author}. Category: ${doc.category}. Format: ${doc.format}, ${doc.size}, ${doc.pages} pages.`,
+      },
+    ],
+  };
+}
+
+// Related documents shown in the Graph tab
+function pickSisters(doc, content, allDocs) {
+  const related = content.sisterIds
+    ? content.sisterIds.map((id) => allDocs.find((item) => item.id === id)).filter(Boolean)
+    : allDocs.filter((item) => item.id !== doc.id && item.category === doc.category).slice(0, 2);
+
+  return related.map(({ id, title, format, category, author }) => ({
+    id,
+    title,
+    format,
+    category,
+    author,
+  }));
+}
+
+export async function getDocumentSummary(id) {
+  const doc = await getDocumentById(id);
+  if (!doc) return null; // unknown id → the page shows its "not found" view
+  const allDocs = await getDocuments();
+  const content = richContent[doc.id] ?? buildGenericContent(doc);
+
+  return {
+    // Facts about the document (from documentService)
+    id: doc.id,
+    title: doc.title,
+    format: doc.format,
+    category: doc.category,
+    status: doc.status,
+    size: doc.size,
+    readTime: doc.readTime,
+    pages: doc.pages,
+    author: doc.author,
+    chunks: doc.chunks,
+    isPinned: Boolean(doc.isPinned),
+    isBookmarked: Boolean(doc.isBookmarked),
+    uploaded: content.uploaded,
+
+    // AI-generated parts
+    executiveSummary: content.executiveSummary,
+    keyInsights: content.keyInsights,
+    entities: content.entities,
+    sections: content.sections,
+    telemetry: {
+      vectorChunks: `${doc.chunks} chunks`,
+      totalPages: `${doc.pages} pages`,
+      encryption: 'AES-256 (KMS)',
+      tenantIsolation: 'Active (0 Training)',
+      indexLatency: '284 ms',
+    },
+    suggestedQuestions: ['Summarize top key takeaways', 'What are the compliance rules?'],
+    connectedArticles: content.connectedArticles,
+    sisterDocuments: pickSisters(doc, content, allDocs),
+
+    // Served by the backend later (a signed/static URL of the original file)
+    pdfUrl: SAMPLE_PDF,
+    readerPages: content.readerPages,
+  };
+}
+
+// Pin / bookmark go through documentService, so the Documents list sees them too.
+// (Replace with a PATCH call when the backend exists.)
+export async function setDocumentFlag(id, flag, value) {
+  return saveDocumentFlag(id, flag, value);
+}
+
+// Mock write actions. Replace each body with a fetch/PATCH call later.
+export async function setDocumentArchived(id, archived) {
+  return { id, archived };
+}
+export async function reindexDocument(id) {
+  return { id, status: 'queued' };
+}
+
+// Mock: replace with PATCH /documents/:id/metadata (+ file upload) later
+export async function updateDocumentMetadata(id, changes) {
+  await new Promise((r) => setTimeout(r, 150));
+  return { id, ...changes };
+}

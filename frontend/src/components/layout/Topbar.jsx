@@ -25,6 +25,10 @@ const routeMetadata = {
     title: "Documents",
     metadata: "INGESTION REPOSITORY / 24 DOCS",
   },
+  "/documents/summary": {
+    title: "Document Summary",
+    metadata: "AI SYNTHESIS & FULL READER",
+  },
   "/semantic-search": {
     title: "Semantic Search",
     metadata: "CONCEPT & INTENT DISCOVERY",
@@ -81,11 +85,10 @@ function Topbar() {
               key={role.name}
               type="button"
               onClick={() => setActiveRole(role.name)}
-              className={`flex cursor-pointer items-center gap-0.5 rounded-full px-2.5 py-1 transition-all duration-150 ${
-                activeRole === role.name
+              className={`flex cursor-pointer items-center gap-0.5 rounded-full px-2.5 py-1 transition-all duration-150 ${activeRole === role.name
                   ? "bg-(--primary) font-bold text-(--primary-contrast) shadow-sm"
                   : "bg-transparent font-semibold text-(--text-secondary) hover:bg-(--primary-light) hover:text-(--primary)"
-              }`}
+                }`}
             >
               <span className="text-[10px] leading-none">{role.icon}</span>
               <span className="text-[11px]">{role.name}</span>

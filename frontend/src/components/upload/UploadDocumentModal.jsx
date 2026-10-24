@@ -11,8 +11,9 @@ import {
 } from "lucide-react";
 import Modal from "../common/Modal.jsx";
 import Button from "../common/Button.jsx";
-import ByteMascot from "../mascot/ByteMascot.jsx";
-import { documentCategories } from "../documents/DocumentData.js";
+import Mascot from "../mascot/Mascot.jsx";
+import { UPLOAD_MASCOT_STATES } from "./uploadMascotStates.js";
+import { documentCategories } from "../documents/shared/DocumentData.js";
 import UploadDropzone from "./UploadDropzone.jsx";
 import UploadProgress from "./UploadProgress.jsx";
 import useUploadPipeline from "./useUploadPipeline.js";
@@ -35,7 +36,7 @@ const HINT_TONES = {
   danger: "text-(--status-danger)",
 };
 
-// validateFile error code -> Byte state
+// validateFile error code -> mascot state
 const FILE_ERROR_MASCOT = {
   type: "invalidType",
   size: "tooLarge",
@@ -156,7 +157,7 @@ function UploadDocumentModal({
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState(null); // { code, message } | null
   const [isDragging, setIsDragging] = useState(false);
-  const [rejectCount, setRejectCount] = useState(0); // lets Byte react to every rejection
+  const [rejectCount, setRejectCount] = useState(0); // lets the mascot react to every rejection
 
   const pipeline = useUploadPipeline(onSubmit);
   const { phase } = pipeline;
@@ -344,9 +345,10 @@ function UploadDocumentModal({
         </div>
       )}
     >
-      {/* Byte reacts to everything below. Pokeable only while nothing is running. */}
-      <ByteMascot
+      {/* The Mascot reacts to everything below. Pokeable only while nothing is running. */}
+      <Mascot
         state={mascotState}
+        states={UPLOAD_MASCOT_STATES}
         pokeable={phase === "idle"}
         frameClassName="h-32"
         imageClassName="h-20"

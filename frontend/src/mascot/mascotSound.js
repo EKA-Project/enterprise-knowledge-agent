@@ -1,4 +1,4 @@
-// Byte's sound effects: tiny 8-bit sounds generated with the Web Audio API
+// Mascot sound effects: tiny 8-bit sounds generated with the Web Audio API
 // (no audio files). Ported from the original EKA mascot.js.
 
 const STORAGE_KEY = "eka_mascot_sound"; // same key as the original build; "false" = muted
@@ -90,7 +90,15 @@ function tone(freq, type, duration, offset = 0, level = 0.14) {
 
 // A note that slides from one pitch to another. `fade` lets the volume
 // outlast the slide slightly (the sad sound needs that).
-function glide(type, fromHz, toHz, duration, offset = 0, level = 0.12, fade = duration) {
+function glide(
+  type,
+  fromHz,
+  toHz,
+  duration,
+  offset = 0,
+  level = 0.12,
+  fade = duration,
+) {
   const audio = getContext();
   if (!audio) return;
   const t = audio.currentTime + offset;
@@ -149,7 +157,7 @@ function angryBuzz() {
 }
 
 /* ==========================================================================
-   The sounds (names are used by the `sound` field in byteStates.js)
+   The sounds (names are used by the `sound` field in mascotStates.js)
    ========================================================================== */
 
 const SOUNDS = {
@@ -167,9 +175,12 @@ const SOUNDS = {
     tone(1046.5, "square", 0.2, 0.24, 0.16); // C6
   },
 
-  // Waiting for a file: low tummy rumble
+  // Waiting for a file: a low tummy rumble, three overlapping growls that
+  // slide down in pitch (glide(type, fromHz, toHz, duration, offset, level, fade))
   hungry() {
-    glide("triangle", 120, 95, 0.35, 0, 0.12);
+    glide("sawtooth", 95, 70, 0.5, 0, 0.1, 0.55);
+    glide("triangle", 140, 90, 0.45, 0.12, 0.12, 0.5);
+    glide("sawtooth", 80, 62, 0.4, 0.3, 0.08, 0.45);
   },
 
   // File hovering over the drop zone
@@ -215,6 +226,18 @@ const SOUNDS = {
 
   angry: angryBuzz,
 
+  // Slow tap on a sleeping mascot: a low, short sleepy mumble
+  grumble() {
+    glide("triangle", 190, 120, 0.28, 0, 0.1, 0.32);
+  },
+
+  // Poked quickly while sleeping: a sharp startled squawk that jumps up, then drops
+  yell() {
+    glide("sawtooth", 260, 900, 0.1, 0, 0.22, 0.2);
+    glide("square", 700, 380, 0.22, 0.1, 0.18, 0.3);
+    tone(330, "sawtooth", 0.12, 0.32, 0.14);
+  },
+
   // Too many taps: a wobbling four-note sequence
   dizzy() {
     tone(440, "sawtooth", 0.08, 0, 0.14);
@@ -228,7 +251,7 @@ const SOUNDS = {
    The one function the rest of the app calls
    ========================================================================== */
 
-export function playByteSound(name) {
+export function playMascotSound(name) {
   if (!soundOn) return; // muted
   if (document.visibilityState === "hidden") return; // nobody is looking at this tab
   const play = SOUNDS[name];
@@ -236,6 +259,47 @@ export function playByteSound(name) {
   try {
     play();
   } catch (error) {
-    console.warn("[byte-sound]", error); // a sound problem must never break the UI
+    console.warn("[mascot-sound]", error); // a sound problem must never break the UI
+  }
+}
+
+
+
+/* ==========================================================================
+   Per-mascot "chosen" sounds
+   --------------------------------------------------------------------------
+   The ONLY sounds that differ between mascots: played once when a mascot is
+   selected in Settings > Preferences. Every other sound (poke, angry, ...) is
+   shared. Keyed by mascot id (see mascotRegistry.js).
+   ========================================================================== */
+
+const SELECT_SOUNDS = {
+  // Byte: rising 8-bit arcade power-up, held top note
+  byte() {
+    [440, 554.37, 659.25, 880, 1108.73].forEach((hz, i) =>
+      tone(hz, "square", 0.04, i * 0.03, 0.15),
+    );
+    tone(1318.51, "square", 0.2, 0.15, 0.18);
+  },
+
+  // Orbit: friendly two-tone chirp ("Bwip-twee!") with a sparkle overtone
+  orbit() {
+    glide("sine", 540, 760, 0.08, 0, 0.2, 0.11); // "Bwip"
+    glide("sine", 840, 1260, 0.11, 0.11, 0.22, 0.34); // "twee"
+    glide("triangle", 1680, 2520, 0.13, 0.13, 0.07, 0.27); // sparkle
+  },
+};
+
+// Same rules as playMascotSound: respects mute, silent in a hidden tab, and a
+// sound problem never breaks the UI.
+export function playMascotSelectSound(id) {
+  if (!soundOn) return;
+  if (document.visibilityState === "hidden") return;
+  const play = SELECT_SOUNDS[id];
+  if (!play) return;
+  try {
+    play();
+  } catch (error) {
+    console.warn("[mascot-sound]", error);
   }
 }

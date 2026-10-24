@@ -20,6 +20,7 @@
      onRowClick:  (row) => void; makes rows clickable
 
    Curve: header corners use --radius-table from variables.css.
+   Row hover uses --table-row-hover (falls back to --bg-surface-subtle).
    NOTE: the table uses `border-separate border-spacing-0` (not
    border-collapse) because border-radius is ignored on table cells in the
    collapsed model. For the same reason, row dividers are drawn on the <td>s
@@ -88,7 +89,7 @@ function DataTable({
               <tr
                 key={getRowKey(row)}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
-                className={`transition-colors hover:bg-(--bg-surface-subtle) ${
+                className={`transition-colors hover:bg-(--table-row-hover,var(--bg-surface-subtle)) ${
                   onRowClick ? "cursor-pointer" : ""
                 }`}
               >
