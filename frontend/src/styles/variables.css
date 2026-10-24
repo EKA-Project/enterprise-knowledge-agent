@@ -9,16 +9,6 @@
    The active theme is set on <html> by src/theme.js (temporary) and later
    by the Appearance settings page.
    ========================================================================== */
-:root {
-  --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-    /* Bottom guidance banner (Knowledge Base) */
-  --banner-bg: #273b34;
-  --banner-eyebrow: #869f96;
-  --banner-text-muted: #c3e6e1;
-
-    --scrollbar-thumb: #c7c7c7;
 
 /* ---------- Common (never change per theme) ---------- */
 :root {
@@ -32,6 +22,19 @@
   --radius-full: 9999px;
   --radius-table: 28px;
 
+/* Knowledge Base category accents (top border + icon tile) */
+  --cat-lavender: #8b5cf6;
+  --cat-lavender-bg: #f3efff;
+  --cat-mint: #10b981;
+  --cat-mint-bg: #e6f8f0;
+  --cat-gold: #f59e0b;
+  --cat-gold-bg: #fef6dc;
+  --cat-teal: #14b8a6;
+  --cat-teal-bg: #e3f6f4;
+  --cat-rose: #f43f5e;
+  --cat-rose-bg: #ffeef1;
+
+
   /* Typography */
   --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
   --font-sans:
@@ -39,6 +42,13 @@
     sans-serif;
   --font-mono:
     "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+        /* Bottom guidance banner (Knowledge Base) */
+  --banner-bg: #273b34;
+  --banner-eyebrow: #869f96;
+  --banner-text-muted: #c3e6e1;
+
+    --scrollbar-thumb: #c7c7c7;
 
   /* Layout Dimensions */
   --sidebar-width: 240px;
@@ -936,7 +946,6 @@
   --file-fig-border: var(--doc-fig-border);
 }
 
-<<<<<<< HEAD
 /* ---------- Modal animation ---------- */
 @keyframes modal-fade-in {
   from {
@@ -1018,18 +1027,4 @@
     scrollbar-width: thin;
     scrollbar-color: var(--border-subtle) transparent;
   }
-=======
-/* Knowledge Base category accents (top border + icon tile) */
-:root {
-  --cat-lavender: #8b5cf6;
-  --cat-lavender-bg: #f3efff;
-  --cat-mint: #10b981;
-  --cat-mint-bg: #e6f8f0;
-  --cat-gold: #f59e0b;
-  --cat-gold-bg: #fef6dc;
-  --cat-teal: #14b8a6;
-  --cat-teal-bg: #e3f6f4;
-  --cat-rose: #f43f5e;
-  --cat-rose-bg: #ffeef1;
->>>>>>> feat/K_B_updated
 }
