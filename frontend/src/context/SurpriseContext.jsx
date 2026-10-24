@@ -25,6 +25,10 @@ export function SurpriseProvider({ children }) {
 
   useEffect(() => () => clearTimeout(spinTimer.current), []);
 
+  // Unknown saved ids count as "theme". Exposed so the dice tooltip matches what a click changes.
+  const scope = SURPRISE_SCOPES.some((s) => s.id === appearance.surpriseScope)
+    ? appearance.surpriseScope
+    : "theme";
   const announce = (message, name) => {
     if (lastToast.current) toast.dismiss(lastToast.current);
     lastToast.current = toast.success(message, {
@@ -46,9 +50,6 @@ export function SurpriseProvider({ children }) {
 
     // 2. Random pick (moved from AppearanceSettings). Compared against the resolved
     // active theme/font so an unknown saved id can't land on the look already showing.
-    const scope = SURPRISE_SCOPES.some((s) => s.id === appearance.surpriseScope)
-      ? appearance.surpriseScope
-      : "theme";
     const activeTheme =
       THEMES.find((t) => t.id === appearance.theme) ??
       THEMES.find((t) => t.id === DEFAULT_THEME);
@@ -74,7 +75,7 @@ export function SurpriseProvider({ children }) {
 
   return (
     <SurpriseContext.Provider
-      value={{ isSurprising, rollCount, triggerSurprise }}
+      value={{ isSurprising, rollCount, scope, triggerSurprise }}
     >
       {children}
     </SurpriseContext.Provider>
