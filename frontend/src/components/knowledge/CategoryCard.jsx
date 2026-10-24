@@ -28,9 +28,9 @@ function CategoryCard({ category, onOpenInsights }) {
             event.stopPropagation(); // don't trigger the card click
             onOpenInsights(category);
           }}
-          className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary)"
+          className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary) transition-colors hover:border-[#0284c8] hover:bg-[#0284c8] hover:text-white"
         >
-          <Zap size={11} className="text-amber-500" />
+          <Zap size={11} className="fill-current text-[#e8801a]" />
           Collection Insights
         </button>
       </div>

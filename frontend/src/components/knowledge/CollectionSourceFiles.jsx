@@ -85,7 +85,7 @@ function CollectionSourceFiles({ files }) {
             </ul>
 
             {/* Pagination bar */}
-            <div className="mt-3 flex items-center justify-between rounded-2xl bg-(--bg-surface-subtle) px-3.5 py-2.5">
+            <div className="mt-3 flex items-center justify-between rounded-2xl bg-(--bg-surface-subtle) px-3.5 py-1">
                 <span className="kb-mono text-[10px] text-(--text-muted)">
                     Showing {start + 1}-{start + visibleFiles.length} of {files.length} documents (Page {page}/{totalPages})
                 </span>
@@ -94,7 +94,7 @@ function CollectionSourceFiles({ files }) {
                         type="button"
                         disabled={page === 1}
                         onClick={() => setPage(page - 1)}
-                        className="rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1.5 text-xs font-semibold text-(--text-primary) disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                        className="rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-0.5 text-xs font-semibold text-(--text-primary) disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                     >
                         ← Prev
                     </button>
@@ -102,7 +102,7 @@ function CollectionSourceFiles({ files }) {
                         type="button"
                         disabled={page === totalPages}
                         onClick={() => setPage(page + 1)}
-                        className="rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-1.5 text-xs font-semibold text-(--text-primary) disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                        className="rounded-full border border-(--border-subtle) bg-(--bg-surface) px-4 py-0.5 text-xs font-semibold text-(--text-primary) disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                     >
                         Next →
                     </button>

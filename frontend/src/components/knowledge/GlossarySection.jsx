@@ -98,8 +98,13 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
   } else {
     body = (
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-        {visible.map((item) => (
-          <GlossaryCard key={item.id} item={item} canManage={canManage} />
+          {visible.map((item) => (
+          <GlossaryCard
+            key={item.id}
+            item={item}
+            canManage={canManage}
+            onEdit={() => setAddOpen(true)}
+          />
         ))}
       </div>
     );

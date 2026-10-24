@@ -65,13 +65,13 @@ export default function AddGlossaryTermModal({ onClose, onSave }) {
             </div>
             <h3 className="kb-serif text-lg font-bold text-(--text-primary)">Add Glossary Term</h3>
           </div>
-          <button
+                   <button
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary)"
+            className="group flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-colors duration-200 hover:bg-[#ffe2e1] hover:text-[#d9373f]"
           >
-            <X size={14} />
+            <X size={14} className="transition-transform duration-200 group-hover:rotate-90" />
           </button>
         </header>
 

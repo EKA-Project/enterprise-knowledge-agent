@@ -4,7 +4,7 @@ import { SquarePen, MessageSquare, Copy, Check, Pencil } from 'lucide-react';
 
 // One glossary term card.
 // canManage -> shows the edit icon (admin only; wired in a later step).
-export default function GlossaryCard({ item, canManage = false }) {
+export default function GlossaryCard({ item, canManage = false, onEdit }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -34,6 +34,7 @@ export default function GlossaryCard({ item, canManage = false }) {
           <button
             type="button"
             aria-label={`Edit ${item.term}`}
+            onClick={() => onEdit?.(item)}
             className="cursor-pointer text-(--text-muted) hover:text-(--primary)"
           >
             <SquarePen size={13} />
