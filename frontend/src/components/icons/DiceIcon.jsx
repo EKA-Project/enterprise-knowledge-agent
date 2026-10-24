@@ -13,7 +13,7 @@ export default function DiceIcon({ size = 16, rolling = false, className = "" })
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className={`shrink-0 text-(--primary) transition-transform duration-250 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-[20deg] group-hover:scale-[1.15] ${
+      className={`shrink-0 text-(--primary) transition-transform duration-250 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-20 group-hover:scale-[1.15] ${
         rolling ? "dice-rolling" : ""
       } ${className}`}
     >

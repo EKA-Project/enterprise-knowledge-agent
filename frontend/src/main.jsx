@@ -7,7 +7,8 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 // Holds the selected mascot (byte/orbit) for the whole app
 import { MascotProvider } from "./context/MascotContext.jsx";
-
+// Holds theme, typography, eye comfort and surprise scope for the whole app
+import { AppearanceProvider } from "./context/AppearanceContext.jsx";
 import { initAppearance } from "./appearance/appearance";
 // Variables first so base & layout can use CSS custom properties
 import "./styles/variables.css";
@@ -20,9 +21,11 @@ initAppearance();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <MascotProvider>
-        <App />
-      </MascotProvider>
+      <AppearanceProvider>
+        <MascotProvider>
+          <App />
+        </MascotProvider>
+      </AppearanceProvider>
     </BrowserRouter>
   </StrictMode>,
 );
