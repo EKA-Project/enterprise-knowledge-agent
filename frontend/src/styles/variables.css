@@ -2,7 +2,6 @@
 
 @import "tailwindcss";
 
-<<<<<<< HEAD
 /* ==========================================================================
    EKA Design System - Variables & Theme Atmospheres
    :root holds only values that are the SAME for every theme.
@@ -10,7 +9,6 @@
    The active theme is set on <html> by src/theme.js (temporary) and later
    by the Appearance settings page.
    ========================================================================== */
-=======
 :root {
   --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
   --font-sans: "Plus Jakarta Sans", -apple-system, sans-serif;
@@ -21,7 +19,6 @@
   --banner-text-muted: #c3e6e1;
 
     --scrollbar-thumb: #c7c7c7;
->>>>>>> feat/K_B_updated
 
 /* ---------- Common (never change per theme) ---------- */
 :root {
