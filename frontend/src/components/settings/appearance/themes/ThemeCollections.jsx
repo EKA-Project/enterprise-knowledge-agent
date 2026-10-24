@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { THEMES, THEME_COLLECTIONS, themeTag } from "../../../../appearance/theme";
+import {
+  THEMES,
+  THEME_COLLECTIONS,
+  themeTag,
+} from "../../../../appearance/theme";
 import Button from "../../../common/Button";
 import SearchInput from "../../../common/SearchInput";
 import { getCollectionIcon } from "../../../icons/collectionIcons";
-import FilterPills from "../FilterPills";
+import AtmosphereToolbar from "./AtmosphereToolbar";
 import AppearanceHeader from "../AppearanceHeader";
 import { Diamond } from "lucide-react";
 import CollectionRow from "./CollectionRow";
@@ -71,21 +75,14 @@ export default function ThemeCollections({ activeId, onSelect }) {
           </span>
         }
       />
-
+      
       <div>
-        <FilterPills
-          label="Atmosphere collections"
+        <AtmosphereToolbar
           options={options}
           value={filter}
           onChange={setFilter}
-        />
-
-        <SearchInput
-          className="mt-3 max-w-64"
-          value={query}
-          onChange={setQuery}
-          placeholder={`Search ${THEMES.length} atmospheres…`}
-          label="Search atmospheres"
+          query={query}
+          onQueryChange={setQuery}
         />
 
         {shown === 0 ? (
