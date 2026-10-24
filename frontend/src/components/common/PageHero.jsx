@@ -6,8 +6,7 @@ function PageHero({ eyebrow, title, description, status, actions, bare = false }
     : 'rounded-3xl border border-(--border-medium) bg-(--bg-surface) px-10 py-9 shadow-(--shadow-sm)';
 
   return (
-    // <section className="rounded-3xl border border-(--border-medium) bg-(--bg-surface) px-10 py-9 shadow-(--shadow-sm)">
-    <section className="px-2 py-4">
+    <section className={boxClass}>
       <div className="flex items-end justify-between gap-8">
         {/* Main page introduction. */}
         <div>
@@ -15,7 +14,7 @@ function PageHero({ eyebrow, title, description, status, actions, bare = false }
             {eyebrow}
           </p>
 
-          <h1 className="mt-1 font-serif text-[39px] font-black tracking-tight text-(--text-primary)">
+          <h1 className="mt-3 [font-family:var(--font-serif)] text-4xl font-black tracking-tight text-(--text-primary)">
             {title}
           </h1>
 

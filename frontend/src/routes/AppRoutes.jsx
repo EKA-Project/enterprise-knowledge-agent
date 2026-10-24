@@ -23,6 +23,7 @@ import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMember
 import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
+import SemanticSearchPage from "../pages/SemanticSearchPage.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
