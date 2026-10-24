@@ -19,9 +19,6 @@ import AppearanceTabs, {
 import StudioDivider from "./appearance/StudioDivider";
 import usePersistedState from "../../hooks/usePersistedState";
 
-
-const pickRandom = (items) => items[Math.floor(Math.random() * items.length)];
-
 // One entry per tab. The ids are what gets saved in localStorage.
 const TABS = [
   {
@@ -79,26 +76,6 @@ export default function AppearanceSettings() {
   // Reset is available while either the theme or the font pairing differs from the default.
   const isDefault =
     activeTheme.id === DEFAULT_THEME && activeFont.id === DEFAULT_TYPOGRAPHY;
-
-  // Random theme, and optionally a random font pairing, never the ones already active.
-  // Compared against activeTheme/activeFont (not the raw saved ids) so an unknown saved
-  // value can't make the pick land on the look that is already showing.
-  const surprise = () => {
-    const nextTheme = pickRandom(THEMES.filter((t) => t.id !== activeTheme.id));
-
-    if (scope === "both") {
-      const nextFont = pickRandom(
-        TYPOGRAPHY.filter((t) => t.id !== activeFont.id),
-      );
-      // One update call = one apply, one save, one toast.
-      update({ theme: nextTheme.id, typography: nextFont.id });
-      announce("Surprise pick applied", `${nextTheme.name} · ${nextFont.name}`);
-      return;
-    }
-
-    update({ theme: nextTheme.id });
-    announce("Surprise pick applied", nextTheme.name);
-  };
 
   // Restores whichever of theme / typography is not already the default.
   // Eye comfort has its own card and is left as chosen.
@@ -163,7 +140,6 @@ export default function AppearanceSettings() {
               theme={activeTheme}
               typography={activeFont}
               isDefault={isDefault}
-              onSurprise={surprise}
               scope={scope}
               onScopeChange={(id) => update({ surpriseScope: id })}
               onReset={reset}

@@ -1,5 +1,5 @@
 import { Shuffle } from "lucide-react";
-import { SurpriseMeButton } from "../../../common/ActionButtons";
+import DiceSurprise from "../../../common/DiceSurprise";
 import IconBadge from "../../../icons/IconBadge";
 import ThemeSwatch from "./ThemeSwatch";
 import ResetDefaultButton from "./ResetDefaultButton";
@@ -54,8 +54,8 @@ export default function AtmosphereHero({
             </p>
           </div>
 
-          <SurpriseMeButton
-            onClick={onSurprise}
+          <DiceSurprise
+            variant="labeled"
             title={
               scope === "both"
                 ? "Pick a random theme and typography"
