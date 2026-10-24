@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import { applyAppearance, loadAppearance, saveAppearance } from "../appearance/appearance";
+import { useContext } from "react";
+import AppearanceContext from "../context/AppearanceContext.jsx";
 
-// update({ key: value }) merges a change, applies it to the page and saves it.
-export default function useAppearance() {
-  const [appearance, setAppearance] = useState(loadAppearance);
-
-  useEffect(() => {
-    applyAppearance(appearance);
-    saveAppearance(appearance);
-  }, [appearance]);
-
-  const update = useCallback((patch) => setAppearance((prev) => ({ ...prev, ...patch })), []);
-  return [appearance, update];
+// const [appearance, update] = useAppearance();
+// update({ theme: "sky-blue" }) merges a change, applies it to the page and saves it.
+function useAppearance() {
+  const context = useContext(AppearanceContext);
+  if (!context) {
+    throw new Error("useAppearance must be used inside <AppearanceProvider>");
+  }
+  return context;
 }
+
+export default useAppearance;
