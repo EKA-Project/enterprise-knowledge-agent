@@ -339,6 +339,7 @@
    ATMOSPHERE: Coastal Crimson (Oxford Navy, Honeydew & Imperial Crimson)
    ========================================================================== */
 [data-theme="coastal-crimson"] {
+  --theme-swatch-3: var(--primary);
   --sidebar-bg: #1d3557;
   --sidebar-text: #f1faee;
   --sidebar-text-muted: #a8dadc;
@@ -385,7 +386,12 @@
   --shadow-lg: 0 12px 32px rgba(29, 53, 87, 0.12);
 
   --gradient-card: linear-gradient(180deg, #ffffff 0%, #f7fcf8 100%);
-  --gradient-brand: linear-gradient(135deg, #1d3557 0%, #457b9d 50%, #e63946 100%);
+  --gradient-brand: linear-gradient(
+    135deg,
+    #1d3557 0%,
+    #457b9d 50%,
+    #e63946 100%
+  );
 
   /* Extended tokens */
   --primary-deep: #14243b;
@@ -397,4 +403,130 @@
   --highlight-text: #1d3557;
   --highlight-border: #e63946;
   --highlight-shadow: 0 2px 6px rgba(230, 57, 70, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Cobalt Periwinkle (Midnight Indigo, Royal Cobalt & Ice Mist)
+   ========================================================================== */
+[data-theme="cobalt-periwinkle"] {
+  --sidebar-bg: #2c3974;
+  --sidebar-text: #ffffff;
+  --sidebar-text-muted: #dadfe5;
+  --sidebar-border: rgba(218, 223, 229, 0.16);
+  --sidebar-active-bg: #4454a2;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
+  --sidebar-tip-bg: rgba(161, 160, 210, 0.25);
+
+  --bg-app: #dadfe5;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #eaeef3;
+  --table-header-bg: #eaeef3;
+  --bg-glass: rgba(218, 223, 229, 0.94);
+
+  --primary: #4454a2;
+  --primary-hover: #364486;
+  --primary-deep: #2c3974;
+  --primary-light: #e8ecf8;
+  --primary-glow: rgba(68, 84, 162, 0.32);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #a1a0d2;
+  --accent-highlight-hover: #8f8dc5;
+  --accent-secondary: #2c3974;
+  --accent-chip: #2c3974;
+  --accent-chip-text: #ffffff;
+
+  --border-subtle: #b8c4d2;
+  --border-subtle-nav: #a1a0d2;
+  --border-medium: #4454a2;
+  --border-focus: #4454a2;
+
+  --text-primary: #181e3d;
+  --text-secondary: #2c3974;
+  --text-muted: #363c44;
+  --text-eyebrow: #4454a2;
+
+  --badge-bg: #2c3974;
+  --badge-text: #ffffff;
+  --badge-border: #a1a0d2;
+
+  --shadow-sm: 0 1px 3px rgba(44, 57, 116, 0.08);
+  --shadow-md: 0 4px 18px rgba(44, 57, 116, 0.12);
+  --shadow-lg: 0 12px 36px rgba(44, 57, 116, 0.16);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+  --gradient-brand: linear-gradient(135deg, #2c3974 0%, #4454a2 50%, #a1a0d2 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #2c3974;
+  --highlight-text: #ffffff;
+  --highlight-border: #a1a0d2;
+  --highlight-shadow: 0 2px 8px rgba(68, 84, 162, 0.35);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Jet Cerulean (Jet Black, Cerulean Blue & Neon Rose)
+   ========================================================================== */
+[data-theme="jet-cerulean"] {
+  /* Swatch shows the three palette colours: jet, cerulean, neon rose */
+  --theme-swatch-2: var(--accent-highlight);
+  --theme-swatch-3: var(--primary);
+
+  --sidebar-bg: #0a0a0a;
+  --sidebar-text: #f0f4f8;
+  --sidebar-text-muted: #8297a5;
+  --sidebar-border: rgba(255, 255, 255, 0.12);
+  --sidebar-active-bg: #ff2d95;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(255, 45, 149, 0.25);
+
+  --bg-app: #e7f0f7;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #dbeaf3;
+  --table-header-bg: #e1eff6;
+  --bg-glass: rgba(231, 240, 247, 0.94);
+
+  --primary: #ff2d95;
+  --primary-hover: #e61c82;
+  --primary-deep: #b30059;
+  --primary-light: #ffe4f1;
+  --primary-glow: rgba(255, 45, 149, 0.38);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #007ba7;
+  --accent-highlight-hover: #006387;
+  --accent-secondary: #007ba7;
+  --accent-chip: #e0f2f9;
+  --accent-chip-text: #004c68;
+
+  --border-subtle: #cbe1ed;
+  --border-subtle-nav: #ff2d95;
+  --border-medium: #007ba7;
+  --border-focus: #ff2d95;
+
+  --text-primary: #0a0a0a;
+  --text-secondary: #30414c;
+  --text-muted: #647a88;
+  --text-eyebrow: #007ba7;
+
+  --badge-bg: #0a0a0a;
+  --badge-text: #ff2d95;
+  --badge-border: #ff2d95;
+
+  --shadow-sm: 0 1px 3px rgba(10, 10, 10, 0.08);
+  --shadow-md: 0 4px 16px rgba(10, 10, 10, 0.1);
+  --shadow-lg: 0 12px 32px rgba(10, 10, 10, 0.15);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6fafd 100%);
+  --gradient-brand: linear-gradient(135deg, #0a0a0a 0%, #007ba7 50%, #ff2d95 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #0a0a0a;
+  --highlight-text: #ff2d95;
+  --highlight-border: #007ba7;
+  --highlight-shadow: 0 0 10px rgba(255, 45, 149, 0.45);
 }

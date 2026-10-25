@@ -256,3 +256,131 @@
   --highlight-border: #ea580c;
   --highlight-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
 }
+
+/* ==========================================================================
+   ATMOSPHERE: Rosso Corsa (Scuderia Red, Carbon Black & Giallo Modena)
+   ========================================================================== */
+[data-theme="rosso-corsa"] {
+  --theme-swatch-2: var(--primary);
+  --sidebar-bg: #000000;
+  --sidebar-text: #ffffff;
+  --sidebar-text-muted: #9ba3af;
+  --sidebar-border: rgba(255, 255, 255, 0.12);
+  --sidebar-active-bg: #ed1c24;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(237, 28, 36, 0.15);
+
+  --bg-app: #e9eef2;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #dce4ec;
+  --table-header-bg: #dce4ec;
+  --bg-glass: rgba(233, 238, 242, 0.94);
+
+  --primary: #ed1c24;
+  --primary-hover: #d0141b;
+  --primary-deep: #a50e14;
+  --primary-light: #fde8e8;
+  --primary-glow: rgba(237, 28, 36, 0.32);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #fff200;
+  --accent-highlight-hover: #e6da00;
+  --accent-secondary: #009a4e;
+  --accent-chip: #fffce0;
+  --accent-chip-text: #594d00;
+
+  --border-subtle: #ccd6e0;
+  --border-subtle-nav: #ed1c24;
+  --border-medium: #a2b2c2;
+  --border-focus: #ed1c24;
+
+  --text-primary: #000000;
+  --text-secondary: #333d4b;
+  --text-muted: #5e6b7c;
+  --text-eyebrow: #ed1c24;
+
+  --badge-bg: #000000;
+  --badge-text: #fff200;
+  --badge-border: #fff200;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #f6f9fb 100%);
+  --gradient-brand: linear-gradient(
+    135deg,
+    #000000 0%,
+    #ed1c24 50%,
+    #fff200 100%
+  );
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fffce0;
+  --highlight-text: #000000;
+  --highlight-border: #fff200;
+  --highlight-shadow: 0 2px 6px rgba(237, 28, 36, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Pure White & Black (Manga Ink & Screentone Grey Monochrome)
+   ========================================================================== */
+[data-theme="pure-white-black"] {
+  --sidebar-bg: #f8f8fa;
+  --sidebar-text: #09090b;
+  --sidebar-text-muted: #52525b;
+  --sidebar-border: #d4d4d8;
+  --sidebar-active-bg: #000000;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: #e2e2e8;
+  --sidebar-tip-bg: #f0f0f4;
+
+  --bg-app: #f0f0f3;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #e5e5eb;
+  --table-header-bg: #e5e5eb;
+  --bg-glass: rgba(240, 240, 243, 0.96);
+
+  --primary: #000000;
+  --primary-hover: #18181b;
+  --primary-deep: #000000;
+  --primary-light: #e5e5eb;
+  --primary-glow: rgba(0, 0, 0, 0.12);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #000000;
+  --accent-highlight-hover: #18181b;
+  --accent-secondary: #18181b;
+  --accent-chip: #000000;
+  --accent-chip-text: #ffffff;
+
+  --border-subtle: #18181b;
+  --border-subtle-nav: #d4d4d8;
+  --border-medium: #18181b;
+  --border-focus: #000000;
+
+  --text-primary: #000000;
+  --text-secondary: #27272a;
+  --text-muted: #52525b;
+  --text-eyebrow: #000000;
+
+  --badge-bg: #000000;
+  --badge-text: #ffffff;
+  --badge-border: #000000;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+  --gradient-card: none;
+  --gradient-brand: linear-gradient(135deg, #000000 0%, #27272a 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #000000;
+  --highlight-text: #ffffff;
+  --highlight-border: #000000;
+  --highlight-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
