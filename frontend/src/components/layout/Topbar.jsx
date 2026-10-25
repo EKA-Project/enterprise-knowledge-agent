@@ -29,6 +29,10 @@ const routeMetadata = {
     title: "Document Summary",
     metadata: "AI SYNTHESIS & FULL READER",
   },
+    "/documents/storage": {
+    title: "Storage Management",
+    metadata: "REPOSITORY CAPACITY / 14.2 GB OF 50 GB",
+  },
   "/semantic-search": {
     title: "Semantic Search",
     metadata: "CONCEPT & INTENT DISCOVERY",

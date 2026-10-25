@@ -1,5 +1,6 @@
 import { Save, ExternalLink } from 'lucide-react';
 import { documentStorage } from '../shared/DocumentData';
+import { Link } from 'react-router-dom';
 
 // Storage pill beside the header buttons (reference screenshot):
 // floppy tile, "EKA STORAGE: used / total", capacity pill, Manage pill, bar below.
@@ -24,12 +25,12 @@ function StorageIndicator() {
             {percent.toFixed(1)}% Capacity
           </span>
           {/* Not wired yet: storage management page comes later */}
-          <button
-            type="button"
-            className="doc-mono inline-flex cursor-pointer items-center gap-1 rounded-full bg-[#cfe3f3] px-2 py-0.5 text-[10px] font-semibold text-[#1f718e] transition-colors hover:bg-[#bcd8ee]"
+          <Link
+            to="/documents/storage"
+            className="doc-mono ml-1.5 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[#bcd8ee] bg-[#cfe3f3] px-3 py-[3px] text-xs font-semibold text-[#1f718e] transition-colors hover:bg-[#bcd8ee]"
           >
-            Manage <ExternalLink size={10} />
-          </button>
+            Manage <ExternalLink size={12} />
+          </Link>
         </div>
 
         {/* Usage bar */}

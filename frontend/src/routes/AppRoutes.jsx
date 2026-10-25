@@ -3,6 +3,7 @@ import AppLayout from "../components/layout/AppLayout.jsx";
 import KnowledgeBasePage from "../pages/KnowledgeBasePage.jsx";
 import DocumentsPage from "../pages/DocumentsPage.jsx";
 import DocumentSummaryPage from "../pages/DocumentSummaryPage.jsx";
+import StorageManagementPage from "../pages/StorageManagementPage.jsx";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import RoleGuard from "../components/common/RoleGuard.jsx";
 
@@ -30,7 +31,7 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Redirect the root URL to the main dashboard. */}
-     <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
       {/* Public / authentication routes */}
       <Route path="/landing" element={<LandingPage />} />
@@ -76,9 +77,10 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
         <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
-        <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
-        <Route path="/documents" element={<DocumentsPage/>} />
+        <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
+        <Route path="/documents" element={<DocumentsPage />} />
         <Route path="/documents/summary" element={<DocumentSummaryPage />} />
+        <Route path="/documents/storage" element={<RoleGuard allowedRoles={["Admin"]}><StorageManagementPage /></RoleGuard>} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
         <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
         <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
