@@ -120,9 +120,9 @@ function StorageManagementPage() {
 
   return (
     // No side padding: content starts at the same x as the Summary page (1520px wide)
-    <div className="w-full space-y-6 pb-24 pt-[33px]">
+    <div className="w-full space-y-6 pb-24 pt-[0px]">
       {/* Common PageHero on the page background; only sizes are overridden here */}
-      <div className="[&_h1]:text-[48px] [&_h1]:leading-[1.1] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-2 [&_p:last-of-type]:max-w-[900px] [&_p:last-of-type]:text-[17px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-[30px]">
+      <div className="[&_h1]:text-[40px] [&_h1]:leading-[1.1] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-2 [&_p:last-of-type]:max-w-[900px] [&_p:last-of-type]:text-[14px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-[30px]">
         <PageHero
           bare
           eyebrow={
