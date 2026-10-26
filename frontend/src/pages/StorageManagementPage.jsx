@@ -11,12 +11,12 @@ import '../styles/Document.css';
 function HeroActions() {
   return (
     <div className="flex items-center gap-4">
-      <div className="flex items-center gap-3 rounded-2xl border border-[#dbe9f4] bg-white px-5 py-3 shadow-(--shadow-sm)">
+      <div className="flex items-center gap-3 rounded-2xl border border-[#e3f1f9] bg-white px-4 py-[10px] shadow-(--shadow-sm)">
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e1f0fa] text-[#1f718e]">
           <HardDrive size={16} />
         </span>
         <div>
-          <span className="doc-mono flex items-center gap-2 text-[11px] font-bold uppercase text-[#10283f]">
+          <span className="doc-mono flex items-center gap-2 text-[12px] font-bold uppercase text-[#10283f]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#0f8f63]" />
             Primary Cluster
           </span>
@@ -39,15 +39,17 @@ function HeroActions() {
   );
 }
 
+
 // Admin-only Storage Management page (route: /documents/storage).
 function StorageManagementPage() {
   const [activeFormat, setActiveFormat] = useState('ALL'); // selected format card
   const [hoveredKey, setHoveredKey] = useState(null); // bar / legend / card hover link
 
   return (
-    <div className="w-full space-y-6 px-4 py-6">
+    // No side padding: content starts at the same x as the Summary page (1520px wide)
+    <div className="w-full space-y-6 pb-6 pt-[0px]">
       {/* Common PageHero on the page background; only sizes are overridden here */}
-      <div className="[&_h1]:text-[48px] [&_h1]:leading-[1.1] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-4 [&_p:last-of-type]:max-w-[860px] [&_p:last-of-type]:text-[16px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-7">
+      <div className="kb-hero-heading text-[2rem] sm:text-[2.5rem] font-bold leading-tight text-(--text-primary)">
         <PageHero
           bare
           eyebrow={
@@ -60,6 +62,7 @@ function StorageManagementPage() {
             </>
           }
           title="Know what's taking space."
+          
           description="Enterprise document volume telemetry, format allocations, and intelligent reclamation suggestions to keep retrieval precision fast and lean."
           actions={<HeroActions />}
         />

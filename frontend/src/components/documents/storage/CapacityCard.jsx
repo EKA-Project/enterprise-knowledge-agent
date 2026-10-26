@@ -29,24 +29,24 @@ function CapacityCard({ hoveredKey, onHover }) {
   const tipFormat = tip && storageFormats.find((f) => f.key === tip.key);
 
   return (
-    <section className="rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) px-10 py-7 shadow-(--shadow-sm)">
+    <section className="rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) px-7 py-5 shadow-(--shadow-sm)">
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="min-w-0">
           <div className="flex flex-wrap items-baseline gap-3">
-            <span className="doc-mono text-[46px] font-bold leading-none text-[#10283f]">
+            <span className="doc-mono text-[35px] font-bold leading-none text-[#10283f]">
               {usedGb} GB
             </span>
-            <span className="doc-mono text-[22px] text-[#7c949a]">of {totalGb} GB used</span>
-            <span className="doc-mono rounded-full border border-[#bdeedb] bg-[#edfdf3] px-3 py-1 text-[12px] font-semibold text-[#0f8f63]">
+            <span className="doc-mono text-[18px] text-[#7c949a]">of {totalGb} GB used</span>
+            <span className="doc-mono rounded-full border border-[#bdeedb] bg-[#edfdf3] px-3 py-1 text-[11px] font-semibold text-[#0f8f63]">
               {percent}% Capacity
             </span>
           </div>
-          <p className="mt-3 text-[13px] text-[#7c949a]">
+          <p className="mt-2 text-[13px] text-[#7c949a]">
             {freeGb} GB free • Encrypted tenant storage pool • Auto-indexed into Milvus vector stores
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-x-9 rounded-2xl bg-[#e1f0fa] px-6 py-4">
+        <div className="grid grid-cols-3 gap-x-8 rounded-2xl bg-[#e1f0fa] px-5 py-3">
           {[
             ['Total Documents', `${documents} Ingested`],
             ['Reclaimable Space', `${reclaimableGb} GB`],
@@ -63,7 +63,7 @@ function CapacityCard({ hoveredKey, onHover }) {
       </div>
 
       {/* Usage bar: width of each segment = format size / 50 GB */}
-      <div className="relative mt-6">
+      <div className="relative mt-5">
         {tipFormat && (
           <span
             className="doc-mono pointer-events-none absolute bottom-full z-10 mb-3 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#10192b] px-2.5 py-1.5 text-[11px] font-semibold text-white"
@@ -72,7 +72,7 @@ function CapacityCard({ hoveredKey, onHover }) {
             {tipFormat.key}: {tipFormat.gb} GB ({tipFormat.share}% of used space)
           </span>
         )}
-        <div className="flex h-7 overflow-hidden rounded-full bg-[#e1f0fa]">
+        <div className="flex h-5 overflow-hidden rounded-full bg-[#e1f0fa]">
           {segments.map((s) => (
             <div
               key={s.key}
@@ -90,7 +90,7 @@ function CapacityCard({ hoveredKey, onHover }) {
       </div>
 
       {/* Legend */}
-      <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
+      <div className="mt-3.5 flex flex-wrap items-center gap-x-6 gap-y-0">
         {storageFormats.map((f) => (
           <span
             key={f.key}
