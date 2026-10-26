@@ -5,6 +5,12 @@ import PageHero from '../components/common/PageHero.jsx';
 import CapacityCard from '../components/documents/storage/CapacityCard.jsx';
 import FormatCards from '../components/documents/storage/FormatCards.jsx';
 import '../styles/Document.css';
+import FreeUpCard from '../components/documents/storage/FreeUpCard.jsx';
+import BulkActionBar from '../components/documents/storage/BulkActionBar.jsx';
+import PurgeModal from '../components/documents/storage/PurgeModal.jsx';
+import { storageFiles } from '../components/documents/storage/StorageData.js';
+import { DocToastHost, showDocToast } from '../components/documents/shared/DocToast';
+
 
 // Right side of the hero: cluster chip + back button.
 // (spans, not <p>, so the hero's paragraph overrides below don't touch them)
@@ -44,7 +50,21 @@ function HeroActions() {
 function StorageManagementPage() {
   const [activeFormat, setActiveFormat] = useState('ALL'); // selected format card
   const [hoveredKey, setHoveredKey] = useState(null); // bar / legend / card hover link
+  const [selected, setSelected] = useState(() => new Set()); // ids ticked in Free up space
 
+  const [hidden, setHidden] = useState(() => new Set()); // recycled/purged ids (Step 6 will split these)
+  const [purgeOpen, setPurgeOpen] = useState(false);
+
+  const selectedFiles = Object.values(storageFiles).flat().filter((f) => selected.has(f.id));
+  const reclaimMb = selectedFiles.reduce((sum, f) => sum + f.sizeMb, 0);
+  const n = selectedFiles.length;
+
+  const finish = (message) => {
+    setHidden(new Set([...hidden, ...selected]));
+    setSelected(new Set());
+    setPurgeOpen(false);
+    showDocToast(message, 'neutral');
+  };
   return (
     // No side padding: content starts at the same x as the Summary page (1520px wide)
     <div className="w-full space-y-6 pb-6 pt-[0px]">
@@ -62,7 +82,7 @@ function StorageManagementPage() {
             </>
           }
           title="Know what's taking space."
-          
+
           description="Enterprise document volume telemetry, format allocations, and intelligent reclamation suggestions to keep retrieval precision fast and lean."
           actions={<HeroActions />}
         />
@@ -76,8 +96,25 @@ function StorageManagementPage() {
         onHover={setHoveredKey}
       />
 
-      {/* Step 2: Free up space card (tabs, filters, table) */}
-      {/* Step 5: bulk action bar + purge modal */}
+      <FreeUpCard selected={selected} onSelectedChange={setSelected} hiddenIds={hidden} />
+
+      <BulkActionBar
+        count={n}
+        reclaimMb={reclaimMb}
+        onRecycle={() => finish(`🗑 Moved ${n} ${n === 1 ? 'file' : 'files'} to Recycle Bin`)}
+        onPurge={() => setPurgeOpen(true)}
+        onDisarm={() => setSelected(new Set())}
+      />
+      {purgeOpen && (
+        <PurgeModal
+          count={n}
+          sizeMb={reclaimMb}
+          onClose={() => setPurgeOpen(false)}
+          onConfirm={() => finish(`Permanently purged ${n} ${n === 1 ? 'file' : 'files'}`)}
+        />
+      )}
+      <DocToastHost />
+
       {/* Step 6: Recycle Bin section */}
     </div>
   );
