@@ -1,40 +1,41 @@
-import { formatMb } from './StorageData';
+import { Droplet, Trash2 } from 'lucide-react';
 import '../../../styles/Document.css';
 
-// Floating bar at the bottom: shows only while something is ticked.
+// Floating bar, centred over the content area (not the whole window), like the video.
 function BulkActionBar({ count, reclaimMb, onRecycle, onPurge, onDisarm }) {
   if (count === 0) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-6 rounded-full bg-[#10192b] py-3 pl-7 pr-3 shadow-2xl">
-      <div>
-        <span className="doc-mono block text-[11px] font-bold uppercase tracking-[0.14em] text-white">
-          {count} {count === 1 ? 'file' : 'files'} selected
+    <div className="pointer-events-none fixed bottom-6 left-0 right-0 z-40 flex justify-center lg:left-[300px]">
+      <div className="pointer-events-auto flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0e1a2c] p-3 shadow-2xl">
+        <div className="flex items-center gap-4 rounded-xl bg-[#16263b] px-4 py-2">
+          <span className="doc-mono text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-white">
+            {count} {count === 1 ? 'file' : 'files'}<br />selected
+          </span>
+        </div>
+        <span className="doc-mono px-1 text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-[#33c6c9]">
+          ▲ {reclaimMb.toFixed(1)} MB<br />reclaimable
         </span>
-        <span className="doc-mono mt-0.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-[#3ddc97]">
-          ▲ {formatMb(reclaimMb)} reclaimable
-        </span>
-      </div>
-
-      <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={onRecycle}
-          className="doc-mono h-10 cursor-pointer rounded-full bg-white/10 px-5 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-white/20"
+          className="doc-mono flex h-11 cursor-pointer items-center gap-2.5 rounded-xl bg-[#2563eb] px-4 text-left text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-white transition-colors hover:bg-[#1d4fd0]"
         >
-          To Recycle Bin
+          <Trash2 size={13} />
+          <span>Move to<br />Recycle Bin</span>
         </button>
         <button
           type="button"
           onClick={onPurge}
-          className="doc-mono h-10 cursor-pointer rounded-full bg-[#e5484d] px-5 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#d13a3f]"
+          className="doc-mono flex h-11 cursor-pointer items-center gap-2.5 rounded-xl border border-[#7a2630] bg-[#3a1620] px-4 text-left text-[10px] font-bold uppercase leading-4 tracking-[0.1em] text-[#ff9aa0] transition-colors hover:bg-[#4a1b27]"
         >
-          Purge Permanently
+          <Droplet size={13} className="fill-current text-[#f5b83d]" />
+          <span>Purge<br />Permanently</span>
         </button>
         <button
           type="button"
           onClick={onDisarm}
-          className="doc-mono h-10 cursor-pointer rounded-full px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white/70 transition-colors hover:text-white"
+          className="doc-mono cursor-pointer px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-white/70 transition-colors hover:text-white"
         >
           Disarm
         </button>

@@ -4,9 +4,12 @@ import '../../../styles/Document.css';
 
 // Capacity card: big number, stat box, segmented usage bar (hover = tooltip + dim others), legend.
 // `hoveredKey` is shared with the format cards so the matching card lights up too.
-function CapacityCard({ hoveredKey, onHover }) {
-  const { usedGb, totalGb, freeGb, documents, reclaimableGb, softDeleted } = storageSummary;
-  const percent = ((usedGb / totalGb) * 100).toFixed(1); // 28.6
+function CapacityCard({ summary, hoveredKey, onHover }) {
+  const { usedMb, documents, reclaimableGb, softDeleted } = summary; // numbers move after recycle / purge
+  const totalGb = storageSummary.totalGb;
+  const usedGb = (usedMb / 1000).toFixed(1);
+  const freeGb = ((totalGb * 1000 - usedMb) / 1000).toFixed(1);
+  const percent = ((usedMb / (totalGb * 1000)) * 100).toFixed(1);
   const [tip, setTip] = useState(null); // { key, x } tooltip position (% of bar)
 
   const showTip = (key, centerPct) => {
@@ -96,11 +99,10 @@ function CapacityCard({ hoveredKey, onHover }) {
             key={f.key}
             onMouseEnter={() => onHover(f.key)}
             onMouseLeave={() => onHover(null)}
-            className={`doc-mono inline-flex cursor-default items-center gap-2 rounded-full border px-2.5 py-0.5 text-[12px] transition-colors ${
-              hoveredKey === f.key
+            className={`doc-mono inline-flex cursor-default items-center gap-2 rounded-full border px-2.5 py-0.5 text-[12px] transition-colors ${hoveredKey === f.key
                 ? 'border-[#cfe3f3] bg-[#e1f0fa]'
                 : 'border-transparent'
-            }`}
+              }`}
           >
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: f.color }} />
             <strong className="font-bold text-[#10283f]">{f.key}</strong>

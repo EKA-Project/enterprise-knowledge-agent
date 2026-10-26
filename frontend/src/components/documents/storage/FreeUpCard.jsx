@@ -1,80 +1,70 @@
-import { Fragment, useMemo, useState } from 'react';
-import {
-  AlertTriangle, ChevronLeft, ChevronRight, Clock, Copy, FileText, Search, Sparkles,
-} from 'lucide-react';
-import { storageFiles } from './StorageData';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { AlertTriangle, Archive, ClipboardList, Copy, History, Lock, Paintbrush, RotateCcw, Search, Zap } from 'lucide-react';
+import { dupGroups } from './StorageData';
+import { DeptPill, StatusPill, TypeTile } from './StorageBits';
 import CustomThresholdModal from './CustomThresholdModal';
 import '../../../styles/Document.css';
 
 const TABS = [
-  { key: 'large', label: 'Large files', icon: FileText, tone: 'bg-[#e0ecff] text-[#2563eb]' },
-  { key: 'idle', label: 'Not opened recently', icon: Clock, tone: 'bg-[#fff0c0] text-[#b86b00]' },
-  { key: 'failed', label: 'Failed ingestions', icon: AlertTriangle, tone: 'bg-[#fde2e1] text-[#d9373f]' },
-  { key: 'dupes', label: 'Duplicates', icon: Copy, tone: 'bg-[#ede4ff] text-[#7c3aed]' },
+  { key: 'large', label: 'Large files', icon: Archive, on: 'bg-[#0a7bc4] text-white', off: 'bg-[#e3f0fa] text-[#1b79a8]' },
+  { key: 'idle', label: 'Not opened recently', icon: History, on: 'bg-[#f08a1c] text-white', off: 'bg-[#fff0dc] text-[#d9822b]' },
+  { key: 'failed', label: 'Failed ingestions', icon: AlertTriangle, on: 'bg-[#e5484d] text-white', off: 'bg-[#ffe9e8] text-[#e5484d]' },
+  { key: 'dupes', label: 'Duplicates', icon: Copy, on: 'bg-[#7c5ce0] text-white', off: 'bg-[#ece8fd] text-[#7c5ce0]' },
 ];
-const LARGE_CHIPS = [10, 50, 100, 150];
+const LARGE_CHIPS = [10, 50, 100];
 const IDLE_CHIPS = [30, 60, 90];
 const PER_PAGE = [5, 10, 15, 20];
 const SORTS = [
-  ['size-desc', 'Largest first'],
-  ['size-asc', 'Smallest first'],
-  ['name', 'Name A–Z'],
-  ['idle-desc', 'Least recently opened'],
+  ['size-desc', 'Sort: Size (Largest)', (a, b) => b.sizeMb - a.sizeMb],
+  ['size-asc', 'Sort: Size (Smallest)', (a, b) => a.sizeMb - b.sizeMb],
+  ['name-asc', 'Sort: File Name (A-Z)', (a, b) => a.name.localeCompare(b.name)],
+  ['name-desc', 'Sort: File Name (Z-A)', (a, b) => b.name.localeCompare(a.name)],
+  ['opened-desc', 'Sort: Last Opened (Oldest first)', (a, b) => b.idleDays - a.idleDays],
 ];
-const TYPE_TILE = {
-  PDF: 'bg-[#fde2e1] text-[#d9373f]',
-  DOCX: 'bg-[#e0ecff] text-[#2563eb]',
-  MD: 'bg-[#d9f7ea] text-[#08966a]',
-  CSV: 'bg-[#e0f1fd] text-[#0c82c0]',
-  TXT: 'bg-[#fff0c0] text-[#b86b00]',
-};
-const STATUS = {
-  Ready: 'bg-[#edfdf5] text-[#0f8f63]',
-  Outdated: 'bg-[#fff6dc] text-[#b86b00]',
-  Failed: 'bg-[#ffe9e8] text-[#d9373f]',
-};
-const COLS = 'grid grid-cols-[44px_64px_minmax(0,2.6fr)_130px_90px_130px_130px_100px] items-center gap-4';
+const TH = 'doc-mono px-3 py-4 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
 
-const sizeLabel = (mb) => `${mb.toFixed(1)} MB`;
-const openedLabel = (d) => (d <= 1 ? 'Today' : d < 14 ? `${d} days ago` : d < 60 ? `${Math.round(d / 7)} weeks ago` : `${Math.round(d / 30)} months ago`);
-
-// `selected` (Set of ids) lives in the page so the Step 5 bulk bar can read it.
-function FreeUpCard({ selected, onSelectedChange, hiddenIds }) {
+// `files` = documents that are currently active (not in the bin, not purged).
+function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedChange, onSweep, onToast }) {
   const [tab, setTab] = useState('large');
   const [largeMin, setLargeMin] = useState(10); // MB
-  const [idleMin, setIdleMin] = useState(30); // days
+  const [customVal, setCustomVal] = useState(null); // number once a custom value is applied
+  const [idleMin, setIdleMin] = useState(90); // days
   const [customOpen, setCustomOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState('size-desc');
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
-  // Rows of one tab after threshold + search (counts on the tabs use the same rule)
-  const baseRows = (key) => {
-    const list = storageFiles[key].filter((f) => !hiddenIds.has(f.id));
+  useEffect(() => setPage(0), [activeFormat, tab, largeMin, idleMin, query, sort]);
+
+  const rowsFor = (key) => {
+    const list = files.filter((f) => activeFormat === 'ALL' || f.type === activeFormat);
     if (key === 'large') return list.filter((f) => f.sizeMb > largeMin);
     if (key === 'idle') return list.filter((f) => f.idleDays > idleMin);
-    return list;
+    if (key === 'failed') return list.filter((f) => f.status === 'Failed');
+    return list.filter((f) => f.group);
   };
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
-    let list = baseRows(tab).filter(
-      (f) => !q || f.name.toLowerCase().includes(q) || f.file.toLowerCase().includes(q),
-    );
-    if (tab !== 'dupes') {
-      list = [...list].sort((a, b) =>
-        sort === 'size-desc' ? b.sizeMb - a.sizeMb
-        : sort === 'size-asc' ? a.sizeMb - b.sizeMb
-        : sort === 'idle-desc' ? b.idleDays - a.idleDays
-        : a.name.localeCompare(b.name),
-      );
-    }
+    const sorter = SORTS.find((s) => s[0] === sort)[2];
+    let list = rowsFor(tab)
+      .filter((f) => !q || f.name.toLowerCase().includes(q) || f.file.toLowerCase().includes(q))
+      .sort(sorter);
+    if (tab === 'dupes') list = Object.keys(dupGroups).flatMap((g) => list.filter((f) => f.group === g));
     return list;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, largeMin, idleMin, query, sort]);
+  }, [files, activeFormat, tab, largeMin, idleMin, query, sort]);
 
-  const pages = Math.max(1, Math.ceil(rows.length / perPage));
+  const count = rows.length;
+  const reclaim = rows.filter((f) => !f.isProtected).reduce((s, f) => s + f.sizeMb, 0);
+  const lead =
+    tab === 'large' ? `occupying > ${largeMin} MB`
+    : tab === 'idle' ? `inactive > ${idleMin} days`
+    : tab === 'failed' ? 'with pipeline failures'
+    : 'with duplicate copies';
+
+  const pages = Math.max(1, Math.ceil(count / perPage));
   const safePage = Math.min(page, pages - 1);
   const start = safePage * perPage;
   const visible = rows.slice(start, start + perPage);
@@ -92,197 +82,292 @@ function FreeUpCard({ selected, onSelectedChange, hiddenIds }) {
     onSelectedChange(next);
   };
 
-  const reset = (fn) => (v) => {
-    fn(v);
-    setPage(0);
-  };
-  const chips = tab === 'large' ? LARGE_CHIPS : tab === 'idle' ? IDLE_CHIPS : null;
-  const current = tab === 'large' ? largeMin : idleMin;
-  const unit = tab === 'large' ? 'MB' : 'days';
-  const setCurrent = reset(tab === 'large' ? setLargeMin : setIdleMin);
-  const isCustomActive = tab === 'large' && !LARGE_CHIPS.includes(largeMin);
-
-  const chipCls = (on) =>
-    `doc-mono h-8 cursor-pointer rounded-full border px-4 text-[12px] font-semibold transition-colors ${
-      on ? 'border-[#153830] bg-[#153830] text-white' : 'border-[#cfe3f3] bg-white text-[#10283f] hover:bg-[#e1f0fa]'
+  const chip = (on) =>
+    `doc-mono h-7 cursor-pointer rounded-full px-3.5 text-[12px] font-semibold transition-colors ${
+      on ? 'bg-[#0a7bc4] text-white' : 'text-[#6b8296] hover:text-[#10283f]'
     }`;
 
   return (
-    <section className="rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) px-9 py-8 shadow-(--shadow-sm)">
-      <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e1f0fa] text-[#1f718e]">
-          <Sparkles size={18} />
-        </span>
-        <div>
-          <h2 className="text-[22px] font-bold text-[#10283f]">Free up space</h2>
-          <p className="text-[13px] text-[#7c949a]">Review files that are safe to recycle. Protected files are locked.</p>
+    <section className="overflow-hidden rounded-[28px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-9 pb-8 pt-7 shadow-(--shadow-sm)">
+      {/* Header */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex items-start gap-4">
+          <button
+            type="button"
+            onClick={onSweep}
+            className="flex h-[56px] w-[56px] shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-[#e1f0fa] text-[#e8801a] transition-transform hover:scale-105"
+          >
+            <Paintbrush size={22} />
+          </button>
+          <div>
+            <div className="flex items-center gap-3">
+              <h2 className="doc-heading text-[30px] font-black leading-none text-[#10283f]">Free up space</h2>
+              <span className="doc-mono inline-flex items-center gap-1.5 rounded-full bg-[#e1f0fa] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-[#1b79a8]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#1b79a8]" />
+                Suggestions
+              </span>
+            </div>
+            <p className="mt-3 text-[14.5px] text-[#7c949a]">
+              Targeted reclamation suggestions modeled after intelligent storage analytics to trim orphaned vectors and bloated PDFs.
+            </p>
+          </div>
         </div>
+        <span className="doc-mono inline-flex h-10 items-center gap-2 rounded-full border border-[#c4ecd9] bg-[#eefbf5] px-5 text-[13px] font-bold text-[#0f8f63]">
+          <Zap size={13} className="fill-current text-[#e8801a]" />
+          {reclaim.toFixed(1)} MB Reclaimable
+        </span>
       </div>
 
       {/* Tabs */}
-      <div className="mt-6 flex flex-wrap gap-3">
+      <div className="mt-6 flex flex-wrap gap-2 border-b border-[#e3eef7]">
         {TABS.map((t) => {
-          const on = tab === t.key;
+          const isOn = tab === t.key;
           const Icon = t.icon;
           return (
             <button
               key={t.key}
               type="button"
-              onClick={() => { setTab(t.key); setPage(0); }}
-              className={`flex h-11 cursor-pointer items-center gap-2.5 rounded-full border px-4 text-[14px] font-semibold transition-colors ${
-                on ? 'border-[#1b79a8] bg-[#e0f1fd] text-[#10283f]' : 'border-[#e3eef7] bg-white text-[#44596a] hover:bg-[#f2f8fd]'
+              onClick={() => setTab(t.key)}
+              className={`-mb-px flex cursor-pointer items-center gap-2.5 rounded-t-xl border-b-2 px-4 pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${
+                isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'
               }`}
             >
-              <span className={`flex h-6 w-6 items-center justify-center rounded-full ${t.tone}`}>
-                <Icon size={13} />
+              <span className={`flex h-7 w-7 items-center justify-center rounded-lg ${isOn ? t.on : t.off}`}>
+                <Icon size={14} />
               </span>
               {t.label}
-              <span className="doc-mono rounded-full bg-[#e1f0fa] px-2 text-[12px]">{baseRows(t.key).length}</span>
+              <span className={`doc-mono flex h-[22px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-bold ${isOn ? 'bg-[#0a7bc4] text-white' : 'bg-[#e3eef7] text-[#7c949a]'}`}>
+                {rowsFor(t.key).length}
+              </span>
             </button>
           );
         })}
       </div>
 
-      {/* Threshold chips + filter + sort */}
-      <div className="mt-5 flex flex-wrap items-center gap-3">
-        {chips && (
-          <>
-            {chips.map((c) => (
-              <button key={c} type="button" onClick={() => setCurrent(c)} className={chipCls(current === c)}>
-                &gt;{c} {unit}
+      {/* Summary + filters */}
+      <div className="mt-5 rounded-2xl bg-[#e1f0fa] px-5 py-4">
+        <p className="text-[14.5px] text-[#44596a]">
+          {count === 0 ? (
+            '0 files matching current cleanup parameters'
+          ) : (
+            <>
+              Showing <span className="doc-mono font-semibold text-[#10283f]">{count} {count === 1 ? 'file' : 'files'}</span> {lead} •{' '}
+              <span className="doc-mono font-bold text-[#0f9d6b]">{reclaim.toFixed(1)} MB</span> can be freed
+            </>
+          )}
+        </p>
+
+        <div className="mt-3.5 flex flex-wrap items-center gap-3">
+          {activeFormat !== 'ALL' && (
+            <div className="inline-flex h-9 items-center gap-3 rounded-full bg-white px-4 text-[12px]">
+              <span className="doc-mono font-semibold text-[#1b79a8]">Format: {activeFormat}</span>
+              <button type="button" onClick={onClearFormat} className="inline-flex cursor-pointer items-center gap-1 font-bold text-[#0a7bc4] underline">
+                <RotateCcw size={11} /> View All
               </button>
-            ))}
-            {tab === 'large' && (
-              <button type="button" onClick={() => setCustomOpen(true)} className={chipCls(isCustomActive)}>
-                {isCustomActive ? `>${largeMin} MB` : 'Custom'}
-              </button>
-            )}
-          </>
-        )}
-        <div className="ml-auto flex items-center gap-3">
+            </div>
+          )}
+
+          {(tab === 'large' || tab === 'idle') && (
+            <div className="inline-flex items-center gap-0.5 rounded-full bg-white p-1">
+              {(tab === 'large' ? LARGE_CHIPS : IDLE_CHIPS).map((c) => {
+                const isOn = tab === 'large' ? largeMin === c && customVal === null : idleMin === c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => {
+                      if (tab === 'large') { setLargeMin(c); setCustomVal(null); } else setIdleMin(c);
+                    }}
+                    className={chip(isOn)}
+                  >
+                    &gt; {c} {tab === 'large' ? 'MB' : 'days'}
+                  </button>
+                );
+              })}
+              {tab === 'large' && (
+                <button type="button" onClick={() => setCustomOpen(true)} className={chip(customVal !== null)}>
+                  {customVal !== null ? `> ${customVal} MB` : 'Custom ›'}
+                </button>
+              )}
+            </div>
+          )}
+
           <div className="relative">
-            <Search size={14} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#7c949a]" />
+            <Search size={14} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7c949a]" />
             <input
               value={query}
-              onChange={(e) => { setQuery(e.target.value); setPage(0); }}
-              placeholder="Filter by name…"
-              className="h-10 w-[240px] rounded-full border border-[#cfe3f3] bg-[#f4f9fd] pl-9 pr-4 text-[13px] text-[#10283f] outline-none focus:border-[#1b79a8]"
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Filter files..."
+              className="h-10 w-[250px] rounded-full bg-white pl-10 pr-4 text-[13px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
             />
           </div>
-          {tab !== 'dupes' && (
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="h-10 cursor-pointer rounded-full border border-[#cfe3f3] bg-white px-4 text-[13px] text-[#10283f] outline-none"
-            >
-              {SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          )}
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="doc-mono h-10 cursor-pointer rounded-full bg-white px-4 text-[12px] text-[#10283f] outline-none"
+          >
+            {SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
         </div>
       </div>
 
       {/* Table */}
-      <div className="mt-5 overflow-hidden rounded-[18px] border border-[#e3eef7]">
-        <div className={`${COLS} bg-[#e1f0fa] px-5 py-3`}>
-          <input
-            type="checkbox"
-            checked={allOnPage}
-            onChange={toggleAll}
-            disabled={selectable.length === 0}
-            className="h-4 w-4 cursor-pointer accent-[#153830]"
-          />
-          {['Type', 'Document', 'Dept', 'Size', 'Last opened', 'Last cited', 'Status'].map((h) => (
-            <span key={h} className="doc-mono text-[11px] uppercase tracking-[0.14em] text-[#7c949a]">{h}</span>
-          ))}
-        </div>
-
-        {visible.length === 0 ? (
-          <p className="px-5 py-14 text-center text-[15px] text-[#7c949a]">Nothing to clean up here.</p>
-        ) : (
-          visible.map((f, i) => (
-            <Fragment key={f.id}>
-              {tab === 'dupes' && f.group !== visible[i - 1]?.group && (
-                <div className="bg-[#f2f8fd] px-5 py-2.5 text-[12px] font-semibold text-[#44596a]">
-                  Duplicate group: {f.group}
-                </div>
-              )}
-              <div className={`${COLS} border-t border-[#e3eef7] px-5 py-3.5 ${selected.has(f.id) ? 'bg-[#f0f8fe]' : 'bg-white'}`}>
-                <input
-                  type="checkbox"
-                  checked={selected.has(f.id)}
-                  disabled={f.isProtected}
-                  onChange={() => toggleOne(f.id)}
-                  className="h-4 w-4 cursor-pointer accent-[#153830] disabled:cursor-not-allowed disabled:opacity-40"
-                />
-                <span className={`doc-mono inline-flex h-7 w-12 items-center justify-center rounded-md text-[11px] font-bold ${TYPE_TILE[f.type]}`}>
-                  {f.type}
-                </span>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="truncate text-[14px] font-semibold text-[#10283f]">{f.name}</span>
-                    {f.isProtected && (
-                      <span className="shrink-0 rounded-full bg-[#e1f0fa] px-2 py-0.5 text-[10px] font-bold uppercase text-[#1f718e]">
-                        Protected
-                      </span>
-                    )}
-                  </div>
-                  <span className="doc-mono block truncate text-[11px] text-[#7c949a]">{f.file}</span>
-                </div>
-                <span className="w-fit rounded-full bg-[#e1f0fa] px-3 py-1 text-[12px] font-semibold text-[#44596a]">{f.dept}</span>
-                <span className="doc-mono text-[13px] font-bold text-[#10283f]">{sizeLabel(f.sizeMb)}</span>
-                <span className="text-[13px] text-[#44596a]">{openedLabel(f.idleDays)}</span>
-                <span className="text-[13px] text-[#44596a]">{f.cited}</span>
-                <span className={`w-fit rounded-full px-3 py-1 text-[12px] font-semibold ${STATUS[f.status]}`}>{f.status}</span>
-              </div>
-            </Fragment>
-          ))
-        )}
+      <div className="mt-5 overflow-x-auto rounded-[20px] border border-[#e3eef7] bg-white">
+        <table className="w-full min-w-[980px] text-left">
+          <thead className="bg-[#e3eff9]">
+            <tr>
+              <th className="w-12 px-4 py-4">
+                <input type="checkbox" checked={allOnPage} onChange={toggleAll} disabled={selectable.length === 0} className="h-[18px] w-[18px] cursor-pointer accent-[#0a7bc4]" />
+              </th>
+              <th className={TH}>Type</th>
+              <th className={TH}>Document Name</th>
+              <th className={TH}>Department / Category</th>
+              <th className={TH}>Size</th>
+              <th className={TH}>Last Opened</th>
+              <th className={TH}>Last Cited</th>
+              <th className={TH}>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visible.length === 0 && (
+              <tr>
+                <td colSpan={8} className="py-14 text-center text-[15px] text-[#7c949a]">Nothing to clean up here.</td>
+              </tr>
+            )}
+            {visible.map((f, i) => {
+              const isFirstOfGroup = tab === 'dupes' && f.group !== visible[i - 1]?.group;
+              const grp = rows.filter((r) => r.group === f.group);
+              return (
+                <Fragment key={f.id}>
+                  {isFirstOfGroup && (
+                    <tr>
+                      <td colSpan={8} className="px-3 pb-1 pt-3">
+                        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#d6e8f5] border-l-[3px] border-l-[#1b79a8] bg-[#f1f8fd] px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e1f0fa] text-[#1b79a8]">
+                              <ClipboardList size={15} />
+                            </span>
+                            <div>
+                              <p className="text-[14.5px] font-semibold text-[#10283f]">Duplicate Group: {dupGroups[f.group].title}</p>
+                              <p className="doc-mono text-[10.5px] text-[#7c949a]">{dupGroups[f.group].note}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="doc-mono rounded-full border border-[#c9def6] bg-[#eaf3fd] px-3 py-1 text-[11px] font-bold text-[#1b79a8]">
+                              {grp.length} Copies Detected
+                            </span>
+                            <span className="doc-mono rounded-full border border-[#c4ecd9] bg-[#eefbf5] px-3 py-1 text-[11px] font-bold text-[#0f8f63]">
+                              +{grp.reduce((s, r) => s + r.sizeMb, 0).toFixed(1)} MB Reclaimable
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  <tr className={`border-t border-[#e3eef7] ${selected.has(f.id) ? 'bg-[#e8f3fc]' : 'bg-white hover:bg-[#f7fbfe]'}`}>
+                    <td className="px-4 py-4">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(f.id)}
+                        disabled={f.isProtected}
+                        onChange={() => toggleOne(f.id)}
+                        className="h-[18px] w-[18px] cursor-pointer accent-[#0a7bc4] disabled:cursor-not-allowed disabled:opacity-30"
+                      />
+                    </td>
+                    <td className="px-3 py-4"><TypeTile type={f.type} /></td>
+                    <td className="px-3 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="min-w-0">
+                          <p className="max-w-[330px] truncate text-[14px] font-semibold text-[#10283f]">{f.name}</p>
+                          <p className="doc-mono max-w-[330px] truncate text-[11px] text-[#7c949a]">{f.file}</p>
+                        </div>
+                        {f.isProtected && (
+                          <span className="group/p relative shrink-0">
+                            <span className="doc-mono inline-flex items-center gap-1 rounded-full border border-[#d6e1ea] bg-[#f1f5f8] px-2.5 py-1 text-[10px] font-bold text-[#6b7f8f]">
+                              <Lock size={10} /> Protected
+                            </span>
+                            <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden w-max max-w-[190px] -translate-x-1/2 rounded-lg bg-[#5d6b7a] px-3 py-1.5 text-center text-[11px] leading-4 text-white group-hover/p:block">
+                              {f.note}
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-3 py-4"><DeptPill name={f.dept} /></td>
+                    <td className="doc-mono px-3 py-4 text-[13px] font-bold text-[#10283f]">{f.sizeMb.toFixed(1)} MB</td>
+                    <td className="doc-mono px-3 py-4 text-[12px] text-[#7c949a]">{f.opened}</td>
+                    <td className="doc-mono px-3 py-4 text-[12px] text-[#7c949a]">{f.cited}</td>
+                    <td className="px-3 py-4"><StatusPill status={f.status} /></td>
+                  </tr>
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
 
       {/* Pagination */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-[13px] text-[#7c949a]">
-        <span className="doc-mono">
-          {rows.length === 0 ? '0 files' : `${start + 1}–${Math.min(start + perPage, rows.length)} of ${rows.length}`}
-        </span>
-        <div className="flex items-center gap-3">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#e1f0fa] px-5 py-3.5 text-[13px] text-[#7c949a]">
+        <div className="flex items-center gap-5">
+          <span>
+            Showing <strong className="text-[#10283f]">{count === 0 ? 0 : `${start + 1}–${Math.min(start + perPage, count)}`}</strong> of <strong className="text-[#10283f]">{count}</strong> files
+          </span>
           <label className="flex items-center gap-2">
-            Rows per page
+            Show per page:
             <select
               value={perPage}
               onChange={(e) => { setPerPage(Number(e.target.value)); setPage(0); }}
-              className="h-8 cursor-pointer rounded-lg border border-[#cfe3f3] bg-white px-2 text-[#10283f] outline-none"
+              className="doc-mono h-8 cursor-pointer rounded-lg border border-[#cfe3f3] bg-white px-2 text-[#10283f] outline-none"
             >
               {PER_PAGE.map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
-          <button
-            type="button"
-            disabled={safePage === 0}
-            onClick={() => setPage(safePage - 1)}
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-[#cfe3f3] text-[#10283f] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            <ChevronLeft size={15} />
+        </div>
+        <div className="flex items-center gap-2">
+          <button type="button" disabled={safePage === 0} onClick={() => setPage(safePage - 1)} className="h-8 cursor-pointer rounded-full px-3 text-[12px] disabled:cursor-not-allowed disabled:opacity-40">
+            ← Prev
           </button>
-          <button
-            type="button"
-            disabled={safePage >= pages - 1}
-            onClick={() => setPage(safePage + 1)}
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-[#cfe3f3] text-[#10283f] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            <ChevronRight size={15} />
+          {Array.from({ length: pages }, (_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setPage(i)}
+              className={`doc-mono h-8 w-8 cursor-pointer rounded-full text-[12px] font-bold ${i === safePage ? 'bg-[#0a7bc4] text-white' : 'text-[#44596a] hover:bg-white'}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button type="button" disabled={safePage >= pages - 1} onClick={() => setPage(safePage + 1)} className="h-8 cursor-pointer rounded-full bg-white px-4 text-[12px] font-semibold text-[#10283f] disabled:cursor-not-allowed disabled:opacity-40">
+            Next →
           </button>
         </div>
       </div>
 
       {customOpen && (
         <CustomThresholdModal
-          initial={largeMin}
+          initial={customVal ?? largeMin}
           onClose={() => setCustomOpen(false)}
-          onApply={(mb) => { setLargeMin(mb); setPage(0); setCustomOpen(false); }}
+          onApply={(mb) => {
+            setLargeMin(mb);
+            setCustomVal(mb);
+            setCustomOpen(false);
+            onToast(`Filtering files occupying > ${mb} MB`);
+          }}
         />
       )}
     </section>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
 
 export default FreeUpCard;
