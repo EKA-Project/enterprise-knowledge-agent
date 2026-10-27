@@ -332,3 +332,124 @@
   --highlight-border: #9b2f87;
   --highlight-shadow: 0 2px 6px rgba(155, 47, 135, 0.25);
 }
+/* ==========================================================================
+   ATMOSPHERE: Circadian Amber (Warm Beeswax & Roasted Walnut)
+   ========================================================================== */
+[data-theme="circadian-amber"] {
+  --sidebar-bg: #241c14;
+  --sidebar-text: #fcf8ef;
+  --sidebar-text-muted: #c2aa91;
+  --sidebar-border: rgba(252, 248, 239, 0.08);
+  --sidebar-active-bg: #d97706;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.07);
+  --sidebar-tip-bg: rgba(255, 255, 255, 0.05);
+
+  --bg-app: #fcf8ef;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #f3ead3;
+  --table-header-bg: #f3ead3;
+  --bg-glass: rgba(252, 248, 239, 0.94);
+
+  --primary: #b45309;
+  --primary-hover: #92400e;
+  --primary-deep: #78350f;
+  --primary-light: #fef3c7;
+  --primary-glow: rgba(180, 83, 9, 0.2);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #d97706;
+  --accent-highlight-hover: #b45309;
+  --accent-secondary: #f59e0b;
+  --accent-chip: #fef3c7;
+  --accent-chip-text: #78350f;
+
+  --border-subtle: #ebdcc0;
+  --border-subtle-nav: #b45309;
+  --border-medium: #d9c49f;
+  --border-focus: #b45309;
+
+  --text-primary: #2a2015;
+  --text-secondary: #5c4632;
+  --text-muted: #8c7158;
+  --text-eyebrow: #b45309;
+
+  --badge-bg: #fef3c7;
+  --badge-text: #78350f;
+  --badge-border: #f59e0b;
+
+  --shadow-sm: 0 1px 3px rgba(42, 32, 21, 0.04);
+  --shadow-md: 0 4px 16px rgba(42, 32, 21, 0.06);
+  --shadow-lg: 0 12px 32px rgba(42, 32, 21, 0.1);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf5ea 100%);
+  --gradient-brand: linear-gradient(135deg, #241c14 0%, #b45309 60%, #d97706 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #fed7aa;
+  --highlight-text: #2a2015;
+  --highlight-border: #d97706;
+  --highlight-shadow: 0 2px 6px rgba(217, 119, 6, 0.25);
+}
+
+/* ==========================================================================
+   ATMOSPHERE: Mocha Lavender (Artisanal Mocha, Platinum Silver & Pale Lavender)
+   ========================================================================== */
+[data-theme="mocha-lavender"] {
+  --sidebar-bg: #3d2618;
+  --sidebar-text: #e5e4e2;
+  --sidebar-text-muted: #b3a8a0;
+  --sidebar-border: rgba(229, 228, 226, 0.12);
+  --sidebar-active-bg: #6f4e37;
+  --sidebar-active-text: #ffffff;
+  --sidebar-hover-bg: rgba(229, 228, 226, 0.08);
+  --sidebar-tip-bg: rgba(230, 224, 240, 0.28);
+
+  --bg-app: #eae4f5;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #dfd4f0;
+  --table-header-bg: #ddd0f0;
+  --bg-glass: rgba(234, 228, 245, 0.94);
+
+  --primary: #6f4e37;
+  --primary-hover: #563b29;
+  --primary-deep: #3b2518;
+  --primary-light: #e6e0f0;
+  --primary-glow: rgba(111, 78, 55, 0.22);
+  --primary-contrast: #ffffff;
+
+  --accent-highlight: #6f4e37;
+  --accent-highlight-hover: #563b29;
+  --accent-secondary: #8e6d54;
+  --accent-chip: #e6e0f0;
+  --accent-chip-text: #422c1d;
+
+  --border-subtle: #d8d4ce;
+  --border-subtle-nav: #8e6d54;
+  --border-medium: #bbb6af;
+  --border-focus: #6f4e37;
+
+  --text-primary: #261811;
+  --text-secondary: #594539;
+  --text-muted: #847368;
+  --text-eyebrow: #6f4e37;
+
+  --badge-bg: #e6e0f0;
+  --badge-text: #422c1d;
+  --badge-border: #9d84c7;
+
+  --shadow-sm: 0 1px 3px rgba(38, 24, 17, 0.05);
+  --shadow-md: 0 4px 16px rgba(38, 24, 17, 0.07);
+  --shadow-lg: 0 12px 32px rgba(38, 24, 17, 0.11);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf8fc 100%);
+  --gradient-brand: linear-gradient(135deg, #3d2618 0%, #6f4e37 50%, #e6e0f0 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #e6e0f0;
+  --highlight-text: #261811;
+  --highlight-border: #6f4e37;
+  --highlight-shadow: 0 2px 6px rgba(111, 78, 55, 0.25);
+}

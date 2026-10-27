@@ -391,3 +391,66 @@
   --highlight-border: #ac9fbb;
   --highlight-shadow: 0 2px 6px rgba(172, 159, 187, 0.25);
 }
+/* ==========================================================================
+   ATMOSPHERE: Aubergine Marigold (Deep Aubergine, Ice Silver & Luminous Marigold)
+   ========================================================================== */
+[data-theme="aubergine-marigold"] {
+  /* Accent-highlight is aubergine here, so the swatch uses marigold (primary) */
+  --theme-swatch-3: var(--primary);
+
+  --sidebar-bg: #2d0a28;
+  --sidebar-text: #dde3e8;
+  --sidebar-text-muted: #a0829b;
+  --sidebar-border: rgba(221, 227, 232, 0.12);
+  --sidebar-active-bg: #eaaa00;
+  --sidebar-active-text: #23071f;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-tip-bg: rgba(234, 170, 0, 0.25);
+
+  --bg-app: #e6edf2;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #dde3e8;
+  --table-header-bg: #dde3e8;
+  --bg-glass: rgba(230, 237, 242, 0.94);
+
+  --primary: #eaaa00;
+  --primary-hover: #d49b00;
+  --primary-deep: #b37d00;
+  --primary-light: #fff4d9;
+  --primary-glow: rgba(234, 170, 0, 0.38);
+  --primary-contrast: #23071f;
+
+  --accent-highlight: #3a0f34;
+  --accent-highlight-hover: #280824;
+  --accent-secondary: #3a0f34;
+  --accent-chip: #fff3d6;
+  --accent-chip-text: #3a0f34;
+
+  --border-subtle: #dde3e8;
+  --border-subtle-nav: #eaaa00;
+  --border-medium: #b8c7d3;
+  --border-focus: #eaaa00;
+
+  --text-primary: #1c0619;
+  --text-secondary: #4d2c48;
+  --text-muted: #7c6577;
+  --text-eyebrow: #946300;
+
+  --badge-bg: #3a0f34;
+  --badge-text: #eaaa00;
+  --badge-border: #eaaa00;
+
+  --shadow-sm: 0 1px 3px rgba(28, 6, 25, 0.06);
+  --shadow-md: 0 4px 16px rgba(28, 6, 25, 0.09);
+  --shadow-lg: 0 12px 32px rgba(28, 6, 25, 0.14);
+
+  --gradient-card: linear-gradient(180deg, #ffffff 0%, #faf8fc 100%);
+  --gradient-brand: linear-gradient(135deg, #3a0f34 0%, #7a1c6d 50%, #eaaa00 100%);
+
+  /* Theme Search Highlight Palette */
+  --highlight-bg: #3a0f34;
+  --highlight-text: #eaaa00;
+  --highlight-border: #eaaa00;
+  --highlight-shadow: 0 2px 8px rgba(234, 170, 0, 0.4);
+}

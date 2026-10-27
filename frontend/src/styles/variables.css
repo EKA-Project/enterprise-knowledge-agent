@@ -106,8 +106,7 @@
 }
 
 /* Swatch preview tokens: resolved per element, so a swatch with data-theme="x" shows theme x's colours */
-:root,
-[data-theme] {
+:where(:root, [data-theme]) {
   --theme-swatch-1: var(--sidebar-bg);
   --theme-swatch-2: var(--bg-app);
   --theme-swatch-3: var(--accent-highlight, var(--primary));
