@@ -2,7 +2,7 @@ import {
   Anchor, Book, Citrus, Cloud, CloudMoon, Clover, Compass, Contrast, Crown,
   Diamond, Droplet, Eye, Feather, Flame, Flower2, Gauge, Gem, Grape, Leaf,
   Moon, Orbit, Palette, Sparkle, Sunrise, Sunset, TreePine, Wheat,
-  Coffee, Flower, Hexagon, PenTool, Zap,
+  Coffee, Flower, Hexagon, Zap,
 } from "lucide-react";
 import ToriiIcon from "./ToriiIcon";
 
@@ -44,8 +44,7 @@ const THEME_ICONS = {
   "space-steel": Orbit,
   "midnight-copper": Flame,
   "rosso-corsa": Gauge,
-  "pure-white-black": PenTool,
-    "night-meadow": Clover,
+  "night-meadow": Clover,
 };
 
 export const getThemeIcon = (id) => THEME_ICONS[id] ?? Palette;

@@ -56,7 +56,6 @@ export const THEMES = [
   { id: "midnight-copper", collection: "executive", name: "Midnight copper", description: "Celestial midnight, ivory & burnt copper" },
   { id: "night-meadow", collection: "executive", name: "Night Meadow", description: "Sculpted carbon, pewter canvas & cobalt blue" },
   { id: "rosso-corsa", collection: "executive", name: "Rosso Corsa", description: "Scuderia red, carbon black & Giallo Modena" },
-  { id: "pure-white-black", collection: "executive", name: "Pure White & Black", description: "Manga ink, screentone grey & pure white" },
 ];
 
 // Counts and tags come from the data, so the UI can never drift from the registry.
