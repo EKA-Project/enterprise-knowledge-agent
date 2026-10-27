@@ -18,9 +18,9 @@ const mb = (x) => `${Number(x.toFixed(1))} MB`; // 21 -> "21 MB"
 
 // Three chips under the hero text: Export Storage Audit / Free Up Space / Back to Documents.
 function HeroChips({ reclaimMb, onExport, onFreeUp }) {
-  const base = 'inline-flex h-10 cursor-pointer items-center gap-2.5 rounded-full border pl-2 pr-4 text-[13px] font-semibold transition-colors';
+  const base = 'inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border pl-2 pr-4 text-[12px] font-semibold transition-colors';
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-3.5">
+    <div className="mt-4  flex flex-wrap items-center gap-3.5">
       <button type="button" onClick={onExport} className={`${base} border-[#d6e6f2] bg-white text-[#10283f] hover:bg-[#e1f0fa]`}>
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e8f1f8] text-[#44596a]">
           <Download size={12} />
@@ -136,8 +136,8 @@ function StorageManagementPage() {
 
   return (
     // 28px between cards, content starts at x=346 (1520px wide), like the video
-    <div className="w-full space-y-7 pb-24 pt-[0px]">
-      <div className="[&_h1]:text-[35px] [&_h1]:leading-[1.1] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-2 [&_p:last-of-type]:max-w-[870px] [&_p:last-of-type]:text-[14px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-[30px]">
+    <div className="w-full space-y-5 pb-24 pt-[0px]">
+      <div className="[&_h1]:text-[34px] [&_h1]:leading-[0.5] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-4 [&_p:last-of-type]:max-w-[650px] [&_p:last-of-type]:text-[12px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-[20px]">
         <PageHero
           bare
           eyebrow={

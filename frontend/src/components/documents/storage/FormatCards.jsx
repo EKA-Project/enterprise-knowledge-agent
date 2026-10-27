@@ -28,7 +28,7 @@ function FormatCards({ active, hoveredKey, onSelect, onHover }) {
             onClick={() => onSelect(c.key)}
             onMouseEnter={() => onHover(c.key === 'ALL' ? null : c.key)}
             onMouseLeave={() => onHover(null)}
-            className={`flex h-[136px] cursor-pointer flex-col rounded-[18px] border-2 px-5 py-5 text-left transition-colors ${
+            className={`flex h-[13px] cursor-pointer flex-col rounded-[18px] border-2 px-5 py-5 text-left transition-colors ${
               isActive
                 ? 'border-[#1b79a8] bg-[#e0f1fd]'
                 : isLinked

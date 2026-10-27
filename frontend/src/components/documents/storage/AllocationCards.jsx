@@ -39,7 +39,7 @@ function AllocationCards({ mode, active, hoveredKey, usedGb, documents, onSelect
             onMouseEnter={() => onHover(isAll ? null : c.key)}
             onMouseLeave={() => onHover(null)}
             style={isLinked ? { borderColor: c.color } : undefined}
-            className={`flex h-[164px] cursor-pointer flex-col rounded-[20px] border-2 bg-white p-[22px] text-left transition-colors ${
+          className={`flex h-[164px] cursor-pointer flex-col rounded-[20px] border-2 border-t-[4px] bg-white p-[22px] text-left transition-colors ${
               isActive ? 'border-[#1b79a8] shadow-[0_0_0_3px_rgba(27,121,168,0.12)]' : isLinked ? '' : 'border-[#e8f1f8] hover:border-[#bcd8ee]'
             }`}
           >
