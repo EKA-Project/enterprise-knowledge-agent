@@ -54,3 +54,7 @@ export function StatusPill({ status }) {
     </span>
   );
 }
+export function DeptIcon({ name, size = 14 }) {
+  const [Icon] = DEPT[name] ?? DEPT['General Knowledge'];
+  return <Icon size={size} />;
+}

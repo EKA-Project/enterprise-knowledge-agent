@@ -1,33 +1,33 @@
 import { useState } from 'react';
-import { AlertCircle, ChevronDown, RotateCcw, Droplet, Trash2 } from 'lucide-react';
+import { AlertCircle, ChevronDown, Droplet, RotateCcw, Sparkles, Trash2 } from 'lucide-react';
 import { DeptPill, TypeTile } from './StorageBits';
 import '../../../styles/Document.css';
 
-const TH = 'doc-mono px-3 py-3.5 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
+const TH = 'doc-mono px-3 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
 
-// items = bin files, newest first. Collapsed by default ("View deleted files").
+// Collapsed by default. Sizes measured on the 1920px frame (card 1521 wide, header 111 tall, table head 52).
 function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
   const [open, setOpen] = useState(false);
   const empty = items.length === 0;
 
   return (
-    <section className="overflow-hidden rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)">
-      <div className={`flex flex-wrap items-center justify-between gap-4 px-8 py-6 ${open ? 'bg-[#fff6f6]' : ''}`}>
-        <div className="flex items-center gap-4">
-          <span className="relative flex h-[54px] w-[54px] items-center justify-center rounded-2xl bg-[#ffe9e8] text-[#e5484d]">
-            <Trash2 size={22} />
-            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#e5484d]" />
+    <section className="overflow-hidden rounded-[28px] border border-[#f6d5d9] bg-(--bg-surface) shadow-(--shadow-sm)">
+      <div className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[25px] ${open ? 'border-b border-[#f3e4e6]' : ''}`}>
+        <div className="flex items-center gap-[14px]">
+          <span className="relative flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-2xl border border-[#f6d5d9] bg-[#ffe9ee] text-[#e5484d]">
+            <Trash2 size={24} />
+            <span className="absolute right-1.5 top-1 h-1.5 w-1.5 rounded-full bg-[#e5484d]" />
           </span>
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className="doc-heading text-[24px] font-black leading-none text-[#10283f]">
+              <h2 className="doc-heading text-[24px] font-black leading-8 text-[#10283f]">
                 Recycle Bin / Soft-Deleted Files ({items.length})
               </h2>
-              <span className="doc-mono rounded-md border border-[#f3c3c3] bg-[#fff0f0] px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.08em] text-[#d9373f]">
+              <span className="doc-mono inline-flex h-[22px] items-center rounded-full border border-[#f6c4c3] bg-[#fff0f0] px-3 text-[10px] font-bold uppercase tracking-[0.06em] text-[#d9373f]">
                 30-day retention
               </span>
             </div>
-            <p className="mt-2 text-[14px] text-[#7c949a]">
+            <p className="mt-0.5 text-[14px] text-[#7c949a]">
               Safe-containment holding zone. Documents staged here are purged automatically after 30 days unless restored.
             </p>
           </div>
@@ -35,7 +35,7 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="doc-mono inline-flex cursor-pointer items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#44596a] transition-colors hover:text-[#10283f]"
+          className="doc-mono inline-flex cursor-pointer items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.1em] text-[#1f718e] transition-colors hover:text-[#10283f]"
         >
           View deleted files
           <ChevronDown size={15} className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
@@ -43,26 +43,26 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
       </div>
 
       {open && (
-        <div className="border-t border-[#f3dede] px-8 pb-8 pt-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="flex items-center gap-2 text-[13px] text-[#7c949a]">
-              <AlertCircle size={14} className="text-[#e5484d]" />
+        <div className="px-9 pb-9">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#f3e4e6] py-[14px]">
+            <p className="flex items-center gap-2.5 text-[14px] text-[#7c949a]">
+              <AlertCircle size={16} className="text-[#e5484d]" />
               Soft-deleted files remain restorable for 30 days before being purged forever.
             </p>
             <button
               type="button"
               onClick={onEmpty}
               disabled={empty}
-              className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-5 text-[12px] font-bold text-[#d9373f] transition-opacity hover:bg-[#ffe2e1] disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-[39px] cursor-pointer items-center gap-2 rounded-full border border-[#f9d3df] bg-[#fff3f8] px-5 text-[14px] font-semibold text-[#d9373f] transition-colors hover:bg-[#ffe2e1] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <Trash2 size={13} /> Empty Recycle Bin
+              <Trash2 size={14} /> Empty Recycle Bin
             </button>
           </div>
 
-          <div className="mt-4 overflow-hidden rounded-[20px] border border-[#e3eef7] bg-white">
+          <div className="mt-[15px] overflow-hidden rounded-[18px] border border-[#e3eef7] bg-white">
             <table className="w-full text-left">
-              <thead className="bg-[#e3eff9]">
-                <tr>
+              <thead className="bg-[#dcf0fd]">
+                <tr className="h-[52px]">
                   <th className={`${TH} pl-5`}>Type</th>
                   <th className={TH}>Document Name</th>
                   <th className={TH}>Department</th>
@@ -75,20 +75,20 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
                 <tbody>
                   {items.map((f) => (
                     <tr key={f.id} className="border-t border-[#e3eef7]">
-                      <td className="py-4 pl-5 pr-3"><TypeTile type={f.type} /></td>
-                      <td className="px-3 py-4">
+                      <td className="py-[18px] pl-5 pr-3"><TypeTile type={f.type} /></td>
+                      <td className="px-3">
                         <p className="max-w-[330px] truncate text-[14px] font-semibold text-[#10283f]">{f.name}</p>
                         <p className="doc-mono max-w-[330px] truncate text-[11px] text-[#7c949a]">{f.file}</p>
                       </td>
-                      <td className="px-3 py-4"><DeptPill name={f.dept} /></td>
-                      <td className="doc-mono px-3 py-4 text-[13px] font-bold text-[#10283f]">{f.sizeMb.toFixed(1)} MB</td>
-                      <td className="doc-mono px-3 py-4 text-[12px] text-[#7c949a]">{f.deleted}</td>
-                      <td className="py-4 pl-3 pr-5">
+                      <td className="px-3"><DeptPill name={f.dept} /></td>
+                      <td className="doc-mono px-3 text-[13px] font-bold text-[#10283f]">{f.sizeMb.toFixed(1)} MB</td>
+                      <td className="doc-mono px-3 text-[12px] text-[#7c949a]">{f.deleted}</td>
+                      <td className="pl-3 pr-5">
                         <div className="flex justify-end gap-2">
-                          <button type="button" onClick={() => onRestore(f)} className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#cfe3f3] bg-white px-4 text-[12px] font-semibold text-[#10283f] transition-colors hover:border-[#8fd3b5] hover:bg-[#eefbf5] hover:text-[#0f8f63]">
+                          <button type="button" onClick={() => onRestore(f)} className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#cfe3f3] bg-white px-4 text-[13px] font-semibold text-[#10283f] transition-colors hover:border-[#8fd3b5] hover:bg-[#eefbf5] hover:text-[#0f8f63]">
                             <RotateCcw size={13} /> Restore
                           </button>
-                          <button type="button" onClick={() => onPurge(f)} className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-4 text-[12px] font-semibold text-[#d9373f] transition-colors hover:bg-[#ffe2e1]">
+                          <button type="button" onClick={() => onPurge(f)} className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-4 text-[13px] font-semibold text-[#d9373f] transition-colors hover:bg-[#ffe2e1]">
                             <Droplet size={13} className="fill-current" /> Purge
                           </button>
                         </div>
@@ -100,14 +100,15 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
             </table>
 
             {empty && (
-              <div className="px-6 py-10">
-                <div className="mx-auto max-w-[340px] rounded-2xl border border-[#cdeedd] bg-[linear-gradient(180deg,#f2fcf7,#ffffff)] px-8 py-8 text-center">
-                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#dcf7ea] text-[#0f9d6b]">
-                    <Trash2 size={24} />
+              <div className="py-[50px]">
+                <div className="mx-auto flex h-[296px] w-full max-w-[516px] flex-col items-center rounded-3xl border border-dashed border-[#f3c4d0] bg-[linear-gradient(180deg,#fff5f8,#ffffff)] px-10 pt-[42px] text-center">
+                  <span className="relative flex h-[90px] w-[90px] items-center justify-center rounded-full border-2 border-[#f6c4cf] bg-[#ffe9ee] text-[#e5484d]">
+                    <Trash2 size={36} />
+                    <Sparkles size={12} className="absolute right-3 top-3 text-[#e5484d]" />
                   </span>
-                  <h4 className="doc-heading mt-4 text-[19px] font-black text-[#10283f]">Recycle Bin is Empty</h4>
-                  <p className="mt-2 text-[13px] leading-5 text-[#7c949a]">
-                    Zero files staged. Documents removed from the library are held here safely for 30 days before being purged permanently.
+                  <h4 className="doc-heading mt-[22px] text-[21px] font-black leading-7 text-[#10283f]">Recycle Bin is Empty</h4>
+                  <p className="mt-2 max-w-[404px] text-[14px] leading-[22px] text-[#7c949a]">
+                    Zero files staged. Documents removed from the library are held here safely for 30 days before being permanently purged.
                   </p>
                 </div>
               </div>
@@ -120,3 +121,10 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
 }
 
 export default RecycleBinSection;
+
+
+
+
+
+
+

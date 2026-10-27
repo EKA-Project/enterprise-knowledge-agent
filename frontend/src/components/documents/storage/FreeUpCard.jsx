@@ -21,13 +21,13 @@ const SORTS = [
   ['name-desc', 'Sort: File Name (Z-A)', (a, b) => b.name.localeCompare(a.name)],
   ['opened-desc', 'Sort: Last Opened (Oldest first)', (a, b) => b.idleDays - a.idleDays],
 ];
-const TH = 'doc-mono px-3 py-4 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
+const TH = 'doc-mono px-3 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
 
-// `files` = documents that are currently active (not in the bin, not purged).
-function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedChange, onSweep, onToast }) {
+// `files` = active documents. `filter` = { mode: 'dept' | 'format', key } from the cards above.
+function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, onSweep, onToast, glow }) {
   const [tab, setTab] = useState('large');
   const [largeMin, setLargeMin] = useState(10); // MB
-  const [customVal, setCustomVal] = useState(null); // number once a custom value is applied
+  const [customVal, setCustomVal] = useState(null);
   const [idleMin, setIdleMin] = useState(90); // days
   const [customOpen, setCustomOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -35,10 +35,12 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
-  useEffect(() => setPage(0), [activeFormat, tab, largeMin, idleMin, query, sort]);
+  useEffect(() => setPage(0), [filter.key, filter.mode, tab, largeMin, idleMin, query, sort]);
 
   const rowsFor = (key) => {
-    const list = files.filter((f) => activeFormat === 'ALL' || f.type === activeFormat);
+    const list = files.filter(
+      (f) => filter.key === 'ALL' || (filter.mode === 'dept' ? f.dept === filter.key : f.type === filter.key),
+    );
     if (key === 'large') return list.filter((f) => f.sizeMb > largeMin);
     if (key === 'idle') return list.filter((f) => f.idleDays > idleMin);
     if (key === 'failed') return list.filter((f) => f.status === 'Failed');
@@ -54,7 +56,7 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
     if (tab === 'dupes') list = Object.keys(dupGroups).flatMap((g) => list.filter((f) => f.group === g));
     return list;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files, activeFormat, tab, largeMin, idleMin, query, sort]);
+  }, [files, filter, tab, largeMin, idleMin, query, sort]);
 
   const count = rows.length;
   const reclaim = rows.filter((f) => !f.isProtected).reduce((s, f) => s + f.sizeMb, 0);
@@ -83,31 +85,36 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
   };
 
   const chip = (on) =>
-    `doc-mono h-7 cursor-pointer rounded-full px-3.5 text-[12px] font-semibold transition-colors ${
-      on ? 'bg-[#0a7bc4] text-white' : 'text-[#6b8296] hover:text-[#10283f]'
+    `doc-mono h-8 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${
+      on ? 'bg-[#0a7bc4] text-white' : 'text-[#44596a] hover:text-[#10283f]'
     }`;
 
   return (
-    <section className="overflow-hidden rounded-[28px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-9 pb-8 pt-7 shadow-(--shadow-sm)">
+    <section
+      id="free-up-card"
+      className={`overflow-hidden rounded-[28px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-9 pb-8 pt-[26px] shadow-(--shadow-sm) transition-shadow duration-500 ${
+        glow ? 'shadow-[0_0_0_5px_rgba(246,185,100,0.45)]' : ''
+      }`}
+    >
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-5">
           <button
             type="button"
             onClick={onSweep}
-            className="flex h-[56px] w-[56px] shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-[#e1f0fa] text-[#e8801a] transition-transform hover:scale-105"
+            className="flex h-[60px] w-[60px] shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-[#e1f0fa] text-[#e8801a] transition-transform hover:scale-105"
           >
-            <Paintbrush size={22} />
+            <Paintbrush size={24} />
           </button>
           <div>
             <div className="flex items-center gap-3">
-              <h2 className="doc-heading text-[30px] font-black leading-none text-[#10283f]">Free up space</h2>
-              <span className="doc-mono inline-flex items-center gap-1.5 rounded-full bg-[#e1f0fa] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-[#1b79a8]">
+              <h2 className="doc-heading text-[30px] font-black leading-[38px] text-[#10283f]">Free up space</h2>
+              <span className="doc-mono inline-flex h-[22px] items-center gap-1.5 rounded-full bg-[#e1f0fa] px-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#1b79a8]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#1b79a8]" />
                 Suggestions
               </span>
             </div>
-            <p className="mt-3 text-[14.5px] text-[#7c949a]">
+            <p className="mt-1.5 text-[14px] text-[#7c949a]">
               Targeted reclamation suggestions modeled after intelligent storage analytics to trim orphaned vectors and bloated PDFs.
             </p>
           </div>
@@ -119,7 +126,7 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
       </div>
 
       {/* Tabs */}
-      <div className="mt-6 flex flex-wrap gap-2 border-b border-[#e3eef7]">
+      <div className="mt-5 flex flex-wrap gap-2 border-b border-[#e3eef7]">
         {TABS.map((t) => {
           const isOn = tab === t.key;
           const Icon = t.icon;
@@ -128,15 +135,15 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
-              className={`-mb-px flex cursor-pointer items-center gap-2.5 rounded-t-xl border-b-2 px-4 pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${
+              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-4 pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${
                 isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'
               }`}
             >
-              <span className={`flex h-7 w-7 items-center justify-center rounded-lg ${isOn ? t.on : t.off}`}>
-                <Icon size={14} />
+              <span className={`flex h-[34px] w-[34px] items-center justify-center rounded-xl ${isOn ? t.on : t.off}`}>
+                <Icon size={16} />
               </span>
               {t.label}
-              <span className={`doc-mono flex h-[22px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-bold ${isOn ? 'bg-[#0a7bc4] text-white' : 'bg-[#e3eef7] text-[#7c949a]'}`}>
+              <span className={`doc-mono flex h-[26px] min-w-[26px] items-center justify-center rounded-full px-1.5 text-[12px] font-bold ${isOn ? 'bg-[#0a7bc4] text-white' : 'bg-[#e3eef7] text-[#7c949a]'}`}>
                 {rowsFor(t.key).length}
               </span>
             </button>
@@ -145,8 +152,8 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
       </div>
 
       {/* Summary + filters */}
-      <div className="mt-5 rounded-2xl bg-[#e1f0fa] px-5 py-4">
-        <p className="text-[14.5px] text-[#44596a]">
+      <div className="mt-5 rounded-[20px] bg-[#e1f0fa] px-[22px] py-[22px]">
+        <p className="text-[14px] text-[#44596a]">
           {count === 0 ? (
             '0 files matching current cleanup parameters'
           ) : (
@@ -157,18 +164,20 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
           )}
         </p>
 
-        <div className="mt-3.5 flex flex-wrap items-center gap-3">
-          {activeFormat !== 'ALL' && (
-            <div className="inline-flex h-9 items-center gap-3 rounded-full bg-white px-4 text-[12px]">
-              <span className="doc-mono font-semibold text-[#1b79a8]">Format: {activeFormat}</span>
-              <button type="button" onClick={onClearFormat} className="inline-flex cursor-pointer items-center gap-1 font-bold text-[#0a7bc4] underline">
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {filter.key !== 'ALL' && (
+            <div className="inline-flex h-10 items-center gap-3 rounded-full bg-white px-4 text-[12px]">
+              <span className="doc-mono font-semibold text-[#1b79a8]">
+                {filter.mode === 'dept' ? 'Department' : 'Format'}: {filter.key}
+              </span>
+              <button type="button" onClick={onClearFilter} className="inline-flex cursor-pointer items-center gap-1 font-bold text-[#0a7bc4] underline">
                 <RotateCcw size={11} /> View All
               </button>
             </div>
           )}
 
           {(tab === 'large' || tab === 'idle') && (
-            <div className="inline-flex items-center gap-0.5 rounded-full bg-white p-1">
+            <div className="inline-flex items-center gap-0.5 rounded-full bg-white/70 p-1">
               {(tab === 'large' ? LARGE_CHIPS : IDLE_CHIPS).map((c) => {
                 const isOn = tab === 'large' ? largeMin === c && customVal === null : idleMin === c;
                 return (
@@ -198,13 +207,13 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter files..."
-              className="h-10 w-[250px] rounded-full bg-white pl-10 pr-4 text-[13px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
+              className="h-10 w-[246px] rounded-full bg-white pl-10 pr-4 text-[13px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
             />
           </div>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="doc-mono h-10 cursor-pointer rounded-full bg-white px-4 text-[12px] text-[#10283f] outline-none"
+            className="doc-mono h-10 w-[300px] cursor-pointer rounded-full bg-white px-4 text-[12px] text-[#10283f] outline-none"
           >
             {SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
@@ -214,9 +223,9 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
       {/* Table */}
       <div className="mt-5 overflow-x-auto rounded-[20px] border border-[#e3eef7] bg-white">
         <table className="w-full min-w-[980px] text-left">
-          <thead className="bg-[#e3eff9]">
-            <tr>
-              <th className="w-12 px-4 py-4">
+          <thead className="bg-[#dcf0fd]">
+            <tr className="h-[52px]">
+              <th className="w-12 px-4">
                 <input type="checkbox" checked={allOnPage} onChange={toggleAll} disabled={selectable.length === 0} className="h-[18px] w-[18px] cursor-pointer accent-[#0a7bc4]" />
               </th>
               <th className={TH}>Type</th>
@@ -248,7 +257,7 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
                               <ClipboardList size={15} />
                             </span>
                             <div>
-                              <p className="text-[14.5px] font-semibold text-[#10283f]">Duplicate Group: {dupGroups[f.group].title}</p>
+                              <p className="text-[14px] font-semibold text-[#10283f]">Duplicate Group: {dupGroups[f.group].title}</p>
                               <p className="doc-mono text-[10.5px] text-[#7c949a]">{dupGroups[f.group].note}</p>
                             </div>
                           </div>
@@ -265,7 +274,7 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
                     </tr>
                   )}
                   <tr className={`border-t border-[#e3eef7] ${selected.has(f.id) ? 'bg-[#e8f3fc]' : 'bg-white hover:bg-[#f7fbfe]'}`}>
-                    <td className="px-4 py-4">
+                    <td className="px-4 py-[21px]">
                       <input
                         type="checkbox"
                         checked={selected.has(f.id)}
@@ -274,8 +283,8 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
                         className="h-[18px] w-[18px] cursor-pointer accent-[#0a7bc4] disabled:cursor-not-allowed disabled:opacity-30"
                       />
                     </td>
-                    <td className="px-3 py-4"><TypeTile type={f.type} /></td>
-                    <td className="px-3 py-4">
+                    <td className="px-3"><TypeTile type={f.type} /></td>
+                    <td className="px-3">
                       <div className="flex items-center gap-3">
                         <div className="min-w-0">
                           <p className="max-w-[330px] truncate text-[14px] font-semibold text-[#10283f]">{f.name}</p>
@@ -293,11 +302,11 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
                         )}
                       </div>
                     </td>
-                    <td className="px-3 py-4"><DeptPill name={f.dept} /></td>
-                    <td className="doc-mono px-3 py-4 text-[13px] font-bold text-[#10283f]">{f.sizeMb.toFixed(1)} MB</td>
-                    <td className="doc-mono px-3 py-4 text-[12px] text-[#7c949a]">{f.opened}</td>
-                    <td className="doc-mono px-3 py-4 text-[12px] text-[#7c949a]">{f.cited}</td>
-                    <td className="px-3 py-4"><StatusPill status={f.status} /></td>
+                    <td className="px-3"><DeptPill name={f.dept} /></td>
+                    <td className="doc-mono px-3 text-[13px] font-bold text-[#10283f]">{f.sizeMb.toFixed(1)} MB</td>
+                    <td className="doc-mono px-3 text-[12px] text-[#7c949a]">{f.opened}</td>
+                    <td className="doc-mono px-3 text-[12px] text-[#7c949a]">{f.cited}</td>
+                    <td className="px-3"><StatusPill status={f.status} /></td>
                   </tr>
                 </Fragment>
               );
@@ -306,8 +315,8 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
         </table>
       </div>
 
-      {/* Pagination */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#e1f0fa] px-5 py-3.5 text-[13px] text-[#7c949a]">
+      {/* Pagination (67px band, 34px page buttons) */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-[#e0f0f9] px-6 py-4 text-[14px] text-[#7c949a]">
         <div className="flex items-center gap-5">
           <span>
             Showing <strong className="text-[#10283f]">{count === 0 ? 0 : `${start + 1}–${Math.min(start + perPage, count)}`}</strong> of <strong className="text-[#10283f]">{count}</strong> files
@@ -317,14 +326,14 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
             <select
               value={perPage}
               onChange={(e) => { setPerPage(Number(e.target.value)); setPage(0); }}
-              className="doc-mono h-8 cursor-pointer rounded-lg border border-[#cfe3f3] bg-white px-2 text-[#10283f] outline-none"
+              className="doc-mono h-8 w-[62px] cursor-pointer rounded-lg border border-[#cfe3f3] bg-white px-2 text-[13px] text-[#10283f] outline-none"
             >
               {PER_PAGE.map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
         </div>
         <div className="flex items-center gap-2">
-          <button type="button" disabled={safePage === 0} onClick={() => setPage(safePage - 1)} className="h-8 cursor-pointer rounded-full px-3 text-[12px] disabled:cursor-not-allowed disabled:opacity-40">
+          <button type="button" disabled={safePage === 0} onClick={() => setPage(safePage - 1)} className="h-[31px] cursor-pointer rounded-full bg-white/50 px-4 text-[13px] disabled:cursor-not-allowed disabled:opacity-60">
             ← Prev
           </button>
           {Array.from({ length: pages }, (_, i) => (
@@ -332,12 +341,12 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
               key={i}
               type="button"
               onClick={() => setPage(i)}
-              className={`doc-mono h-8 w-8 cursor-pointer rounded-full text-[12px] font-bold ${i === safePage ? 'bg-[#0a7bc4] text-white' : 'text-[#44596a] hover:bg-white'}`}
+              className={`doc-mono h-[34px] w-[34px] cursor-pointer rounded-lg text-[14px] font-bold ${i === safePage ? 'bg-[#147aa5] text-white' : 'text-[#44596a] hover:bg-white'}`}
             >
               {i + 1}
             </button>
           ))}
-          <button type="button" disabled={safePage >= pages - 1} onClick={() => setPage(safePage + 1)} className="h-8 cursor-pointer rounded-full bg-white px-4 text-[12px] font-semibold text-[#10283f] disabled:cursor-not-allowed disabled:opacity-40">
+          <button type="button" disabled={safePage >= pages - 1} onClick={() => setPage(safePage + 1)} className="h-[31px] cursor-pointer rounded-full bg-white px-4 text-[13px] font-semibold text-[#10283f] disabled:cursor-not-allowed disabled:opacity-60">
             Next →
           </button>
         </div>
@@ -359,15 +368,11 @@ function FreeUpCard({ files, activeFormat, onClearFormat, selected, onSelectedCh
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
 export default FreeUpCard;
+
+
+
+
+
+
+

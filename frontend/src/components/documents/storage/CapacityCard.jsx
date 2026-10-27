@@ -1,86 +1,108 @@
 import { useState } from 'react';
-import { storageSummary, storageFormats } from './StorageData';
+import { FileText, Landmark } from 'lucide-react';
+import { departments, formats, storageSummary } from './StorageData';
 import '../../../styles/Document.css';
 
-// Capacity card: big number, stat box, segmented usage bar (hover = tooltip + dim others), legend.
-// `hoveredKey` is shared with the format cards so the matching card lights up too.
-function CapacityCard({ summary, hoveredKey, onHover }) {
-  const { usedMb, documents, reclaimableGb, softDeleted } = summary; // numbers move after recycle / purge
+// Capacity card: big number, stat box, department/format toggle, allocation bar, footer.
+function CapacityCard({ summary, mode, onModeChange, hoveredKey, onHover }) {
+  const { usedMb, documents, reclaimableGb, softDeleted } = summary;
   const totalGb = storageSummary.totalGb;
   const usedGb = (usedMb / 1000).toFixed(1);
   const freeGb = ((totalGb * 1000 - usedMb) / 1000).toFixed(1);
   const percent = ((usedMb / (totalGb * 1000)) * 100).toFixed(1);
-  const [tip, setTip] = useState(null); // { key, x } tooltip position (% of bar)
+  const isDept = mode === 'dept';
+  const items = isDept ? departments : formats;
+  const [tip, setTip] = useState(null); // { text, x }
 
-  const showTip = (key, centerPct) => {
-    onHover(key);
-    setTip({ key, x: centerPct });
-  };
-  const hideTip = () => {
-    onHover(null);
-    setTip(null);
-  };
-
-  // Left edge + width of each segment as % of the 50 GB pool
   let left = 0;
-  const segments = storageFormats.map((f) => {
+  const segments = items.map((f) => {
     const width = (f.gb / totalGb) * 100;
     const seg = { ...f, width, center: left + width / 2 };
     left += width;
     return seg;
   });
-  const tipFormat = tip && storageFormats.find((f) => f.key === tip.key);
+  const freeCenter = left + (100 - left) / 2;
+
+  const show = (key, text, x) => {
+    onHover(key);
+    setTip({ text, x });
+  };
+  const hide = () => {
+    onHover(null);
+    setTip(null);
+  };
+
+  const toggleBtn = (on) =>
+    `inline-flex h-9 cursor-pointer items-center gap-2 rounded-full px-4 text-[13px] font-semibold transition-colors ${
+      on ? 'bg-[#0b6fa4] text-white shadow-sm' : 'text-[#6b8296] hover:text-[#10283f]'
+    }`;
+  const badge = (on) =>
+    `doc-mono rounded-full px-2 py-0.5 text-[10px] font-bold ${on ? 'bg-white/20 text-white' : 'bg-[#d4e5f2] text-[#7c949a]'}`;
 
   return (
-    <section className="rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) px-7 py-5 shadow-(--shadow-sm)">
+    <section className="rounded-[24px] border border-(--border-subtle) bg-(--bg-surface) px-7 py-[22px] shadow-(--shadow-sm)">
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-baseline gap-3">
-            <span className="doc-mono text-[35px] font-bold leading-none text-[#10283f]">
-              {usedGb} GB
-            </span>
-            <span className="doc-mono text-[18px] text-[#7c949a]">of {totalGb} GB used</span>
-            <span className="doc-mono rounded-full border border-[#bdeedb] bg-[#edfdf3] px-3 py-1 text-[11px] font-semibold text-[#0f8f63]">
+          <div className="flex flex-wrap items-baseline gap-4">
+            <span className="doc-mono text-[40px] font-bold leading-none text-[#10283f]">{usedGb} GB</span>
+            <span className="doc-mono text-[22px] text-[#7c949a]">of {totalGb} GB used</span>
+            <span className="doc-mono inline-flex h-[29px] items-center rounded-full border border-[#bdeedb] bg-[#edfdf5] px-4 text-[12px] font-semibold text-[#0f8f63]">
               {percent}% Capacity
             </span>
           </div>
-          <p className="mt-2 text-[13px] text-[#7c949a]">
+          <p className="mt-3 text-[13.5px] font-light text-[#7c949a]">
             {freeGb} GB free • Encrypted tenant storage pool • Auto-indexed into Milvus vector stores
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-x-8 rounded-2xl bg-[#e1f0fa] px-5 py-3">
+        {/* Stat box (~467 x 70) */}
+        <div className="grid grid-cols-3 gap-x-9 rounded-2xl bg-[#e1f0fa] px-6 py-3">
           {[
             ['Total Documents', `${documents} Ingested`],
             ['Reclaimable Space', `${reclaimableGb} GB`],
             ['Recycle Bin', `${softDeleted} Soft-deleted`],
           ].map(([label, value]) => (
             <div key={label}>
-              <p className="doc-mono text-[10px] uppercase tracking-[0.14em] text-[#7c949a]">
-                {label}
-              </p>
-              <p className="doc-mono mt-1.5 text-[15px] font-bold text-[#10283f]">{value}</p>
+              <p className="doc-mono text-[9px] uppercase leading-3 tracking-[0.14em] text-[#7c949a]">{label}</p>
+              <p className="doc-mono mt-2 text-[17px] font-bold leading-6 text-[#10283f]">{value}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Usage bar: width of each segment = format size / 50 GB */}
-      <div className="relative mt-5">
-        {tipFormat && (
+      <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="doc-mono text-[9px] uppercase tracking-[0.14em] text-[#7c949a]">Capacity Allocation</p>
+          <h3 className="doc-heading mt-1 text-[18px] font-black leading-6 text-[#10283f]">
+            {isDept ? 'Department Volume Distribution' : 'File Format Volume Distribution'}
+          </h3>
+        </div>
+        <div className="inline-flex items-center rounded-full bg-[#e3f0fa] p-1">
+          <button type="button" onClick={() => onModeChange('dept')} className={toggleBtn(isDept)}>
+            <Landmark size={14} /> By Department <span className={badge(isDept)}>7 Depts</span>
+          </button>
+          <button type="button" onClick={() => onModeChange('format')} className={toggleBtn(!isDept)}>
+            <FileText size={14} /> By File Format <span className={badge(!isDept)}>5 Types</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Allocation bar: segment width = gb / 50 GB */}
+      <div className="relative mt-4">
+        {tip && (
           <span
             className="doc-mono pointer-events-none absolute bottom-full z-10 mb-3 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#10192b] px-2.5 py-1.5 text-[11px] font-semibold text-white"
             style={{ left: `${tip.x}%` }}
           >
-            {tipFormat.key}: {tipFormat.gb} GB ({tipFormat.share}% of used space)
+            {tip.text}
           </span>
         )}
         <div className="flex h-5 overflow-hidden rounded-full bg-[#e1f0fa]">
           {segments.map((s) => (
             <div
               key={s.key}
-              onMouseEnter={() => showTip(s.key, s.center)}
-              onMouseLeave={hideTip}
+              onMouseEnter={() => show(s.key, `${s.key}: ${s.gb} GB (${s.share}% of used space)`, s.center)}
+              onMouseLeave={hide}
               className="h-full cursor-pointer transition-opacity duration-150"
               style={{
                 width: `${s.width}%`,
@@ -89,31 +111,22 @@ function CapacityCard({ summary, hoveredKey, onHover }) {
               }}
             />
           ))}
+          <div
+            className="h-full flex-1"
+            onMouseEnter={() => show('FREE', `Free Space: ${freeGb} GB`, freeCenter)}
+            onMouseLeave={hide}
+          />
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="mt-3.5 flex flex-wrap items-center gap-x-6 gap-y-0">
-        {storageFormats.map((f) => (
-          <span
-            key={f.key}
-            onMouseEnter={() => onHover(f.key)}
-            onMouseLeave={() => onHover(null)}
-            className={`doc-mono inline-flex cursor-default items-center gap-2 rounded-full border px-2.5 py-0.5 text-[12px] transition-colors ${hoveredKey === f.key
-                ? 'border-[#cfe3f3] bg-[#e1f0fa]'
-                : 'border-transparent'
-              }`}
-          >
-            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: f.color }} />
-            <strong className="font-bold text-[#10283f]">{f.key}</strong>
-            <span className="text-[#7c949a]">
-              {f.gb} GB ({f.share}%)
-            </span>
-          </span>
-        ))}
-        <span className="doc-mono ml-auto inline-flex items-center gap-2 text-[12px] text-[#7c949a]">
-          <span className="h-2 w-2 rounded-full bg-[#bcd8ee]" />
-          Free Space {freeGb} GB
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[#e3eef7] pt-3.5 text-[12px] text-[#7c949a]">
+        <span className="inline-flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#2563eb]" />
+          Allocated: <strong className="font-semibold text-[#10283f]">{usedGb} GB</strong> ({percent}%) • Hover over bar
+          segments to inspect telemetry • Click cards below to filter
+        </span>
+        <span className="doc-mono">
+          Available: <strong className="text-[#10283f]">{freeGb} GB</strong> ({(100 - Number(percent)).toFixed(1)}%)
         </span>
       </div>
     </section>
@@ -121,3 +134,7 @@ function CapacityCard({ summary, hoveredKey, onHover }) {
 }
 
 export default CapacityCard;
+
+
+
+

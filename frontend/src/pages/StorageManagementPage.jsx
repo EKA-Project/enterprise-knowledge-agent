@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, HardDrive } from 'lucide-react';
+import { ArrowLeft, Download, Zap } from 'lucide-react';
 import PageHero from '../components/common/PageHero.jsx';
 import CapacityCard from '../components/documents/storage/CapacityCard.jsx';
-import FormatCards from '../components/documents/storage/FormatCards.jsx';
+import AllocationCards from '../components/documents/storage/AllocationCards.jsx';
 import FreeUpCard from '../components/documents/storage/FreeUpCard.jsx';
 import RecycleBinSection from '../components/documents/storage/RecycleBinSection.jsx';
 import BulkActionBar from '../components/documents/storage/BulkActionBar.jsx';
 import FileActionModal from '../components/documents/storage/FileActionModal.jsx';
+import TwoFactorModal from '../components/documents/storage/TwoFactorModal.jsx';
 import { storageFiles, storageSummary } from '../components/documents/storage/StorageData.js';
 import { DocToastHost, showDocToast } from '../components/documents/shared/DocToast';
 import '../styles/Document.css';
@@ -15,31 +16,27 @@ import '../styles/Document.css';
 const BIN_SEED = storageFiles.filter((f) => f.startsInBin).map((f) => f.id);
 const mb = (x) => `${Number(x.toFixed(1))} MB`; // 21 -> "21 MB"
 
-// Right side of the hero: cluster chip + back button.
-function HeroActions() {
+// Three chips under the hero text: Export Storage Audit / Free Up Space / Back to Documents.
+function HeroChips({ reclaimMb, onExport, onFreeUp }) {
+  const base = 'inline-flex h-10 cursor-pointer items-center gap-2.5 rounded-full border pl-2 pr-4 text-[13px] font-semibold transition-colors';
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex items-center gap-3 rounded-2xl border border-[#e3f1f9] bg-white px-4 py-[13px] shadow-(--shadow-sm)">
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e1f0fa] text-[#1f718e]">
-          <HardDrive size={16} />
+    <div className="mt-6 flex flex-wrap items-center gap-3.5">
+      <button type="button" onClick={onExport} className={`${base} border-[#d6e6f2] bg-white text-[#10283f] hover:bg-[#e1f0fa]`}>
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e8f1f8] text-[#44596a]">
+          <Download size={12} />
         </span>
-        <div>
-          <span className="doc-mono flex items-center gap-2 text-[12px] font-bold uppercase text-[#10283f]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#0f8f63]" />
-            Primary Cluster
-          </span>
-          <span className="doc-mono mt-0.5 block text-[9px] uppercase tracking-wider text-[#7c949a]">
-            AES-256 Encrypted Pool
-          </span>
-        </div>
-      </div>
-
-      <Link
-        to="/documents"
-        className="inline-flex h-[39px] items-center gap-2 rounded-full border border-[#cfe3f3] bg-white pl-1.5 pr-5 text-[13px] font-semibold text-[#10283f] transition-colors hover:bg-[#e1f0fa]"
-      >
-        <span className="flex h-[27px] w-[27px] items-center justify-center rounded-full bg-[#e1f0fa] text-[#1f718e]">
-          <ArrowLeft size={13} />
+        Export Storage Audit
+      </button>
+      <button type="button" onClick={onFreeUp} className={`${base} border-[#f6d9a8] bg-[#fff6e6] text-[#9a5a00] hover:bg-[#ffefd0]`}>
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ffe3b8] text-[#e8801a]">
+          <Zap size={12} className="fill-current" />
+        </span>
+        Free Up Space
+        <span className="doc-mono rounded-full bg-[#f59f0c] px-2.5 py-0.5 text-[10.5px] font-bold text-white">{reclaimMb.toFixed(1)} MB</span>
+      </button>
+      <Link to="/documents" className={`${base} border-[#d6e6f2] bg-white text-[#10283f] hover:bg-[#e1f0fa]`}>
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#e8f1f8] text-[#1f718e]">
+          <ArrowLeft size={12} />
         </span>
         Back to Documents
       </Link>
@@ -49,15 +46,16 @@ function HeroActions() {
 
 // Admin-only Storage Management page (route: /documents/storage).
 function StorageManagementPage() {
-  const [activeFormat, setActiveFormat] = useState('ALL'); // format card that filters the table
-  const [hoveredKey, setHoveredKey] = useState(null); // bar / legend / card hover link
-  const [selected, setSelected] = useState(() => new Set()); // ticked ids
+  const [mode, setMode] = useState('dept'); // 'dept' | 'format' (capacity toggle)
+  const [activeKey, setActiveKey] = useState('ALL'); // selected card = filter for the table
+  const [hoveredKey, setHoveredKey] = useState(null);
+  const [selected, setSelected] = useState(() => new Set());
   const [bin, setBin] = useState(BIN_SEED); // recycle bin ids, newest first
   const [purged, setPurged] = useState(() => new Set());
   const [restored, setRestored] = useState(() => new Set());
   const [confirm, setConfirm] = useState(null); // { kind: 'recycle' | 'purge', ids, from: 'table' | 'bin' | 'empty' }
+  const [glow, setGlow] = useState(false);
 
-  // Restored files come back as "Restored just now"
   const all = useMemo(
     () =>
       storageFiles.map((f) =>
@@ -71,9 +69,9 @@ function StorageManagementPage() {
   const activeFiles = all.filter(isActive);
   const binFiles = bin.map((id) => byId.get(id));
   const selectedFiles = activeFiles.filter((f) => selected.has(f.id));
-  const reclaimMb = selectedFiles.reduce((s, f) => s + f.sizeMb, 0);
+  const selectedMb = selectedFiles.reduce((s, f) => s + f.sizeMb, 0);
 
-  // Capacity card numbers follow the actions (14.3 -> 14.2 after a purge, like the video)
+  // Capacity numbers follow the actions
   let usedMb = storageSummary.usedGb * 1000;
   all.forEach((f) => {
     const on = isActive(f);
@@ -88,6 +86,22 @@ function StorageManagementPage() {
     softDeleted: bin.length,
   };
 
+  const changeMode = (m) => {
+    setMode(m);
+    setActiveKey('ALL');
+  };
+
+  const goFreeUp = () => {
+    document.getElementById('free-up-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setGlow(true);
+    setTimeout(() => setGlow(false), 1600);
+  };
+
+  const finish = () => {
+    setSelected(new Set());
+    setConfirm(null);
+  };
+
   const runConfirm = () => {
     const files = confirm.ids.map((id) => byId.get(id));
     const n = files.length;
@@ -99,15 +113,16 @@ function StorageManagementPage() {
     } else {
       setPurged((prev) => new Set([...prev, ...confirm.ids]));
       setBin((prev) => prev.filter((id) => !confirm.ids.includes(id)));
-      if (confirm.from === 'empty') {
+      if (confirm.from === 'bin') {
+        showDocToast(`✓ Two-Factor Verified: Permanently deleted "${files[0].name}" from Recycle Bin.`, 'success');
+      } else if (confirm.from === 'empty') {
         showDocToast('🗑 Documents & staged data recycled into containment!', 'neutral');
         showDocToast(`✓ Emptied Recycle Bin (${n} files, ${size.toFixed(1)} MB purged permanently).`, 'success');
       } else {
         showDocToast(`✓ Permanently purged ${n} files. ${mb(size)} freed.`, 'success'); // "1 files" like the video
       }
     }
-    setSelected(new Set());
-    setConfirm(null);
+    finish();
   };
 
   const restore = (f) => {
@@ -117,12 +132,12 @@ function StorageManagementPage() {
   };
 
   const confirmFiles = confirm ? confirm.ids.map((id) => byId.get(id)) : [];
+  const use2fa = confirm && confirm.kind === 'purge' && confirm.from === 'bin';
 
   return (
-    // No side padding: content starts at the same x as the Summary page (1520px wide)
-    <div className="w-full space-y-6 pb-24 pt-[0px]">
-      {/* Common PageHero on the page background; only sizes are overridden here */}
-      <div className="[&_h1]:text-[40px] [&_h1]:leading-[1.1] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-2 [&_p:last-of-type]:max-w-[900px] [&_p:last-of-type]:text-[14px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-[30px]">
+    // 28px between cards, content starts at x=346 (1520px wide), like the video
+    <div className="w-full space-y-7 pb-24 pt-[0px]">
+      <div className="[&_h1]:text-[35px] [&_h1]:leading-[1.1] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-2 [&_p:last-of-type]:max-w-[870px] [&_p:last-of-type]:text-[14px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-[30px]">
         <PageHero
           bare
           eyebrow={
@@ -136,21 +151,34 @@ function StorageManagementPage() {
           }
           title="Know what's taking space."
           description="Enterprise document volume telemetry, format allocations, and intelligent reclamation suggestions to keep retrieval precision fast and lean."
-          actions={<HeroActions />}
+        />
+        <HeroChips
+          reclaimMb={largeReclaim}
+          onExport={() => showDocToast('📄 Storage audit exported', 'neutral')}
+          onFreeUp={goFreeUp}
         />
       </div>
 
-      <CapacityCard summary={summary} hoveredKey={hoveredKey} onHover={setHoveredKey} />
-      <FormatCards active={activeFormat} hoveredKey={hoveredKey} onSelect={setActiveFormat} onHover={setHoveredKey} />
+      <CapacityCard summary={summary} mode={mode} onModeChange={changeMode} hoveredKey={hoveredKey} onHover={setHoveredKey} />
+      <AllocationCards
+        mode={mode}
+        active={activeKey}
+        hoveredKey={hoveredKey}
+        usedGb={(usedMb / 1000).toFixed(1)}
+        documents={summary.documents}
+        onSelect={setActiveKey}
+        onHover={setHoveredKey}
+      />
 
       <FreeUpCard
         files={activeFiles}
-        activeFormat={activeFormat}
-        onClearFormat={() => setActiveFormat('ALL')}
+        filter={{ mode, key: activeKey }}
+        onClearFilter={() => setActiveKey('ALL')}
         selected={selected}
         onSelectedChange={setSelected}
         onSweep={() => showDocToast('✨ Swept 0s and 1s out of storage!', 'neutral')}
         onToast={(m) => showDocToast(m, 'neutral')}
+        glow={glow}
       />
 
       <RecycleBinSection
@@ -162,29 +190,23 @@ function StorageManagementPage() {
 
       <BulkActionBar
         count={selectedFiles.length}
-        reclaimMb={reclaimMb}
+        reclaimMb={selectedMb}
         onRecycle={() => setConfirm({ kind: 'recycle', ids: selectedFiles.map((f) => f.id), from: 'table' })}
         onPurge={() => setConfirm({ kind: 'purge', ids: selectedFiles.map((f) => f.id), from: 'table' })}
         onDisarm={() => setSelected(new Set())}
       />
 
-      {confirm && (
-        <FileActionModal
-          variant={confirm.kind}
-          files={confirmFiles}
-          onClose={() => setConfirm(null)}
-          onConfirm={runConfirm}
-        />
+      {confirm && use2fa && (
+        <TwoFactorModal file={confirmFiles[0]} onClose={() => setConfirm(null)} onVerified={runConfirm} />
+      )}
+      {confirm && !use2fa && (
+        <FileActionModal variant={confirm.kind} files={confirmFiles} onClose={() => setConfirm(null)} onConfirm={runConfirm} />
       )}
       <DocToastHost />
     </div>
   );
 }
 
-
-
-
-
-
-
 export default StorageManagementPage;
+
+
