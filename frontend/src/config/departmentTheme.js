@@ -29,8 +29,7 @@ import {
 // Source: data-architecture.md, section 4.1.
 
 // colorKey -> CSS variable. The hex values live ONLY in styles/variables.css
-// (the "Department palette" block);
-// see the check in the PR notes that verifies every key has a variable.
+// (the "Department palette" block).
 export const DEPARTMENT_COLORS = {
   // Core departments, as used in the target design
   forest: "var(--dept-forest)", // Engineering & DevOps

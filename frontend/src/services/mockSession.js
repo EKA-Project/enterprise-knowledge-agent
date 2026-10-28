@@ -1,4 +1,4 @@
-import { users } from "../data/mock/users.js";
+import { db } from "./mockDb.js";
 
 // MOCK-ONLY stand-in for "who is signed in". Phase C replaces it with GET /me,
 // so this file is deleted together with src/data/mock/.
@@ -31,5 +31,5 @@ export function getMockCurrentUser() {
     // localStorage can be unavailable (private mode, tests): use the fallback
   }
   const userId = USER_ID_BY_ROLE[role] ?? USER_ID_BY_ROLE.Employee;
-  return users.find((u) => u.id === userId);
+   return db.users.find((u) => u.id === userId);
 }

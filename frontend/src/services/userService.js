@@ -1,4 +1,4 @@
-import { users } from "../data/mock/users.js";
+import { db } from "./mockDb.js";
 import { clone, delay } from "./mockHelpers.js";
 import { getMockCurrentUser } from "./mockSession.js";
 
@@ -23,7 +23,7 @@ export async function getUsers(filters = {}) {
   await delay();
   const { departmentId, role, status } = filters;
   return clone(
-    users.filter(
+    db.users.filter(
       (u) =>
         (departmentId === undefined || u.departmentId === departmentId) &&
         (role === undefined || u.role === role) &&
