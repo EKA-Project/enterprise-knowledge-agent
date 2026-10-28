@@ -205,7 +205,21 @@
   --file-fig-color: var(--doc-fig-color);
   --file-fig-border: var(--doc-fig-border);
 }
-
+/* ── Department palette ──────────────────────────────────────────────
+   Referenced by departments.colorKey through config/departmentTheme.js.
+   One hue per key, shared by all themes; soft backgrounds and borders are
+   derived with color-mix() where used. */
+:root {
+  --dept-violet: #7c3aed;
+  --dept-indigo: #4f46e5;
+  --dept-blue: #2563eb;
+  --dept-cyan: #0891b2;
+  --dept-emerald: #059669;
+  --dept-amber: #d97706;
+  --dept-orange: #ea580c;
+  --dept-rose: #e11d48;
+  --dept-neutral: #64748b; /* fallback for an unknown colorKey */
+}
 /* ==========================================================================
    Modal animation
    ========================================================================== */
