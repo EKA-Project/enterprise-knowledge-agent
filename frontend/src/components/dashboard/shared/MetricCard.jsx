@@ -5,6 +5,7 @@ function MetricCard({
   supportingType,
   icon: Icon,
   iconColor,
+  action,
   children,
 }) {
   // ─────────────────────────────────────────────
@@ -16,6 +17,7 @@ function MetricCard({
     green: "bg-[#eaf7ef] text-[#4caf50]",
     amber: "bg-[#fff6df] text-[#ffb300]",
     purple: "bg-[#f0eafb] text-[#7e57c2]",
+    red: "bg-[#fdecea] text-[#ef4444]",
   };
 
   // ─────────────────────────────────────────────
@@ -32,7 +34,7 @@ function MetricCard({
   // ─────────────────────────────────────────────
 
   return (
-    <section className="rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
+    <section className="flex h-40 flex-col rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
       {/* ─────────────────────────────────────────
           Header: metric label and icon
       ───────────────────────────────────────── */}
@@ -57,7 +59,7 @@ function MetricCard({
           Content: metric value or custom content
       ───────────────────────────────────────── */}
 
-      <div className="mt-2 flex min-h-24 items-end pb-2">
+      <div className="mt-4 flex flex-1 items-end pb-0">
         {children ? (
           children
         ) : (
@@ -66,6 +68,9 @@ function MetricCard({
             <p className="font-serif text-[2rem] font-bold tracking-tight text-(--text-primary)">
               {value}
             </p>
+
+            {/* Optional action (link or button) */}
+            {action}
 
             {/* Supporting metric */}
             {supportingText && (

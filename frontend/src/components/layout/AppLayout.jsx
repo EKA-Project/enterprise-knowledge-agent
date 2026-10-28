@@ -4,7 +4,7 @@ import Topbar from "./Topbar.jsx";
 
 function AppLayout() {
   return (
-    <div className="grid h-screen grid-cols-[15rem_1fr]">
+    <div className="relative grid h-screen grid-cols-[15rem_1fr] grid-rows-[minmax(0,1fr)] overflow-hidden">
       {/* Sidebar occupies the first grid column. */}
       <Sidebar />
 
@@ -14,7 +14,7 @@ function AppLayout() {
         <Topbar />
 
         {/* Only this area changes between routes. */}
-        <main className="min-h-0 flex-1 overflow-y-auto bg-(--bg-app) px-10 py-8">
+        <main className="relative min-h-0 flex-1 overflow-y-auto bg-(--bg-app) px-10 py-8">
           <Outlet />
         </main>
       </div>

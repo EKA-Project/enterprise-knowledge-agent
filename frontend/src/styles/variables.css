@@ -27,6 +27,7 @@
   /* Primary & Accent Tones (Calm Sky Blue 600 & Vivid Sky Azure) */
   --primary: #0a75aa;
   --primary-hover: #4eb4eb;
+  --primary-deep: #075f8c;
   --primary-light: #e0f2fe;
   --primary-glow: rgba(2, 132, 199, 0.18);
   --primary-contrast: #ffffff;
@@ -80,7 +81,7 @@
   --status-info: #0369a1;
   --status-info-bg: #e0f2fe;
 
-    /* Semantic Citation & Verification (Search & Grounding) */
+  /* Semantic Citation & Verification (Search & Grounding) */
   --status-verified: #10b981;
   --status-verified-bg: rgba(16, 185, 129, 0.1);
   --status-verified-border: rgba(16, 185, 129, 0.25);
@@ -97,4 +98,149 @@
   --status-failure-glow: rgba(239, 68, 68, 0.25);
   --status-failure-subtle: rgba(239, 68, 68, 0.03);
   --status-failure-row: rgba(239, 68, 68, 0.015);
+
+  /* Document File Formats Palette (PDF, DOC/DOCX, CSV, MD, TXT, FIG) */
+  --doc-pdf-bg: #fee2e2;
+  --doc-pdf-color: #dc2626;
+  --doc-pdf-text: #dc2626;
+  --doc-pdf-border: #fca5a5;
+
+  --doc-doc-bg: #dbeafe;
+  --doc-doc-color: #2563eb;
+  --doc-doc-text: #2563eb;
+  --doc-doc-border: #bfdbfe;
+
+  --doc-docx-bg: #dbeafe;
+  --doc-docx-color: #2563eb;
+  --doc-docx-text: #2563eb;
+  --doc-docx-border: #bfdbfe;
+
+  --doc-csv-bg: #dcfce7;
+  --doc-csv-color: #15803d;
+  --doc-csv-text: #15803d;
+  --doc-csv-border: #bbf7d0;
+
+  --doc-md-bg: #e0e7ff;
+  --doc-md-color: #4f46e5;
+  --doc-md-text: #4f46e5;
+  --doc-md-border: #c7d2fe;
+
+  --doc-txt-bg: #f3f4f6;
+  --doc-txt-color: #4b5563;
+  --doc-txt-text: #4b5563;
+  --doc-txt-border: #e5e7eb;
+
+  --doc-fig-bg: #f3e8ff;
+  --doc-fig-color: #9333ea;
+  --doc-fig-text: #9333ea;
+  --doc-fig-border: #e9d5ff;
+
+  /* Aliases for convenience */
+  --file-pdf-bg: var(--doc-pdf-bg);
+  --file-pdf-color: var(--doc-pdf-color);
+  --file-pdf-border: var(--doc-pdf-border);
+  --file-doc-bg: var(--doc-doc-bg);
+  --file-doc-color: var(--doc-doc-color);
+  --file-doc-border: var(--doc-doc-border);
+  --file-docx-bg: var(--doc-docx-bg);
+  --file-docx-color: var(--doc-docx-color);
+  --file-docx-border: var(--doc-docx-border);
+  --file-csv-bg: var(--doc-csv-bg);
+  --file-csv-color: var(--doc-csv-color);
+  --file-csv-border: var(--doc-csv-border);
+  --file-md-bg: var(--doc-md-bg);
+  --file-md-color: var(--doc-md-color);
+  --file-md-border: var(--doc-md-border);
+  --file-txt-bg: var(--doc-txt-bg);
+  --file-txt-color: var(--doc-txt-color);
+  --file-txt-border: var(--doc-txt-border);
+  --file-fig-bg: var(--doc-fig-bg);
+  --file-fig-color: var(--doc-fig-color);
+  --file-fig-border: var(--doc-fig-border);
+
+  --radius-table: 28px;
+  --table-header-bg: #cfe4f5;
+}
+
+/* ---------- Modal animation ---------- */
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modal-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes modal-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes modal-pop-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.modal-overlay {
+  animation: modal-fade-in 150ms ease-out;
+}
+.modal-overlay[data-closing] {
+  animation: modal-fade-out 150ms ease-in forwards;
+}
+.modal-card {
+  animation: modal-pop-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-overlay[data-closing] .modal-card {
+  animation: modal-pop-out 150ms ease-in forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay,
+  .modal-card,
+  .modal-overlay[data-closing],
+  .modal-overlay[data-closing] .modal-card {
+    animation: none;
+  }
+}
+
+/* ---------- Modal scroll area ---------- */
+.modal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--border-medium);
+}
+
+/* Firefox only (Chrome would ignore the webkit rules above if it saw these) */
+@supports not selector(::-webkit-scrollbar) {
+  .modal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-subtle) transparent;
+  }
 }
