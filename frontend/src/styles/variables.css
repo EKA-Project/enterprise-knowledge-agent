@@ -79,4 +79,22 @@
   --status-danger-bg: #fee2e2;
   --status-info: #0369a1;
   --status-info-bg: #e0f2fe;
+
+    /* Semantic Citation & Verification (Search & Grounding) */
+  --status-verified: #10b981;
+  --status-verified-bg: rgba(16, 185, 129, 0.1);
+  --status-verified-border: rgba(16, 185, 129, 0.25);
+
+  /* Semantic Search Relevance & Match Badges */
+  --match-score-bg: #e6f4ea;
+  --match-score-text: #137333;
+  --match-score-border: #a7f3d0;
+
+  /* Ingestion Failures, Alerts & Direct Admin Fix (Vivid Coral Red) */
+  --status-failure: #ef4444;
+  --status-failure-bg: rgba(239, 68, 68, 0.15);
+  --status-failure-border: rgba(239, 68, 68, 0.3);
+  --status-failure-glow: rgba(239, 68, 68, 0.25);
+  --status-failure-subtle: rgba(239, 68, 68, 0.03);
+  --status-failure-row: rgba(239, 68, 68, 0.015);
 }

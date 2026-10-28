@@ -24,13 +24,14 @@ import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSucces
 import Dashboard from "../pages/Dashboard.jsx";
 import AskEkaPage from "../pages/AskEkaPage";
 import ChatHistoryPage from "../pages/ChatHistoryPage";
+import SemanticSearchPage from "../pages/SemanticSearchPage.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
   return (
     <Routes>
       {/* Redirect the root URL to the main dashboard. */}
-     <Route path="/" element={<Navigate to="/landing" replace />} />
+     <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
       {/* Public / authentication routes */}
       <Route path="/landing" element={<LandingPage />} />
@@ -78,7 +79,7 @@ function AppRoutes() {
         <Route path="/ask-eka/history" element={<ChatHistoryPage />} />
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
-        <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
+        <Route path="/semantic-search" element={<SemanticSearchPage />} />
         <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
         <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
         <Route path="/settings" element={<h1>Settings</h1>} />
@@ -86,5 +87,4 @@ function AppRoutes() {
     </Routes>
   );
 }
-
 export default AppRoutes;
