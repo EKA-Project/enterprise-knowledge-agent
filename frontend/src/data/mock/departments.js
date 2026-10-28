@@ -1,0 +1,113 @@
+// @ts-check
+// MOCK TABLE: departments. Disposable: deleted when the API is live.
+// Shape: data-architecture.md section 4.1. Only departmentService reads this file.
+// documentCount and memberCount are NOT stored; the service computes them.
+
+/** @type {import('../../types').Department[]} */
+export const departments = [
+  {
+    id: "dept_eng",
+    name: "Engineering & DevOps",
+    code: "ENG",
+    description: "Builds and operates the platform, infrastructure and developer tooling.",
+    scope: "Runbooks, architecture guides, audit reports and engineering standards.",
+    colorKey: "violet",
+    iconKey: "sliders-horizontal",
+    managerId: "usr_003",
+    insight: {
+      status: "ready",
+      generatedAt: "2026-10-25T09:40:00Z",
+      model: "mock-model-v1",
+      overview:
+        "Microservices architecture across containerized Kubernetes clusters, with documented failover procedures, zero-trust networking and continuous deployment practices.",
+      basedOnDocumentIds: ["doc_007", "doc_009"],
+    },
+    createdAt: "2026-01-05T09:00:00Z",
+    updatedAt: "2026-10-25T09:40:00Z",
+  },
+  {
+    id: "dept_hr",
+    name: "People & HR Operations",
+    code: "HR",
+    description: "Owns people policies, onboarding, benefits and workplace programs.",
+    scope: "Employee handbooks, conduct and compliance policies, leave and benefits guides.",
+    colorKey: "emerald",
+    iconKey: "users",
+    managerId: "usr_002",
+    insight: {
+      // Older than doc_001's updatedAt (2026-10-22), so the badge shows "outdated".
+      status: "ready",
+      generatedAt: "2026-10-15T08:00:00Z",
+      model: "mock-model-v1",
+      overview:
+        "Company-wide conduct and information security rules, remote work limits and home office benefits, with some figures that differ between documents.",
+      basedOnDocumentIds: ["doc_001", "doc_003", "doc_015"],
+    },
+    createdAt: "2026-01-05T09:00:00Z",
+    updatedAt: "2026-10-15T08:00:00Z",
+  },
+  {
+    id: "dept_prod",
+    name: "Product Strategy & Design",
+    code: "PROD",
+    description: "Sets product direction, roadmaps and the design system.",
+    scope: "Roadmaps, product requirement documents, research findings and design guidelines.",
+    colorKey: "amber",
+    iconKey: "layout-panel-left",
+    managerId: "usr_004",
+    insight: {
+      status: "pending",
+      generatedAt: null,
+      model: null,
+      overview: null,
+      basedOnDocumentIds: [],
+    },
+    createdAt: "2026-01-05T09:00:00Z",
+    updatedAt: "2026-01-05T09:00:00Z",
+  },
+  {
+    id: "dept_sec",
+    name: "Security & Compliance",
+    code: "SEC",
+    description: "Protects company systems and data and prepares for audits.",
+    scope: "Security standards, incident response plans, audit evidence and risk registers.",
+    colorKey: "cyan",
+    iconKey: "shield",
+    managerId: "usr_006",
+    insight: {
+      status: "failed",
+      generatedAt: null,
+      model: "mock-model-v1",
+      overview: null,
+      basedOnDocumentIds: [],
+    },
+    createdAt: "2026-01-05T09:00:00Z",
+    updatedAt: "2026-10-20T10:00:00Z",
+  },
+  {
+    id: "dept_gtm",
+    name: "Sales & Go-To-Market",
+    code: "GTM",
+    description: "Runs sales, partnerships and market launches.",
+    scope: "Sales playbooks, pricing sheets, launch plans and partner agreements.",
+    colorKey: "rose",
+    iconKey: "tag",
+    managerId: "usr_007",
+    insight: null,
+    createdAt: "2026-01-05T09:00:00Z",
+    updatedAt: "2026-01-05T09:00:00Z",
+  },
+  {
+    id: "dept_legal",
+    name: "Legal & Finance",
+    code: "LEGAL",
+    description: "Handles contracts, regulatory matters and financial controls.",
+    scope: "Contract templates, financial policies, regulatory filings and legal guidance.",
+    colorKey: "orange",
+    iconKey: "file-text",
+    managerId: "usr_008",
+    insight: null,
+    createdAt: "2026-01-05T09:00:00Z",
+    updatedAt: "2026-01-05T09:00:00Z",
+  },
+];
