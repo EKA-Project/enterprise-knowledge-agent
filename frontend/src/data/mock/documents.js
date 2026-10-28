@@ -174,7 +174,7 @@ export const documents = [
     isPinned: false, pinnedAt: null, isProtected: false, protectedReason: null,
     supersededById: null, archivedAt: null,
     uploadedAt: "2026-10-01T09:00:00Z", updatedAt: "2026-10-01T09:00:00Z", lastIndexedAt: "2026-10-01T09:25:00Z",
-    lastOpenedAt: "2026-09-10T08:00:00Z", lastCitedAt: null,
+    lastOpenedAt: "2026-10-03T08:00:00Z", lastCitedAt: null,
   },
   {
     // DUPLICATE of doc_011; never opened
