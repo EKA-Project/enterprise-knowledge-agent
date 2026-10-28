@@ -97,9 +97,13 @@ function TwoFactorModal({ file, onClose, onVerified }) {
                   key={n}
                   type="button"
                   onClick={() => pick(n)}
-                  className={`h-[42px] cursor-pointer rounded-lg text-[16px] font-bold transition-colors ${
-                    picked === n ? (n === code ? 'border-2 border-[#1b79a8] bg-[#e1f0fa] text-[#1b79a8]' : 'border-2 border-[#e5484d] bg-[#fff0ef] text-[#d9373f]') : 'bg-[#e4f1fb] text-[#10283f] hover:bg-[#d4e8f6]'
-                  }`}
+className={`h-[52px] cursor-pointer rounded-xl border text-[18px] font-bold transition-all duration-200 ${
+  picked === n
+    ? n === code
+      ? 'border-[#17b97f] bg-[#17b97f] text-white shadow-[0_6px_14px_rgba(23,185,127,0.35)]'
+      : 'border-[#e5484d] bg-[#e5484d] text-white shadow-[0_6px_14px_rgba(229,72,77,0.3)]'
+    : 'border-[#b9d6ec] bg-[#dcebf8] text-[#10283f] hover:-translate-y-px hover:bg-[#cfe3f4]'
+}`}
                 >
                   {n}
                 </button>

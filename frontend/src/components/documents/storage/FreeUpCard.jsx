@@ -152,8 +152,8 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
       </div>
 
       {/* Summary + filters */}
-      <div className="mt-5 rounded-[20px] bg-[#e1f0fa] px-[22px] py-[22px]">
-        <p className="text-[14px] text-[#44596a]">
+      <div className="mt-5 rounded-[20px] bg-[#e1f0fa] px-[15px] py-[12px]">
+        <p className="text-[13px] text-[#44596a]">
           {count === 0 ? (
             '0 files matching current cleanup parameters'
           ) : (
@@ -207,13 +207,13 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter files..."
-              className="h-10 w-[246px] rounded-full bg-white pl-10 pr-4 text-[13px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
+              className="h-8 w-[246px] rounded-full bg-white pl-10 pr-4 text-[12px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
             />
           </div>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="doc-mono h-10 w-[300px] cursor-pointer rounded-full bg-white px-4 text-[12px] text-[#10283f] outline-none"
+            className="doc-mono h-8 w-[250px] cursor-pointer rounded-full bg-white px-2 text-[12px] text-[#10283f] outline-none"
           >
             {SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
@@ -316,7 +316,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
       </div>
 
       {/* Pagination (67px band, 34px page buttons) */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-[#e0f0f9] px-6 py-4 text-[14px] text-[#7c949a]">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-[#e0f0f9] px-6 py-1 text-[14px] text-[#7c949a]">
         <div className="flex items-center gap-5">
           <span>
             Showing <strong className="text-[#10283f]">{count === 0 ? 0 : `${start + 1}–${Math.min(start + perPage, count)}`}</strong> of <strong className="text-[#10283f]">{count}</strong> files
@@ -333,7 +333,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
           </label>
         </div>
         <div className="flex items-center gap-2">
-          <button type="button" disabled={safePage === 0} onClick={() => setPage(safePage - 1)} className="h-[31px] cursor-pointer rounded-full bg-white/50 px-4 text-[13px] disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="button" disabled={safePage === 0} onClick={() => setPage(safePage - 1)} className="h-[25px] cursor-pointer rounded-full bg-white px-3 text-[12px]  font-semibold text-[#10283f]  disabled:cursor-not-allowed disabled:opacity-60">
             ← Prev
           </button>
           {Array.from({ length: pages }, (_, i) => (
@@ -346,7 +346,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
               {i + 1}
             </button>
           ))}
-          <button type="button" disabled={safePage >= pages - 1} onClick={() => setPage(safePage + 1)} className="h-[31px] cursor-pointer rounded-full bg-white px-4 text-[13px] font-semibold text-[#10283f] disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="button" disabled={safePage >= pages - 1} onClick={() => setPage(safePage + 1)} className="h-[25px] cursor-pointer rounded-full bg-white px-3 text-[12px] font-semibold text-[#10283f] disabled:cursor-not-allowed disabled:opacity-60">
             Next →
           </button>
         </div>
