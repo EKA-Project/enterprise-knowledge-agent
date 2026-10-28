@@ -98,7 +98,7 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
   } else {
     body = (
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {visible.map((item) => (
+        {visible.map((item) => (
           <GlossaryCard
             key={item.id}
             item={item}
@@ -130,7 +130,7 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
         </div>
 
         <div className="flex w-full items-center gap-2 sm:w-auto">
-          <label className="flex flex-1 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1.5 sm:w-56 sm:flex-none">
+         <label className="flex flex-1 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1.5 transition-[width,border-color,box-shadow] duration-300 focus-within:border-(--primary) focus-within:shadow-[0_0_0_3px_var(--primary-light)] sm:w-56 sm:flex-none sm:focus-within:w-[250px]">
             <Search size={12} className="text-(--text-muted)" />
             <input
               type="text"
@@ -155,17 +155,16 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
         </div>
       </div>
 
-            {/* A–Z filter */}
+      {/* A–Z filter */}
       {/* Bar is plain white; hover / selected letter gets a soft blue tile */}
-      <div className="mt-4 flex items-center gap-1 overflow-x-auto rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-1.5">
+      <div className="mt-4 flex items-center gap-4 overflow-x-auto overflow-y-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <button
           type="button"
           onClick={() => changeLetter('All')}
-          className={`kb-mono shrink-0 cursor-pointer rounded-xl px-3 py-1 text-[11px] font-semibold transition-colors ${
-            letter === 'All'
+          className={`kb-mono shrink-0 cursor-pointer rounded-xl px-3 py-1 text-[11px] font-semibold transition-colors ${letter === 'All'
               ? 'bg-(--primary) text-(--primary-contrast)'
               : 'text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
-          }`}
+            }`}
         >
           All ({terms.length})
         </button>
@@ -178,19 +177,18 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
                 type="button"
                 disabled={count === 0}
                 onClick={() => changeLetter(l)}
-                className={`kb-mono flex h-6 w-6 items-center justify-center rounded-lg text-[11px] font-semibold transition-colors ${
-                  active
+                className={`kb-mono flex h-6 w-6 items-center justify-center rounded-lg text-[11px] font-semibold transition-colors ${active
                     ? 'cursor-pointer bg-(--bg-surface-subtle) text-(--text-primary)'
                     : count
                       ? 'cursor-pointer text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
                       : 'cursor-not-allowed text-(--text-muted) opacity-40'
-                }`}
+                  }`}
               >
                 {l}
               </button>
               {count > 0 && (
-                <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-1 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-(--sidebar-bg) px-2 py-1 text-[10px] text-white group-hover:block">
-                  {count} terms starting with {l}
+                <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-1 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-(--sidebar-bg) px-1.5 py-0.5 text-[9px] leading-3 text-white group-hover:block">
+                  {count} {count === 1 ? 'term' : 'terms'}
                 </span>
               )}
             </div>

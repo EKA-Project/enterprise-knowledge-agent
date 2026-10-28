@@ -47,7 +47,7 @@ export default function RecentlyUpdated({ state = 'normal', onReset }) {
               title={`Open ${item.title}`}
               className="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border border-(--border-subtle) bg-(--primary-light) px-3.5 py-2.5 transition-colors hover:border-(--accent-highlight) hover:bg-(--bg-surface)"
             >
-              <span className={`kb-mono rounded-md px-1.5 py-1.5 text-[9px] font-semibold ${formatStyles[item.format]}`}>
+              <span className={`kb-mono rounded-md px-1.5 py-0 text-[9px] font-semibold ${formatStyles[item.format]}`}>
                 {item.format}
               </span>
               <span className="kb-serif min-w-0 text-[13px] font-bold text-(--text-primary)">{item.title}</span>

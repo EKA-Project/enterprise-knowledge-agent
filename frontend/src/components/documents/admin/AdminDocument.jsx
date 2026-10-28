@@ -16,6 +16,7 @@ function AdminDocument() {
       {/* Admin header: hero, then storage + buttons in one row below it */}
       <div className="mb-6 [&_p:first-of-type]:text-[#7c949a]">
         <PageHero
+          bare
           eyebrow={`Ingestion Repository / ${countText}`}
           title="Raw sources, structured."
           description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
