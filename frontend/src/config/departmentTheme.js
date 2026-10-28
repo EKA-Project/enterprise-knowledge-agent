@@ -1,44 +1,84 @@
 import {
+  Award,
   Briefcase,
+  Building,
   Code,
+  Compass,
+  Cpu,
+  Database,
   FileText,
+  Globe,
   Layers,
+  Layout,
   LayoutPanelLeft,
+  Lock,
+  MessageSquare,
+  Server,
   Shield,
   SlidersHorizontal,
   Tag,
+  Target,
   TrendingUp,
   Users,
+  Zap,
 } from "lucide-react";
 
 // Departments store KEYS (departments.colorKey / iconKey), never hex values or
-// component names. That lets an admin create a department with no code deploy,
-// and keeps every theme consistent. Source: data-architecture.md, section 4.1.
+// component instances. That lets an admin create a department with no code
+// deploy, and keeps every theme consistent.
+// Source: data-architecture.md, section 4.1.
 
-// colorKey -> CSS variable defined at the end of styles/variables.css
+// colorKey -> CSS variable. The hex values live ONLY in styles/variables.css
+// (the "Department palette" block);
+// see the check in the PR notes that verifies every key has a variable.
 export const DEPARTMENT_COLORS = {
-  violet: "var(--dept-violet)",
-  indigo: "var(--dept-indigo)",
+  // Core departments, as used in the target design
+  forest: "var(--dept-forest)", // Engineering & DevOps
+  emerald: "var(--dept-emerald)", // People & HR Operations
+  purple: "var(--dept-purple)", // Product Strategy & Design
+  crimson: "var(--dept-crimson)", // Security & Compliance
+  amber: "var(--dept-amber)", // Sales & Go-To-Market
+  cyan: "var(--dept-cyan)", // Legal & Finance
+
+  // Extended palette for departments an admin creates later
+  teal: "var(--dept-teal)",
+  sky: "var(--dept-sky)",
   blue: "var(--dept-blue)",
-  cyan: "var(--dept-cyan)",
-  emerald: "var(--dept-emerald)",
-  amber: "var(--dept-amber)",
-  orange: "var(--dept-orange)",
+  indigo: "var(--dept-indigo)",
+  violet: "var(--dept-violet)",
+  fuchsia: "var(--dept-fuchsia)",
   rose: "var(--dept-rose)",
+  orange: "var(--dept-orange)",
+  slate: "var(--dept-slate)",
 };
 
 // iconKey -> lucide component. Keys are lucide's own kebab-case names.
 export const DEPARTMENT_ICONS = {
-  "sliders-horizontal": SlidersHorizontal,
-  users: Users,
-  "layout-panel-left": LayoutPanelLeft,
-  shield: Shield,
-  tag: Tag,
-  "file-text": FileText,
+  // Core departments
+  code: Code, // Engineering & DevOps
+  users: Users, // People & HR Operations
+  layout: Layout, // Product Strategy & Design
+  "layout-panel-left": LayoutPanelLeft, // alternative Product layout icon
+  shield: Shield, // Security & Compliance
+  "trending-up": TrendingUp, // Sales & Go-To-Market
+  "file-text": FileText, // Legal & Finance
+
+  // Extra choices for new departments
+  database: Database,
+  cpu: Cpu,
   briefcase: Briefcase,
-  code: Code,
+  server: Server,
+  target: Target,
+  "message-square": MessageSquare,
+  compass: Compass,
+  globe: Globe,
+  building: Building,
+  award: Award,
+  lock: Lock,
+  zap: Zap,
   layers: Layers,
-  "trending-up": TrendingUp,
+  "sliders-horizontal": SlidersHorizontal,
+  tag: Tag,
 };
 
 const FALLBACK_COLOR = "var(--dept-neutral)";
@@ -48,8 +88,8 @@ const FALLBACK_ICON = Briefcase;
  * Resolve a department's keys into what a component needs to draw it.
  * Unknown keys fall back to a neutral style instead of crashing.
  *
- * @param {string} colorKey
- * @param {string} iconKey
+ * @param {string} colorKey  e.g. "forest"
+ * @param {string} iconKey   e.g. "code"
  * @returns {{Icon: import('react').ComponentType<any>, color: string, softBg: string, border: string}}
  *
  * Usage:
