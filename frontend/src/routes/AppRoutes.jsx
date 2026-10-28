@@ -25,6 +25,7 @@ import Dashboard from "../pages/Dashboard.jsx";
 import AskEkaPage from "../pages/AskEkaPage";
 import ChatHistoryPage from "../pages/ChatHistoryPage";
 import SemanticSearchPage from "../pages/SemanticSearchPage.jsx";
+import AnalyticsPage from "../pages/AnalyticsPage.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
@@ -80,7 +81,7 @@ function AppRoutes() {
         <Route path="/knowledge-base" element={<KnowledgeBasePage/>} />
         <Route path="/documents" element={<DocumentsPage/>} />
         <Route path="/semantic-search" element={<SemanticSearchPage />} />
-        <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
+        <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><AnalyticsPage /></RoleGuard>} />
         <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
         <Route path="/settings" element={<h1>Settings</h1>} />
       </Route>
