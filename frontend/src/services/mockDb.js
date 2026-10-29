@@ -46,3 +46,16 @@ export function getReadableActiveDocuments(user) {
 export function getInsightRow(documentId) {
   return db.insights.find((insight) => insight.documentId === documentId);
 }
+
+// New mock documents get doc_025, doc_026, ... (the seed ends at doc_024).
+// A counter, not "highest id + 1", so a deleted id is never handed out again;
+// real UUIDs are never reused either. Ids are opaque to the frontend.
+let lastDocumentNumber = db.documents.reduce(
+  (highest, doc) => Math.max(highest, Number(/^doc_(\d+)$/.exec(doc.id)?.[1] ?? 0)),
+  0,
+);
+
+export function nextDocumentId() {
+  lastDocumentNumber += 1;
+  return `doc_${String(lastDocumentNumber).padStart(3, "0")}`;
+}

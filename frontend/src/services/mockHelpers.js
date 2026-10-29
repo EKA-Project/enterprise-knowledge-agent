@@ -21,3 +21,17 @@ export function paginate(rows, limit, offset = 0) {
     items: rows.slice(safeOffset, safeOffset + safeLimit),
   };
 }
+
+// A refused or failed request, shaped like an HTTP error so pages already know
+// how to handle failures when the real API replaces the mock:
+//   403 not allowed | 404 not found or not readable | 409 conflict | 422 invalid input
+export class ServiceError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.name = "ServiceError";
+    this.status = status;
+  }
+}
+
+// Current time as an ISO 8601 UTC string without milliseconds, like the seed data.
+export const nowIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
