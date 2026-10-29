@@ -131,7 +131,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     <>
       {/* Filter controls */}
       <section className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-3 shadow-(--shadow-sm)">
-        <div className="flex w-full min-w-0 items-center gap-4 rounded-full bg-(--bg-surface-subtle) px-2.5 py-3 lg:w-auto lg:flex-1">
+        <div className="flex w-full min-w-0 items-center gap-4 rounded-full bg-(--bg-surface-subtle) px-2.5 py-2 lg:w-auto lg:flex-1">
           <Search size={16} className="shrink-0 text-(--text-muted)" />
           <input
             type="text"

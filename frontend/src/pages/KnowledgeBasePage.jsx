@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
+import UploadDocumentModal from '../components/upload/UploadDocumentModal.jsx';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
@@ -11,7 +12,6 @@ import RecentlyUpdated from '../components/knowledge/RecentlyUpdated';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
-import IngestDocumentModal from '../components/documents/shared/IngestDocumentModal.jsx';
 import DemoStatesBar from '../components/knowledge/DemoStatesBar';
 import SectionState from '../components/knowledge/SectionState';
 
@@ -114,7 +114,7 @@ export default function KnowledgeBasePage() {
           onClose={() => setInsightsCategory(null)}
         />
       )}
-      {ingestOpen && <IngestDocumentModal onClose={() => setIngestOpen(false)} />}   {/* <-- ye nayi line */}
+      {ingestOpen && <UploadDocumentModal onClose={() => setIngestOpen(false)} />}  {/* <-- ye nayi line */}
       <DemoStatesBar value={demoState} onChange={setDemoState} />
     </div>
   );
