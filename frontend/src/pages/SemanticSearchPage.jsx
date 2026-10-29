@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle2, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Info } from "lucide-react";
 import "../styles/semantic-search.css";
 import SemanticSearchControls from "../components/semantic-search/SemanticSearchControls";
 import GroundedAnswerCard from "../components/semantic-search/GroundedAnswerCard";
@@ -12,17 +12,16 @@ import CitationPreviewModal from "../components/semantic-search/CitationPreviewM
 import {
   BETTER_SEARCH_TIPS, DEFAULT_QUERY, HYBRID_PROMPTS, SEARCH_MODES, SOURCE_FILTERS,
   SUGGESTED_CONCEPTS, createSeedRecentSearches, getHighlightTerms, getSearchStats, searchDocuments,
-} from "../../services/semanticSearchService";
+} from "../components/semantic-search/semanticmock";
 
 const RECENT_KEY = "eka.semanticSearch.recent";
-const MAX_RECENT = 5;
-// ↑ Recent searches list is capped at 5 so the right column stays short.
+const MAX_RECENT = 8;
+// ↑ The video keeps more than 5 recent searches.
 const INITIAL_RESULTS = 3;
-// ↑ Only the first 3 result cards show until the user asks for more.
 const MODE_TOASTS = {
-  semantic: "Switched to Semantic Vector Mode",
-  keyword: "Switched to Keyword Mode",
-  hybrid: "Switched to Hybrid RAG Mode",
+  semantic: "Switched to ✨ Semantic Vector Mode",
+  keyword: "Switched to 🎯 Keyword Mode",
+  hybrid: "Switched to ⚡ Hybrid RAG Mode",
 };
 
 function loadRecent() {
@@ -40,6 +39,7 @@ function loadRecent() {
 
 export default function SemanticSearchPage() {
   const navigate = useNavigate();
+  const inputRef = useRef(null);
   const [inputValue, setInputValue] = useState(DEFAULT_QUERY);
   const [activeQuery, setActiveQuery] = useState(DEFAULT_QUERY);
   const [mode, setMode] = useState("semantic");
@@ -82,7 +82,6 @@ export default function SemanticSearchPage() {
   const showAll = expandedKey === searchKey;
   const visibleResults = showAll ? search.results : search.results.slice(0, INITIAL_RESULTS);
   const hiddenCount = search.results.length - visibleResults.length;
-  // ↑ "Show more" resets by itself whenever the query, mode or filter changes.
 
   const showToast = (message) => {
     setToast(message);
@@ -138,9 +137,14 @@ export default function SemanticSearchPage() {
   return (
     <div className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
       <header className="ssp-rise">
-        <p className="font-(family-name:--font-mono) text-[10.5px] font-medium uppercase tracking-[0.18em] text-(--text-eyebrow)">
-          Knowledge discovery
-        </p>
+        <div className="flex items-center gap-2.5">
+          <p className="font-(family-name:--font-mono) text-[10.5px] font-medium uppercase tracking-[0.18em] text-(--text-eyebrow)">
+            Knowledge discovery
+          </p>
+          <span className="rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 font-(family-name:--font-mono) text-[9.5px] font-bold uppercase tracking-wider text-(--badge-text)">
+            EKA Vector Agent
+          </span>
+        </div>
         <h2 className="mt-2 font-(family-name:--font-serif) text-[40px] font-bold leading-tight tracking-tight text-(--text-primary)">
           Search by meaning, not just words.
         </h2>
@@ -149,21 +153,24 @@ export default function SemanticSearchPage() {
         </p>
       </header>
 
-      <SemanticSearchControls
-        value={inputValue}
-        onChange={setInputValue}
-        onSubmit={() => runSearch(inputValue)}
-        onClear={() => setInputValue("")}
-        modes={SEARCH_MODES}
-        mode={mode}
-        onModeChange={changeMode}
-        sources={SOURCE_FILTERS}
-        source={source}
-        onSourceChange={setSource}
-        suggestionLabel={isHybrid ? "Hybrid RAG prompts" : "Suggested intent concepts"}
-        suggestions={isHybrid ? HYBRID_PROMPTS : SUGGESTED_CONCEPTS}
-        onPickSuggestion={runSearch}
-      />
+      {/* Sticky: stays pinned while results scroll, like the video */}
+        <SemanticSearchControls
+          inputRef={inputRef}
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={() => runSearch(inputValue)}
+          onClear={() => setInputValue("")}
+          modes={SEARCH_MODES}
+          mode={mode}
+          onModeChange={changeMode}
+          sources={SOURCE_FILTERS}
+          source={source}
+          onSourceChange={setSource}
+          suggestionLabel={isHybrid ? "Hybrid RAG prompts" : "Suggested intent concepts"}
+          suggestions={isHybrid ? HYBRID_PROMPTS : SUGGESTED_CONCEPTS}
+          onPickSuggestion={runSearch}
+          onExpand={() => goFollowUp(`Expand on: ${activeQuery}`)}
+        />
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section aria-label="Search results" className="flex flex-col gap-5">
@@ -185,29 +192,36 @@ export default function SemanticSearchPage() {
           )}
 
           {search.results.length === 0 ? (
-            <div className="ssp-rise rounded-2xl border border-dashed border-(--border-medium) bg-(--bg-surface) p-10 text-center">
-              <p className="font-(family-name:--font-serif) text-[18px] font-bold text-(--text-primary)">
-                No documents matched “{activeQuery}”
+            <div className="ssp-rise rounded-2xl border border-(--border-medium) bg-(--bg-surface) px-6 py-12 text-center shadow-(--shadow-sm)">
+              <p className="font-(family-name:--font-serif) text-[22px] font-bold text-(--text-primary)">
+                No matching documents found
               </p>
-              <p className="mt-1 text-[13px] text-(--text-secondary)">
-                Try Semantic or Hybrid mode, switch the source filter to All Sources, or pick a suggested concept.
+              <p className="mx-auto mt-2 max-w-[46ch] text-[13px] text-(--text-secondary)">
+                Try phrasing your question differently or ask EKA’s generative intelligence directly.
               </p>
+              <button
+                type="button"
+                onClick={() => goFollowUp(activeQuery)}
+                className="mt-5 rounded-full bg-(--sidebar-bg) px-5 py-2 text-[12.5px] font-bold text-white transition hover:opacity-90 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
+              >
+                Ask EKA Generative AI →
+              </button>
             </div>
           ) : (
             <>
-            <ol className="flex flex-col gap-5">
+              <ol className="flex flex-col gap-5">
                 {visibleResults.map((result, i) => (
-                <li key={`${searchKey}|${regenKey}|${result.id}`}>
+                  <li key={`${searchKey}|${regenKey}|${result.id}`}>
                     <SearchResultCard
-                    result={result}
-                    index={i}
-                    terms={terms}
-                    delay={i * 70}
-                    onPreview={setCitationResult}
+                      result={result}
+                      index={i}
+                      terms={terms}
+                      delay={i * 70}
+                      onPreview={setCitationResult}
                     />
-                </li>
-            ))}
-        </ol>
+                  </li>
+                ))}
+              </ol>
 
               {search.results.length > INITIAL_RESULTS && (
                 <button
@@ -231,7 +245,13 @@ export default function SemanticSearchPage() {
         </section>
 
         <aside className="flex flex-col gap-5">
-        <SearchIntelligencePanel query={activeQuery} stats={stats} />
+          <SearchIntelligencePanel
+            query={activeQuery}
+            stats={stats}
+            onInspect={() =>
+              showToast(`Inspected: ${stats.scanned} docs indexed, ${stats.chunks} chunks vector-scored`)
+            }
+          />
           <RecentSearchesPanel
             items={recent}
             onSelect={runSearch}
@@ -244,15 +264,17 @@ export default function SemanticSearchPage() {
             onCopy={(text) => copyText(text, "Example copied to clipboard")}
           />
         </aside>
-        {/* ↑ The last panel stretches (flex-1) so both columns end at the same line. */}
       </div>
 
+      {/* Both "View Exact Citation…" and "Preview Citation →" open this one modal */}
       {citationResult && (
         <CitationPreviewModal
           result={citationResult}
           terms={terms}
           onClose={closeCitation}
-          onFollowUp={() => goFollowUp(`Tell me more about ${citationResult.citation.section} in ${citationResult.title}`)}
+          onFollowUp={() =>
+            goFollowUp(`Tell me more about ${citationResult.citation.section} in ${citationResult.title}`)
+          }
           onOpenReader={openReader}
         />
       )}
@@ -260,9 +282,9 @@ export default function SemanticSearchPage() {
       {toast && (
         <div
           role="status"
-          className="ssp-toast fixed bottom-6 right-6 z-[60] flex items-center gap-2 rounded-xl border border-(--border-medium) bg-(--bg-surface) px-4 py-3 text-[12.5px] font-semibold text-(--text-primary) shadow-(--shadow-lg)"
+          className="ssp-toast fixed bottom-6 right-6 z-[60] flex max-w-sm items-center gap-2.5 rounded-xl bg-(--sidebar-bg) px-4 py-3 text-[12.5px] font-semibold text-white shadow-(--shadow-lg)"
         >
-          <CheckCircle2 size={15} className="text-(--status-success)" aria-hidden="true" />
+          <Info size={15} className="shrink-0 text-(--accent-highlight)" aria-hidden="true" />
           {toast}
         </div>
       )}

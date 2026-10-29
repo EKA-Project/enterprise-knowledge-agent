@@ -50,11 +50,11 @@ export const BETTER_SEARCH_TIPS = [
 
 // ---------- Mock documents (demo data only, no backend) ----------
 const DOCUMENTS = [
-  {
-    id: "doc-leave", topic: "leave", title: "2026 Employee Handbook & Leave Policy",
+    {
+    id: "doc-leave", topic: "leave", title: "2025 Employee Handbook & Leave Policy",
     fileType: "PDF", category: "People & HR Operations", verified: true, page: 4, baseMatch: 96,
     keywords: ["time off", "leave", "vacation", "holiday", "pto", "days off", "annual leave", "sick"],
-    excerpt: "Full-time employees accrue 24 days of paid annual leave per calendar year. Time off requests should be submitted at least two weeks in advance through the HR portal and approved by the line manager.",
+    excerpt: "Full-time employees accrue 20 days of paid annual leave plus 10 days of paid sick/wellness leave per calendar year. Time off requests should be submitted at least two weeks in advance through the HR portal and approved by the line manager.",
     citation: { page: 4, lines: "98-116", section: "§4.2 Annual Leave Entitlement" },
   },
   {
