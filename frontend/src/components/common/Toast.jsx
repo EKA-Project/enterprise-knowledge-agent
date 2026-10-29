@@ -3,12 +3,16 @@ import { CheckCircle2, Info, X } from "lucide-react";
 
 function ToastItem({ toast, onDismiss, animationClass }) {
   useEffect(() => {
+    if (!toast?.id) return;
+
     const timer = setTimeout(() => {
       onDismiss(toast.id);
     }, 3800);
 
     return () => clearTimeout(timer);
-  }, [toast.id, onDismiss]);
+  }, [toast?.id, onDismiss]);
+
+  if (!toast) return null;
   // ↑ Each toast removes itself after 3.8 seconds.
   const success = toast.tone === "success";
   const Icon = success ? CheckCircle2 : Info;
