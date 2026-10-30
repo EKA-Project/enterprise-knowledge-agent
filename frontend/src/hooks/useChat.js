@@ -5,7 +5,7 @@ import {
   buildPlaceholderCitation,
   getThread,
   saveThread,
-} from '../../components/chat/chatMock';
+} from '../components/chat/chatMock';
 
 const THINK_MS = 1200;
 const THINK_MS_DEEP = 2200;

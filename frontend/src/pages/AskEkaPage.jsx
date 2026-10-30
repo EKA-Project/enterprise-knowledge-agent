@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useChat from '../hooks/useChat';
 import useToastStack from '../hooks/useToastStack';
-import { deleteThread, getThreads, subscribeThreads } from '../../components/chat/chatMock';
+import { deleteThread, getThreads, subscribeThreads } from '../components/chat/chatMock';
 import ChatMessage from '../components/chat/ChatMessage';
 import ChatInput from '../components/chat/ChatInput';
 import ChatHistoryDrawer from '../components/chat/ChatHistoryDrawer';
