@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react";
+import { Box, Download, FileText } from "lucide-react";
 import { useState } from "react";
 import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
@@ -8,23 +8,37 @@ import {
   IngestionLibraryButton,
 } from "../../common/ActionButtons";
 import useUpload from "../../../hooks/useUpload";
+import useDepartmentDocuments from "../../../hooks/useDepartmentDocuments";
 /* ==========================================================================
    ManagerDepartmentDocuments
    --------------------------------------------------------------------------
    Documents table for the Manager overview page. Built on the shared shell:
-   this file only decides the COLUMNS and what goes in each cell.
+   this file decides the COLUMNS and what goes in each cell. The data comes
+   from useDepartmentDocuments (services), one server-side page at a time.
 
-   Columns: Document | Category / Scope | Uploader | Size | Chunks |
-            Status (dot + Open pill) | Action (Edit, Re-index)
+   Columns: Document | Uploader | Size | Vector Chunks | Status | Action
    ========================================================================== */
 
-const DEFAULT_PAGE_SIZE = 5;
+const DEFAULT_PAGE_SIZE = 10;
+const SKELETON_ROWS = 5;
 
-// ---- Status dot colour + accessible label, per indexing status ----
-const STATUS_DOT = {
-  indexed: { color: "bg-(--status-verified)", label: "Indexed" },
-  indexing: { color: "bg-amber-400", label: "Indexing" },
-  failed: { color: "bg-(--status-failure)", label: "Failed" },
+// ---- Status pill per table status (theme tokens only) ----
+const STATUS_PILL = {
+  indexed: {
+    label: "Ready",
+    className:
+      "border-(--status-verified-border) bg-(--status-verified-bg) text-(--status-success)",
+  },
+  indexing: {
+    label: "Processing",
+    className:
+      "border-(--status-warning)/30 bg-(--status-warning-bg) text-(--status-warning)",
+  },
+  failed: {
+    label: "Failed",
+    className:
+      "border-(--status-failure-border) bg-(--status-failure-bg) text-(--status-danger)",
+  },
 };
 
 // ---- File-type chip colours come from the --file-<type>-* tokens ----
@@ -46,38 +60,45 @@ function FileTypeChip({ type }) {
   );
 }
 
-// ---- Plain text action (Edit, Re-index) ----
-const actionLink =
-  "cursor-pointer text-[0.75rem] font-medium text-(--text-secondary) transition-colors hover:text-(--primary) disabled:cursor-not-allowed disabled:opacity-40";
+// Placeholder rows while loading (same rough height as a real row)
+function TableSkeleton() {
+  return (
+    <div className="space-y-2 px-4 py-4" aria-hidden="true">
+      {Array.from({ length: SKELETON_ROWS }, (_, index) => (
+        <div key={index} className="h-14 animate-pulse rounded-xl bg-(--border-subtle)" />
+      ))}
+    </div>
+  );
+}
 
 function ManagerDepartmentDocuments({
-  documents,
-  department,
   onIngest, // optional override; by default the button opens the upload modal
   onOpenLibrary = () => console.log("open ingestion library"),
   onOpen = (doc) => console.log("open", doc.id),
-  onEdit = (doc) => console.log("edit", doc.id),
-  onReindex = (doc) => console.log("re-index", doc.id),
 }) {
-  // ---- Pagination state + current page slice ----
   const { openUpload, canUpload } = useUpload();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const startIdx = (page - 1) * pageSize;
-  const paginatedDocs = documents.slice(startIdx, startIdx + pageSize);
+  const { data, loading, error, reload } = useDepartmentDocuments(page, pageSize);
 
-  // Stops a click on an inner button from also triggering the row click
-  const run = (fn, row) => (e) => {
-    e.stopPropagation();
-    fn(row);
-  };
+  // useApi clears `data` on every refetch, so remember the title and total from the
+  // last answer. Otherwise the title and footer would jump on each page change.
+  // (Setting state during render is React's pattern for "adjust state to new data".)
+  const [meta, setMeta] = useState(null);
+  if (data && (meta?.total !== data.total || meta?.departmentName !== data.departmentName)) {
+    setMeta({ departmentName: data.departmentName, total: data.total });
+  }
+
+  const title = meta
+    ? `${meta.departmentName ?? "Department"} Documents (${meta.total})`
+    : "Department Documents";
 
   // ---- Columns ----
   const columns = [
     {
       key: "title",
       header: "Document",
-      width: "28%",
+      width: "34%",
       render: (row) => (
         <div className="flex items-center gap-3">
           <FileTypeChip type={row.type} />
@@ -85,119 +106,128 @@ function ManagerDepartmentDocuments({
             <p className="truncate font-serif text-[0.88rem] font-bold leading-tight text-(--text-primary)">
               {row.title}
             </p>
-            <p className="text-[0.62rem] leading-tight text-(--text-muted)">
-              {row.meta}
-            </p>
+            {row.meta && (
+              <p className="text-[0.62rem] leading-tight text-(--text-muted)">
+                {row.meta}
+              </p>
+            )}
           </div>
         </div>
       ),
     },
     {
-      key: "category",
-      header: "Category / Scope",
-      width: "16%",
-      render: (row) => (
-        <span className="inline-flex whitespace-nowrap rounded-full bg-(--accent-chip) px-2.5 py-0.5 text-[0.7rem] font-medium text-(--accent-chip-text)">
-          {row.category}
-        </span>
-      ),
-    },
-    {
       key: "uploader",
       header: "Uploader",
-      width: "13%",
+      width: "20%",
       render: (row) => (
-        <span className="whitespace-nowrap text-[0.78rem] text-(--text-secondary)">
-          {row.uploader}
-        </span>
+        <div className="flex items-center gap-2.5">
+          <span
+            aria-hidden="true"
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) font-mono text-[0.65rem] font-bold text-(--text-secondary)"
+          >
+            {row.uploader.charAt(0).toUpperCase()}
+          </span>
+          <span className="whitespace-nowrap text-[0.78rem] text-(--text-secondary)">
+            {row.uploader}
+          </span>
+        </div>
       ),
     },
     {
       key: "size",
       header: "Size",
-      width: "8%",
+      width: "11%",
       render: (row) => (
-        <span className="font-mono text-[0.72rem] text-(--text-secondary)">
+        <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[0.72rem] text-(--text-secondary)">
+          <Download size={12} aria-hidden="true" />
           {row.size}
         </span>
       ),
     },
     {
       key: "chunks",
-      header: "Chunks",
-      width: "10%",
+      header: "Vector Chunks",
+      width: "15%",
       render: (row) =>
         row.chunks > 0 ? (
-          <span className="rounded-md bg-(--accent-chip) px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-(--accent-chip-text)">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border border-(--border-subtle) bg-(--bg-surface) px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-(--text-secondary)">
+            <Box size={11} aria-hidden="true" />
             {row.chunks} chunks
           </span>
         ) : (
-          <span className="font-mono text-[0.72rem] text-(--text-muted)">
-            —
-          </span>
+          <span className="font-mono text-[0.72rem] text-(--text-muted)">—</span>
         ),
     },
     {
       key: "status",
       header: "Status",
-      width: "13%",
+      width: "10%",
       render: (row) => {
-        const dot = STATUS_DOT[row.status] ?? STATUS_DOT.indexing;
+        const pill = STATUS_PILL[row.status] ?? STATUS_PILL.indexing;
         return (
-          <div className="flex items-center gap-2">
-            <span
-              className={`h-2 w-2 shrink-0 rounded-full ${dot.color}`}
-              title={dot.label}
-            />
-            <span className="sr-only">{dot.label}</span>
-
-            {row.status === "indexed" ? (
-              <Button size="xs" onClick={run(onOpen, row)}>
-                Open →
-              </Button>
-            ) : (
-              <span className="text-[0.7rem] text-(--text-muted)">
-                {row.status === "indexing" ? "Processing…" : "Failed"}
-              </span>
-            )}
-          </div>
+          <span
+            className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[0.65rem] font-semibold ${pill.className}`}
+          >
+            {pill.label}
+          </span>
         );
       },
     },
     {
       key: "actions",
       header: "Action",
-      width: "12%",
+      width: "10%",
       align: "right",
-      render: (row) => (
-        <div className="flex items-center justify-end gap-3">
-          <button
-            type="button"
-            className={actionLink}
-            onClick={run(onEdit, row)}
+      render: (row) =>
+        row.status === "indexed" ? (
+          <Button
+            size="xs"
+            onClick={(e) => {
+              e.stopPropagation(); // do not also trigger the row click
+              onOpen(row);
+            }}
           >
-            Edit
-          </button>
-          <button
-            type="button"
-            className={`${actionLink} ${
-              row.status === "failed" ? "text-(--status-danger)" : ""
-            }`}
-            disabled={row.status === "indexing"}
-            onClick={run(onReindex, row)}
-          >
-            {row.status === "failed" ? "Retry" : "Re-index"}
-          </button>
-        </div>
-      ),
+            Open →
+          </Button>
+        ) : null,
     },
   ];
 
-  // ---- Card + table ----
+  // ---- Body: skeleton, error or the table ----
+  let body;
+  if (loading) {
+    body = <TableSkeleton />;
+  } else if (error) {
+    body = (
+      <div role="alert" className="flex flex-col items-start gap-2 px-7 py-6">
+        <p className="text-[0.82rem] text-(--status-danger)">
+          Couldn&apos;t load the department documents.
+        </p>
+        <button
+          type="button"
+          onClick={reload}
+          className="cursor-pointer text-[0.78rem] font-semibold text-(--primary) hover:underline"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  } else {
+    body = (
+      <DataTable
+        columns={columns}
+        rows={data.items}
+        getRowKey={(row) => row.id}
+        emptyMessage="No documents indexed for this department yet."
+        onRowClick={(row) => row.status === "indexed" && onOpen(row)}
+      />
+    );
+  }
+
   return (
     <TableContainer
       icon={<FileText size={20} />}
-      title={`${department.name} Documents (${documents.length})`}
+      title={title}
       subtitle="Scoped documents and playbooks indexed into your department's vector space."
       actions={
         <>
@@ -210,7 +240,7 @@ function ManagerDepartmentDocuments({
       }
       page={page}
       pageSize={pageSize}
-      total={documents.length}
+      total={meta?.total ?? 0}
       itemLabel="documents"
       onPageChange={setPage}
       onPageSizeChange={(newSize) => {
@@ -218,13 +248,7 @@ function ManagerDepartmentDocuments({
         setPage(1);
       }}
     >
-      <DataTable
-        columns={columns}
-        rows={paginatedDocs}
-        getRowKey={(row) => row.id}
-        emptyMessage="No documents indexed for this department yet."
-        onRowClick={(row) => row.status === "indexed" && onOpen(row)}
-      />
+      {body}
     </TableContainer>
   );
 }

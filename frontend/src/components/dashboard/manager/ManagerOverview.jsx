@@ -221,10 +221,7 @@ function ManagerOverview() {
       </div>
 
       {/* Department documents table */}
-      <ManagerDepartmentDocuments
-        documents={departmentDocuments}
-        department={department}
-      />
+      <ManagerDepartmentDocuments />
     </div>
   );
 }
