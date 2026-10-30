@@ -33,7 +33,7 @@ export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear
           {items.map((item) => (
             <li
               key={item.id}
-              className="group flex items-center rounded-lg border border-[#c8e2f3] bg-[#e0eff9] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[#a9d5ef] hover:bg-[#d5eafa] hover:shadow-sm"
+              className="group flex items-center rounded-lg border border-[#c8e2f3] bg-[#e0eff9] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[#c8e2f3] hover:bg-white hover:shadow-sm"
             >
               <button
                 type="button"
