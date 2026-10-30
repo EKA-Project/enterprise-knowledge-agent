@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import { CheckCircle2, Info, X } from "lucide-react";
 
+/**
+ * toast: { id, message, tone?: "success" | "dark" | undefined }
+ *   success   -> green
+ *   dark      -> navy (used by Ask EKA / Chat History)
+ *   (default) -> white card
+ * onDismiss: (id) => void   (must be a stable function, e.g. from useCallback)
+ */
 function ToastItem({ toast, onDismiss, animationClass }) {
   useEffect(() => {
     if (!toast?.id) return;
@@ -15,8 +22,8 @@ function ToastItem({ toast, onDismiss, animationClass }) {
   if (!toast) return null;
   // ↑ Each toast removes itself after 3.8 seconds.
   const success = toast.tone === "success";
+  const dark = toast.tone === "dark";
   const Icon = success ? CheckCircle2 : Info;
-
 
   return (
     <div
@@ -25,10 +32,16 @@ function ToastItem({ toast, onDismiss, animationClass }) {
       className={`${animationClass} pointer-events-auto flex max-w-sm items-start gap-2.5 rounded-xl border border-(--border-subtle) px-4 py-3 text-[12.5px] font-semibold shadow-(--shadow-lg) ${
         success
           ? "bg-(--status-success) text-white"
-          : "bg-(--bg-surface) text-(--text-primary)"
+          : dark
+            ? "bg-(--sidebar-bg) text-white"
+            : "bg-(--bg-surface) text-(--text-primary)"
       }`}
     >
-      <Icon size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
+      <Icon
+        size={15}
+        className={`mt-0.5 shrink-0 ${dark ? "text-(--accent-highlight)" : ""}`}
+        aria-hidden="true"
+      />
       <span className="min-w-0 flex-1 leading-snug">{toast.message}</span>
 
       <button
