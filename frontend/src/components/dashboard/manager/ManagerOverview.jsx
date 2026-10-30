@@ -18,9 +18,9 @@ import ManagerQueryVelocity from "./ManagerQueryVelocity.jsx";
 import ManagerTeamRoster from "./ManagerTeamRoster.jsx";
 import ManagerDepartmentDocuments from "./ManagerDepartmentDocuments.jsx";
 import ManagerRangeToggle, { DEFAULT_RANGE } from "./ManagerRangeToggle.jsx";
+import useDepartmentKpis from "../../../hooks/useDepartmentKpis.js";
 import {
   department,
-  departmentDocuments,
   departmentKpis,
   manager,
   memberQueries,
@@ -31,10 +31,20 @@ import {
 const RAG_HEALTHY_AT = 90;
 const RAG_WARNING_AT = 70;
 
-function getRagHealth(documents) {
-  if (documents.length === 0) return 100;
-  const indexed = documents.filter((doc) => doc.status === "indexed").length;
-  return Math.round((indexed / documents.length) * 100);
+// readyCount and total come from the document service (useDepartmentKpis).
+function getRagHealth(readyCount, total) {
+  if (total === 0) return 100; // nothing to index, nothing unhealthy (as before)
+  return Math.round((readyCount / total) * 100);
+}
+
+// Grey bar shown in place of a KPI number while it loads
+function KpiSkeleton() {
+  return (
+    <span
+      aria-label="Loading"
+      className="inline-block h-8 w-16 animate-pulse rounded-md bg-(--border-subtle)"
+    />
+  );
 }
 
 function getRagIconColor(percent) {
@@ -96,7 +106,30 @@ function ManagerOverview() {
   const [isRetrying, setIsRetrying] = useState(false);
   const [range, setRange] = useState(DEFAULT_RANGE);
 
-  const ragHealth = getRagHealth(departmentDocuments);
+  const {
+    data: kpis,
+    loading: kpisLoading,
+    error: kpisError,
+    reload: reloadKpis,
+  } = useDepartmentKpis();
+  // null until the numbers arrive (or when they fail), so nothing is invented
+  const ragHealth = kpis
+    ? getRagHealth(kpis.readyCount, kpis.documentCount)
+    : null;
+  const documentCountValue = kpisLoading ? (
+    <KpiSkeleton />
+  ) : kpis ? (
+    kpis.documentCount
+  ) : (
+    "—"
+  );
+  const ragValue = kpisLoading ? (
+    <KpiSkeleton />
+  ) : ragHealth !== null ? (
+    `${ragHealth}%`
+  ) : (
+    "—"
+  );
   const usage = useMemo(() => buildUsageByMember(range), [range]);
   const totalQueries = teamMembers.reduce((sum, m) => sum + m.queries, 0);
 
@@ -136,7 +169,7 @@ function ManagerOverview() {
       >
         <MetricCard
           label="Department Documents"
-          value={departmentDocuments.length}
+          value={documentCountValue}
           icon={FileText}
           iconColor="amber"
           action={
@@ -167,23 +200,34 @@ function ManagerOverview() {
 
         <MetricCard
           label="RAG Health"
-          value={`${ragHealth}%`}
+          value={ragValue}
           icon={Activity}
-          iconColor={getRagIconColor(ragHealth)}
+          iconColor={ragHealth === null ? "amber" : getRagIconColor(ragHealth)}
           action={
-            ragHealth < RAG_HEALTHY_AT && (
+            kpisError ? (
               <button
                 type="button"
-                onClick={handleRetry}
-                disabled={isRetrying}
-                className="mb-1 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-(--border-medium) px-2.5 py-1 text-xs font-semibold text-(--primary) transition-colors hover:bg-(--primary-light) disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={reloadKpis}
+                className="mb-1 cursor-pointer text-xs font-semibold text-(--primary) hover:underline"
               >
-                <RotateCw
-                  size={12}
-                  className={isRetrying ? "animate-spin" : ""}
-                />
-                {isRetrying ? "Retrying" : "Retry"}
+                Try again
               </button>
+            ) : (
+              ragHealth !== null &&
+              ragHealth < RAG_HEALTHY_AT && (
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  disabled={isRetrying}
+                  className="mb-1 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-(--border-medium) px-2.5 py-1 text-xs font-semibold text-(--primary) transition-colors hover:bg-(--primary-light) disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <RotateCw
+                    size={12}
+                    className={isRetrying ? "animate-spin" : ""}
+                  />
+                  {isRetrying ? "Retrying" : "Retry"}
+                </button>
+              )
             )
           }
         />
