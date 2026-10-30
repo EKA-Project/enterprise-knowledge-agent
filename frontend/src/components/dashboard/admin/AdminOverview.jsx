@@ -5,7 +5,7 @@ import StorageMetric from "../shared/StorageMetric.jsx";
 
 import AdminRecentQuestions from "./AdminRecentQuestions.jsx";
 import AdminKnowledgeActivity from "./AdminKnowledgeActivity.jsx";
-import AdminPinnedDocuments from "./AdminPinnedDocuments.jsx";
+import PinnedDocumentsPanel from "../shared/PinnedDocumentsPanel.jsx";
 import AdminGrowthTrends from "./AdminGrowthTrends.jsx";
 
 import pageMetadata from "../../../config/pageMetadata.js";
@@ -124,7 +124,7 @@ function AdminOverview() {
           Pinned documents
       ───────────────────────────────────────── */}
 
-      <AdminPinnedDocuments />
+      <PinnedDocumentsPanel layout="grid" className="mt-6" />
 
       {/* ─────────────────────────────────────────
           Growth trends

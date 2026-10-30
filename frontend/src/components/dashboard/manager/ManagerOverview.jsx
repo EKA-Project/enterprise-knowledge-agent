@@ -13,7 +13,7 @@ import {
 import PageHero from "../../common/PageHero.jsx";
 import RankedBarList from "../../charts/RankedBarList.jsx";
 import MetricCard from "../shared/MetricCard.jsx";
-import AdminPinnedDocuments from "../admin/AdminPinnedDocuments.jsx";
+import PinnedDocumentsPanel from "../shared/PinnedDocumentsPanel.jsx";
 import ManagerQueryVelocity from "./ManagerQueryVelocity.jsx";
 import ManagerTeamRoster from "./ManagerTeamRoster.jsx";
 import ManagerDepartmentDocuments from "./ManagerDepartmentDocuments.jsx";
@@ -202,13 +202,7 @@ function ManagerOverview() {
       {/* Two-column area: pinned docs + usage (left), team roster (right) */}
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <div className="space-y-6">
-          <AdminPinnedDocuments
-            className=""
-            title="📌 Admin-Pinned Documents"
-            description="Admin-pinned documents relevant to your department."
-            linkTo="/documents?category=pinned"
-            linkLabel="View All →"
-          />
+          <PinnedDocumentsPanel />
 
           <RankedBarList
             data={usage}
