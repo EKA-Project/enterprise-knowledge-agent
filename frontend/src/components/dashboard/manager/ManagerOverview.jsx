@@ -244,8 +244,11 @@ function ManagerOverview() {
       {/* Query velocity chart */}
       <ManagerQueryVelocity range={range} onRangeChange={setRange} />
       {/* Two-column area: pinned docs + usage (left), team roster (right) */}
-      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-        <div className="space-y-6">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+        {/* self-start: the left column keeps its natural height. It sets the row height,
+            and the roster (absolute at xl) stretches to match it. Without this, the
+            Pinned panel's h-full fills the stretched column and pushes Queries out. */}
+        <div className="space-y-6 xl:self-start">
           <PinnedDocumentsPanel />
 
           <RankedBarList
@@ -255,17 +258,21 @@ function ManagerOverview() {
             }
           />
         </div>
-        <div id="team-roster" className="scroll-mt-6">
-          <ManagerTeamRoster
-            teamMembers={teamMembers}
-            currentUserId={manager.id}
-            department={department}
-          />
+        {/* At xl the roster is taken out of the flow (absolute), so the LEFT column
+            alone sets the row height and the roster stretches to match it. */}
+        <div id="team-roster" className="relative scroll-mt-6">
+          <div className="xl:absolute xl:inset-0">
+            <ManagerTeamRoster
+              teamMembers={teamMembers}
+              currentUserId={manager.id}
+              department={department}
+            />
+          </div>
         </div>
       </div>
 
       {/* Department documents table */}
-      <ManagerDepartmentDocuments />
+      <ManagerDepartmentDocuments onReindexed={reloadKpis} />
     </div>
   );
 }

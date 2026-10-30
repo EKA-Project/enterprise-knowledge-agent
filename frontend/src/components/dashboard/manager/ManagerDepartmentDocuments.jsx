@@ -9,6 +9,8 @@ import {
 } from "../../common/ActionButtons";
 import useUpload from "../../../hooks/useUpload";
 import useDepartmentDocuments from "../../../hooks/useDepartmentDocuments";
+import { reindexDocument } from "../../../services/documentService.js";
+import ManagerDocumentRowMenu from "./ManagerDocumentRowMenu.jsx";
 /* ==========================================================================
    ManagerDepartmentDocuments
    --------------------------------------------------------------------------
@@ -65,7 +67,10 @@ function TableSkeleton() {
   return (
     <div className="space-y-2 px-4 py-4" aria-hidden="true">
       {Array.from({ length: SKELETON_ROWS }, (_, index) => (
-        <div key={index} className="h-14 animate-pulse rounded-xl bg-(--border-subtle)" />
+        <div
+          key={index}
+          className="h-14 animate-pulse rounded-xl bg-(--border-subtle)"
+        />
       ))}
     </div>
   );
@@ -75,17 +80,51 @@ function ManagerDepartmentDocuments({
   onIngest, // optional override; by default the button opens the upload modal
   onOpenLibrary = () => console.log("open ingestion library"),
   onOpen = (doc) => console.log("open", doc.id),
+  // Placeholders until the Summary / Edit pages are wired (a teammate owns them)
+  onViewDetails = (doc) => console.log("view details", doc.id),
+  onEdit = (doc) => console.log("edit metadata", doc.id),
+  onReindexed = () => {}, // lets the page refresh the KPI cards after a re-index
 }) {
   const { openUpload, canUpload } = useUpload();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const { data, loading, error, reload } = useDepartmentDocuments(page, pageSize);
+  const { data, loading, error, reload } = useDepartmentDocuments(
+    page,
+    pageSize,
+  );
+
+  // Re-index / Retry. One call at a time (busyId); a refused call (403, 409)
+  // shows its message above the table.
+  const [busyId, setBusyId] = useState(null);
+  const [actionError, setActionError] = useState(null);
+
+  async function handleReindex(row) {
+    if (busyId) return; // ignore a second click while one call is running
+    setActionError(null);
+    setBusyId(row.id);
+    try {
+      await reindexDocument(row.id);
+      // Reload once, no polling: the row now reads "Processing…" and turns Ready
+      // on a later refresh (the mock pipeline needs about 1.5 s).
+      reload();
+      onReindexed();
+    } catch (err) {
+      setActionError(
+        err.message || "Could not re-index this document. Please try again.",
+      );
+    } finally {
+      setBusyId(null);
+    }
+  }
 
   // useApi clears `data` on every refetch, so remember the title and total from the
   // last answer. Otherwise the title and footer would jump on each page change.
   // (Setting state during render is React's pattern for "adjust state to new data".)
   const [meta, setMeta] = useState(null);
-  if (data && (meta?.total !== data.total || meta?.departmentName !== data.departmentName)) {
+  if (
+    data &&
+    (meta?.total !== data.total || meta?.departmentName !== data.departmentName)
+  ) {
     setMeta({ departmentName: data.departmentName, total: data.total });
   }
 
@@ -98,7 +137,7 @@ function ManagerDepartmentDocuments({
     {
       key: "title",
       header: "Document",
-      width: "34%",
+      width: "35%",
       render: (row) => (
         <div className="flex items-center gap-3">
           <FileTypeChip type={row.type} />
@@ -118,7 +157,7 @@ function ManagerDepartmentDocuments({
     {
       key: "uploader",
       header: "Uploader",
-      width: "20%",
+      width: "19%",
       render: (row) => (
         <div className="flex items-center gap-2.5">
           <span
@@ -155,13 +194,15 @@ function ManagerDepartmentDocuments({
             {row.chunks} chunks
           </span>
         ) : (
-          <span className="font-mono text-[0.72rem] text-(--text-muted)">—</span>
+          <span className="font-mono text-[0.72rem] text-(--text-muted)">
+            —
+          </span>
         ),
     },
     {
       key: "status",
       header: "Status",
-      width: "10%",
+      width: "9%",
       render: (row) => {
         const pill = STATUS_PILL[row.status] ?? STATUS_PILL.indexing;
         return (
@@ -176,20 +217,43 @@ function ManagerDepartmentDocuments({
     {
       key: "actions",
       header: "Action",
-      width: "10%",
+      width: "11%",
       align: "right",
-      render: (row) =>
-        row.status === "indexed" ? (
-          <Button
-            size="xs"
-            onClick={(e) => {
-              e.stopPropagation(); // do not also trigger the row click
-              onOpen(row);
-            }}
-          >
-            Open →
-          </Button>
-        ) : null,
+      render: (row) => (
+        <div className="flex items-center justify-end gap-2">
+          {row.status === "indexed" && (
+            <Button
+              size="xs"
+              onClick={(e) => {
+                e.stopPropagation(); // do not also trigger the row click
+                onOpen(row);
+              }}
+            >
+              Open →
+            </Button>
+          )}
+          {row.status === "failed" && (
+            <button
+              type="button"
+              disabled={busyId !== null}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleReindex(row);
+              }}
+              className="cursor-pointer text-[0.75rem] font-semibold text-(--status-danger) hover:underline disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {busyId === row.id ? "Retrying…" : "Retry"}
+            </button>
+          )}
+          <ManagerDocumentRowMenu
+            row={row}
+            reindexDisabled={row.status === "indexing" || busyId !== null}
+            onViewDetails={onViewDetails}
+            onEdit={onEdit}
+            onReindex={handleReindex}
+          />
+        </div>
+      ),
     },
   ];
 
@@ -213,14 +277,24 @@ function ManagerDepartmentDocuments({
       </div>
     );
   } else {
-    body = (
-      <DataTable
-        columns={columns}
-        rows={data.items}
-        getRowKey={(row) => row.id}
-        emptyMessage="No documents indexed for this department yet."
-        onRowClick={(row) => row.status === "indexed" && onOpen(row)}
-      />
+       body = (
+      <>
+        {actionError && (
+          <p
+            role="alert"
+            className="border-b border-(--border-subtle) px-7 py-3 text-[0.78rem] text-(--status-danger)"
+          >
+            {actionError}
+          </p>
+        )}
+        <DataTable
+          columns={columns}
+          rows={data.items}
+          getRowKey={(row) => row.id}
+          emptyMessage="No documents indexed for this department yet."
+          onRowClick={(row) => row.status === "indexed" && onOpen(row)}
+        />
+      </>
     );
   }
 

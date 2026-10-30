@@ -45,6 +45,10 @@ function TableContainer({
   onPageChange = () => {},
   onPageSizeChange = () => {},
 
+  // Stretch to the height of the parent; the table body scrolls if it is too tall.
+  // Off by default, so every other table keeps its natural height.
+  fillHeight = false,
+
   // The table goes here
   children,
 }) {
@@ -57,7 +61,11 @@ function TableContainer({
   const endItem = Math.min(page * pageSize, total);
 
   return (
-    <div className="overflow-hidden rounded-(--radius-table) border border-(--border-subtle) bg-(--bg-surface) shadow-sm">
+    <div
+      className={`overflow-hidden rounded-(--radius-table) border border-(--border-subtle) bg-(--bg-surface) shadow-sm ${
+        fillHeight ? "flex h-full flex-col" : ""
+      }`}
+    >
       {/* ================= HEADER: icon + title/subtitle + actions ================= */}
       <div className="flex items-center justify-between gap-4 border-b border-(--border-subtle) bg-(--bg-surface) px-7 py-5">
         {/* Left: icon + title on one row, subtitle underneath */}
@@ -80,7 +88,13 @@ function TableContainer({
       </div>
 
       {/* ================= BODY: the table (children) ================= */}
-      <div className="overflow-x-auto">{children}</div>
+      <div
+        className={`overflow-x-auto ${
+          fillHeight ? "min-h-0 flex-1 overflow-y-auto" : ""
+        }`}
+      >
+        {children}
+      </div>
 
       {/* ================= FOOTER: summary + rows per page + prev/next ================= */}
       <div className="flex items-center justify-between gap-4 border-t border-(--border-subtle) bg-white px-7 py-4">

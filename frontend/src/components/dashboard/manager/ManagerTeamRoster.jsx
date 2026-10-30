@@ -7,7 +7,7 @@ import UserViewModal from "../../common/UserViewModal";
 import InviteMemberModal from "../../common/InviteMemberModal";
 import RemoveMemberModal from "../../common/RemoveMemberModal";
 
-const DEFAULT_PAGE_SIZE = 5;
+const DEFAULT_PAGE_SIZE = 10;
 
 function ManagerTeamRoster({
   teamMembers,
@@ -163,6 +163,7 @@ function ManagerTeamRoster({
         pageSize={pageSize}
         total={teamMembers.length}
         itemLabel="members"
+        fillHeight
         onPageChange={setPage}
         onPageSizeChange={(newSize) => {
           setPageSize(newSize);
