@@ -116,3 +116,152 @@ function EmptyState({ onPick }) {
     </div>
   );
 }
+
+// ===================== page =====================
+export default function AskEkaPage() {
+  const chat = useChat();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { toasts, push, dismiss } = useToastStack();
+
+  const [inputValue, setInputValue] = useState('');
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [threads, setThreads] = useState(() => getThreads().filter((t) => !t.archived));
+
+  const scrollRef = useRef(null);
+  const stickRef = useRef(true); // true while the user is near the bottom
+
+  // Keep the drawer list in sync with the thread store (save, delete, archive).
+  useEffect(() => {
+    const sync = () => setThreads(getThreads().filter((t) => !t.archived));
+    sync();
+    return subscribeThreads(sync);
+  }, []);
+
+  // "Resume Thread" from the history page arrives with { threadId } in router state.
+  useEffect(() => {
+    const id = location.state?.threadId;
+    if (id) {
+      chat.loadThread(id);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keep the newest text in view while generating, unless the user scrolled up.
+  function handleScroll() {
+    const el = scrollRef.current;
+    stickRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  }
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el && stickRef.current) el.scrollTo({ top: el.scrollHeight });
+  }, [chat.turns]);
+
+  function handleSend() {
+    if (chat.isGenerating) return;
+    stickRef.current = true;
+    if (chat.submitQuestion(inputValue)) setInputValue('');
+  }
+
+  function handleSuggestion(question) {
+    stickRef.current = true;
+    chat.submitQuestion(question);
+  }
+
+  function handleNewThread() {
+    chat.newThread();
+    setInputValue('');
+    push('Started new chat session');
+  }
+
+  function handleToggleDeepResearch() {
+    chat.toggleDeepResearch();
+    push(chat.deepResearch ? 'Deep Research Agent disabled' : 'Deep Research Agent enabled');
+  }
+
+  function handleRegenerate(id) {
+    chat.regenerateTurn(id);
+    push('Regenerating response with fresh citations...');
+  }
+
+  function handleSelectThread(id) {
+    chat.loadThread(id);
+  }
+
+  function handleDeleteThread(id) {
+    deleteThread(id);
+    chat.detachThread(id);
+    push('Chat thread deleted');
+  }
+
+  return (
+    // h-full fills AppLayout's <main>. If main isn't height-constrained in your shell,
+    // use h-[calc(100dvh-8.5rem)] instead (4.5rem topbar + 4rem main vertical padding).
+    <div className="ask-eka-page flex h-full min-h-0 flex-col overflow-hidden">
+      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
+        <ChatHistoryDrawer
+          open={historyOpen}
+          threads={threads}
+          activeThreadId={chat.threadId}
+          onClose={() => setHistoryOpen(false)}
+          onSelect={handleSelectThread}
+          onDelete={handleDeleteThread}
+          onNewThread={handleNewThread}
+          onOpenArchive={() => setHistoryOpen(false)}
+        />
+
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden">
+          <AskEkaHeader
+            historyOpen={historyOpen}
+            onToggleHistory={() => setHistoryOpen(!historyOpen)}
+            onNewThread={handleNewThread}
+            deepResearch={chat.deepResearch}
+            onToggleDeepResearch={handleToggleDeepResearch}
+          />
+
+          <section className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+            {/* only this area scrolls; header and input stay in place */}
+            <div ref={scrollRef} onScroll={handleScroll} className="ask-eka-scroll flex min-h-0 flex-1 flex-col overflow-y-auto pr-1">
+              {chat.turns.length === 0 ? (
+                <EmptyState onPick={handleSuggestion} />
+              ) : (
+                <div className="flex flex-col gap-5 pb-6 pt-1">
+                  {chat.turns.map((turn, i) => (
+                    <ChatMessage
+                      key={turn.id}
+                      turn={turn}
+                      entryNumber={i + 1}
+                      onPause={chat.pauseTurn}
+                      onResume={chat.resumeTurn}
+                      onRegenerate={handleRegenerate}
+                      onEdit={chat.editQuestion}
+                      onCopied={() => push('📋 Answer copied to clipboard!')}
+                      onFeedback={() => push('💡 Feedback recorded. We will refine future grounded answers.')}
+                      onShare={() => push('🔗 Share summary copied to clipboard')}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="relative z-10 shrink-0 bg-[var(--bg-app)] pt-2">
+              <ChatInput
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onSend={handleSend}
+                entryNumber={chat.turns.length + 1}
+                isGenerating={chat.isGenerating}
+                onPause={chat.pauseActive}
+                deepResearch={chat.deepResearch}
+                onToggleDeepResearch={handleToggleDeepResearch}
+              />
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <ToastStack toasts={toasts} onDismiss={dismiss} />
+    </div>
+  );
+}
