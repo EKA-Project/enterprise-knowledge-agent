@@ -62,9 +62,9 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
   const reclaim = rows.filter((f) => !f.isProtected).reduce((s, f) => s + f.sizeMb, 0);
   const lead =
     tab === 'large' ? `occupying > ${largeMin} MB`
-    : tab === 'idle' ? `inactive > ${idleMin} days`
-    : tab === 'failed' ? 'with pipeline failures'
-    : 'with duplicate copies';
+      : tab === 'idle' ? `inactive > ${idleMin} days`
+        : tab === 'failed' ? 'with pipeline failures'
+          : 'with duplicate copies';
 
   const pages = Math.max(1, Math.ceil(count / perPage));
   const safePage = Math.min(page, pages - 1);
@@ -85,46 +85,85 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
   };
 
   const chip = (on) =>
-    `doc-mono h-8 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${
-      on ? 'bg-[#0a7bc4] text-white' : 'text-[#44596a] hover:text-[#10283f]'
+    `doc-mono h-8 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${on ? 'bg-[#0a7bc4] text-white' : 'text-[#44596a] hover:text-[#10283f]'
     }`;
 
   return (
     <section
       id="free-up-card"
-      className={`overflow-hidden rounded-[28px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-9 pb-8 pt-[26px] shadow-(--shadow-sm) transition-shadow duration-500 ${
-        glow ? 'shadow-[0_0_0_5px_rgba(246,185,100,0.45)]' : ''
-      }`}
+      className={`overflow-hidden rounded-[23px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-7 pb-8 pt-[24px] shadow-(--shadow-sm) transition-shadow duration-500 ${glow ? 'shadow-[0_0_0_5px_rgba(246,185,100,0.45)]' : ''
+        }`}
     >
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-start gap-5">
-          <button
-            type="button"
-            onClick={onSweep}
-            className="flex h-[60px] w-[60px] shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-[#e1f0fa] text-[#e8801a] transition-transform hover:scale-105"
-          >
-            <Paintbrush size={24} />
-          </button>
-          <div>
-            <div className="flex items-center gap-3">
-              <h2 className="doc-heading text-[30px] font-black leading-[38px] text-[#10283f]">Free up space</h2>
-              <span className="doc-mono inline-flex h-[22px] items-center gap-1.5 rounded-full bg-[#e1f0fa] px-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#1b79a8]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#1b79a8]" />
-                Suggestions
-              </span>
-            </div>
-            <p className="mt-1.5 text-[14px] text-[#7c949a]">
-              Targeted reclamation suggestions modeled after intelligent storage analytics to trim orphaned vectors and bloated PDFs.
-            </p>
-          </div>
-        </div>
-        <span className="doc-mono inline-flex h-10 items-center gap-2 rounded-full border border-[#c4ecd9] bg-[#eefbf5] px-5 text-[13px] font-bold text-[#0f8f63]">
-          <Zap size={13} className="fill-current text-[#e8801a]" />
-          {reclaim.toFixed(1)} MB Reclaimable
+{/* Header */}
+<div className="flex items-start justify-between gap-4">
+
+  {/* Left Content */}
+  <div className="min-w-0 flex-1">
+
+    {/* Sweeper + Heading Row */}
+    <div className="flex items-start gap-5">
+
+      <button
+        type="button"
+        onClick={onSweep}
+        className="relative flex h-[50px] w-[50px] shrink-0 cursor-pointer items-center justify-center overflow-visible rounded-2xl bg-[#e1f0fa]"
+      >
+        <span className="animate-[broom-sweep_1.5s_ease-in-out_infinite] text-[27px]">
+          🧹
         </span>
+
+        {/* Digital Data Particles */}
+        <span className="pointer-events-none absolute left-[5px] top-[27px] animate-[dust-1_1.2s_ease-out_infinite] font-mono text-[11px] font-black text-[#1b79a8]">01</span>
+
+        <span className="pointer-events-none absolute left-[12px] top-[32px] animate-[dust-2_1.2s_ease-out_infinite] font-mono text-[13px] font-black text-[#e8801a]">0</span>
+
+        <span className="pointer-events-none absolute left-[18px] top-[25px] animate-[dust-3_1.3s_ease-out_infinite] font-mono text-[11px] font-black text-[#1b79a8]">1</span>
+
+        <span className="pointer-events-none absolute left-[8px] top-[39px] animate-[dust-2_1.4s_ease-out_infinite] font-mono text-[10px] font-black text-[#8ba9bc]">10</span>
+
+        <span className="pointer-events-none absolute left-[23px] top-[35px] animate-[dust-1_1.5s_ease-out_infinite] font-mono text-[12px] font-black text-[#e8801a]">01</span>
+
+        <span className="pointer-events-none absolute left-[15px] top-[42px] animate-[dust-3_1.5s_ease-out_infinite] font-mono text-[10px] font-black text-[#1b79a8]">11</span>
+
+        <span className="pointer-events-none absolute left-[27px] top-[29px] animate-[dust-2_1.5s_ease-out_infinite] font-mono text-[11px] font-black text-[#e8801a]">0</span>
+
+        <span className="pointer-events-none absolute left-[20px] top-[43px] animate-[dust-1_1.5s_ease-out_infinite] font-mono text-[9px] font-black text-[#8ba9bc]">1</span>
+
+        {/* Sparkle */}
+        <span className="pointer-events-none absolute right-[5px] top-[5px] animate-[dust-sparkle_1.5s_ease-in-out_infinite] text-[11px]">
+          ✨
+        </span>
+      </button>
+
+      <div className="min-w-0">
+        <div className="flex items-center gap-3">
+          <h2 className="doc-heading text-[30px] font-black leading-[38px] text-[#10283f]">
+            Free up space
+          </h2>
+
+          <span className="doc-mono inline-flex h-[22px] items-center gap-1.5 rounded-full bg-[#e1f0fa] px-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#1b79a8]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#1b79a8]" />
+            Suggestions
+          </span>
+        </div>
       </div>
 
+    </div>
+
+    {/* Description - Full Left Width */}
+    <p className="mt-1 text-[14px] text-[#7c949a]">
+      Targeted reclamation suggestions modeled after intelligent storage analytics to trim orphaned vectors and bloated PDFs.
+    </p>
+
+  </div>
+
+  {/* Reclaimable Badge - Top Right */}
+  <span className="doc-mono inline-flex h-7 shrink-0 items-center gap-2 rounded-full border border-[#c4ecd9] bg-[#eefbf5] px-2 text-[11px] font-bold text-[#0f8f63]">
+    <Zap size={10} className="fill-current text-[#e8801a]" />
+    {reclaim.toFixed(1)} MB Reclaimable
+  </span>
+
+</div>
       {/* Tabs */}
       <div className="mt-5 flex flex-wrap gap-2 border-b border-[#e3eef7]">
         {TABS.map((t) => {
@@ -135,9 +174,8 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
-              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-4 pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${
-                isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'
-              }`}
+              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-4 pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'
+                }`}
             >
               <span className={`flex h-[34px] w-[34px] items-center justify-center rounded-xl ${isOn ? t.on : t.off}`}>
                 <Icon size={16} />
@@ -152,7 +190,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
       </div>
 
       {/* Summary + filters */}
-      <div className="mt-5 rounded-[20px] bg-[#e1f0fa] px-[15px] py-[12px]">
+      <div className="mt-5 rounded-[18px] bg-[#e1f0fa] px-[15px] py-[11px]">
         <p className="text-[13px] text-[#44596a]">
           {count === 0 ? (
             '0 files matching current cleanup parameters'
@@ -177,7 +215,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
           )}
 
           {(tab === 'large' || tab === 'idle') && (
-            <div className="inline-flex items-center gap-0.5 rounded-full bg-white/70 p-1">
+            <div className="inline-flex items-center gap-0.5 rounded-full bg-white/70 p-0">
               {(tab === 'large' ? LARGE_CHIPS : IDLE_CHIPS).map((c) => {
                 const isOn = tab === 'large' ? largeMin === c && customVal === null : idleMin === c;
                 return (
@@ -207,13 +245,13 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter files..."
-              className="h-8 w-[246px] rounded-full bg-white pl-10 pr-4 text-[12px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
+              className="h-6 w-[236px] rounded-full bg-white pl-10 pr-4 text-[12px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
             />
           </div>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="doc-mono h-8 w-[250px] cursor-pointer rounded-full bg-white px-2 text-[12px] text-[#10283f] outline-none"
+            className="doc-mono h-6 w-[250px] cursor-pointer rounded-full bg-white px-2 text-[12px] text-[#10283f] outline-none"
           >
             {SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>

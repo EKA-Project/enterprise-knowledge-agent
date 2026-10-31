@@ -21,3 +21,73 @@
 .bin-group:hover .bin-lid {
   transform: translateY(-2px) rotate(24deg);
 }
+@keyframes broom-sweep {
+  0%, 100% {
+    transform: rotate(-12deg) translateX(0);
+  }
+  25% {
+    transform: rotate(12deg) translateX(2px);
+  }
+  50% {
+    transform: rotate(-18deg) translateX(-2px);
+  }
+  75% {
+    transform: rotate(10deg) translateX(2px);
+  }
+}
+
+@keyframes dust-1 {
+  0%, 20% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-9px, -7px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-17px, -13px) scale(0.2);
+  }
+}
+
+@keyframes dust-2 {
+  0%, 30% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-12px, -10px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-20px, -16px);
+  }
+}
+
+@keyframes dust-3 {
+  0%, 35% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-7px, -14px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-15px, -20px);
+  }
+}
+
+@keyframes dust-sparkle {
+  0%, 65%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}

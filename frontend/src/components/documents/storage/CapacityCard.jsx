@@ -41,15 +41,15 @@ const iconCircle = (on) =>
     on ? 'bg-white/20 text-white' : 'bg-white text-[#44596a]'
   }`;
 const badge = (on) =>
-  `doc-mono rounded-full px-1 py-0.5 text-[9px] font-bold leading-none ${
+  `doc-mono rounded-full px-1 py-1 text-[9px] font-bold leading-none ${
     on ? 'bg-[#56a8ca] text-white' : 'bg-[#d4e5f2] text-[#7c949a]'
   }`;
   return (
-    <section className="rounded-[24px] border border-(--border-subtle) bg-(--bg-surface) px-[17px] pb-[9px] pt-[13px] shadow-(--shadow-sm)">
+    <section className="rounded-[16px] border border-(--border-subtle) bg-(--bg-surface) px-[17px] pb-[9px] pt-[13px] shadow-(--shadow-sm)">
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-4">
-            <span className="doc-mono text-[30px] font-bold leading-[44px] text-[#10283f]">{usedGb} GB</span>
+            <span className="doc-mono text-[30px] font-bold leading-[40px] text-[#10283f]">{usedGb} GB</span>
             <span className="doc-mono text-[13px] font-bold text-[#7c949a]">of {totalGb} GB used</span>
             <span className="doc-mono inline-flex h-[20px] items-center rounded-full border border-[#bdeedb] bg-[#edfdf5] px-1 text-[11px] font-bold text-[#0f8f63]">
               {percent}% Capacity
