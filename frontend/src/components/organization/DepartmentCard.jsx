@@ -22,14 +22,14 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
   return (
     <article
       style={{ animationDelay: `${delay}ms` }}
-className="org-rise group flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
-        <div className="flex items-start gap-3.5">
-        <span
-className={`grid size-12 shrink-0 place-items-center rounded-xl border text-[20px] transition duration-300 group-hover:scale-110 group-hover:shadow-(--shadow-md) ${TONES[dept.tone] ?? TONES.indigo}`}>
+      className="org-rise group flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
+        <div className="flex items-start gap-4">
+          <span
+            className={`grid size-12 shrink-0 place-items-center rounded-xl border text-[20px] transition duration-300 group-hover:scale-110 group-hover:shadow-(--shadow-md) ${TONES[dept.tone] ?? TONES.indigo}`}>
             {dept.emoji ? <span aria-hidden="true">{dept.emoji}</span> : <Icon size={20} aria-hidden="true" />}
         </span>
         <div className="min-w-0 flex-1">
-<h3
+      <h3
   title={dept.name}
   className="truncate text-[15px] font-bold leading-snug text-(--text-primary)"
 >
@@ -49,11 +49,11 @@ className={`grid size-12 shrink-0 place-items-center rounded-xl border text-[20p
         </div>
       </div>
 
-<p className="mt-4 min-h-[2.75rem] line-clamp-2 text-[13px] leading-relaxed text-(--text-secondary)">
+<p className="mt-5 min-h-[2.75rem] line-clamp-2 text-[13px] leading-relaxed text-(--text-secondary)">
   {dept.description || "No description yet."}
 </p>
 
-<div className="group/lead mt-4 flex items-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-surface-subtle) p-3 transition-colors duration-200 hover:border-(--border-medium) hover:bg-white">
+<div className="group/lead mt-5 flex items-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-surface-subtle) p-3 transition-colors duration-200 hover:border-(--border-medium) hover:bg-white">
           {lead ? (
           <>
             <span className="grid size-8 shrink-0 place-items-center rounded-full bg-(--primary) text-[11px] font-bold text-(--primary-contrast)">
@@ -75,14 +75,14 @@ className={`grid size-12 shrink-0 place-items-center rounded-xl border text-[20p
         <button
           type="button"
           onClick={onReassign}
-className="shrink-0 rounded-full border border-(--border-medium) bg-white px-3 py-1 text-[12px] font-bold text-(--text-primary) transition-all duration-200 group-hover/lead:border-(--primary) group-hover/lead:bg-(--primary-light) group-hover/lead:text-(--primary) hover:-translate-y-0.5 hover:shadow-(--shadow-sm) active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"        >
+          className="shrink-0 rounded-full border border-(--border-medium) bg-white px-3 py-1 text-[12px] font-bold text-(--text-primary) transition-all duration-200 group-hover/lead:border-(--primary) group-hover/lead:bg-(--primary-light) group-hover/lead:text-(--primary) hover:-translate-y-0.5 hover:shadow-(--shadow-sm) active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"        >
           {lead ? "Reassign" : "Assign"}
         </button>
       </div>
 
-<div className="mt-auto pt-7">
-            <div className="flex items-center justify-between gap-3 border-t border-(--border-subtle) pt-4 text-[12px] text-(--text-muted)">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+      <div className="mt-auto pt-8">
+          <div className="flex items-center justify-between gap-3 border-t border-(--border-subtle) pt-5 text-[12px] text-(--text-muted)">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <span><span aria-hidden="true">👥</span> <b className="text-(--text-primary)">{dept.members}</b> members</span>
             <span><span aria-hidden="true">📄</span> <b className="text-(--text-primary)">{dept.docs}</b> scoped docs</span>
           </div>

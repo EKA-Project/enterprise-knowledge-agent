@@ -18,8 +18,8 @@ export default function DepartmentStatCards({ departments }) {
   ];
 
   return (
-<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {cards.map(({ label, value, note, noteTone, Icon, tile }, i) => (
+<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            {cards.map(({ label, value, note, noteTone, Icon, tile }, i) => (
         <article
           key={label}
           style={{ animationDelay: `${i * 60}ms` }}
