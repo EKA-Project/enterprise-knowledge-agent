@@ -85,7 +85,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
   };
 
   const chip = (on) =>
-    `doc-mono h-8 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${on ? 'bg-[#0a7bc4] text-white' : 'text-[#44596a] hover:text-[#10283f]'
+    `doc-mono h-6 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${on ? 'bg-[#0a7bc4] text-white' : 'text-[#44596a] hover:text-[#10283f]'
     }`;
 
   return (
@@ -174,14 +174,14 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
-              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-4
-           pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'      }`}
+              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-3
+           pb-2 pt-1.5 text-[13px] font-semibold text-[#10283f] transition-colors ${isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'      }`}
             >
-              <span className={`flex h-[28px] w-[28px] items-center justify-center rounded-xl ${isOn ? t.on : t.off}`}>
-                <Icon size={16} />
+              <span className={`flex h-[22px] w-[22px] items-center justify-center rounded-xl ${isOn ? t.on : t.off}`}>
+                <Icon size={13} />
               </span>
               {t.label}
-              <span className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[12px] font-bold ${isOn ? 'bg-[#0a7bc4] text-white' : 'bg-[#e3eef7] text-[#7c949a]'}`}>
+              <span className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-full px-2.5 text-[12px] font-bold ${isOn ? 'bg-[#0a7bc4] text-white' : 'bg-[#e3eef7] text-[#7c949a]'}`}>
                 {rowsFor(t.key).length}
               </span>
             </button>
@@ -191,7 +191,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
 
       {/* Summary + filters */}
       <div className="mt-5 rounded-[18px] bg-[#e1f0fa] px-[15px] py-[11px]">
-        <p className="text-[130px] text[#44596a]">
+        <p className="text-[13px] text[#44596a]">
           {count === 0 ? (
             '0 files matching current cleanup parameters'
           ) : (
@@ -204,7 +204,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
 
         <div className="mt-3 flex flex-wrap items-center gap-30">
           {filter.key !== 'ALL' && (
-            <div className="inline-flex h-10 items-center gap-3 rounded-full bg-white px-4 text-[1px]">
+            <div className=" h-16 items-center gap-3 rounded-full bg-white px-4 text-[1px]">
               <span className="doc-mono font-semibold text-[#1b79a8]">
                 {filter.mode === 'dept' ? 'Department' : 'Format'}: {filter.key}
               </span>
@@ -259,12 +259,12 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
       </div>
 
       {/* Table */}
-      <div className="mt-5 overflow-x-auto rounded-[20px] border border-[#e3eef7] bg-white">
+      <div className="mt-5 overflow-x-auto rounded-[14px] border border-[#e3eef7] bg-white">
         <table className="w-full min-w-[980px] text-left">
           <thead className="bg-[#dcf0fd]">
-            <tr className="h-[52px]">
-              <th className="w-12 px-4">
-                <input type="checkbox" checked={allOnPage} onChange={toggleAll} disabled={selectable.length === 0} className="h-[18px] w-[18px] cursor-pointer accent-[#0a7bc4]" />
+            <tr className="h-[48px]">
+              <th className="w-11 px-4">
+                <input type="checkbox" checked={allOnPage} onChange={toggleAll} disabled={selectable.length === 0} className="h-[16px] w-[16px] cursor-pointer accent-[#0a7bc4]" />
               </th>
               <th className={TH}>Type</th>
               <th className={TH}>Document Name</th>
@@ -312,7 +312,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
                     </tr>
                   )}
                   <tr className={`border-t border-[#e3eef7] ${selected.has(f.id) ? 'bg-[#e8f3fc]' : 'bg-white hover:bg-[#f7fbfe]'}`}>
-                    <td className="px-4 py-[21px]">
+                    <td className="px-4 py-[20px]">
                       <input
                         type="checkbox"
                         checked={selected.has(f.id)}
@@ -321,12 +321,12 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
                         className="h-[18px] w-[18px] cursor-pointer accent-[#0a7bc4] disabled:cursor-not-allowed disabled:opacity-30"
                       />
                     </td>
-                    <td className="px-3"><TypeTile type={f.type} /></td>
-                    <td className="px-3">
+                    <td className="px-1"><TypeTile type={f.type} /></td>
+                    <td className="px-1">
                       <div className="flex items-center gap-3">
                         <div className="min-w-0">
-                          <p className="max-w-[330px] truncate text-[14px] font-semibold text-[#10283f]">{f.name}</p>
-                          <p className="doc-mono max-w-[330px] truncate text-[11px] text-[#7c949a]">{f.file}</p>
+                          <p className="max-w-[330px] truncate text-[12.5px] font-semibold text-[#10283f]">{f.name}</p>
+                          <p className="doc-mono max-w-[310px] truncate text-[10px] text-[#7c949a]">{f.file}</p>
                         </div>
                         {f.isProtected && (
                           <span className="group/p relative shrink-0">
@@ -340,10 +340,10 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
                         )}
                       </div>
                     </td>
-                    <td className="px-3"><DeptPill name={f.dept} /></td>
-                    <td className="doc-mono px-3 text-[13px] font-bold text-[#10283f]">{f.sizeMb.toFixed(1)} MB</td>
-                    <td className="doc-mono px-3 text-[12px] text-[#7c949a]">{f.opened}</td>
-                    <td className="doc-mono px-3 text-[12px] text-[#7c949a]">{f.cited}</td>
+                    <td className="px-7"><DeptPill name={f.dept} /></td>
+                    <td className="doc-mono px-3 text-[12px] font-black text-[#10283f]">{f.sizeMb.toFixed(1)} MB</td>
+                    <td className="doc-mono px-3 text-[10px] text-[#7c949a]">{f.opened}</td>
+                    <td className="doc-mono px-3 text-[10px] text-[#7c949a]">{f.cited}</td>
                     <td className="px-3"><StatusPill status={f.status} /></td>
                   </tr>
                 </Fragment>

@@ -11,7 +11,7 @@ const TYPE = {
 
 export function TypeTile({ type }) {
   return (
-    <span className={`doc-mono inline-flex h-[29px] w-[41px] shrink-0 items-center justify-center rounded-lg text-[10px] font-bold ${TYPE[type]}`}>
+    <span className={`doc-mono inline-flex h-[30px] w-[32px] shrink-0 items-center justify-center  text-[8px] font-bold ${TYPE[type]}`}>
       {type}
     </span>
   );
@@ -30,8 +30,8 @@ const DEPT = {
 export function DeptPill({ name }) {
   const [Icon, cls] = DEPT[name] ?? DEPT['General Knowledge'];
   return (
-    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-[12px] font-semibold ${cls}`}>
-      <Icon size={12} />
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-semibold ${cls}`}>
+      <Icon size={10} />
       {name}
     </span>
   );
@@ -45,11 +45,11 @@ const STATUS = {
 
 export function StatusPill({ status }) {
   return (
-    <span className={`doc-mono inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold ${STATUS[status]}`}>
+    <span className={`doc-mono inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold ${STATUS[status]}`}>
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       {status}
       {status === 'Failed' && (
-        <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-current text-[8px]">?</span>
+        <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-current text-[800px]">?</span>
       )}
     </span>
   );
