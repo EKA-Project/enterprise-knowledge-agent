@@ -32,8 +32,8 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
   }, [items.length]);
 
   return (
-    <section className="overflow-hidden rounded-[28px] border border-[#f6d5d9] bg-(--bg-surface) shadow-(--shadow-sm)">
-      <div className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[25px] ${open ? 'border-b border-[#f3e4e6]' : ''}`}>
+    <section className="overflow-hidden rounded-[24px] border border-[#f6d5d9] bg-(--bg-surface) shadow-(--shadow-sm)">
+      <div className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[18px] ${open ? 'border-b border-[#f3e4e6]' : ''}`}>
         <div className="flex items-center gap-[14px]">
           <span className={`bin-group relative flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-2xl border border-[#f6d5d9] bg-[#ffe9ee] text-[#e5484d] ${flap ? 'bin-open' : ''}`}>
             <BinIcon size={24} />

@@ -11,7 +11,7 @@ const TYPE = {
 
 export function TypeTile({ type }) {
   return (
-    <span className={`doc-mono inline-flex h-[30px] w-[32px] shrink-0 items-center justify-center  text-[8px] font-bold ${TYPE[type]}`}>
+    <span className={`doc-mono inline-flex h-[29px] w-[41px] shrink-0 items-center justify-center rounded-lg text-[10px] font-bold ${TYPE[type]}`}>
       {type}
     </span>
   );
@@ -49,7 +49,7 @@ export function StatusPill({ status }) {
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       {status}
       {status === 'Failed' && (
-        <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-current text-[800px]">?</span>
+        <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-current text-[8px]">?</span>
       )}
     </span>
   );

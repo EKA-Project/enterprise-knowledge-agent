@@ -354,7 +354,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
       </div>
 
       {/* Pagination (67px band, 34px page buttons) */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-[#e0f0f9] px-6 py-1 text-[14px] text-[#7c949a]">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-[#e0f0f9] px-6 py-3 text-[12px] text-[#7c949a]">
         <div className="flex items-center gap-5">
           <span>
             Showing <strong className="text-[#10283f]">{count === 0 ? 0 : `${start + 1}–${Math.min(start + perPage, count)}`}</strong> of <strong className="text-[#10283f]">{count}</strong> files
@@ -364,14 +364,14 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
             <select
               value={perPage}
               onChange={(e) => { setPerPage(Number(e.target.value)); setPage(0); }}
-              className="doc-mono h-8 w-[62px] cursor-pointer rounded-lg border border-[#cfe3f3] bg-white px-2 text-[13px] text-[#10283f] outline-none"
+             className="doc-mono h-6 w-[55px] cursor-pointer rounded-[9px] border border-[#cfe3f3] bg-white px-2 text-[13px] text-[#10283f] outline-none"
             >
               {PER_PAGE.map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
         </div>
         <div className="flex items-center gap-2">
-          <button type="button" disabled={safePage === 0} onClick={() => setPage(safePage - 1)} className="h-[25px] cursor-pointer rounded-full bg-white px-3 text-[12px]  font-semibold text-[#10283f]  disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="button" disabled={safePage === 0} onClick={() => setPage(safePage - 1)} className="h-[23px] cursor-pointer rounded-full bg-white px-3 text-[12px]  font-semibold text-[#10283f]  disabled:cursor-not-allowed disabled:opacity-60">
             ← Prev
           </button>
           {Array.from({ length: pages }, (_, i) => (
@@ -379,12 +379,12 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
               key={i}
               type="button"
               onClick={() => setPage(i)}
-              className={`doc-mono h-[34px] w-[34px] cursor-pointer rounded-lg text-[14px] font-bold ${i === safePage ? 'bg-[#147aa5] text-white' : 'text-[#44596a] hover:bg-white'}`}
+           className={`doc-mono h-[30px] w-[30px] cursor-pointer rounded-[9px] text-[11px] font-bold ${i === safePage ? 'bg-[#147aa5] text-white' : 'text-[#44596a] hover:bg-white'}`}
             >
               {i + 1}
             </button>
           ))}
-          <button type="button" disabled={safePage >= pages - 1} onClick={() => setPage(safePage + 1)} className="h-[25px] cursor-pointer rounded-full bg-white px-3 text-[12px] font-semibold text-[#10283f] disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="button" disabled={safePage >= pages - 1} onClick={() => setPage(safePage + 1)} className="h-[23px] cursor-pointer rounded-full bg-white px-3 text-[12px] font-semibold text-[#10283f] disabled:cursor-not-allowed disabled:opacity-60">
             Next →
           </button>
         </div>
