@@ -174,14 +174,14 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
-              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-4 pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'
-                }`}
+              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-4
+           pb-3 pt-2.5 text-[15px] font-semibold text-[#10283f] transition-colors ${isOn ? 'border-[#1796a8] bg-[#f1f8fd]' : 'border-transparent hover:bg-[#f7fbfe]'      }`}
             >
-              <span className={`flex h-[34px] w-[34px] items-center justify-center rounded-xl ${isOn ? t.on : t.off}`}>
+              <span className={`flex h-[28px] w-[28px] items-center justify-center rounded-xl ${isOn ? t.on : t.off}`}>
                 <Icon size={16} />
               </span>
               {t.label}
-              <span className={`doc-mono flex h-[26px] min-w-[26px] items-center justify-center rounded-full px-1.5 text-[12px] font-bold ${isOn ? 'bg-[#0a7bc4] text-white' : 'bg-[#e3eef7] text-[#7c949a]'}`}>
+              <span className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[12px] font-bold ${isOn ? 'bg-[#0a7bc4] text-white' : 'bg-[#e3eef7] text-[#7c949a]'}`}>
                 {rowsFor(t.key).length}
               </span>
             </button>
@@ -191,7 +191,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
 
       {/* Summary + filters */}
       <div className="mt-5 rounded-[18px] bg-[#e1f0fa] px-[15px] py-[11px]">
-        <p className="text-[13px] text-[#44596a]">
+        <p className="text-[130px] text[#44596a]">
           {count === 0 ? (
             '0 files matching current cleanup parameters'
           ) : (
@@ -202,9 +202,9 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
           )}
         </p>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-3 flex flex-wrap items-center gap-30">
           {filter.key !== 'ALL' && (
-            <div className="inline-flex h-10 items-center gap-3 rounded-full bg-white px-4 text-[12px]">
+            <div className="inline-flex h-10 items-center gap-3 rounded-full bg-white px-4 text-[1px]">
               <span className="doc-mono font-semibold text-[#1b79a8]">
                 {filter.mode === 'dept' ? 'Department' : 'Format'}: {filter.key}
               </span>
@@ -215,7 +215,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
           )}
 
           {(tab === 'large' || tab === 'idle') && (
-            <div className="inline-flex items-center gap-0.5 rounded-full bg-white/70 p-0">
+            <div className="inline-flex items-center gap-0.5 rounded-full bg-white/90 p-0 h-6">
               {(tab === 'large' ? LARGE_CHIPS : IDLE_CHIPS).map((c) => {
                 const isOn = tab === 'large' ? largeMin === c && customVal === null : idleMin === c;
                 return (
@@ -240,7 +240,7 @@ function FreeUpCard({ files, filter, onClearFilter, selected, onSelectedChange, 
           )}
 
           <div className="relative">
-            <Search size={14} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7c949a]" />
+            <Search size={12} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7c949a]" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
