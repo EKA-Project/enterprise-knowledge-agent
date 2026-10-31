@@ -30,14 +30,14 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
         </span>
         <div className="min-w-0 flex-1">
       <h3
-  title={dept.name}
-  className="truncate text-[15px] font-bold leading-snug text-(--text-primary)"
->
-  {dept.name}
-</h3>
-          <span className="mt-1 inline-block rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 font-(family-name:--font-mono) text-[9.5px] font-bold uppercase tracking-wider text-(--text-secondary)">
+        title={dept.name}
+        className="truncate text-[15px] font-bold leading-snug text-(--text-primary)"
+      >
+      {dept.name}
+      </h3>
+        <span className="mt-1 inline-block rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 font-(family-name:--font-mono) text-[9.5px] font-bold uppercase tracking-wider text-(--text-secondary)">
             {dept.code}
-          </span>
+        </span>
         </div>
         <div className="flex shrink-0 gap-0.5">
           <button type="button" onClick={onEdit} aria-label={`Edit ${dept.name}`} title="Edit" className={`${iconBtn} hover:-rotate-12 hover:bg-(--primary-light) hover:text-(--primary)`}>
@@ -49,16 +49,16 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
         </div>
       </div>
 
-<p className="mt-5 min-h-[2.75rem] line-clamp-2 text-[13px] leading-relaxed text-(--text-secondary)">
-  {dept.description || "No description yet."}
-</p>
+      <p className="mt-5 min-h-[2.75rem] line-clamp-2 text-[13px] leading-relaxed text-(--text-secondary)">
+        {dept.description || "No description yet."}
+      </p>
 
-<div className="group/lead mt-5 flex items-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-surface-subtle) p-3 transition-colors duration-200 hover:border-(--border-medium) hover:bg-white">
+      <div className="group/lead mt-5 flex items-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-surface-subtle) p-3 transition-colors duration-200 hover:border-(--border-medium) hover:bg-white">
           {lead ? (
           <>
-            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-(--primary) text-[11px] font-bold text-(--primary-contrast)">
+          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-(--primary) text-[11px] font-bold text-(--primary-contrast)">
               {getInitials(lead.name)}
-            </span>
+          </span>
             <div className="min-w-0 flex-1">
               <p className="flex flex-wrap items-center gap-1.5 text-[13.5px] font-bold text-(--text-primary)">
                 <span className="truncate">{lead.name}</span>
