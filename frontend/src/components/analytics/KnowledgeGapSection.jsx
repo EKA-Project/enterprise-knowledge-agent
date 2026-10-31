@@ -7,7 +7,7 @@ const serif = "font-(family-name:--font-serif)";
 const COLS = "grid grid-cols-[2.2fr_0.9fr_1.4fr_1.5fr_1.3fr] items-center gap-4";
 
 // KnowledgeGapSection component for displaying knowledge gaps and audit items
-export default function KnowledgeGapSection({ onIngest }) {
+export default function KnowledgeGapSection() {
   const [activeId, setActiveId] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
@@ -112,7 +112,6 @@ export default function KnowledgeGapSection({ onIngest }) {
               <div className="text-right">
                 <button
                   type="button"
-                  onClick={() => onIngest(r)}
                   className="rounded-full border border-(--border-subtle-nav) px-3 py-1 text-[11px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:bg-(--primary) hover:text-(--primary-contrast) active:scale-95"
                 >
                   {r.action}

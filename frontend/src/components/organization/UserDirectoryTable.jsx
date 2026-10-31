@@ -1,9 +1,9 @@
 import Tooltip from "../common/Tooltip";
 import DepartmentIcon from "./DepartmentIcon";
 import { getInitials } from "./OrganizationData";
-
+import Pagination from "../common/Pagination";
 const mono = "font-(family-name:--font-mono)";
-const COLS = "grid grid-cols-[2.2fr_2.3fr_1fr_1.2fr_1fr_1.2fr_1.5fr] items-center gap-4";
+const COLS = "grid grid-cols-[2.2fr_2.3fr_1fr_1fr_1.2fr_1.5fr] items-center gap-4";
 
 const ROLE_STYLES = {
   Manager: "border-[#fde68a] bg-[#fffbeb] text-[#d97706]",
@@ -18,11 +18,8 @@ const STATUS_STYLES = {
 };
 const FADE = { Suspended: "opacity-70", Terminated: "opacity-50" };
 
-const pager =
-  "rounded-full border border-(--border-medium) bg-white px-3 py-1 text-[11.5px] font-semibold text-(--text-primary) transition duration-200 hover:border-(--primary) hover:text-(--primary) active:scale-95 disabled:opacity-40 disabled:hover:border-(--border-medium) disabled:hover:text-(--text-primary)";
-
 export default function UserDirectoryTable({
-  rows, total, page, pageCount, perPage, onPage, onPerPage, getDept,
+  rows, total, page, perPage, onPage, onPerPage, getDept,
   onView, onEdit, onTerminate, onReactivate,
 }) {
   const from = total === 0 ? 0 : (page - 1) * perPage + 1;
@@ -35,9 +32,21 @@ export default function UserDirectoryTable({
           <h3 className="font-(family-name:--font-serif) text-[22px] font-bold text-(--text-primary)">User Directory ({total})</h3>
           <p className="mt-1 text-[12.5px] text-(--text-muted)">Manage member roles, access levels, and account statuses.</p>
         </div>
-        <span className={`${mono} rounded-full bg-(--bg-surface-subtle) px-3 py-1 text-[11px] font-semibold text-(--text-secondary)`}>
-          Showing {from}-{to} of {total}
-        </span>
+        <div className="flex items-center gap-3">
+  <label className="flex items-center gap-2 text-[12px] text-(--text-muted)">
+    Per page:
+    <select
+      value={perPage}
+      onChange={(e) => onPerPage(Number(e.target.value))}
+      className="rounded-lg border border-(--border-medium) bg-white px-2.5 py-1 text-[12px] font-semibold text-(--text-primary) outline-none transition hover:border-(--primary) focus:border-(--border-focus)"
+    >
+      {[10, 25, 50].map((n) => <option key={n} value={n}>{n}</option>)}
+    </select>
+  </label>
+  <span className={`${mono} rounded-full bg-(--bg-surface-subtle) px-3 py-1 text-[11px] font-semibold text-(--text-secondary)`}>
+    Showing {from}-{to} of {total}
+  </span>
+</div>  
       </div>
 
 <div className="org-user-directory__scroll-container overflow-x-auto xl:overflow-x-visible">
@@ -46,7 +55,6 @@ export default function UserDirectoryTable({
             <span>Name</span>
             <span>Department</span>
             <span>Role</span>
-            <span>Access level</span>
             <span>Status</span>
             <span>Last active</span>
             <span className="text-right">Actions</span>
@@ -95,9 +103,6 @@ export default function UserDirectoryTable({
                     <span className={`${mono} w-fit rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${ROLE_STYLES[u.role] ?? ROLE_STYLES.Employee}`}>
                       {u.role}
                     </span>
-                    <span className={`${mono} w-fit rounded-full border border-(--border-medium) bg-(--bg-surface-subtle) px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-(--text-secondary)`}>
-                      {u.access}
-                    </span>
                     <span className={`w-fit rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold ${STATUS_STYLES[u.status]}`}>{u.status}</span>
                     <span className={`${mono} text-[11.5px] text-(--text-muted)`}>{u.lastActive}</span>
 
@@ -131,29 +136,13 @@ export default function UserDirectoryTable({
           )}
         </div>
       </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-(--border-subtle) px-6 py-4 text-[12px] text-(--text-muted)">
-        <div className="flex flex-wrap items-center gap-5">
-          <span>
-            Showing <b className="text-(--text-primary)">{from}-{to}</b> of <b className="text-(--text-primary)">{total}</b> members
-          </span>
-          <label className="flex items-center gap-2">
-            Per page:
-            <select
-              value={perPage}
-              onChange={(e) => onPerPage(Number(e.target.value))}
-              className="rounded-lg border border-(--border-medium) bg-white px-2.5 py-1 text-[12px] font-semibold text-(--text-primary) outline-none transition hover:border-(--primary) focus:border-(--border-focus)"
-            >
-              {[10, 25, 50].map((n) => <option key={n} value={n}>{n}</option>)}
-            </select>
-          </label>
-        </div>
-        <div className="flex items-center gap-3">
-          <button type="button" className={pager} disabled={page <= 1} onClick={() => onPage(page - 1)}>← Prev</button>
-          <span className="font-semibold text-(--text-primary)">Page {page} of {pageCount}</span>
-          <button type="button" className={pager} disabled={page >= pageCount} onClick={() => onPage(page + 1)}>Next →</button>
-        </div>
-      </div>
+      <Pagination
+  page={page}
+  pageSize={perPage}
+  total={total}
+  onPageChange={onPage}
+  itemLabel="members"
+/>
     </section>
   );
 }
