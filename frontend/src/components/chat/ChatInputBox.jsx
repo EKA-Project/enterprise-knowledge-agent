@@ -1,4 +1,5 @@
-import { ArrowRightIcon, EnterIcon, FileIcon, FlaskIcon, StopIcon } from './ChatIcons';
+import { CornerDownLeft } from 'lucide-react';
+import { ArrowRightIcon, FileIcon, FlaskIcon, StopIcon } from './ChatIcons';
 import { MONO, SERIF } from './ChatUtils';
 
 // Holds nothing but display: the typed text lives in the page, and it never calls the API.
@@ -69,7 +70,7 @@ export default function ChatInputBox({
           ) : (
             <div className="flex items-center gap-2.5">
               <button type="button" onClick={onSend} className={`${MONO} flex cursor-pointer items-center gap-1.5 rounded-md border border-[var(--border-subtle)] px-2 py-1 text-[11px] text-[var(--text-muted)] transition hover:bg-[var(--bg-surface-subtle)]`}>
-                <EnterIcon size={11} /> send
+                <CornerDownLeft size={11} /> Send
               </button>
               <button
                 type="button"
