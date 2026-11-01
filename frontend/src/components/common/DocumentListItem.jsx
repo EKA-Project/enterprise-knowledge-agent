@@ -2,8 +2,12 @@ const KNOWN_TYPES = ["pdf", "doc", "docx", "csv", "md", "txt", "fig"];
 
 const ACTIONS = {
   pinned: {
+    // Follows the active theme through --primary. Hover styles are kept apart
+    // so a read-only badge (no click handler) does not react to the mouse.
     className:
-      "bg-[#eef2ff] text-[#2563eb] ring-[#c7d2fe] hover:bg-[#e0e7ff] hover:ring-[#a5b4fc]",
+      "bg-[color:color-mix(in_srgb,var(--primary)_12%,transparent)] text-(--primary) ring-[color:color-mix(in_srgb,var(--primary)_28%,transparent)]",
+    hoverClassName:
+      "hover:bg-[color:color-mix(in_srgb,var(--primary)_20%,transparent)] hover:ring-[color:color-mix(in_srgb,var(--primary)_45%,transparent)]",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -22,7 +26,9 @@ const ACTIONS = {
   },
   saved: {
     className:
-      "bg-[#fffbeb] text-[#f59e0b] ring-[#fde68a] hover:bg-[#fef3c7] hover:ring-[#fcd34d]",
+      "bg-[color:color-mix(in_srgb,var(--action-saved)_12%,transparent)] text-(--action-saved) ring-[color:color-mix(in_srgb,var(--action-saved)_30%,transparent)]",
+    hoverClassName:
+      "hover:bg-[color:color-mix(in_srgb,var(--action-saved)_22%,transparent)] hover:ring-[color:color-mix(in_srgb,var(--action-saved)_50%,transparent)]",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -55,6 +61,8 @@ function DocumentListItem({
 
   const actionConfig = ACTIONS[action];
   const isInteractive = Boolean(onClick);
+  // No handler = read-only badge (for example the pin icon for non-admin roles)
+  const isActionClickable = Boolean(onActionClick);
 
   const handleKeyDown = (event) => {
     if (!isInteractive) return;
@@ -98,27 +106,37 @@ function DocumentListItem({
       {/* Trailing action */}
       {actionConfig ? (
         <div className="group/action relative shrink-0">
-          <button
-            type="button"
-            aria-label={actionLabel}
-            onClick={(event) => {
-              event.stopPropagation();
-              onActionClick?.();
-            }}
-            className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-[10px] ring-1 ring-inset transition-all duration-150 hover:scale-110 active:scale-95 ${actionConfig.className}`}
-          >
-            {actionConfig.icon}
-          </button>
+          {isActionClickable ? (
+            <button
+              type="button"
+              aria-label={actionLabel}
+              onClick={(event) => {
+                event.stopPropagation();
+                onActionClick();
+              }}
+              className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-[10px] ring-1 ring-inset transition-all duration-150 hover:scale-110 active:scale-95 ${actionConfig.className} ${actionConfig.hoverClassName}`}
+            >
+              {actionConfig.icon}
+            </button>
+          ) : (
+            <span
+              role="img"
+              aria-label={actionLabel}
+              className={`flex h-8 w-8 items-center justify-center rounded-[10px] ring-1 ring-inset ${actionConfig.className}`}
+            >
+              {actionConfig.icon}
+            </span>
+          )}
 
           {actionLabel && (
             <span
               role="tooltip"
-              className="pointer-events-none absolute right-0 top-full z-20 mt-2 whitespace-nowrap rounded-md bg-[#0f172a] px-2.5 py-1.5 text-[0.7rem] font-medium text-white opacity-0 shadow-(--shadow-md) transition-all duration-150 group-hover/action:translate-y-0 group-hover/action:opacity-100 group-focus-within/action:opacity-100 -translate-y-1"
+              className="pointer-events-none absolute right-0 top-full z-20 mt-2 whitespace-nowrap rounded-md bg-(--text-primary) px-2.5 py-1.5 text-[0.7rem] font-medium text-(--bg-surface) opacity-0 shadow-(--shadow-md) transition-all duration-150 group-hover/action:translate-y-0 group-hover/action:opacity-100 group-focus-within/action:opacity-100 -translate-y-1"
             >
               {/* Tooltip pointer */}
               <span
                 aria-hidden="true"
-                className="absolute -top-1 right-3 h-2 w-2 rotate-45 bg-[#0f172a]"
+                className="absolute -top-1 right-3 h-2 w-2 rotate-45 bg-(--text-primary)"
               />
               {actionLabel}
             </span>

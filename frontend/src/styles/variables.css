@@ -146,6 +146,9 @@
   --status-failure-subtle: rgba(239, 68, 68, 0.03);
   --status-failure-row: rgba(239, 68, 68, 0.015);
 
+  /* "Saved" bookmark accent on document rows; the same amber in every theme */
+  --action-saved: #f59e0b;
+
   /* Document File Formats Palette (PDF, DOC/DOCX, CSV, MD, TXT, FIG) */
   --doc-pdf-bg: #fee2e2;
   --doc-pdf-color: #dc2626;
