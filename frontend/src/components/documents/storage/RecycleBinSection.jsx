@@ -1,22 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { AlertCircle, ChevronDown, Droplet, RotateCcw, Sparkles, Trash2 } from 'lucide-react';
+import { AlertCircle, ChevronDown, Droplet, RotateCcw, Trash2 } from 'lucide-react';
 import { DeptPill, TypeTile } from './StorageBits';
+import AnimatedBin from '../../common/ActionButtons.jsx';
 import '../../../styles/Document.css';
 
 const TH = 'doc-mono px-3 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
-// Trash can with a separate lid, so the lid can lift (see .bin-lid in Document.css)
-function BinIcon({ size }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <g className="bin-lid">
-        <path d="M3 6h18" />
-        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-      </g>
-      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-      <path d="M10 11v6M14 11v6" />
-    </svg>
-  );
-}
+
 // Collapsed by default. Sizes measured on the 1920px frame (card 1521 wide, header 111 tall, table head 52).
 function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
   const [open, setOpen] = useState(false);
@@ -30,13 +19,29 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
     const t = setTimeout(() => setFlap(false), 900);
     return () => clearTimeout(t);
   }, [items.length]);
-
+  // Two-tone flame (red outer, orange inner) for the Purge button
+function FlameIcon({ size = 13 }) {
+  return (
+    <span className="flame-rise">
+      <svg className="flame-svg" width={size} height={size} viewBox="0 0 24 24" fill="none">
+        <path
+          d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+          fill="#e11d2e"
+        />
+        <path
+          d="M12 21a4 4 0 0 0 4-4c0-1.5-1-2.5-2-3.5-.4 1-1.2 1.5-2 1.5-.9 0-1.5-.6-1.5-1.5C9 14 8 15.5 8 17a4 4 0 0 0 4 4z"
+          fill="#f59e0b"
+        />
+      </svg>
+    </span>
+  );
+}
   return (
     <section className="overflow-hidden rounded-[24px] border border-[#f6d5d9] bg-(--bg-surface) shadow-(--shadow-sm)">
       <div className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[18px] ${open ? 'border-b border-[#f3e4e6]' : ''}`}>
         <div className="flex items-center gap-[14px]">
-          <span className={`bin-group relative flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-2xl border border-[#f6d5d9] bg-[#ffe9ee] text-[#e5484d] ${flap ? 'bin-open' : ''}`}>
-            <BinIcon size={24} />
+          <span className="bin-group relative flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-2xl border border-[#f6d5d9] bg-[#ffe9ee] text-[#e5484d]">
+            <AnimatedBin size={24} open={flap} />
             <span className="absolute right-1.5 top-1 h-1.5 w-1.5 rounded-full bg-[#e5484d]" />
           </span>
           <div>
@@ -66,7 +71,7 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
       {open && (
         <div className="px-9 pb-9">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#f3e4e6] py-[14px]">
-            <p className="flex items-center gap-2.5 text-[14px] text-[#7c949a]">
+            <p className="flex items-center gap-2.5 text-[12px] text-[#7c949a]">
               <AlertCircle size={16} className="text-[#e5484d]" />
               Soft-deleted files remain restorable for 30 days before being purged forever.
             </p>
@@ -74,9 +79,12 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
               type="button"
               onClick={onEmpty}
               disabled={empty}
-              className="inline-flex h-[39px] cursor-pointer items-center gap-2 rounded-full border border-[#f9d3df] bg-[#fff3f8] px-5 text-[14px] font-semibold text-[#d9373f] transition-colors hover:bg-[#ffe2e1] disabled:cursor-not-allowed disabled:opacity-60"
+              className="bin-group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-[#f0c5c9] bg-[#fff5f5] pl-2 pr-2 text-[12px] font-semibold text-[#c92525] transition-colors hover:bg-[#ffeaea] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <Trash2 size={14} /> Empty Recycle Bin
+              <span className="flex h-6 w-5 items-center justify-center rounded-full bg-[#fbdcdd]">
+                <AnimatedBin size={14} />
+              </span>
+              Empty Recycle Bin
             </button>
           </div>
 
@@ -109,8 +117,11 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
                           <button type="button" onClick={() => onRestore(f)} className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#cfe3f3] bg-white px-4 text-[13px] font-semibold text-[#10283f] transition-colors hover:border-[#8fd3b5] hover:bg-[#eefbf5] hover:text-[#0f8f63]">
                             <RotateCcw size={13} /> Restore
                           </button>
-                          <button type="button" onClick={() => onPurge(f)} className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-4 text-[13px] font-semibold text-[#d9373f] transition-colors hover:bg-[#ffe2e1]">
-                            <Droplet size={13} className="fill-current" /> Purge
+                          <button type="button" onClick={() => onPurge(f)} className="flame-group inline-flex h-9 cursor-pointer items-center gap-2.5 rounded-full border border-[#f4b4b6] bg-[#fce7e9] pl-2 pr-5 text-[14px] font-semibold text-[#d92d2d] transition-colors hover:bg-[#fbd9dc]">
+                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f8d0d3]">
+                              <FlameIcon size={18} />
+                            </span>
+                            Purge
                           </button>
                         </div>
                       </td>
@@ -122,10 +133,9 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
 
             {empty && (
               <div className="py-[50px]">
-                <div className={`group bin-group mx-auto flex h-[296px] w-full max-w-[516px] cursor-pointer flex-col items-center rounded-3xl border border-dashed border-[#f3c4d0] bg-[linear-gradient(180deg,#fff5f8,#ffffff)] px-10 pt-[42px] text-center transition-colors duration-300 hover:border-[#eba3b4] hover:bg-[linear-gradient(180deg,#ffe6ed,#fff3f7)] ${flap ? 'bin-open' : ''}`}>
-                  <span className="relative flex h-[90px] w-[90px] items-center justify-center rounded-full border-2 border-[#f6c4cf] bg-[#ffe9ee] text-[#e5484d] transition-all duration-300 group-hover:border-[#e5484d] group-hover:shadow-[0_0_0_6px_rgba(229,72,77,0.12)]">
-                    <BinIcon size={36} />
-                    <Sparkles size={12} className="absolute right-3 top-3 text-[#e5484d]" />
+                <div className="mx-auto flex h-[296px] w-full max-w-[516px] flex-col items-center rounded-3xl border border-dashed border-[#f3c4d0] bg-[linear-gradient(180deg,#fff5f8,#ffffff)] px-10 pt-[42px] text-center">
+                  <span className="bin-group relative flex h-[90px] w-[90px] items-center justify-center rounded-full border-2 border-[#f4b8bf] bg-[#ffe9ee] text-[#e5484d] shadow-[0_2px_10px_rgba(229,72,77,0.12)] transition-all duration-300 hover:border-[#c62828] hover:text-[#d9373f] hover:shadow-[0_4px_18px_rgba(220,38,38,0.3)]">
+                    <AnimatedBin size={40} spark open={flap} />
                   </span>
                   <h4 className="doc-heading mt-[22px] text-[21px] font-black leading-7 text-[#10283f]">Recycle Bin is Empty</h4>
                   <p className="mt-2 max-w-[404px] text-[14px] leading-[22px] text-[#7c949a]">
@@ -142,10 +152,3 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
 }
 
 export default RecycleBinSection;
-
-
-
-
-
-
-

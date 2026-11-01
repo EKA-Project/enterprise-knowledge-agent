@@ -1,5 +1,6 @@
 import { FileText, Send, Upload, UserPlus, UserX, X } from "lucide-react";
 import Button from "./Button";
+import '../../styles/Document.css';
 
 /* ==========================================================================
    ActionButtons  (components/common/ActionButtons.jsx)
@@ -87,5 +88,57 @@ export function RemoveFromTeamButton(props) {
     >
       Remove from Team
     </Button>
+  );
+}
+
+
+/**
+ * Animated trash can (lid lifts from its left hinge, icon tilts).
+ * size?: number (px, default 24)
+ * spark?: boolean (fixed "+" beside the icon, does NOT move with the lid)
+ * open?: boolean (force the lid open, e.g. right after a delete)
+ * Hover: put the class "bin-group" on any parent (the card, button or circle)
+ * and the lid lifts while that parent is hovered.
+ */
+export default function AnimatedBin({ size = 24, spark = false, open = false, className = '' }) {
+  return (
+    <span
+      className={`relative inline-flex shrink-0 ${open ? 'bin-open' : ''} ${className}`}
+      style={{ width: size, height: size }}
+    >
+      <svg
+        className="bin-svg overflow-visible"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <g className="bin-lid">
+          <path d="M3 6h18" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </g>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+        <path d="M10 11v6M14 11v6" />
+      </svg>
+
+      {spark && (
+        <svg
+          className="absolute"
+          style={{ left: size * 0.75, top: -size * 0.125, width: size / 4, height: size / 4 }}
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        >
+          <path d="M6.5 1.5v4M4.5 3.5h4" />
+          <circle cx="3" cy="5.5" r="0.7" fill="currentColor" stroke="none" />
+        </svg>
+      )}
+    </span>
   );
 }
