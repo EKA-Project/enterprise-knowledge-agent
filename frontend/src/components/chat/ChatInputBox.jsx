@@ -69,7 +69,7 @@ export default function ChatInputBox({
             </button>
           ) : (
             <div className="flex items-center gap-2.5">
-              <button type="button" onClick={onSend} className={`${MONO} flex cursor-pointer items-center gap-1.5 rounded-md border border-[var(--border-subtle)] px-2 py-1 text-[11px] text-[var(--text-muted)] transition hover:bg-[var(--bg-surface-subtle)]`}>
+              <button type="button" onClick={onSend} className={`${MONO} flex cursor-pointer items-center gap-1.5 rounded-md border border-[var(--border-subtle)] px-1.5 py-1 text-[11px] text-[var(--text-muted)] transition hover:bg-[var(--bg-surface-subtle)]`}>
                 <CornerDownLeft size={11} /> Send
               </button>
               <button

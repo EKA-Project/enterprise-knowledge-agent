@@ -1,4 +1,5 @@
-/// chat history///// import { useEffect, useMemo, useState } from 'react';
+/// chat history/////
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   deleteConversation,
@@ -44,7 +45,7 @@ function ThreadCard({ conversation, index, onResume, onArchive, onDelete }) {
       <button
         type="button"
         onClick={() => onResume(conversation.id)}
-        className="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--primary-hover)] active:scale-95"
+        className="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--primary-deep)] active:scale-95"
       >
         {archived ? 'Open Thread' : 'Resume Thread'} <ArrowRightIcon size={12} />
       </button>
@@ -166,7 +167,7 @@ export default function ChatHistoryPage() {
           <button
             type="button"
             onClick={() => navigate('/ask-eka')}
-            className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--primary-hover)] active:scale-95"
+            className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--primary-deep)] active:scale-95"
           >
             <PlusIcon size={13} /> Start New Thread
           </button>

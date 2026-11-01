@@ -12,8 +12,7 @@ export default function CitationChip({ citation }) {
       to={to}
       state={state}
       title={`Open ${citation.document_name}`}
-      className="group flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--badge-border)] bg-[var(--accent-chip)] px-3.5 py-2.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--primary-light)]"
-    >
+className="group flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--badge-border)] bg-[var(--accent-chip)] px-3.5 py-2.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--bg-surface)]"    >
       <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--sidebar-bg)] text-[var(--sidebar-text)]">
         <FileIcon size={14} />
       </span>
