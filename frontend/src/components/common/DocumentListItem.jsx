@@ -2,10 +2,11 @@ const KNOWN_TYPES = ["pdf", "doc", "docx", "csv", "md", "txt", "fig"];
 
 const ACTIONS = {
   pinned: {
-    // Follows the active theme through --primary. Hover styles are kept apart
-    // so a read-only badge (no click handler) does not react to the mouse.
+    // The tile and ring follow the active theme through --primary; the icon
+    // itself (text colour) is always red. Hover styles are kept apart so a
+    // read-only badge (no click handler) does not react to the mouse.
     className:
-      "bg-[color:color-mix(in_srgb,var(--primary)_12%,transparent)] text-(--primary) ring-[color:color-mix(in_srgb,var(--primary)_28%,transparent)]",
+      "bg-[color:color-mix(in_srgb,var(--primary)_12%,transparent)] text-(--action-pinned) ring-[color:color-mix(in_srgb,var(--primary)_28%,transparent)]",
     hoverClassName:
       "hover:bg-[color:color-mix(in_srgb,var(--primary)_20%,transparent)] hover:ring-[color:color-mix(in_srgb,var(--primary)_45%,transparent)]",
     icon: (

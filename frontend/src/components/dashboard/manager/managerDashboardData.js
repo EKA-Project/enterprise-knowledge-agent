@@ -14,8 +14,9 @@ export const department = {
   code: "ENG-DEV",
 };
 
-// Documents, team size, queries and RAG health are derived from the arrays
-// below in the UI. Only the growth figure is a standalone mock value.
+// Team size and queries are derived from the arrays below in the UI. Documents
+// and RAG health come from the document service (useDepartmentKpis). Only the
+// growth figure is a standalone mock value.
 export const departmentKpis = {
   queriesGrowth: 14.2, // % vs previous period
 };
@@ -41,120 +42,6 @@ export const teamMembers = [
   { id: "u-sofia", name: "Sofia Alvarez", email: "sofia.a@northstar.studio", title: "QA Engineer", role: "EMPLOYEE", status: "Active", queries: 45, searches: 42, docs: 19, weeklyQueries: [12, 24, 35, 42], lastActive: "Yesterday", joinedDate: "9 Aug 2024" },
 ];
 
-// ── Department documents ────────────────────
-// status: "indexed" | "indexing" | "failed"
-export const departmentDocuments = [
-  {
-    id: "d1",
-    title: "eka_departments_2026-10-12",
-    type: "csv",
-    category: "Engineering & DevOps",
-    uploader: "Maya Narang",
-    size: "1 KB",
-    chunks: 12,
-    status: "indexed",
-    meta: "1 min read • 1 page",
-  },
-  {
-    id: "d2",
-    title: "Final_chatArchitecture",
-    type: "txt",
-    category: "Engineering & DevOps",
-    uploader: "Maya Narang",
-    size: "10 KB",
-    chunks: 18,
-    status: "indexed",
-    meta: "4 min read • 7 pages",
-  },
-  {
-    id: "d3",
-    title: "Incident Response Runbook",
-    type: "pdf",
-    category: "Engineering & DevOps",
-    uploader: "Liam O'Connor",
-    size: "2.1 MB",
-    chunks: 64,
-    status: "indexed",
-    meta: "12 min read • 18 pages",
-  },
-  {
-    id: "d4",
-    title: "CI/CD Pipeline Playbook",
-    type: "md",
-    category: "Engineering & DevOps",
-    uploader: "Priya Sharma",
-    size: "48 KB",
-    chunks: 27,
-    status: "indexed",
-    meta: "6 min read • 9 pages",
-  },
-  {
-    id: "d5",
-    title: "Kubernetes Cluster Standards",
-    type: "pdf",
-    category: "Engineering & DevOps",
-    uploader: "Tariq Al-Hassan",
-    size: "3.4 MB",
-    chunks: 0,
-    status: "indexing",
-    meta: "Processing…",
-  },
-  {
-    id: "d6",
-    title: "On-call Rotation Handbook",
-    type: "docx",
-    category: "Engineering & DevOps",
-    uploader: "Elena Rostova",
-    size: "820 KB",
-    chunks: 31,
-    status: "indexed",
-    meta: "8 min read • 11 pages",
-  },
-  {
-    id: "d7",
-    title: "Service Level Objectives 2026",
-    type: "pdf",
-    category: "Engineering & DevOps",
-    uploader: "Noah Becker",
-    size: "1.2 MB",
-    chunks: 22,
-    status: "indexed",
-    meta: "5 min read • 7 pages",
-  },
-  {
-    id: "d8",
-    title: "Database Migration Checklist",
-    type: "md",
-    category: "Engineering & DevOps",
-    uploader: "Vikram Shah",
-    size: "16 KB",
-    chunks: 0,
-    status: "failed",
-    meta: "Indexing failed",
-  },
-  {
-    id: "d9",
-    title: "Security Review Template",
-    type: "docx",
-    category: "Engineering & DevOps",
-    uploader: "Sofia Alvarez",
-    size: "310 KB",
-    chunks: 14,
-    status: "indexed",
-    meta: "3 min read • 4 pages",
-  },
-  {
-    id: "d10",
-    title: "Observability Dashboard Guide",
-    type: "pdf",
-    category: "Engineering & DevOps",
-    uploader: "Marcus Chen",
-    size: "2.6 MB",
-    chunks: 41,
-    status: "indexed",
-    meta: "9 min read • 14 pages",
-  },
-];
 
 // ── Queries per member for the 7 and 14-day ranges ──
 // The 30-day figure is each member's `queries` value in teamMembers.

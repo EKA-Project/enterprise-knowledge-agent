@@ -146,7 +146,8 @@
   --status-failure-subtle: rgba(239, 68, 68, 0.03);
   --status-failure-row: rgba(239, 68, 68, 0.015);
 
-  /* "Saved" bookmark accent on document rows; the same amber in every theme */
+  /* Row action icons: the same colour in every theme (the tile behind them follows the theme) */
+  --action-pinned: #e11d48;
   --action-saved: #f59e0b;
 
   /* Document File Formats Palette (PDF, DOC/DOCX, CSV, MD, TXT, FIG) */
