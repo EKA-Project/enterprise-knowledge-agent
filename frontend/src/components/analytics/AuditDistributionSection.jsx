@@ -6,6 +6,7 @@ import { KNOWLEDGE_MASS, MONTHLY_CONFLICTS, QUALITY_STATS, TOTAL_CITATIONS } fro
 const mono = "font-(family-name:--font-mono)";
 const serif = "font-(family-name:--font-serif)";
 
+//audit distribution section with bar chart and donut chart for analytics page
 export default function AuditDistributionSection() {
   const [barIndex, setBarIndex] = useState(null);
   const [sectorId, setSectorId] = useState(null);
@@ -70,7 +71,7 @@ export default function AuditDistributionSection() {
               {sector ? `(${sector.label}: ${sectorCitations.toLocaleString()} Citations)` : "(Verified Document Sources)"}
             </span>
           </p>
-
+          
           <div className="mt-4 flex flex-wrap items-center gap-6">
             <DonutChart segments={KNOWLEDGE_MASS} activeId={sectorId} onHover={setSectorId} size={130}>
               <div>

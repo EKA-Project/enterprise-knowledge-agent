@@ -34,7 +34,7 @@ export default function KnowledgeGapSection() {
         <button
           type="button"
           onClick={() => setShowAll((v) => !v)}
-          className="rounded-full border border-(--border-subtle-nav) px-3.5 py-1.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary)"
+          className="rounded-full border border-(--border-subtle-nav) px-2 py-0.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary)"
         >
           {showAll ? "Show Fewer ‹" : "View All Gaps ›"}
         </button>

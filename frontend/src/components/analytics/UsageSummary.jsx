@@ -17,7 +17,7 @@ export default function UsageSummary({ onViewUsage }) {
         <button
           type="button"
           onClick={onViewUsage}
-          className="rounded-full bg-(--text-primary) px-4 py-2 text-[12px] font-bold text-white transition hover:bg-(--primary) active:scale-95"
+          className="rounded-full bg-(--text-primary) px-2 py-0.5 text-[12px] font-bold text-white transition hover:bg-(--primary) active:scale-95"
         >
           View Usage →
         </button>

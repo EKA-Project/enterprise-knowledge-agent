@@ -26,7 +26,7 @@ export default function ContradictionCard({ items, onResolve, onAutoResolve }) {
           type="button"
           onClick={onAutoResolve}
           disabled={allResolved}
-          className="rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-4 py-1.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95 disabled:opacity-50"
+          className="rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-2 py-0.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95 disabled:opacity-50"
         >
           {allResolved ? "All Resolved ✓" : "Auto-Resolve Discrepancies"}
         </button>

@@ -65,11 +65,11 @@ const submit = (e) => {
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="md" className="px-2!" onClick={close} />
+            <CancelButton size="md" className="px-1" onClick={close} />
             <Button
               variant="solid"
               size="md"
-              className="px-3!"
+              className="px-1"
               type="submit"
               form="department-form"
               disabled={!canSubmit}

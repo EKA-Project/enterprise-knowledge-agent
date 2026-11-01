@@ -124,7 +124,7 @@ export default function AnalyticsPage() {
                 type="button"
                 aria-pressed={range === o.id}
                 onClick={() => setRange(o.id)}
-                className={`rounded-full px-3 py-1 text-[11.5px] font-semibold transition ${
+                className={`rounded-full px-2 py-0.5 text-[11.5px] font-semibold transition ${
                   range === o.id ? "bg-(--text-primary) text-white" : "text-(--text-muted) hover:text-(--primary)"
                 }`}
               >
@@ -136,7 +136,7 @@ export default function AnalyticsPage() {
             type="button"
             onClick={runScan}
             disabled={scanning}
-            className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-3.5 py-1.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95"
+            className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-2 py-0.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95"
           >
             {scanning ? <RefreshCw size={12} className="animate-spin" aria-hidden="true" /> : 
             <Zap
@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
           <button
             type="button"
             onClick={exportReport}
-            className="rounded-full bg-(--text-primary) px-4 py-1.5 text-[12px] font-bold text-white transition hover:bg-(--primary) active:scale-95"
+            className="rounded-full bg-(--text-primary) px-2 py-0.5 text-[12px] font-bold text-white transition hover:bg-(--primary) active:scale-95"
           >
             Export Report ↗
           </button>
