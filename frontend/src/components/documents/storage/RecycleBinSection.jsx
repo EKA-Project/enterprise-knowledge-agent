@@ -20,40 +20,40 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
     return () => clearTimeout(t);
   }, [items.length]);
   // Two-tone flame (red outer, orange inner) for the Purge button
-function FlameIcon({ size = 13 }) {
-  return (
-    <span className="flame-rise">
-      <svg className="flame-svg" width={size} height={size} viewBox="0 0 24 24" fill="none">
-        <path
-          d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
-          fill="#e11d2e"
-        />
-        <path
-          d="M12 21a4 4 0 0 0 4-4c0-1.5-1-2.5-2-3.5-.4 1-1.2 1.5-2 1.5-.9 0-1.5-.6-1.5-1.5C9 14 8 15.5 8 17a4 4 0 0 0 4 4z"
-          fill="#f59e0b"
-        />
-      </svg>
-    </span>
-  );
-}
+  function FlameIcon({ size = 13 }) {
+    return (
+      <span className="flame-rise">
+        <svg className="flame-svg" width={size} height={size} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+            fill="#e11d2e"
+          />
+          <path
+            d="M12 21a4 4 0 0 0 4-4c0-1.5-1-2.5-2-3.5-.4 1-1.2 1.5-2 1.5-.9 0-1.5-.6-1.5-1.5C9 14 8 15.5 8 17a4 4 0 0 0 4 4z"
+            fill="#f59e0b"
+          />
+        </svg>
+      </span>
+    );
+  }
   return (
     <section className="overflow-hidden rounded-[24px] border border-[#f6d5d9] bg-(--bg-surface) shadow-(--shadow-sm)">
-      <div className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[18px] ${open ? 'border-b border-[#f3e4e6]' : ''}`}>
+      <div className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[12px] ${open ? 'border-b border-[#f3e4e6]' : ''}`}>
         <div className="flex items-center gap-[14px]">
-          <span className="bin-group relative flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-2xl border border-[#f6d5d9] bg-[#ffe9ee] text-[#e5484d]">
-            <AnimatedBin size={24} open={flap} />
+          <span className="bin-group relative flex h-[55px] w-[55px] shrink-0 items-center justify-center rounded-2xl border border-[#f6d5d9] bg-[#ffe9ee] text-[#e5484d]">
+            <AnimatedBin size={22} open={flap} />
             <span className="absolute right-1.5 top-1 h-1.5 w-1.5 rounded-full bg-[#e5484d]" />
           </span>
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className="doc-heading text-[24px] font-black leading-8 text-[#10283f]">
+              <h2 className="doc-heading text-[20px] font-black leading-8 text-[#10283f]">
                 Recycle Bin / Soft-Deleted Files ({items.length})
               </h2>
-              <span className="doc-mono inline-flex h-[22px] items-center rounded-full border border-[#f6c4c3] bg-[#fff0f0] px-3 text-[10px] font-bold uppercase tracking-[0.06em] text-[#d9373f]">
+              <span className="doc-mono inline-flex h-[20px] items-center rounded-full border border-[#f6c4c3] bg-[#fff0f0] px-2 text-[9px] font-bold uppercase tracking-[0.06em] text-[#d9373f]">
                 30-day retention
               </span>
             </div>
-            <p className="mt-0.5 text-[14px] text-[#7c949a]">
+            <p className="mt-0.5 text-[11px] text-[#7c949a]">
               Safe-containment holding zone. Documents staged here are purged automatically after 30 days unless restored.
             </p>
           </div>
@@ -61,7 +61,7 @@ function FlameIcon({ size = 13 }) {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="doc-mono inline-flex cursor-pointer items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.1em] text-[#1f718e] transition-colors hover:text-[#10283f]"
+          className="doc-mono inline-flex cursor-pointer items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#1f718e] transition-colors hover:text-[#10283f]"
         >
           View deleted files
           <ChevronDown size={15} className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
@@ -114,10 +114,10 @@ function FlameIcon({ size = 13 }) {
                       <td className="doc-mono px-3 text-[12px] text-[#7c949a]">{f.deleted}</td>
                       <td className="pl-3 pr-5">
                         <div className="flex justify-end gap-2">
-<button type="button" onClick={() => onRestore(f)} className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#cfe3f3] bg-white px-4 text-[13px] font-semibold text-[#10283f] transition-colors hover:border-[#8fd3b5] hover:bg-[#eefbf5] hover:text-[#0f8f63]">
-  <RotateCcw size={13} className="transition-transform duration-300 ease-out group-hover:-rotate-45 group-active:-rotate-360 group-active:duration-500" />
-  Restore
-</button>
+                          <button type="button" onClick={() => onRestore(f)} className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#cfe3f3] bg-white px-4 text-[13px] font-semibold text-[#10283f] transition-colors hover:border-[#8fd3b5] hover:bg-[#eefbf5] hover:text-[#0f8f63]">
+                            <RotateCcw size={13} className="transition-transform duration-300 ease-out group-hover:-rotate-45 group-active:-rotate-360 group-active:duration-500" />
+                            Restore
+                          </button>
                           <button type="button" onClick={() => onPurge(f)} className="flame-group inline-flex h-9 cursor-pointer items-center gap-2.5 rounded-full border border-[#f4b4b6] bg-[#fce7e9] pl-2 pr-5 text-[14px] font-semibold text-[#d92d2d] transition-colors hover:bg-[#fbd9dc]">
                             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f8d0d3]">
                               <FlameIcon size={18} />

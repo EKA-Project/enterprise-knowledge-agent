@@ -43,7 +43,7 @@ function Tooltip({ children }) {
   );
 }
 
-function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen, onArchive }) {
+function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen, onArchive, onEditMetadata, onReindex, onDelete}) {
   // "Pinned" / "Saved" tags appear when the user toggles a flag on this card
   // (not for documents that were already pinned / saved when the page loaded).
   const [showPinnedTag, setShowPinnedTag] = useState(false);
@@ -116,7 +116,7 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
 
             {/* Actions (hidden in the manager view, like the video) */}
             {showActions && (
-           <div className="flex shrink-0 items-center gap-1">
+              <div className="flex shrink-0 items-center gap-1">
                 {adminMode ? (
                   <div className="group relative">
                     <button
@@ -159,6 +159,7 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                 </button>
 
                 <DocumentCardMenu
+                  doc={document}
                   adminMode={adminMode}
                   isPinned={Boolean(document.isPinned)}
                   isBookmarked={Boolean(document.isBookmarked)}

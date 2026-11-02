@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Archive,
   Bookmark,
@@ -10,12 +11,16 @@ import {
   RefreshCw,
   Trash2,
 } from 'lucide-react';
+import EditMetadataModal from '../summary/EditMetadataModal.jsx';
+import { showDocToast } from './DocToast';
 
 // The "..." menu on a document card / list row.
 // Employee & Manager: Open, Compare / Redline, Bookmark.
 // Admin: also Pin, Edit Metadata, Re-index, Archive and Delete (as in the video).
-// Every action callback is optional, so unwired items simply close the menu.
+// Every action callback is optional. If `doc` is passed, Edit Metadata and Re-index work on their own
+// (modal + toast), same as on the Summary page.
 function DocumentCardMenu({
+  doc,
   adminMode = false,
   isBookmarked = false,
   isPinned = false,
@@ -29,7 +34,9 @@ function DocumentCardMenu({
   onDelete,
 }) {
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
   const wrapperRef = useRef(null);
+  const reindexTimer = useRef(null);
 
   // Close on outside click or Escape while open
   useEffect(() => {
@@ -47,6 +54,28 @@ function DocumentCardMenu({
       document.removeEventListener('keydown', handleKey);
     };
   }, [open]);
+
+  useEffect(() => () => clearTimeout(reindexTimer.current), []);
+
+  // Built-in actions used when the parent does not pass its own callback
+  const handleEdit = onEditMetadata ?? (doc ? () => setEditing(true) : undefined);
+  const handleReindex =
+    onReindex ??
+    (doc
+      ? () => {
+        showDocToast(`Re-indexing "${doc.title}"...`, 'neutral');
+        reindexTimer.current = setTimeout(
+          () => showDocToast(`✓ "${doc.title}" re-indexed. Vector chunks refreshed.`, 'success'),
+          1500,
+        );
+      }
+      : undefined);
+
+  const saveMetadata = async (values) => {
+    await new Promise((resolve) => setTimeout(resolve, 600)); // mock save
+    setEditing(false);
+    showDocToast(`✓ Metadata updated for "${values.title}". Vector chunks re-indexed.`, 'success');
+  };
 
   // Run an action, then close the menu
   const run = (action) => () => {
@@ -107,11 +136,11 @@ function DocumentCardMenu({
                 />
                 {isPinned ? 'Unpin Document' : 'Pin Document'}
               </button>
-              <button type="button" role="menuitem" className={itemClass} onClick={run(onEditMetadata)}>
+              <button type="button" role="menuitem" className={itemClass} onClick={run(handleEdit)}>
                 <Pencil size={13} className={iconClass} />
                 Edit Metadata
               </button>
-              <button type="button" role="menuitem" className={itemClass} onClick={run(onReindex)}>
+              <button type="button" role="menuitem" className={itemClass} onClick={run(handleReindex)}>
                 <RefreshCw size={13} className={iconClass} />
                 Re-index
               </button>
@@ -135,6 +164,14 @@ function DocumentCardMenu({
           )}
         </div>
       )}
+
+      {/* Rendered on document.body so card transforms/overflow can't clip it */}
+      {editing &&
+        doc &&
+        createPortal(
+          <EditMetadataModal doc={doc} onClose={() => setEditing(false)} onSave={saveMetadata} />,
+          document.body,
+        )}
     </div>
   );
 }
