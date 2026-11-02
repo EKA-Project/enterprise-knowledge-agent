@@ -1,6 +1,20 @@
 import ekaBrain from "../../assets/images/eka_brain_bg.png";
 import "../../styles/splash.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+/*
+  Phase configuration lives outside the component so its
+  reference never changes between renders.
+*/
+const PHASES = [
+  { text: "ESTABLISHING SECURE PIPELINE", progress: "15%", duration: 600 },
+  { text: "AUTHENTICATING WORKSPACE SSO", progress: "38%", duration: 700 },
+  { text: "CONNECTING KNOWLEDGE GRAPH & 42 DOCS", progress: "64%", duration: 750 },
+  { text: "OPTIMIZING SEMANTIC VECTOR STORE", progress: "86%", duration: 700 },
+  { text: "SYSTEM READY — OPENING WORKSPACE", progress: "100%", duration: 400 },
+];
+
+const EXIT_DELAY_MS = 350;
 
 /*
   SplashScreen displays the EKA branded loading sequence
@@ -9,31 +23,31 @@ import { useEffect, useState } from "react";
 function SplashScreen({ onComplete }) {
   const [phase, setPhase] = useState(0);
 
-  const phases = [
-    { text: "ESTABLISHING SECURE PIPELINE", progress: "15%", duration: 600 },
-    { text: "AUTHENTICATING WORKSPACE SSO", progress: "38%", duration: 700 },
-    { text: "CONNECTING KNOWLEDGE GRAPH & 42 DOCS", progress: "64%", duration: 750 },
-    { text: "OPTIMIZING SEMANTIC VECTOR STORE", progress: "86%", duration: 700 },
-    { text: "SYSTEM READY — OPENING WORKSPACE", progress: "100%", duration: 400 },
-  ];
+  // Keep the latest onComplete in a ref so a new function from the parent
+  // does not restart the phase timers.
+  const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
-    // When 100% is reached, hold briefly so user sees "System Ready", then open App immediately
-    if (phase >= phases.length - 1) {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    // On the final phase, hold briefly so "System Ready" is visible, then finish.
+    if (phase >= PHASES.length - 1) {
       const exitTimer = setTimeout(() => {
-        if (onComplete) onComplete();
-      }, 350);
+        onCompleteRef.current?.();
+      }, EXIT_DELAY_MS);
       return () => clearTimeout(exitTimer);
     }
 
     const timer = setTimeout(() => {
       setPhase((prev) => prev + 1);
-    }, phases[phase].duration);
+    }, PHASES[phase].duration);
 
     return () => clearTimeout(timer);
-  }, [phase, onComplete]);
+  }, [phase]);
 
-  const currentPhase = phases[phase];
+  const currentPhase = PHASES[phase];
 
   return (
     <div
