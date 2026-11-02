@@ -1,5 +1,5 @@
 import { Search, X, Sparkle, CornerDownLeft } from "lucide-react";
-import { SUGGESTED_CONCEPTS, SUGGESTED_KEYWORDS } from './semanticmock';
+import { SUGGESTED_CONCEPTS, SUGGESTED_KEYWORDS, HYBRID_PROMPTS } from './semanticmock';
 const MODE_EMOJIS = { semantic: "✨", keyword: "🎯", hybrid: "⚡" };
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)";
@@ -37,8 +37,8 @@ export default function SemanticSearchControls({
   };
 
   const isKeyword = mode === 'keyword';
-  const chips = isKeyword ? SUGGESTED_KEYWORDS : SUGGESTED_CONCEPTS;
-  const label = isKeyword ? 'Exact keyword codes:' : 'Try asking about:';
+  const chips = isKeyword ? SUGGESTED_KEYWORDS : suggestions;
+const label = isKeyword ? 'Exact keyword codes:' : suggestionLabel;
 
   return (
     <div className="ssp-rise rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">      {/* ---------- Search bar ---------- */}
@@ -139,9 +139,10 @@ export default function SemanticSearchControls({
       key={chip}
       type="button"
       onClick={() => onPickSuggestion(chip)}
-      className="flex cursor-pointer items-center gap-1.5 rounded-full border border-[var(--badge-border)] bg-[var(--accent-chip)] px-2 py-1.5 text-[12px] font-bold text-[var(--text-primary)] transition-all duration-150 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--bg-surface)]"
+ className={`flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap rounded-full border border-(--badge-border) bg-(--accent-chip) px-1.5 py-1.5 text-[10.5px] font-bold text-(--text-primary) transition-all duration-150 hover:-translate-y-0.5 hover:border-(--primary) hover:bg-(--bg-surface) ${focusRing}`}
+
     >
-      <span aria-hidden="true">{isKeyword ? '🎯' : '✨'}</span>
+<span aria-hidden="true" className="text-[10px] leading-none">{MODE_EMOJIS[mode]}</span>
       {chip}
     </button>
   ))}
