@@ -9,8 +9,8 @@ import { useEffect, useRef, useState } from "react";
 const PHASES = [
   { text: "ESTABLISHING SECURE PIPELINE", progress: "15%", duration: 600 },
   { text: "AUTHENTICATING WORKSPACE SSO", progress: "38%", duration: 700 },
-  { text: "CONNECTING KNOWLEDGE GRAPH & 42 DOCS", progress: "64%", duration: 750 },
-  { text: "OPTIMIZING SEMANTIC VECTOR STORE", progress: "86%", duration: 700 },
+  { text: "CONNECTING YOUR KNOWLEDGE BASE", progress: "64%", duration: 750 },
+  { text: "PREPARING SEARCH", progress: "86%", duration: 700 },
   { text: "SYSTEM READY — OPENING WORKSPACE", progress: "100%", duration: 400 },
 ];
 
@@ -69,16 +69,16 @@ function SplashScreen({ onComplete }) {
 
       {/* ── Editorial Telemetry Corner Marks ── */}
       <div className="pointer-events-none absolute left-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
-        + NODE // EKA.SECURE_V3
+        + WORKSPACE // EKA
       </div>
       <div className="pointer-events-none absolute right-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
-        + LATENCY // 12ms [OK]
+        + STATUS // READY
       </div>
       <div className="pointer-events-none absolute bottom-7 left-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
-        + STORAGE // HYBRID VECTOR
+        + SOURCE // YOUR DOCUMENTS
       </div>
       <div className="pointer-events-none absolute bottom-7 right-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
-        + ARCHITECTURE // ZERO-RETENTION
+        + ANSWERS // CITED
       </div>
 
       {/* ── Minimal Stardust Nodes ── */}
@@ -181,7 +181,7 @@ function SplashScreen({ onComplete }) {
           className="pointer-events-none z-[8] h-auto w-[220px] object-contain drop-shadow-[0_16px_36px_rgba(0,168,132,0.1)]"
         />
 
-        {/* ── CARD 1: 42 Documents (Top-Left) ── */}
+        {/* ── CARD 1: Your Documents (Top-Left) ── */}
         <div
           className="animate-card-float-1 absolute left-[10px] top-[44px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
           style={{
@@ -208,11 +208,11 @@ function SplashScreen({ onComplete }) {
           </div>
           <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
             <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
-              42 Documents
+              Your Documents
             </div>
             <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
               <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#10b981] shadow-[0_0_6px_#10b981] animate-pulse" />
-              <span>all knowledge connected</span>
+              <span>Ready to search</span>
             </div>
           </div>
         </div>
@@ -245,12 +245,12 @@ function SplashScreen({ onComplete }) {
             </div>
             <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
               <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_#8b5cf6] animate-pulse" />
-              <span>vector store indexed</span>
+              <span>Finds the right passage</span>
             </div>
           </div>
         </div>
 
-        {/* ── CARD 4: Enterprise SSO (Bottom-Left) ── */}
+        {/* ── CARD 4: Secure Sign-in (Bottom-Left) ── */}
         <div
           className="animate-card-float-4 absolute bottom-[44px] left-[10px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
           style={{
@@ -274,11 +274,11 @@ function SplashScreen({ onComplete }) {
           </div>
           <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
             <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
-              Enterprise SSO
+              Secure Sign-in
             </div>
             <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
               <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#f59e0b] shadow-[0_0_6px_#f59e0b] animate-pulse" />
-              <span>zero-retention active</span>
+              <span>Organization access only</span>
             </div>
           </div>
         </div>
@@ -348,11 +348,6 @@ function SplashScreen({ onComplete }) {
           <span className="text-[8.5px] font-bold tracking-[0.05em] text-emerald-600">
             {currentPhase.progress}
           </span>
-        </div>
-
-        {/* Footer Badge */}
-        <div className="mt-2 text-[7.5px] font-semibold uppercase tracking-wider text-slate-400">
-          <span>SOC-2 TYPE II COMPLIANT</span> • <span>ZERO-RETENTION ARCHITECTURE</span>
         </div>
       </div>
     </div>
