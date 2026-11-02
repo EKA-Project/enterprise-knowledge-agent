@@ -42,8 +42,8 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="md" icon={null} onClick={close} />
-            <Button variant="solid" size="md" type="submit" form="invite-form">Send Invitation</Button>
+            <CancelButton size="sm" icon={null} onClick={close} />
+            <Button variant="solid" size="sm" type="submit" form="invite-form">Send Invitation</Button>
           </div>
         );
       }}

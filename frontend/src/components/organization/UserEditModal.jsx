@@ -47,8 +47,8 @@ export default function UserEditModal({ user, departmentNames, onClose, onSubmit
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="md" icon={null} onClick={close} />
-            <Button variant="solid" size="md" type="submit" form="edit-user-form">Save Changes</Button>
+            <CancelButton size="sm" icon={null} onClick={close} />
+            <Button variant="solid" size="sm" type="submit" form="edit-user-form">Save Changes</Button>
           </div>
         );
       }}
