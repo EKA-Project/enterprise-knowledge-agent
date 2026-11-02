@@ -10,10 +10,10 @@ export default function SearchResultCard({ result, index, terms, delay = 0, onPr
 className="ssp-rise flex w-full flex-col rounded-2xl border border-[#e0edf5] bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#c8e2f3] hover:shadow-md"    >
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-(--bg-app) font-(family-name:--font-mono) text-[11px] text-(--text-muted)">
-            {number}
+          <span className="grid h-6 w-10 shrink-0 place-items-center rounded-lg border border-(--border-medium) bg-(--bg-surface-subtle) font-(family-name:--font-mono) text-[10px] font-semibold text-(--text-muted)">
+            {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="mt-1 rounded-md border border-(--border-medium) bg-(--bg-app) px-2 py-0.5 font-(family-name:--font-mono) text-[10px] font-bold uppercase tracking-wider text-(--text-primary)">
+          <span className="grid h-6 w-10 shrink-0 place-items-center rounded-lg border border-(--status-verified-border) bg-(--status-verified-bg) font-(family-name:--font-mono) text-[10px] font-semibold tracking-wider text-(--status-verified)">
             {result.fileType}
           </span>
           <div>
