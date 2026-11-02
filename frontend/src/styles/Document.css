@@ -128,3 +128,9 @@
   50% { transform: rotate(5deg) scale(0.96, 1.05); }
   75% { transform: rotate(-4deg) scale(1.05, 1.12); }
 }
+
+/* Waiting dot: fades out and back in every 1.6s */
+@keyframes dot-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}

@@ -114,9 +114,10 @@ function FlameIcon({ size = 13 }) {
                       <td className="doc-mono px-3 text-[12px] text-[#7c949a]">{f.deleted}</td>
                       <td className="pl-3 pr-5">
                         <div className="flex justify-end gap-2">
-                          <button type="button" onClick={() => onRestore(f)} className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#cfe3f3] bg-white px-4 text-[13px] font-semibold text-[#10283f] transition-colors hover:border-[#8fd3b5] hover:bg-[#eefbf5] hover:text-[#0f8f63]">
-                            <RotateCcw size={13} /> Restore
-                          </button>
+<button type="button" onClick={() => onRestore(f)} className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-[#cfe3f3] bg-white px-4 text-[13px] font-semibold text-[#10283f] transition-colors hover:border-[#8fd3b5] hover:bg-[#eefbf5] hover:text-[#0f8f63]">
+  <RotateCcw size={13} className="transition-transform duration-300 ease-out group-hover:-rotate-45 group-active:-rotate-360 group-active:duration-500" />
+  Restore
+</button>
                           <button type="button" onClick={() => onPurge(f)} className="flame-group inline-flex h-9 cursor-pointer items-center gap-2.5 rounded-full border border-[#f4b4b6] bg-[#fce7e9] pl-2 pr-5 text-[14px] font-semibold text-[#d92d2d] transition-colors hover:bg-[#fbd9dc]">
                             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f8d0d3]">
                               <FlameIcon size={18} />

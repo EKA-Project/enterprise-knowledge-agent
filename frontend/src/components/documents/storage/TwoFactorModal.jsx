@@ -48,7 +48,7 @@ function TwoFactorModal({ file, onClose, onVerified }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#10192b]/45 p-4 backdrop-blur-sm" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[calc(100dvh-2rem)] w-full max-w-[610px] overflow-y-auto rounded-[30px] border-t-[3px] border-t-[#e5484d] bg-white px-[30px] pb-[30px] pt-[32px] shadow-2xl"
+                className="[zoom:0.8] w-full max-w-[610px] rounded-[30px] border-t-[3px] border-t-[#e5484d] bg-white px-[30px] pb-[30px] pt-[32px] shadow-2xl"
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
@@ -105,7 +105,7 @@ function TwoFactorModal({ file, onClose, onVerified }) {
               status === 'ok' ? 'text-[#0f8f63]' : status === 'wrong' ? 'text-[#d9373f]' : 'text-[#7c9bb5]'
             }`}
           >
-            <span className={`h-2 w-2 rounded-full ${status === 'waiting' ? 'bg-[#3b82f6]' : 'bg-current'}`} />
+           <span className={`h-2 w-2 rounded-full ${status === 'waiting' ? 'animate-[dot-blink_1.6s_ease-in-out_infinite] bg-[#17b97f]' : 'bg-current'}`} />
             {status === 'ok'
               ? '2FA Approved via EKA Authenticator'
               : status === 'wrong'
