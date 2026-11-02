@@ -37,6 +37,16 @@ function loadRecent() {
   return createSeedRecentSearches();
 }
 
+function getScrollParent(node) {
+  let el = node?.parentElement;
+  while (el) {
+    const { overflowY } = getComputedStyle(el);
+    if (/(auto|scroll|overlay)/.test(overflowY)) return el;
+    el = el.parentElement;
+  }
+  return window;
+}
+
 export default function SemanticSearchPage() {
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -52,6 +62,15 @@ export default function SemanticSearchPage() {
   const [expandedKey, setExpandedKey] = useState("");
   const toastTimer = useRef(null);
   const regenTimer = useRef(null);
+  const pageTopRef = useRef(null);
+  const [scrollTick, setScrollTick] = useState(0);
+
+useEffect(() => {
+  if (scrollTick === 0) return;
+  const parent = getScrollParent(pageTopRef.current);
+  console.log("scrolling parent:", parent);
+  parent.scrollTo({ top: 0, behavior: "smooth" });
+}, [scrollTick]);
 
   useEffect(() => {
     try {
@@ -112,6 +131,11 @@ export default function SemanticSearchPage() {
       showToast("Copy is not available in this browser");
     }
   };
+  const handleTryTip = (example) => {
+    console.log("tip clicked:", example);
+    runSearch(example);
+    setScrollTick((t) => t + 1);
+  };
 
   const handleFeedback = (kind) =>
     showToast(kind === "up" ? "Marked as helpful. Thank you for your feedback!" : "Marked as not helpful. Thanks for letting us know.");
@@ -135,8 +159,8 @@ export default function SemanticSearchPage() {
   const closeCitation = useCallback(() => setCitationResult(null), []);
 
   return (
-    <div className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
-      <header className="ssp-rise">
+<div ref={pageTopRef} className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
+        <header className="ssp-rise">
         <div className="flex items-center gap-2.5">
           <p className="font-(family-name:--font-mono) text-[10.5px] font-medium uppercase tracking-[0.18em] text-(--text-eyebrow)">
             Knowledge discovery
@@ -259,10 +283,10 @@ export default function SemanticSearchPage() {
             onClear={() => setRecent([])}
           />
           <BetterSearchesPanel
-            tips={BETTER_SEARCH_TIPS}
-            onTry={runSearch}
-            onCopy={(text) => copyText(text, "Example copied to clipboard")}
-          />
+  tips={BETTER_SEARCH_TIPS}
+  onTry={handleTryTip}
+  onCopy={(text) => copyText(text, "Example copied to clipboard")}
+/>
         </aside>
       </div>
 

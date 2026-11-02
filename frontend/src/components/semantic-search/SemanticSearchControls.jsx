@@ -1,4 +1,5 @@
 import { Search, X, Sparkle, CornerDownLeft } from "lucide-react";
+import { SUGGESTED_CONCEPTS, SUGGESTED_KEYWORDS } from './semanticmock';
 const MODE_EMOJIS = { semantic: "✨", keyword: "🎯", hybrid: "⚡" };
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)";
@@ -34,6 +35,10 @@ export default function SemanticSearchControls({
     e.preventDefault();
     onSubmit();
   };
+
+  const isKeyword = mode === 'keyword';
+  const chips = isKeyword ? SUGGESTED_KEYWORDS : SUGGESTED_CONCEPTS;
+  const label = isKeyword ? 'Exact keyword codes:' : 'Try asking about:';
 
   return (
     <div className="ssp-rise rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">      {/* ---------- Search bar ---------- */}
@@ -111,7 +116,7 @@ export default function SemanticSearchControls({
                 type="button"
                 aria-pressed={source === s.id}
                 onClick={() => onSourceChange(s.id)}
-                className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11.5px] font-bold transition-all duration-200 ${focusRing} ${
+                className={`inline-flex items-center rounded-full border px-1.5 py-0.5 text-[10px] font-bold transition-all duration-200 ${focusRing} ${
                     source === s.id
                     ? "border-(--primary) bg-(--primary) text-white shadow-sm"
                     : "border-(--border-medium) bg-(--primary-light) text-(--text-muted) hover:border-(--primary) hover:text-(--primary)"
@@ -125,22 +130,22 @@ export default function SemanticSearchControls({
       </div>
 
       {/* ---------- Suggestions ---------- */}
-        <div className="mt-3 flex flex-nowrap items-center gap-1.5 overflow-x-auto whitespace-nowrap border-t border-dashed border-(--border-medium) pt-3">
-          <span className="font-(family-name:--font-mono) text-[10px] font-semibold uppercase tracking-[0.14em] text-(--text-muted)">
-          {suggestionLabel}:
-        </span>
-        {suggestions.map((s) => (
-          <button
-            key={s}
-            type="button"
-            onClick={() => onPickSuggestion(s)}
-            className={`inline-flex items-center gap-1.5 rounded-full border border-(--border-medium) bg-(--primary-light) px-2 py-1.5 text-[11.5px] font-semibold text-(--accent-chip-text) transition-all duration-200 hover:-translate-y-0.5 hover:border-(--primary) hover:bg-(--bg-surface-subtle) ${focusRing}`}
-          >
-            <span aria-hidden="true" className="text-[11px] leading-none">{MODE_EMOJIS[mode] || "✨"}</span>
-            {s}
-          </button>
-        ))}
-      </div>
+        <div className="flex flex-wrap items-center gap-2.5 border-t border-dashed border-[var(--border-subtle)] pt-3.5">
+  <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.12em] text-[var(--text-muted)]">
+    {label}
+  </span>
+  {chips.map((chip) => (
+    <button
+      key={chip}
+      type="button"
+      onClick={() => onPickSuggestion(chip)}
+      className="flex cursor-pointer items-center gap-1.5 rounded-full border border-[var(--badge-border)] bg-[var(--accent-chip)] px-2 py-1.5 text-[12px] font-bold text-[var(--text-primary)] transition-all duration-150 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--bg-surface)]"
+    >
+      <span aria-hidden="true">{isKeyword ? '🎯' : '✨'}</span>
+      {chip}
+    </button>
+  ))}
+</div>
     </div>
   );
 }

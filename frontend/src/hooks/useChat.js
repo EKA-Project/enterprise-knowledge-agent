@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import * as chatApi from '../components/chat/chatApi';
 import { contentToLines, countChars } from '../components/chat/ChatUtils';
 
-const TICK_MS = 38;
+const TICK_MS = 30;// how often the typing effect updates
 const CHARS_MIN = 1;
 const CHARS_MAX = 3;
 

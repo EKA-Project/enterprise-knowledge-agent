@@ -20,6 +20,15 @@ export const SUGGESTED_CONCEPTS = [
   "health benefits",
 ];
 
+export const SUGGESTED_KEYWORDS = [
+  "SOC-2026-v4",
+  "ERR_503_DNS_FAIL",
+  "Section 4.2B",
+  "Kubernetes TTL",
+  "Okta 2FA",
+  "AES-256 CMK",
+];
+
 export const HYBRID_PROMPTS = [
   "2026 WFH Stipend $1500",
   "SOC 2 Key Rotation",

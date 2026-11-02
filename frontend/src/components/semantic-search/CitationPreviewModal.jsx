@@ -39,7 +39,7 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
       footer={(close) => (
         <div className="flex flex-wrap items-center justify-end gap-2">
           <Button
-            size="md"
+            size="sm"
             onClick={() => {
               onFollowUp();
               close();
@@ -48,7 +48,7 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
             Ask AI Follow-up →
           </Button>
           <Button
-            size="md"
+            size="sm"
             variant="solid"
             onClick={() => {
               onOpenReader();
@@ -61,6 +61,7 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
       )}
     >
       <div className="space-y-4">
+         <span data-citation-modal hidden />
         {/* Reference details */}
         <dl className="grid grid-cols-2 gap-4 rounded-xl border border-(--border-medium) bg-(--bg-surface-subtle) p-4">
           <InfoField icon="📍" label="Citation reference">

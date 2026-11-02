@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Zap } from "lucide-react";
+import { ChartColumn , X } from "lucide-react";
 
 function Row({ label, value }) {
   return (
@@ -31,21 +32,29 @@ export default function SearchIntelligencePanel({ query, stats, onInspect }) {
             </p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            setInspecting((v) => !v);
-            onInspect?.();
-          }}
-          aria-expanded={inspecting}
-          className={`rounded-full border px-3 py-1 text-[11.5px] font-semibold transition-all duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) ${
-            inspecting
-              ? "border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-muted)"
-              : "border-(--border-medium) bg-white text-(--text-primary) hover:-translate-y-0.5 hover:border-(--primary) hover:bg-(--primary-light) hover:text-(--primary) hover:shadow-sm"
-          }`}
-        >
-          {inspecting ? "Close" : "Inspect"}
-        </button>
+       <button
+  type="button"
+  onClick={() => {
+    setInspecting((v) => !v);
+    onInspect?.();
+  }}
+  aria-expanded={inspecting}
+  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold transition-all duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) ${
+    inspecting
+      ? "border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-muted)"
+      : "border-(--border-medium) bg-(--bg-surface) text-(--text-primary) hover:-translate-y-0.5 hover:border-(--primary) hover:bg-(--primary-light) hover:text-(--primary) hover:shadow-sm"
+  }`}
+>
+  {inspecting ? (
+    <>
+      <X size={13} aria-hidden="true" /> Close
+    </>
+  ) : (
+    <>
+      <ChartColumn size={13} aria-hidden="true" /> Inspect
+    </>
+  )}
+</button>
       </div>
 
       <p className="mt-3 text-[12px] leading-relaxed text-(--text-secondary)">

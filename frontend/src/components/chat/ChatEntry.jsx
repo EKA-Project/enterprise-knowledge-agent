@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import CitationList from './CitationList';
-import FeedbackButtons from './FeedbackButtons';
-import { AlertIcon, CheckIcon, CopyIcon, EditIcon, RefreshIcon, ShareIcon, SparkleIcon } from './ChatIcons';
+import ActionRating from '../common/ActionRating';
+import { AlertIcon, EditIcon, RefreshIcon } from './ChatIcons';
 import { MONO, SERIF, contentToLines, contentToPlainText, revealLines } from './ChatUtils';
-
 // ---------------- user message: the question (or its inline editor) ----------------
 function UserEntry({ message, editing, onSaveEdit, onCancelEdit }) {
   const [draft, setDraft] = useState(message.content);
@@ -61,12 +60,8 @@ function UserEntry({ message, editing, onSaveEdit, onCancelEdit }) {
 
 // ---------------- assistant message: action row ----------------
 function ActionBar({ message, question, isRetrying, onRetry, onRate, onCopied, onShare }) {
-  const [copied, setCopied] = useState(false);
-
   async function handleCopy() {
     try { await navigator.clipboard.writeText(contentToPlainText(message.content)); } catch { /* ignore */ }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
     onCopied?.();
   }
   async function handleShare() {
@@ -74,25 +69,17 @@ function ActionBar({ message, question, isRetrying, onRetry, onRate, onCopied, o
     onShare?.();
   }
 
-const btn =
-  'group grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-transparent text-[var(--text-muted)] transition-all duration-200 ease-out hover:-translate-y-1 hover:scale-110 hover:border-[var(--badge-border)] hover:bg-[var(--primary-light)] hover:text-[var(--primary)] active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40';
-
   return (
-    <div className="mt-3 flex items-center gap-1">
-      <button type="button" onClick={handleCopy} title={copied ? 'Copied' : 'Copy'} className={`${btn} ${copied ? 'border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)]' : ''}`}>
-        {copied ? <CheckIcon size={15} /> : <CopyIcon size={15} />}
-      </button>
-
-      <FeedbackButtons feedback={message.feedback} disabled={isRetrying} onRate={(rating) => onRate(message.id, rating)} />
-
-      <button type="button" onClick={handleShare} title="Share" className={btn}>
-        <ShareIcon size={15} />
-      </button>
-
-      <button type="button" disabled={isRetrying} onClick={() => onRetry(message.turn_id)} title="Regenerate" className={btn}>
-        <RefreshIcon size={15} className="transition-transform duration-500 ease-out group-hover:rotate-180" />
-      </button>
-    </div>
+    <ActionRating
+      className="mt-3"
+      onCopy={handleCopy}
+      rating={message.feedback?.rating ?? null}
+      ratingDisabled={isRetrying}
+      onFeedback={(kind) => onRate(message.id, kind)}
+      onShare={handleShare}
+      onRegenerate={() => onRetry(message.turn_id)}
+      regenerating={isRetrying}
+    />
   );
 }
 
