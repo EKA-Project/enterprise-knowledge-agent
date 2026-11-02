@@ -3,249 +3,342 @@ import "../../styles/splash.css";
 import { useEffect, useState } from "react";
 
 /*
-  SplashScreen is responsible only for displaying
-  the initial EKA loading experience.
-
-  The logic that decides WHEN this screen should appear
-  will be handled by App.jsx.
+  SplashScreen displays the EKA branded loading sequence
+  and notifies App via onComplete() when finished.
 */
-
 function SplashScreen({ onComplete }) {
-  // ============================================================
-  // INITIALIZATION STATE
-  // ============================================================
-
-  /*
-    Tracks the current initialization phase.
-
-    0 → Establishing secure pipeline
-    1 → Verifying organization SSO
-    2 → Optimizing knowledge layer
-    3 → System ready
-  */
   const [phase, setPhase] = useState(0);
 
-  /*
-    Advances the splash screen through each
-    initialization phase every 1.5 seconds.
-  */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setPhase((currentPhase) => {
-        // Keep the final phase active once reached.
-        if (currentPhase === 3) {
-          return 3;
-        }
-
-        return currentPhase + 1;
-      });
-    }, 1500);
-
-    // Clean up the timer when the splash unmounts.
-    return () => clearInterval(timer);
-  }, []);
-
-  /*
-  Once the final initialization phase is reached,
-  notify App that the splash screen has completed.
-
-  This runs after React has finished updating the phase,
-  so we avoid updating App while SplashScreen is rendering.
-*/
-  useEffect(() => {
-    if (phase === 3) {
-      onComplete();
-    }
-  }, [phase, onComplete]);
-
-  // ============================================================
-  // INITIALIZATION PHASE CONFIGURATION
-  // ============================================================
-
-  /*
-    Each phase contains the status text and
-    corresponding progress-bar position.
-  */
   const phases = [
-    {
-      text: "Establishing secure pipeline",
-      progress: "0%",
-    },
-    {
-      text: "Verifying organization SSO",
-      progress: "33%",
-    },
-    {
-      text: "Optimizing knowledge layer",
-      progress: "66%",
-    },
-    {
-      text: "System ready",
-      progress: "100%",
-    },
+    { text: "ESTABLISHING SECURE PIPELINE", progress: "15%", duration: 600 },
+    { text: "AUTHENTICATING WORKSPACE SSO", progress: "38%", duration: 700 },
+    { text: "CONNECTING KNOWLEDGE GRAPH & 42 DOCS", progress: "64%", duration: 750 },
+    { text: "OPTIMIZING SEMANTIC VECTOR STORE", progress: "86%", duration: 700 },
+    { text: "SYSTEM READY — OPENING WORKSPACE", progress: "100%", duration: 400 },
   ];
 
+  useEffect(() => {
+    // When 100% is reached, hold briefly so user sees "System Ready", then open App immediately
+    if (phase >= phases.length - 1) {
+      const exitTimer = setTimeout(() => {
+        if (onComplete) onComplete();
+      }, 350);
+      return () => clearTimeout(exitTimer);
+    }
+
+    const timer = setTimeout(() => {
+      setPhase((prev) => prev + 1);
+    }, phases[phase].duration);
+
+    return () => clearTimeout(timer);
+  }, [phase, onComplete]);
+
+  const currentPhase = phases[phase];
+
   return (
-    // ============================================================
-    // SPLASH SCREEN CONTAINER
-    // ============================================================
+    <div
+      className="fixed inset-0 z-[99999] flex h-screen w-screen select-none flex-col items-center justify-center overflow-hidden font-sans"
+      style={{
+        backgroundColor: "#eff8f8",
+        backgroundImage: `
+          radial-gradient(circle at 50% 50%, #ffffff 0%, rgba(255, 255, 255, 0.94) 22%, rgba(245, 251, 251, 0.6) 48%, rgba(239, 248, 248, 0.95) 100%),
+          radial-gradient(rgba(100, 116, 139, 0.08) 1.2px, transparent 1.2px)
+        `,
+        backgroundSize: "100% 100%, 36px 36px",
+      }}
+    >
+      {/* ── Ambient Background Circles ── */}
+      <div className="pointer-events-none absolute -bottom-[150px] -left-[140px] z-[1] h-[340px] w-[340px] rounded-full bg-[#eae8fa] opacity-85" />
+      <div className="pointer-events-none absolute right-[-150px] top-[36%] z-[1] h-[480px] w-[480px] -translate-y-1/2 rounded-full bg-[#daf5f2] opacity-85" />
+      <div className="pointer-events-none absolute -left-[100px] -top-[120px] z-[1] h-[360px] w-[360px] rounded-full bg-[#e0f2fe] opacity-65" />
+      <div className="pointer-events-none absolute -bottom-[130px] -right-[110px] z-[1] h-[340px] w-[340px] rounded-full bg-[#fef3c7] opacity-55" />
 
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(circle_at_50%_45%,rgba(16,185,129,0.08),transparent_45%),linear-gradient(135deg,#eef8f7_0%,#f8fafc_38%,#f1f7f8_70%,#eaf7f5_100%)]">
-      {/* Decorative background glows */}
-      <div className="page-glow page-glow--mint" />
-      <div className="page-glow page-glow--lavender" />
-      {/* ========================================================
-          INTELLIGENCE VISUAL
-          Contains the orbit system, information cards,
-          intelligence points, and EKA core.
-      ======================================================== */}
+      {/* ── Editorial Telemetry Corner Marks ── */}
+      <div className="pointer-events-none absolute left-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+        + NODE // EKA.SECURE_V3
+      </div>
+      <div className="pointer-events-none absolute right-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+        + LATENCY // 12ms [OK]
+      </div>
+      <div className="pointer-events-none absolute bottom-7 left-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+        + STORAGE // HYBRID VECTOR
+      </div>
+      <div className="pointer-events-none absolute bottom-7 right-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+        + ARCHITECTURE // ZERO-RETENTION
+      </div>
 
-      <div className="relative flex items-center justify-center">
-        {/* --------------------------------------------------------
-            ORBIT RINGS
-            Three independent orbital paths create the
-            layered intelligence visualization.
-        -------------------------------------------------------- */}
+      {/* ── Minimal Stardust Nodes ── */}
+      <div className="stardust-node pointer-events-none absolute left-[24%] top-[18%] z-[2] h-[3.5px] w-[3.5px] rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]" />
+      <div className="stardust-node pointer-events-none absolute right-[22%] top-[24%] z-[2] h-[4px] w-[4px] rounded-full bg-[#10b981] shadow-[0_0_10px_#10b981]" style={{ animationDelay: "1.5s" }} />
+      <div className="stardust-node pointer-events-none absolute bottom-[22%] left-[26%] z-[2] h-[3px] w-[3px] rounded-full bg-[#8b5cf6] shadow-[0_0_8px_#8b5cf6]" style={{ animationDelay: "2.8s" }} />
+      <div className="stardust-node pointer-events-none absolute bottom-[24%] right-[24%] z-[2] h-[3.5px] w-[3.5px] rounded-full bg-[#06b6d4] shadow-[0_0_8px_#06b6d4]" style={{ animationDelay: "0.8s" }} />
+      <div className="stardust-node pointer-events-none absolute left-[14%] top-[48%] z-[2] h-[3px] w-[3px] rounded-full bg-[#f59e0b] shadow-[0_0_8px_#f59e0b]" style={{ animationDelay: "2.1s" }} />
+      <div className="stardust-node pointer-events-none absolute right-[14%] top-[52%] z-[2] h-[3px] w-[3px] rounded-full bg-[#ec4899] shadow-[0_0_8px_#ec4899]" style={{ animationDelay: "3.4s" }} />
 
-        {/* Primary orbit */}
-        <div className="absolute w-115 h-115 rounded-full border border-emerald-400/60 transform-[rotateX(68deg)_rotateY(-18deg)]"></div>
+      {/* ── Central Stage (Guaranteed Dead Center via Flexbox) ── */}
+      <div className="animate-stage-float relative z-10 -mt-6 flex h-[400px] w-[660px] items-center justify-center">
+        {/* Breathing Luminous Aura */}
+        <div className="animate-aura-breath pointer-events-none absolute left-1/2 top-1/2 z-[3] h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.18)_0%,rgba(16,185,129,0.14)_35%,rgba(139,92,246,0.08)_65%,transparent_80%)] blur-[24px]" />
 
-        {/* Secondary orbit */}
-        <div className="absolute w-92.5 h-92.5 rounded-full border border-sky-400/45 transform-[rotateX(58deg)_rotateY(22deg)]"></div>
+        {/* Orbit Rings with Motion Beads */}
+        <svg
+          className="pointer-events-none absolute inset-0 z-[5] h-full w-full overflow-visible"
+          viewBox="0 0 660 400"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Orbit 1: Cyan Ellipse (+7deg) */}
+          <g transform="rotate(7 330 200)">
+            <path d="M 100,200 a 230,66 0 1,0 460,0 a 230,66 0 1,0 -460,0" stroke="#38bdf8" strokeWidth="1.2" strokeOpacity="0.45" fill="none" />
+            <path id="orbit-cyan-cw" d="M 100,200 a 230,66 0 1,1 460,0 a 230,66 0 1,1 -460,0" fill="none" stroke="none" />
+            <path id="orbit-cyan-ccw" d="M 100,200 a 230,66 0 1,0 460,0 a 230,66 0 1,0 -460,0" fill="none" stroke="none" />
+            <g>
+              <animateMotion dur="8.4s" repeatCount="indefinite">
+                <mpath href="#orbit-cyan-cw" />
+              </animateMotion>
+              <circle r="9" fill="#06b6d4" opacity="0.18" />
+              <circle r="5" fill="#06b6d4" stroke="#ffffff" strokeWidth="1.5" />
+              <circle cx="-1.5" cy="-1.5" r="1.3" fill="#ffffff" opacity="0.9" />
+            </g>
+            <g>
+              <animateMotion dur="10.2s" begin="-5.1s" repeatCount="indefinite">
+                <mpath href="#orbit-cyan-ccw" />
+              </animateMotion>
+              <circle r="8" fill="#38bdf8" opacity="0.18" />
+              <circle r="4.2" fill="#0284c7" stroke="#ffffff" strokeWidth="1.4" />
+              <circle cx="-1.2" cy="-1.2" r="1.1" fill="#ffffff" opacity="0.9" />
+            </g>
+          </g>
 
-        {/* Tertiary orbit */}
-        <div className="absolute w-105 h-105 rounded-full border border-slate-500/40 transform-[rotateX(63deg)_rotateY(2deg)]"></div>
+          {/* Orbit 2: Emerald Ellipse (-18deg) */}
+          <g transform="rotate(-18 330 195)">
+            <path d="M 95,195 a 235,74 0 1,0 470,0 a 235,74 0 1,0 -470,0" stroke="#10b981" strokeWidth="1.25" strokeOpacity="0.5" fill="none" />
+            <path id="orbit-emerald-cw" d="M 95,195 a 235,74 0 1,1 470,0 a 235,74 0 1,1 -470,0" fill="none" stroke="none" />
+            <path id="orbit-emerald-ccw" d="M 95,195 a 235,74 0 1,0 470,0 a 235,74 0 1,0 -470,0" fill="none" stroke="none" />
+            <g>
+              <animateMotion dur="7.2s" repeatCount="indefinite">
+                <mpath href="#orbit-emerald-cw" />
+              </animateMotion>
+              <circle r="9.5" fill="#10b981" opacity="0.18" />
+              <circle r="5.2" fill="#00c888" stroke="#ffffff" strokeWidth="1.6" />
+              <circle cx="-1.6" cy="-1.6" r="1.4" fill="#ffffff" opacity="0.9" />
+            </g>
+            <g>
+              <animateMotion dur="8.8s" begin="-4.4s" repeatCount="indefinite">
+                <mpath href="#orbit-emerald-ccw" />
+              </animateMotion>
+              <circle r="8" fill="#34d399" opacity="0.18" />
+              <circle r="4.4" fill="#059669" stroke="#ffffff" strokeWidth="1.4" />
+              <circle cx="-1.3" cy="-1.3" r="1.1" fill="#ffffff" opacity="0.9" />
+            </g>
+          </g>
 
-        {/* --------------------------------------------------------
-            INTELLIGENCE POINTS
-            Each point follows one of the orbital paths.
-            Their movement is controlled by splash.css.
-        -------------------------------------------------------- */}
+          {/* Orbit 3: Violet Ellipse (+28deg) */}
+          <g transform="rotate(28 330 200)">
+            <path d="M 110,200 a 220,80 0 1,0 440,0 a 220,80 0 1,0 -440,0" stroke="#8b5cf6" strokeWidth="1.15" strokeOpacity="0.4" fill="none" />
+            <path id="orbit-violet-cw" d="M 110,200 a 220,80 0 1,1 440,0 a 220,80 0 1,1 -440,0" fill="none" stroke="none" />
+            <path id="orbit-violet-ccw" d="M 110,200 a 220,80 0 1,0 440,0 a 220,80 0 1,0 -440,0" fill="none" stroke="none" />
+            <g>
+              <animateMotion dur="10.8s" repeatCount="indefinite">
+                <mpath href="#orbit-violet-cw" />
+              </animateMotion>
+              <circle r="8.5" fill="#8b5cf6" opacity="0.18" />
+              <circle r="4.8" fill="#8b5cf6" stroke="#ffffff" strokeWidth="1.5" />
+              <circle cx="-1.4" cy="-1.4" r="1.2" fill="#ffffff" opacity="0.9" />
+            </g>
+            <g>
+              <animateMotion dur="12.2s" begin="-6.1s" repeatCount="indefinite">
+                <mpath href="#orbit-violet-ccw" />
+              </animateMotion>
+              <circle r="7.5" fill="#c084fc" opacity="0.18" />
+              <circle r="4.0" fill="#a855f7" stroke="#ffffff" strokeWidth="1.4" />
+              <circle cx="-1.1" cy="-1.1" r="1.0" fill="#ffffff" opacity="0.9" />
+            </g>
+          </g>
 
-        {/* Green intelligence point — primary orbit */}
-        <div className="absolute w-115 h-115 rounded-full primary-orbit-plane">
-          <div className="absolute inset-0 rounded-full orbit-rotation-primary">
-            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)] orbit-orb-pulse"></div>
-            </div>
-          </div>
-        </div>
+          {/* Inner Dashed Orbital Ring */}
+          <circle cx="330" cy="200" r="150" stroke="rgba(16, 185, 129, 0.16)" strokeWidth="1" strokeDasharray="2 6" fill="none" />
+        </svg>
 
-        {/* Blue intelligence point — secondary orbit */}
-        <div className="absolute w-92.5 h-92.5 rounded-full secondary-orbit-plane">
-          <div className="absolute inset-0 rounded-full orbit-rotation-secondary">
-            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
-              <div className="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.7)] orbit-orb-pulse"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Purple intelligence point — tertiary orbit */}
-        <div className="absolute w-105 h-105 rounded-full tertiary-orbit-plane">
-          <div className="absolute inset-0 rounded-full orbit-rotation-tertiary">
-            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
-              <div className="w-2 h-2 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.7)] orbit-orb-pulse"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* --------------------------------------------------------
-            KNOWLEDGE INDICATOR
-            Shows the amount of connected knowledge available
-            to EKA.
-        -------------------------------------------------------- */}
-
-        <div className="absolute top-8 -left-38 z-20">
-          <div className="eka-info-card eka-documents-card flex items-center gap-3 rounded-xl px-5 py-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500">
-              <span className="text-sm font-semibold">42</span>
-            </div>
-
-            <div>
-              <div className="text-sm font-medium text-slate-800">
-                42 documents
-              </div>
-
-              <div className="text-[10px] lowercase tracking-wider text-emerald-500">
-                All knowledge connected ✓
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* --------------------------------------------------------
-            ASK ANYTHING INDICATOR
-            Represents EKA's context-aware question answering
-            capability.
-        -------------------------------------------------------- */}
-
-        <div className="absolute bottom-8 -right-38 z-20">
-          <div className="eka-info-card eka-ask-card flex items-center gap-3 rounded-xl px-5 py-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-50 text-sky-500">
-              <span className="text-sm">✦</span>
-            </div>
-
-            <div>
-              <div className="text-sm font-medium text-slate-800">
-                Ask anything
-              </div>
-
-              <div className="text-[10px] lowercase tracking-wider text-slate-700">
-                Answers with context
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* --------------------------------------------------------
-            EKA INTELLIGENCE CORE
-            The central visual remains above the orbiting
-            intelligence points.
-        -------------------------------------------------------- */}
-
+        {/* Center Brain Graphic */}
         <img
           src={ekaBrain}
           alt="EKA Intelligence"
-          className="relative z-10 w-64 h-64 object-contain"
+          className="pointer-events-none z-[8] h-auto w-[220px] object-contain drop-shadow-[0_16px_36px_rgba(0,168,132,0.1)]"
         />
+
+        {/* ── CARD 1: 42 Documents (Top-Left) ── */}
+        <div
+          className="animate-card-float-1 absolute left-[10px] top-[44px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
+          style={{
+            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(240, 253, 248, 0.94) 55%, rgba(220, 252, 238, 0.88) 100%)",
+            border: "1.2px solid rgba(16, 185, 129, 0.28)",
+            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(16, 185, 129, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
+          }}
+        >
+          <div
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#059669]"
+            style={{
+              background: "linear-gradient(145deg, #ffffff 0%, #ecfdf5 45%, #d1fae5 100%)",
+              border: "1.2px solid rgba(16, 185, 129, 0.38)",
+              boxShadow: "0 3px 10px rgba(16, 185, 129, 0.18), inset 0 1px 0 #ffffff",
+            }}
+          >
+            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
+            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
+              42 Documents
+            </div>
+            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
+              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#10b981] shadow-[0_0_6px_#10b981] animate-pulse" />
+              <span>all knowledge connected</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── CARD 3: Deep Search (Top-Right) ── */}
+        <div
+          className="animate-card-float-3 absolute right-[10px] top-[44px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
+          style={{
+            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(245, 243, 255, 0.94) 55%, rgba(237, 233, 254, 0.88) 100%)",
+            border: "1.2px solid rgba(139, 92, 246, 0.28)",
+            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(139, 92, 246, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
+          }}
+        >
+          <div
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#7c3aed]"
+            style={{
+              background: "linear-gradient(145deg, #ffffff 0%, #f5f3ff 45%, #ede9fe 100%)",
+              border: "1.2px solid rgba(139, 92, 246, 0.38)",
+              boxShadow: "0 3px 10px rgba(139, 92, 246, 0.18), inset 0 1px 0 #ffffff",
+            }}
+          >
+            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
+            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
+              Deep Search
+            </div>
+            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
+              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_#8b5cf6] animate-pulse" />
+              <span>vector store indexed</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── CARD 4: Enterprise SSO (Bottom-Left) ── */}
+        <div
+          className="animate-card-float-4 absolute bottom-[44px] left-[10px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
+          style={{
+            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 251, 235, 0.94) 55%, rgba(254, 243, 199, 0.88) 100%)",
+            border: "1.2px solid rgba(245, 158, 11, 0.28)",
+            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(245, 158, 11, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
+          }}
+        >
+          <div
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#d97706]"
+            style={{
+              background: "linear-gradient(145deg, #ffffff 0%, #fffbeb 45%, #fef3c7 100%)",
+              border: "1.2px solid rgba(245, 158, 11, 0.38)",
+              boxShadow: "0 3px 10px rgba(245, 158, 11, 0.18), inset 0 1px 0 #ffffff",
+            }}
+          >
+            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
+            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
+              Enterprise SSO
+            </div>
+            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
+              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#f59e0b] shadow-[0_0_6px_#f59e0b] animate-pulse" />
+              <span>zero-retention active</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── CARD 2: Ask Anything (Bottom-Right) ── */}
+        <div
+          className="animate-card-float-2 absolute bottom-[44px] right-[10px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
+          style={{
+            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(240, 249, 255, 0.94) 55%, rgba(224, 242, 254, 0.88) 100%)",
+            border: "1.2px solid rgba(14, 165, 233, 0.28)",
+            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(14, 165, 233, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
+          }}
+        >
+          <div
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#0284c7]"
+            style={{
+              background: "linear-gradient(145deg, #ffffff 0%, #f0f9ff 45%, #e0f2fe 100%)",
+              border: "1.2px solid rgba(14, 165, 233, 0.38)",
+              boxShadow: "0 3px 10px rgba(14, 165, 233, 0.18), inset 0 1px 0 #ffffff",
+            }}
+          >
+            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="currentColor" fillOpacity="0.15" />
+            </svg>
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
+            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
+              Ask Anything
+            </div>
+            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
+              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#0ea5e9] shadow-[0_0_6px_#0ea5e9] animate-pulse" />
+              <span>answers with context</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* ========================================================
-          LOADING / INITIALIZATION INFORMATION
-          Branding, intelligence layer label, progress bar,
-          and current initialization status.
-      ======================================================== */}
-
-      <div className="absolute bottom-8 flex flex-col items-center">
-        {/* EKA brand identity */}
-        <div
-          className="text-4xl font-semibold tracking-wide"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
+      {/* ── Bottom Section ── */}
+      <div className="absolute bottom-7 inset-x-0 z-20 mx-auto flex w-full flex-col items-center text-center">
+        <h1 className="m-0 mb-1 font-serif text-[33px] font-bold leading-none tracking-[-0.025em] text-[#0a0f1d]">
           eka.
-        </div>
+        </h1>
+        <span className="mb-4 text-[9.5px] font-bold uppercase tracking-[0.32em] text-slate-800">
+          intelligence layer
+        </span>
 
-        {/* EKA system description */}
-        <div className="text-xs tracking-[0.3em] uppercase">
-          INTELLIGENCE LAYER
-        </div>
-
-        {/* --------------------------------------------------------
-            PROGRESS BAR
-            Uses the current phase to determine its width.
-            The gradient moves from blue → green → pink.
-        -------------------------------------------------------- */}
-
-        <div className="mt-4 w-64 h-1 rounded-full bg-slate-200 overflow-hidden">
+        {/* Progress Track */}
+        <div className="mb-2 h-[3.5px] w-[250px] overflow-hidden rounded-full bg-black/10">
           <div
-            className="h-full rounded-full bg-linear-to-r from-sky-500 via-emerald-400 to-pink-500 transition-all duration-700"
-            style={{ width: phases[phase].progress }}
-          ></div>
+            className="h-full rounded-full transition-all duration-400 ease-[cubic-bezier(0.25,1,0.5,1)]"
+            style={{
+              width: currentPhase.progress,
+              background: "linear-gradient(90deg, #10b981 0%, #06b6d4 50%, #6366f1 100%)",
+              boxShadow: "0 0 10px rgba(16, 185, 129, 0.45)",
+            }}
+          />
         </div>
 
-        {/* Current initialization stage */}
-        <div className="mt-3 text-[8px] tracking-[0.15em] uppercase text-slate-500">
-          {phases[phase].text}
+        {/* Status Meta */}
+        <div className="mt-0.5 flex w-[250px] items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="h-[4.5px] w-[4.5px] rounded-full bg-[#10b981] shadow-[0_0_7px_#10b981] animate-pulse" />
+            <span className="text-[8.5px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              {currentPhase.text}
+            </span>
+          </div>
+          <span className="text-[8.5px] font-bold tracking-[0.05em] text-emerald-600">
+            {currentPhase.progress}
+          </span>
+        </div>
+
+        {/* Footer Badge */}
+        <div className="mt-2 text-[7.5px] font-semibold uppercase tracking-wider text-slate-400">
+          <span>SOC-2 TYPE II COMPLIANT</span> • <span>ZERO-RETENTION ARCHITECTURE</span>
         </div>
       </div>
     </div>
