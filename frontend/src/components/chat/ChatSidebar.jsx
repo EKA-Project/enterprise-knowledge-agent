@@ -16,7 +16,7 @@ export default function ChatSidebar({ open, conversations, activeConversationId,
     >
       <div className="flex h-full min-h-0 w-[240px] min-w-[240px] flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] [box-shadow:var(--shadow-sm)]">
         <div className="flex shrink-0 items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">
-  <h2 className={`${MONO} m-0 rounded-full border border-[var(--badge-border)] bg-[var(--badge-bg)] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--badge-text)]`}>
+  <h2 className={`${MONO} m-0 rounded-full border border-[var(--badge-border)] bg-[var(--badge-bg)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--badge-text)]`}>
     Threads ({conversations.length})
   </h2>
   <button
@@ -24,9 +24,13 @@ export default function ChatSidebar({ open, conversations, activeConversationId,
   onClick={() => onNewThread?.()}
   aria-label="New thread"
   title="New thread"
-  className="group grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full border border-transparent bg-[var(--primary)] text-[var(--primary-contrast)] transition-all duration-200 [box-shadow:var(--shadow-md)] hover:border-[var(--primary)] hover:bg-[var(--bg-surface)] hover:text-[var(--primary)] active:scale-95"
+  className="group grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full border border-transparent bg-[var(--primary)] text-[var(--primary-contrast)] transition-all duration-200 [box-shadow:var(--shadow-md)] hover:bg-[var(--primary-light)] hover:text-[var(--primary)] hover:[box-shadow:var(--shadow-sm)] active:scale-95"
 >
-  <PlusIcon size={15} className="transition-transform duration-300 ease-out group-hover:rotate-90" />
+  <PlusIcon
+    size={15}
+    strokeWidth={2.6}
+    className="transition-transform duration-300 ease-out group-hover:rotate-90"
+  />
 </button>
 </div>
 
@@ -61,7 +65,7 @@ export default function ChatSidebar({ open, conversations, activeConversationId,
                   onClick={() => onDelete(c.id)}
                   aria-label={`Delete ${c.title}`}
                   title="Delete thread"
-                  className="absolute right-2 top-2.5 grid h-6 w-6 cursor-pointer place-items-center rounded-md border border-[var(--border-subtle)] bg-[var(--bg-surface-subtle)] text-[var(--text-muted)] transition-all duration-150 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)]"
+                  className="absolute right-2 top-2.5 grid h-6 w-6 cursor-pointer place-items-center rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)] transition-all duration-150 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)]"
                 >
                   <TrashIcon size={12} />
                 </button>

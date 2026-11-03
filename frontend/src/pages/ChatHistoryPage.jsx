@@ -59,7 +59,7 @@ function ThreadCard({ conversation, index, onResume, onArchive, onDelete }) {
         onClick={() => onDelete(conversation.id)}
         aria-label={`Delete ${title}`}
         title="Delete"
-        className="grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] transition-all duration-200 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)] active:scale-95"
+        className="grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)] transition-all duration-200 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)] active:scale-95"
       >
         <TrashIcon size={14} />
       </button>
@@ -141,8 +141,8 @@ export default function ChatHistoryPage() {
   const handleDelete = (id) => run(() => deleteConversation(id), 'Chat thread deleted');
 
   return (
-    <div className="chat-history-page mx-auto w-full max-w-[960px]">
-      {/* ---------- header ---------- */}
+<div className="chat-history-page mx-auto w-full max-w-none">
+        {/* ---------- header ---------- */}
       <div className="chat-rise mb-5 flex items-end justify-between gap-6">
         <div className="min-w-0">
           <span className={`${MONO} mb-3 inline-flex rounded-md border border-[var(--badge-border)] bg-[var(--badge-bg)] px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] text-[var(--badge-text)]`}>
@@ -165,12 +165,18 @@ export default function ChatHistoryPage() {
             </button>
           )}
           <button
-            type="button"
-            onClick={() => navigate('/ask-eka')}
-            className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[var(--primary)] px-3.5 py-1.5 text-[12px] font-bold text-[var(--primary-contrast)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--primary-deep)] active:scale-95"
-          >
-            <PlusIcon size={13} /> Start New Thread
-          </button>
+  type="button"
+  onClick={() => navigate('/ask-eka')}
+  className="group inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-(--accent-secondary) bg-(--accent-secondary) pl-1 pr-3 text-xs font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-(--primary-deep) hover:bg-(--primary-deep) hover:shadow-(--shadow-md) active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+>
+  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white/30">
+    <PlusIcon
+      size={13}
+      className="transition-transform duration-300 ease-out group-hover:rotate-90"
+    />
+  </span>
+  Start New Thread
+</button>
         </div>
       </div>
 

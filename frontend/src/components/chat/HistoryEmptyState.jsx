@@ -43,17 +43,27 @@ export default function HistoryEmptyState({ variant, onAction }) {
       <h3 className={`${SERIF} m-0 mb-2 text-[20px] font-bold text-[var(--text-primary)]`}>{c.title}</h3>
       <p className="m-0 mb-5 max-w-[440px] text-[13px] leading-relaxed text-[var(--text-secondary)]">{c.text}</p>
 
-      <button
-        type="button"
-        onClick={onAction}
-        className={`flex cursor-pointer items-center gap-1.5 rounded-full px-4 py-2 text-[12.5px] font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-95 ${
-          isArchived
-            ? 'border border-[var(--border-medium)] bg-[var(--bg-surface)] text-[var(--primary)] hover:border-[var(--primary)] hover:bg-[var(--primary-light)]'
-            : 'bg-[var(--primary)] text-[var(--primary-contrast)] hover:bg-[var(--primary-deep)]'
-        }`}
-      >
-        {isArchived ? <MessageIcon size={13} /> : <PlusIcon size={13} />} {c.action}
-      </button>
+     <button
+  type="button"
+  onClick={onAction}
+  className={`group inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full text-xs font-semibold transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${
+    isArchived
+      ? 'border border-[var(--border-medium)] bg-[var(--bg-surface)] px-3.5 text-[var(--primary)] hover:border-[var(--primary)] hover:bg-[var(--primary-light)]'
+      : 'border border-(--accent-secondary) bg-(--accent-secondary) pl-1 pr-3 text-white hover:border-(--primary-deep) hover:bg-(--primary-deep) hover:shadow-(--shadow-md)'
+  }`}
+>
+  {isArchived ? (
+    <MessageIcon size={13} />
+  ) : (
+    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white/30">
+      <PlusIcon
+        size={13}
+        className="transition-transform duration-300 ease-out group-hover:rotate-90"
+      />
+    </span>
+  )}
+  {c.action}
+</button>
     </div>
   );
 }

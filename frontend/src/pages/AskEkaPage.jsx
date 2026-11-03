@@ -10,27 +10,33 @@ import { ClockIcon, FileIcon, FlaskIcon, PanelIcon, PlusIcon, ShieldCheckIcon } 
 import { EYEBROW, MONO, SERIF, getDocumentLink } from '../components/chat/ChatUtils';
 import '../styles/chat.css'; // hard animations live here
 
+const HistoryClock = ({ size }) => (
+  <ClockIcon
+    size={size}
+    className="transition-transform duration-300 ease-out group-hover:-rotate-[30deg]"
+  />
+);
 // ===================== header (page-specific, stays local) =====================
 function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread,  onToggleDeepResearch }) {
   const badge = `${MONO} inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[10.5px] font-semibold text-[var(--text-secondary)]`;
-  const pill = 'flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[12px] font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-95';
+  const pill = 'flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1 text-[12px] font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-95';
 
   return (
-    <header className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-3">
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-2">
-        <button
-          type="button"
-          onClick={onToggleHistory}
-          aria-label="Toggle history"
-          aria-pressed={historyOpen}
-          className={`grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-lg border transition ${
-            historyOpen
-              ? 'border-[var(--primary)] bg-[var(--primary-light)] text-[var(--primary)]'
-              : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-subtle)]'
-          }`}
-        >
-          <PanelIcon size={17} />
-        </button>
+<header className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-3 pl-1.5 pr-1.5 pt-1.5">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+       <button
+  type="button"
+  onClick={onToggleHistory}
+  aria-label="Toggle history"
+  aria-pressed={historyOpen}
+  className={`group grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-lg border bg-[var(--bg-surface)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--bg-surface)] hover:text-[var(--primary)] hover:shadow-[var(--shadow-md)] active:translate-y-0 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)] ${
+    historyOpen
+      ? 'border-[var(--primary)] text-[var(--primary)]'
+      : 'border-[var(--border-medium)] text-[var(--text-secondary)]'
+  }`}
+>
+  <PanelIcon size={17} className="transition-transform duration-200 ease-out group-hover:scale-110" />
+</button>
 
         <h1 className={`${SERIF} m-0 text-[24px] font-bold leading-tight text-[var(--text-primary)]`}>Talk to your organization.</h1>
 
@@ -50,14 +56,30 @@ function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread,  onToggleDeep
 
 <Link
   to="/ask-eka/history"
-  className={`${pill} border-[var(--border-medium)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--primary-deep)] hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--primary-deep)] hover:shadow-[var(--shadow-md)]`}
+  className={`${pill} group border-[var(--border-medium)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--primary-deep)] hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--primary-deep)] hover:shadow-[var(--shadow-md)]`}
 >
-  <ClockIcon size={14} /> Chat History
+  <span className="grid size-5 place-items-center rounded-full bg-[var(--primary-light)] text-[var(--primary)]">
+    <ClockIcon
+      size={12}
+      className="transition-transform duration-300 ease-out group-hover:-rotate-[45deg]"
+    />
+  </span>
+  Chat History
 </Link>
 
-<button type="button" onClick={onNewThread} className={`${pill} border-[var(--primary-deep)] bg-[var(--primary)] font-bold text-[var(--primary-contrast)] hover:border-[var(--primary-deep)] hover:bg-[var(--primary-deep)] hover:shadow-[var(--shadow-md)]`}>
-            <PlusIcon size={14} /> New Thread
-        </button>
+<button
+  type="button"
+  onClick={onNewThread}
+  className={`${pill} group h-7 text-[11.5px] border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-contrast)] hover:border-[var(--primary-deep)] hover:bg-[var(--primary-deep)] hover:shadow-[var(--shadow-md)] active:scale-95`}
+>
+  <span className="grid size-5 place-items-center rounded-full bg-white/20 transition-colors duration-200 group-hover:bg-white/30">
+    <PlusIcon
+      size={12}
+      className="transition-transform duration-300 ease-out group-hover:rotate-90"
+    />
+  </span>
+  New Thread
+</button>
       </div>
     </header>
   );

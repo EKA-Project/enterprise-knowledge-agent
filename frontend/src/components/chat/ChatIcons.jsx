@@ -16,7 +16,7 @@ export {
   MessageSquare as MessageIcon,
   PanelLeft as PanelIcon,
   Pause as PauseIcon,
-  Pencil as EditIcon,
+  SquarePen as EditIcon,
   Play as PlayIcon,
   Plus as PlusIcon,
   RefreshCw as RefreshIcon,

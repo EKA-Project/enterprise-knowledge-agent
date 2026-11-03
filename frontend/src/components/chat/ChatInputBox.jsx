@@ -76,7 +76,7 @@ export default function ChatInputBox({
                 type="button"
                 onClick={onSend}
                 disabled={!value.trim()}
-                className="flex cursor-pointer items-center gap-2 rounded-full bg-[var(--primary)] px-1.5 py-1 text-[11px] font-bold text-[var(--primary-contrast)] transition hover:bg-[var(--primary-deep)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex cursor-pointer items-center gap-2 rounded-full bg-[var(--primary)] px-2 py-1.5 text-[9.5px] font-bold text-[var(--primary-contrast)] transition hover:bg-[var(--primary-deep)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <ArrowRightIcon size={13} /> Log entry
               </button>

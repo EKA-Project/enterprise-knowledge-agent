@@ -131,11 +131,10 @@ useEffect(() => {
       showToast("Copy is not available in this browser");
     }
   };
-  const handleTryTip = (example) => {
-    console.log("tip clicked:", example);
-    runSearch(example);
-    setScrollTick((t) => t + 1);
-  };
+const handleTryTip = (example) => {
+  runSearch(example);
+  setScrollTick((t) => t + 1);
+};
 
   const handleFeedback = (kind) =>
     showToast(kind === "up" ? "Marked as helpful. Thank you for your feedback!" : "Marked as not helpful. Thanks for letting us know.");
@@ -278,7 +277,7 @@ useEffect(() => {
           />
           <RecentSearchesPanel
             items={recent}
-            onSelect={runSearch}
+            onSelect={handleTryTip}
             onRemove={(id) => setRecent((prev) => prev.filter((r) => r.id !== id))}
             onClear={() => setRecent([])}
           />
