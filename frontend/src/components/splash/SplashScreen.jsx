@@ -1,6 +1,8 @@
 import ekaBrain from "../../assets/images/eka_brain_bg.png";
 import "../../styles/splash.css";
 import { useEffect, useRef, useState } from "react";
+import SplashInfoCard from "./SplashInfoCard";
+import { SPLASH_CARDS } from "./splashCards";
 
 /*
   Phase configuration lives outside the component so its
@@ -181,139 +183,10 @@ function SplashScreen({ onComplete }) {
           className="pointer-events-none z-[8] h-auto w-[220px] object-contain drop-shadow-[0_16px_36px_rgba(0,168,132,0.1)]"
         />
 
-        {/* ── CARD 1: Your Documents (Top-Left) ── */}
-        <div
-          className="animate-card-float-1 absolute left-[10px] top-[44px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
-          style={{
-            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(240, 253, 248, 0.94) 55%, rgba(220, 252, 238, 0.88) 100%)",
-            border: "1.2px solid rgba(16, 185, 129, 0.28)",
-            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(16, 185, 129, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
-          }}
-        >
-          <div
-            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#059669]"
-            style={{
-              background: "linear-gradient(145deg, #ffffff 0%, #ecfdf5 45%, #d1fae5 100%)",
-              border: "1.2px solid rgba(16, 185, 129, 0.38)",
-              boxShadow: "0 3px 10px rgba(16, 185, 129, 0.18), inset 0 1px 0 #ffffff",
-            }}
-          >
-            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-              <polyline points="10 9 9 9 8 9" />
-            </svg>
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
-            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
-              Your Documents
-            </div>
-            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
-              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#10b981] shadow-[0_0_6px_#10b981] animate-pulse" />
-              <span>Ready to search</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── CARD 3: Deep Search (Top-Right) ── */}
-        <div
-          className="animate-card-float-3 absolute right-[10px] top-[44px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
-          style={{
-            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(245, 243, 255, 0.94) 55%, rgba(237, 233, 254, 0.88) 100%)",
-            border: "1.2px solid rgba(139, 92, 246, 0.28)",
-            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(139, 92, 246, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
-          }}
-        >
-          <div
-            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#7c3aed]"
-            style={{
-              background: "linear-gradient(145deg, #ffffff 0%, #f5f3ff 45%, #ede9fe 100%)",
-              border: "1.2px solid rgba(139, 92, 246, 0.38)",
-              boxShadow: "0 3px 10px rgba(139, 92, 246, 0.18), inset 0 1px 0 #ffffff",
-            }}
-          >
-            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="7" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
-            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
-              Deep Search
-            </div>
-            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
-              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_#8b5cf6] animate-pulse" />
-              <span>Finds the right passage</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── CARD 4: Secure Sign-in (Bottom-Left) ── */}
-        <div
-          className="animate-card-float-4 absolute bottom-[44px] left-[10px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
-          style={{
-            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 251, 235, 0.94) 55%, rgba(254, 243, 199, 0.88) 100%)",
-            border: "1.2px solid rgba(245, 158, 11, 0.28)",
-            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(245, 158, 11, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
-          }}
-        >
-          <div
-            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#d97706]"
-            style={{
-              background: "linear-gradient(145deg, #ffffff 0%, #fffbeb 45%, #fef3c7 100%)",
-              border: "1.2px solid rgba(245, 158, 11, 0.38)",
-              boxShadow: "0 3px 10px rgba(245, 158, 11, 0.18), inset 0 1px 0 #ffffff",
-            }}
-          >
-            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
-            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
-              Secure Sign-in
-            </div>
-            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
-              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#f59e0b] shadow-[0_0_6px_#f59e0b] animate-pulse" />
-              <span>Organization access only</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── CARD 2: Ask Anything (Bottom-Right) ── */}
-        <div
-          className="animate-card-float-2 absolute bottom-[44px] right-[10px] z-[15] flex h-[58px] w-[218px] items-center gap-3 rounded-[16px] px-3.5 py-0 backdrop-blur-[28px] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015]"
-          style={{
-            background: "linear-gradient(145deg, rgba(255, 255, 255, 0.97) 0%, rgba(240, 249, 255, 0.94) 55%, rgba(224, 242, 254, 0.88) 100%)",
-            border: "1.2px solid rgba(14, 165, 233, 0.28)",
-            boxShadow: "inset 0 1px 0 #ffffff, inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 18px 38px -8px rgba(14, 165, 233, 0.18), 0 4px 14px -2px rgba(15, 23, 42, 0.05)",
-          }}
-        >
-          <div
-            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[#0284c7]"
-            style={{
-              background: "linear-gradient(145deg, #ffffff 0%, #f0f9ff 45%, #e0f2fe 100%)",
-              border: "1.2px solid rgba(14, 165, 233, 0.38)",
-              boxShadow: "0 3px 10px rgba(14, 165, 233, 0.18), inset 0 1px 0 #ffffff",
-            }}
-          >
-            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="currentColor" fillOpacity="0.15" />
-            </svg>
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
-            <div className="truncate text-[13px] font-bold leading-tight tracking-[-0.015em] text-[#0a0f1d]">
-              Ask Anything
-            </div>
-            <div className="flex items-center gap-1.5 truncate text-[10.5px] font-medium leading-tight text-slate-500">
-              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#0ea5e9] shadow-[0_0_6px_#0ea5e9] animate-pulse" />
-              <span>answers with context</span>
-            </div>
-          </div>
-        </div>
+        {/* Floating info cards (content and styles in splashCards.js) */}
+        {SPLASH_CARDS.map((card) => (
+          <SplashInfoCard key={card.id} card={card} />
+        ))}
       </div>
 
       {/* ── Bottom Section ── */}
