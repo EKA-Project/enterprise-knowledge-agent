@@ -68,16 +68,16 @@ function SplashScreen({ onComplete }) {
       <div className="pointer-events-none absolute -bottom-[130px] -right-[110px] z-[1] h-[340px] w-[340px] rounded-full bg-[#fef3c7] opacity-55" />
 
       {/* ── Editorial Telemetry Corner Marks ── */}
-      <div className="pointer-events-none absolute left-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+      <div aria-hidden="true" className="pointer-events-none absolute left-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
         + WORKSPACE // EKA
       </div>
-      <div className="pointer-events-none absolute right-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+      <div aria-hidden="true" className="pointer-events-none absolute right-8 top-7 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
         + STATUS // READY
       </div>
-      <div className="pointer-events-none absolute bottom-7 left-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+      <div aria-hidden="true" className="pointer-events-none absolute bottom-7 left-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
         + SOURCE // YOUR DOCUMENTS
       </div>
-      <div className="pointer-events-none absolute bottom-7 right-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
+      <div aria-hidden="true" className="pointer-events-none absolute bottom-7 right-8 z-[4] font-mono text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-400 opacity-65">
         + ANSWERS // CITED
       </div>
 
@@ -90,13 +90,13 @@ function SplashScreen({ onComplete }) {
       <div className="stardust-node pointer-events-none absolute right-[14%] top-[52%] z-[2] h-[3px] w-[3px] rounded-full bg-[#ec4899] shadow-[0_0_8px_#ec4899]" style={{ animationDelay: "3.4s" }} />
 
       {/* ── Central Stage (Guaranteed Dead Center via Flexbox) ── */}
-      <div className="animate-stage-float relative z-10 -mt-6 flex h-[400px] w-[660px] items-center justify-center">
+      <div aria-hidden="true" className="animate-stage-float relative z-10 -mt-6 flex h-[400px] w-[660px] items-center justify-center">
         {/* Breathing Luminous Aura */}
         <div className="animate-aura-breath pointer-events-none absolute left-1/2 top-1/2 z-[3] h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.18)_0%,rgba(16,185,129,0.14)_35%,rgba(139,92,246,0.08)_65%,transparent_80%)] blur-[24px]" />
 
         {/* Orbit Rings with Motion Beads */}
         <svg
-          className="pointer-events-none absolute inset-0 z-[5] h-full w-full overflow-visible"
+          className="splash-orbits pointer-events-none absolute inset-0 z-[5] h-full w-full overflow-visible"
           viewBox="0 0 660 400"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -341,7 +341,7 @@ function SplashScreen({ onComplete }) {
         <div className="mt-0.5 flex w-[250px] items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="h-[4.5px] w-[4.5px] rounded-full bg-[#10b981] shadow-[0_0_7px_#10b981] animate-pulse" />
-            <span className="text-[8.5px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <span role="status" aria-live="polite" className="text-[8.5px] font-semibold uppercase tracking-[0.16em] text-slate-500">
               {currentPhase.text}
             </span>
           </div>

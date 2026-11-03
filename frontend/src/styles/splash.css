@@ -81,3 +81,25 @@
 .animate-card-float-4 {
   animation: cardFloat4 5.4s ease-in-out infinite 3.2s;
 }
+
+/* ── Reduced motion ──
+   Respect the OS "reduce motion" setting. The static orbit rings and
+   dashed ring stay visible; only movement is removed. */
+@media (prefers-reduced-motion: reduce) {
+  .stardust-node,
+  .animate-stage-float,
+  .animate-aura-breath,
+  .animate-card-float-1,
+  .animate-card-float-2,
+  .animate-card-float-3,
+  .animate-card-float-4,
+  .animate-pulse {
+    animation: none;
+  }
+
+  /* Hide the moving beads. Their SMIL animateMotion can't be stopped
+     with CSS, so we hide the bead groups instead. */
+  .splash-orbits g > g {
+    display: none;
+  }
+}
