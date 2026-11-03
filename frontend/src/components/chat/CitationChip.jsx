@@ -17,7 +17,7 @@ export default function CitationChip({ citation }) {
         <FileIcon size={14} />
       </span>
       <span className="min-w-0">
-        <span className={`${MONO} block truncate text-[15px] font-bold text-[var(--text-primary)]`}>{citation.document_name}</span>
+        <span className={`${MONO} block truncate text-[14px] font-bold text-[var(--text-primary)]`}>{citation.document_name}</span>
         <span className={`${MONO} block text-[11px] text-[var(--text-muted)]`}>page {citation.page} • verified source</span>
       </span>
     </Link>

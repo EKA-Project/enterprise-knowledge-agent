@@ -19,7 +19,7 @@ const HistoryClock = ({ size }) => (
 // ===================== header (page-specific, stays local) =====================
 function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread,  onToggleDeepResearch }) {
   const badge = `${MONO} inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[10.5px] font-semibold text-[var(--text-secondary)]`;
-  const pill = 'flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1 text-[12px] font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-95';
+  const pill = 'flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-95';
 
   return (
 <header className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-3 pl-1.5 pr-1.5 pt-1.5">
@@ -70,12 +70,12 @@ function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread,  onToggleDeep
 <button
   type="button"
   onClick={onNewThread}
-  className={`${pill} group h-7 text-[11.5px] border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-contrast)] hover:border-[var(--primary-deep)] hover:bg-[var(--primary-deep)] hover:shadow-[var(--shadow-md)] active:scale-95`}
+  className="group inline-flex h-7 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-(--accent-secondary) bg-(--accent-secondary) pl-[3px] pr-3 text-[11.5px] font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-(--primary-deep) hover:bg-(--primary-deep) hover:shadow-(--shadow-md) active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
 >
-  <span className="grid size-5 place-items-center rounded-full bg-white/20 transition-colors duration-200 group-hover:bg-white/30">
+  <span className="flex size-[22px] items-center justify-center rounded-full bg-white/20 text-white transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white/30">
     <PlusIcon
       size={12}
-      className="transition-transform duration-300 ease-out group-hover:rotate-90"
+      className="transition-transform duration-500 ease-in-out group-hover:rotate-90"
     />
   </span>
   New Thread

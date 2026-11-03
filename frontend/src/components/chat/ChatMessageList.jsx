@@ -7,7 +7,7 @@ import { MONO, formatWhen, groupTurns } from './ChatUtils';
 
 // ---- top-right status of a turn: typing pill / Resume / Grounded / Failed ----
 function StatusBadge({ kind, onResume }) {
-  const base = 'flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold transition';
+  const base = 'flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10.5px] font-semibold transition';
   if (kind === 'typing') {
     return (
       <span className={`${base} ask-eka-typing-pill border-[var(--status-warning-border)] bg-[var(--status-warning-bg)] text-[var(--status-warning)]`}>
@@ -62,7 +62,7 @@ function TurnCard({
       <div className="min-w-0 flex-1 rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-3 [box-shadow:var(--shadow-md)]">
         <div className="mb-1 flex items-start justify-between gap-4">
           <p className={`${MONO} m-0 flex items-center gap-2 text-[11px] font-bold tracking-[0.08em] text-[var(--text-muted)]`}>
-            <span className="rounded-md bg-[var(--primary-light)] px-2 py-0.5 text-[var(--primary)]">REQ {String(number).padStart(2, '0')}</span>
+            <span className="rounded-xl bg-[var(--primary-light)] px-2 py-0.5 text-[var(--primary)]">REQ {String(number).padStart(2, '0')}</span>
             <span>• {formatWhen(user.created_at)}</span>
           </p>
 
@@ -73,7 +73,7 @@ function TurnCard({
                 type="button"
                 disabled={busy}
                 onClick={() => setEditing(true)}
-                className={`${MONO} flex cursor-pointer items-center gap-1.5 rounded-md border border-[var(--border-subtle)] px-2.5 py-1 text-[10px] font-semibold text-[var(--text-muted)] transition hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-50`}
+                className={`${MONO} flex cursor-pointer items-center gap-1.5 rounded-xl border border-[var(--border-subtle)] px-2.5 py-1 text-[10px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-50`}
               >
                 <EditIcon size={12} /> Edit
               </button>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import CitationList from './CitationList';
 import ActionRating from '../common/ActionRating';
-import { AlertIcon, EditIcon, RefreshIcon, SquarePen } from './ChatIcons';
+import { AlertIcon, EditIcon, RefreshIcon } from './ChatIcons';
 import { MONO, SERIF, contentToLines, contentToPlainText, revealLines } from './ChatUtils';
 // ---------------- user message: the question (or its inline editor) ----------------
 function UserEntry({ message, editing, onSaveEdit, onCancelEdit }) {
@@ -28,7 +28,7 @@ function UserEntry({ message, editing, onSaveEdit, onCancelEdit }) {
     <div className="mb-4 rounded-2xl border border-[var(--badge-border)] bg-[var(--primary-light)] p-4">
       <div className="mb-2.5 flex items-center justify-between gap-3">
         <p className={`${MONO} m-0 flex items-center gap-1.5 text-[10.5px] font-bold tracking-[0.12em] text-[var(--primary)]`}>
-          <SquarePen size={12} /> EDIT QUESTION PROMPT
+          <EditIcon size={12} /> EDIT QUESTION PROMPT
         </p>
         <p className={`${MONO} m-0 text-[10.5px] text-[var(--text-muted)]`}>Modifying prompt re-synthesizes answer</p>
       </div>
@@ -94,7 +94,7 @@ function AssistantEntry({ message, question, reveal, isRetrying, onRetry, onRate
   return (
     <>
       <div
-        className={`rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-subtle)] px-5 py-4 text-[14px] leading-[1.5] text-[var(--text-secondary)] transition-opacity duration-300 ${
+        className={`rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-subtle)] px-5 py-4 text-[13px] leading-[1.5] text-[var(--text-secondary)] transition-opacity duration-300 ${
           isTyping || isRetrying ? 'ask-eka-streaming' : ''
         } ${isRetrying ? 'opacity-60' : ''}`}
       >
