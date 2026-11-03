@@ -2,13 +2,13 @@ import { Search } from "lucide-react";
 import { ACCESS_LEVELS, USER_ROLES, USER_STATUSES } from "./OrganizationData";
 
 const select =
-  "rounded-xl border border-(--border-medium) bg-white px-3 py-2 text-[12px] font-semibold text-(--text-primary) outline-none transition duration-200 hover:border-(--primary) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)]";
+  "cursor-pointer rounded-xl border border-(--badge-border) bg-(--accent-chip) px-3 py-1.5 text-[12.5px] font-semibold text-(--text-primary) outline-none transition hover:border-(--primary) focus:border-(--primary) focus:shadow-[0_0_0_3px_var(--primary-glow)]";
 
 export default function UserFilters({ filters, onChange, departmentNames }) {
   return (
-    <div className="org-rise flex flex-wrap items-center gap-3 rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-4 shadow-(--shadow-sm)">
-      <label className="flex min-w-[240px] flex-1 items-center gap-2.5 rounded-xl border border-(--badge-border) bg-(--primary-light) px-3.5 py-2.5 transition focus-within:border-(--border-focus) focus-within:shadow-[0_0_0_3px_var(--primary-glow)]">
-        <Search size={15} className="shrink-0 text-(--text-muted)" aria-hidden="true" />
+<div className="org-rise flex flex-wrap items-center gap-3 rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-4 shadow-(--shadow-sm)">
+<label className="flex min-w-[240px] flex-1 items-center gap-2.5 rounded-xl border border-(--badge-border) bg-(--accent-chip) px-3.5 py-2.5 transition focus-within:border-(--border-focus) focus-within:shadow-[0_0_0_3px_var(--primary-glow)]">
+          <Search size={15} className="shrink-0 text-(--text-muted)" aria-hidden="true" />
         <input
           value={filters.query}
           onChange={(e) => onChange({ query: e.target.value })}

@@ -1,4 +1,4 @@
-import { Briefcase, Code, FileText, Layers, Pencil, ShieldCheck, Trash2, TrendingUp, Users } from "lucide-react";
+import { Briefcase, Code, FileText, Layers, SquarePen, ShieldCheck, Trash2, TrendingUp, Users } from "lucide-react";
 import { getInitials } from "./OrganizationData";
 // Tailwind class for the monospace font used in badges and labels
 const ICONS = { code: Code, users: Users, layers: Layers, shield: ShieldCheck, trend: TrendingUp, file: FileText, briefcase: Briefcase };
@@ -31,18 +31,24 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
         <div className="min-w-0 flex-1">
       <h3
   title={dept.name}
-  className="truncate text-[15px] font-bold leading-snug text-(--text-primary)"
+  className="truncate text-[16px] font-bold leading-snug text-(--text-primary)"
 >
   {dept.name}
 </h3>
-          <span className="mt-1 inline-block rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 font-(family-name:--font-mono) text-[9.5px] font-bold uppercase tracking-wider text-(--text-secondary)">
+          <span className="mt-1 inline-block rounded-xl border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 font-(family-name:--font-mono) text-[10px] font-bold uppercase tracking-wider text-(--text-secondary)">
             {dept.code}
           </span>
         </div>
         <div className="flex shrink-0 gap-0.5">
-          <button type="button" onClick={onEdit} aria-label={`Edit ${dept.name}`} title="Edit" className={`${iconBtn} hover:-rotate-12 hover:bg-(--primary-light) hover:text-(--primary)`}>
-            <Pencil size={16} />
-          </button>
+         <button
+  type="button"
+  onClick={() => onEdit(dept.id)}
+  aria-label={`Edit ${dept.name}`}
+  title="Edit department"
+  className="grid size-8 cursor-pointer place-items-center rounded-lg text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--primary-light) hover:text-(--primary) active:scale-95"
+>
+  <SquarePen size={17} />
+</button>
           <button type="button" onClick={onDelete} aria-label={`Delete ${dept.name}`} title="Delete"className={`${iconBtn} hover:rotate-6 hover:bg-(--status-failure-bg) hover:text-(--status-failure)`}>
             <Trash2 size={16} />
           </button>
