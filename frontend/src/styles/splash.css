@@ -116,5 +116,5 @@
 }
 
 .splash-orbits > g > g {
-  animation: beadFadeIn 900ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
+  animation: beadFadeIn 400ms ease 300ms both;
 }
