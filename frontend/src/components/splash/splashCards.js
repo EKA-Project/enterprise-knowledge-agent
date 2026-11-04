@@ -25,8 +25,8 @@ export const SPLASH_CARDS = [
   },
   {
     id: "search",
-    title: "Deep Search",
-    subtitle: "Finds the right passage",
+    title: "Semantic Search",
+    subtitle: "Finds passages by meaning",
     icon: "search",
     position: "absolute right-[10px] top-[44px]",
     floatClass: "animate-card-float-3",
@@ -66,7 +66,7 @@ export const SPLASH_CARDS = [
   {
     id: "ask",
     title: "Ask Anything",
-    subtitle: "answers with context",
+    subtitle: "Answers with citations",
     icon: "sparkle",
     position: "absolute bottom-[44px] right-[10px]",
     floatClass: "animate-card-float-2",
