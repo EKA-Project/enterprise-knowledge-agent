@@ -1,7 +1,7 @@
 // The three steps of "Start Vector Ingestion".
 //
 //   label / detail: text shown in the progress card
-//   mascot:         which Byte state to show during this stage (see byteStates.js)
+//   mascot:         which mascot state to show during this stage (see uploadMascotStates.js)
 //   weight:         this stage's share of the 0-100% bar (weights add up to 100)
 //   duration:       how long the SIMULATED stage takes (ms); a real backend replaces this
 

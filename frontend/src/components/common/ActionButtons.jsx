@@ -1,6 +1,7 @@
 import { FileText, Send, Upload, UserPlus, UserX, X } from "lucide-react";
 import Button from "./Button";
 import '../../styles/Document.css';
+import DiceIcon from "../icons/DiceIcon";
 
 /* ==========================================================================
    ActionButtons  (components/common/ActionButtons.jsx)
@@ -140,5 +141,19 @@ export default function AnimatedBin({ size = 24, spark = false, open = false, cl
         </svg>
       )}
     </span>
+  );
+}
+export function SurpriseMeButton({ isSurprising = false, rollCount = 0, ...props }) {
+  // The spin state comes from SurpriseContext; the key restarts it on rapid clicks.
+  return (
+    <Button
+      variant="surface"
+      size="md"
+      title="Pick a random atmosphere"
+      {...props}
+    >
+      <DiceIcon key={rollCount} rolling={isSurprising} />
+      Surprise Me
+    </Button>
   );
 }

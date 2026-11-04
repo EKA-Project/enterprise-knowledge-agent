@@ -5,19 +5,27 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
-
+// Holds the selected mascot (byte/orbit) for the whole app
+import { MascotProvider } from "./context/MascotContext.jsx";
+// Holds theme, typography, eye comfort and surprise scope for the whole app
+import { AppearanceProvider } from "./context/AppearanceContext.jsx";
+import { initAppearance } from "./appearance/appearance";
 // Variables first so base & layout can use CSS custom properties
 import "./styles/variables.css";
 import "./styles/base.css";
 import "./styles/layout.css";
+import "./styles/eye-comfort.css";
 
-// TEMPORARY: sets data-theme on <html> until the Appearance settings exist
-import "./theme.js";
+initAppearance();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AppearanceProvider>
+        <MascotProvider>
+          <App />
+        </MascotProvider>
+      </AppearanceProvider>
     </BrowserRouter>
   </StrictMode>,
 );

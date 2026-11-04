@@ -1,0 +1,28 @@
+/* Settings page only. Every selector is scoped under .settings-page. */
+@keyframes set-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes set-toast { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+
+.settings-page .set-rise { animation: set-rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+/* Toast.jsx tags every toast "anl-toast"; on this page it slides in from the right. */
+.settings-page .anl-toast { animation: set-toast 0.3s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+
+.settings-page button:not(:disabled),
+.settings-page [role="radio"] { cursor: pointer; }
+
+/* Confidence slider: blue filled track and a round thumb (--fill is set from the page). */
+.settings-page input[type="range"].set-range {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 999px; outline: none;
+  background: linear-gradient(90deg, var(--primary) var(--fill, 50%), var(--border-medium) var(--fill, 50%));
+}
+.settings-page input[type="range"].set-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--primary); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--primary), var(--shadow-md); transition: transform 0.15s;
+}
+.settings-page input[type="range"].set-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.settings-page input[type="range"].set-range::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-page .set-rise, .settings-page .anl-toast { animation: none; }
+}

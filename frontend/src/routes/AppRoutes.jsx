@@ -25,6 +25,7 @@ import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSucces
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
 import SemanticSearchPage from "../pages/SemanticSearchPage.jsx";
+import SettingsPage from "../pages/SettingsPage.jsx";
 // ...other EKA pages
 
 function AppRoutes() {
@@ -73,7 +74,13 @@ function AppRoutes() {
       />
 
       {/* EKA application */}
-      <Route element={<AuthProvider><AppLayout /></AuthProvider>}>
+      <Route
+        element={
+          <AuthProvider>
+            <AppLayout />
+          </AuthProvider>
+        }
+      >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
         <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
@@ -82,9 +89,28 @@ function AppRoutes() {
         <Route path="/documents/summary" element={<DocumentSummaryPage />} />
         <Route path="/documents/storage" element={<RoleGuard allowedRoles={["Admin"]}><StorageManagementPage /></RoleGuard>} />
         <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
-        <Route path="/analytics" element={<RoleGuard allowedRoles={["Admin"]}><h1>Analytics</h1></RoleGuard>} />
-        <Route path="/organization" element={<RoleGuard allowedRoles={["Admin"]}><h1>Organization</h1></RoleGuard>} />
-        <Route path="/settings" element={<h1>Settings</h1>} />
+
+        <Route
+          path="/analytics"
+          element={
+            <RoleGuard allowedRoles={["Admin"]}>
+              <h1>AnalyticsPage </h1>
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/organization"
+          element={
+            <RoleGuard allowedRoles={["Admin"]}>
+              <h1>OrganizationPage </h1>
+            </RoleGuard>
+          }
+        />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route
+          path="/help-support"
+          element={<h1>Answers whenever you need them.</h1>}
+        />
       </Route>
     </Routes>
   );
