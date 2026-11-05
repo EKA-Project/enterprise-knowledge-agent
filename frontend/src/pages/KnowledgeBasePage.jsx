@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
-import UploadDocumentModal from '../components/upload/UploadDocumentModal.jsx';
+import UploadContext from '../context/UploadContext.jsx';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
@@ -17,12 +17,12 @@ import SectionState from '../components/knowledge/SectionState';
 
 export default function KnowledgeBasePage() {
   const { activeRole } = useContext(AuthContext);
+  const { openUpload, canUpload } = useContext(UploadContext);
   const [demoState, setDemoState] = useState('normal');
   const resetDemo = () => setDemoState('normal');
   // Category whose Collection Insights modal is open (null = closed)
   const [insightsCategory, setInsightsCategory] = useState(null);
-  // Ingest modal open/closed (opened by the "Upload document" button)
-  const [ingestOpen, setIngestOpen] = useState(false);
+
 
   return (
     <div className="px-4 py-2">
@@ -41,13 +41,15 @@ export default function KnowledgeBasePage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setIngestOpen(true)}
-            className="cursor-pointer inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-3.5 py-1 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
-          >
-            <Upload size={12} /> Upload document
-          </button>
+          {canUpload && (
+            <button
+              type="button"
+              onClick={openUpload}
+              className="cursor-pointer inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-3.5 py-1 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
+            >
+              <Upload size={12} /> Upload document
+            </button>
+          )}
           <Link
             to="/documents"
             className="cursor-pointer inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
@@ -114,7 +116,7 @@ export default function KnowledgeBasePage() {
           onClose={() => setInsightsCategory(null)}
         />
       )}
-      {ingestOpen && <UploadDocumentModal onClose={() => setIngestOpen(false)} />}  {/* <-- ye nayi line */}
+      
       <DemoStatesBar value={demoState} onChange={setDemoState} />
     </div>
   );
