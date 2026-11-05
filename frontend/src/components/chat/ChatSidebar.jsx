@@ -24,10 +24,10 @@ export default function ChatSidebar({ open, conversations, activeConversationId,
   onClick={() => onNewThread?.()}
   aria-label="New thread"
   title="New thread"
-  className="group grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full border border-transparent bg-[var(--primary)] text-[var(--primary-contrast)] transition-all duration-200 [box-shadow:var(--shadow-md)] hover:bg-[var(--primary-light)] hover:text-[var(--primary)] hover:[box-shadow:var(--shadow-sm)] active:scale-95"
+  className="group grid h-6 w-6 shrink-0 cursor-pointer place-items-center rounded-full border border-transparent bg-[var(--primary)] text-[var(--primary-contrast)] transition-all duration-200 [box-shadow:var(--shadow-md)] hover:bg-[var(--primary-light)] hover:text-[var(--primary)] hover:[box-shadow:var(--shadow-sm)] active:scale-95"
 >
   <PlusIcon
-    size={15}
+    size={12}
     strokeWidth={2.6}
     className="transition-transform duration-300 ease-out group-hover:rotate-90"
   />

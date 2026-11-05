@@ -5,7 +5,7 @@ const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)";
 
 const segment = (active) =>
-      `inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11.5px] font-bold transition-all duration-200 ${focusRing} ${
+      `inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-bold transition-all duration-200 ${focusRing} ${
       active
       ? "bg-(--primary) text-white shadow-sm"
       : "bg-transparent text-(--text-muted) hover:bg-(--primary-light) hover:text-(--primary)"

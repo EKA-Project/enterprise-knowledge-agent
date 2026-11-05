@@ -57,26 +57,26 @@ export default function AuditDistributionSection() {
           <BarChart data={MONTHLY_CONFLICTS} activeIndex={barIndex} onHover={setBarIndex} />
         </div>
 
-        <div className="rounded-xl border border-(--status-verified-border) bg-(--status-verified-bg) p-4">
-          <div className="flex items-center justify-between">
+        <div className="rounded-xl border border-(--status-verified-border) bg-[color-mix(in_srgb,var(--status-verified)_6%,var(--bg-surface))] p-4">
+            <div className="flex items-center justify-between">
             <p className={`${mono} text-[9.5px] uppercase tracking-[0.12em] text-(--text-muted)`}>Knowledge mass distribution</p>
             <span className={`${mono} rounded-md bg-(--bg-surface) px-2 py-0.5 text-[9.5px] font-bold text-(--status-success)`}>
               {TOTAL_CITATIONS.toLocaleString()} Citations
             </span>
           </div>
           <p className="mt-2 flex flex-wrap items-baseline gap-2">
-            <span className={`${serif} text-[32px] font-bold leading-none text-(--text-primary)`}>{KNOWLEDGE_MASS.length}</span>
-            <span className={`${serif} text-[18px] text-(--text-primary)`}>Sectors</span>
+            <span className={`${serif} text-[38px] font-bold leading-none text-(--text-primary)`}>{KNOWLEDGE_MASS.length}</span>
+            <span className={`${serif} text-[22px] text-(--text-primary)`}>Sectors</span>
             <span className={`${mono} text-[10.5px] text-(--text-muted)`}>
               {sector ? `(${sector.label}: ${sectorCitations.toLocaleString()} Citations)` : "(Verified Document Sources)"}
             </span>
           </p>
           
           <div className="mt-4 flex flex-wrap items-center gap-6">
-            <DonutChart segments={KNOWLEDGE_MASS} activeId={sectorId} onHover={setSectorId} size={130}>
+            <DonutChart segments={KNOWLEDGE_MASS} activeId={sectorId} onHover={setSectorId} size={112}>
               <div>
-                <p className={`${serif} text-[22px] font-bold leading-none text-(--text-primary)`}>{sector ? `${sector.value}%` : "100%"}</p>
-                <p className={`${mono} mt-1 max-w-[70px] text-[8px] uppercase leading-tight text-(--text-muted)`}>
+                <p className={`${serif} text-[18px] font-bold leading-none text-(--text-primary)`}>{sector ? `${sector.value}%` : "100%"}</p>
+                <p className={`${mono} mt-1 max-w-[60px] text-[7.5px] uppercase leading-tight text-(--text-muted)`}>
                   {sector ? sector.label : "Verified Sources"}
                 </p>
               </div>
