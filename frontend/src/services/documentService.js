@@ -72,6 +72,21 @@ export async function getDocument(id) {
   return doc ? clone(doc) : null;
 }
 
+
+
+/**
+ * GET /documents/{id}/insight
+ * Returns the AI insight for a readable document.
+ */ 
+/**@returns {import('../types').Insight|null}*/
+export async function getDocumentInsight(id) {
+  await delay();
+
+  if (!findReadableDocument(id)) return null;
+
+  const insight = getInsightRow(id);
+  return insight ? clone(insight) : null;
+}
 // GET /documents/{id}/sections  (null = no such readable document; [] = it has
 // no sections yet, e.g. still processing)
 /** @returns {Promise<import('../types').DocumentSection[]|null>} */
