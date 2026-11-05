@@ -50,7 +50,7 @@ function MyEkaUsageChart({ data }) {
               <button
                 key={range}
                 type="button"
-                className={`rounded-full px-[0.65rem] py-[0.2rem] font-mono text-[0.72rem] transition-all duration-200 ${
+                className={`cursor-pointer rounded-full px-[0.65rem] py-[0.2rem] font-mono text-[0.6rem] transition-all duration-200 ${
                   activeRange === range
                     ? "bg-(--primary) font-bold text-white"
                     : "font-semibold text-(--text-muted)"
