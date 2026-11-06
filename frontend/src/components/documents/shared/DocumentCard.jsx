@@ -28,10 +28,10 @@ export const statusMeta = {
     label: 'Outdated',
     style: 'border border-amber-200 bg-(--status-warning-bg) text-(--status-warning)',
   },
-  Failed: {
-    label: '⚠ Failed Ingestion',
-    style: 'border border-orange-200 bg-orange-50 text-orange-600',
-  },
+Failed: {
+  label: '⚠ Failed Ingestion',
+  style: 'border border-(--status-danger) bg-(--status-danger-bg) text-(--status-danger)',
+},
 };
 
 // Small dark tooltip shown under an icon button on hover.

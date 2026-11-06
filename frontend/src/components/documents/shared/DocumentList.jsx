@@ -107,7 +107,7 @@ function DocumentList({
       render: (doc) => {
         const status = statusMeta[doc.status] ?? {
           label: doc.status,
-          style: 'border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary)',
+          style: 'border border-(--status-danger) bg-(--status-danger-bg) text-(--status-danger)',
         };
         const label = shortStatus ? `● ${SHORT_LABEL[doc.status] ?? status.label}` : status.label;
         return (
