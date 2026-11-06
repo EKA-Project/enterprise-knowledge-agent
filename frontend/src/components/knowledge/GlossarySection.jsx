@@ -14,6 +14,7 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 export default function GlossarySection({ canManage = false, state = 'normal', onReset }) {
   const [terms, setTerms] = useState(glossaryTerms); // local copy so new terms can be added
   const [addOpen, setAddOpen] = useState(false);
+  const [selectedTerm, setSelectedTerm] = useState(null);
   const [query, setQuery] = useState('');
   const [letter, setLetter] = useState('All');
   const [page, setPage] = useState(1);
@@ -49,16 +50,23 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
   };
 
   // Add a new term, keep the list alphabetical, and reset filters so it is visible
-  const handleAdd = (newTerm) => {
-    setTerms((prev) =>
-      [...prev, newTerm].sort((a, b) =>
-        a.term.localeCompare(b.term, undefined, { sensitivity: 'base' }),
-      ),
-    );
-    setQuery('');
-    changeLetter('All');
-    setAddOpen(false);
-  };
+const handleSave = (savedTerm) => {
+  setTerms((prev) =>
+    [
+      ...prev.filter((t) => t.id !== savedTerm.id),
+      savedTerm,
+    ].sort((a, b) =>
+      a.term.localeCompare(b.term, undefined, {
+        sensitivity: 'base',
+      }),
+    ),
+  );
+
+  setQuery('');
+  changeLetter('All');
+  setAddOpen(false);
+  setSelectedTerm(null);
+};
 
   const showAllTerms = () => {
     setQuery('');
