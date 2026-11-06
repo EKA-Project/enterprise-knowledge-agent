@@ -46,15 +46,7 @@ function HeroChips({ reclaimMb, onExport, onFreeUp }) {
           {reclaimMb.toFixed(1)} MB
         </span>
       </button>
-<Link
-  to="/documents"
-  className={`${base} group border-[#d6e6f2] bg-white text-[#10283f] transition-all duration-300 hover:scale-[1.02] hover:border-[#1f718e] hover:bg-white hover:shadow-[0_0_10px_rgba(31,113,142,0.20)]`}
->
-  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#e8f1f8] text-[#1f718e]">
-    <ArrowLeft size={12} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
-  </span>
-  Back to Documents
-</Link>
+
     </div>
   );
 }

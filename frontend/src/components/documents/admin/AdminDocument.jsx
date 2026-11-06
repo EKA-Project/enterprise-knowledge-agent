@@ -14,27 +14,23 @@ function AdminDocument() {
   return (
     <>
       {/* Admin header: hero, then storage + buttons in one row below it */}
-      <div className="mb-6 [&_p:first-of-type]:text-[#7c949a]">
-        <PageHero
-          bare
-          eyebrow={`Ingestion Repository / ${countText}`}
-          title="Raw sources, structured."
-          description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
-        />
+<div className="mb-6">
+  <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
+    Ingestion Repository / {countText}
+  </p>
+
+  <PageHero
+    bare
+    title="Raw sources, structured."
+    description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
+  />
+</div>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <StorageIndicator />
 
           {/* Not wired yet: compare / redline flow comes later */}
-          <button
-            type="button"
-            className="inline-flex h-[34px] cursor-pointer items-center gap-2 rounded-full border border-[#cfe3f3] bg-white pl-2 pr-4 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-[#e1f0fa]"
-          >
-            <span className="flex h-5 w-5 items-center justify-center rounded bg-[#e1f0fa] text-[#1f718e]">
-              <Columns2 size={11} />
-            </span>
-            Compare &amp; Redline
-          </button>
+
 
           <button
             type="button"
@@ -48,7 +44,7 @@ function AdminDocument() {
             Ingest Document
           </button>
         </div>
-      </div>
+      
 
       {/* Admin-only document health overview */}
       <DocumentHealthOverview />

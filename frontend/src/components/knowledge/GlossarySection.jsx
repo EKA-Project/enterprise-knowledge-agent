@@ -50,23 +50,23 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
   };
 
   // Add a new term, keep the list alphabetical, and reset filters so it is visible
-const handleSave = (savedTerm) => {
-  setTerms((prev) =>
-    [
-      ...prev.filter((t) => t.id !== savedTerm.id),
-      savedTerm,
-    ].sort((a, b) =>
-      a.term.localeCompare(b.term, undefined, {
-        sensitivity: 'base',
-      }),
-    ),
-  );
+  const handleSave = (savedTerm) => {
+    setTerms((prev) =>
+      [
+        ...prev.filter((t) => t.id !== savedTerm.id),
+        savedTerm,
+      ].sort((a, b) =>
+        a.term.localeCompare(b.term, undefined, {
+          sensitivity: 'base',
+        }),
+      ),
+    );
 
-  setQuery('');
-  changeLetter('All');
-  setAddOpen(false);
-  setSelectedTerm(null);
-};
+    setQuery('');
+    changeLetter('All');
+    setAddOpen(false);
+    setSelectedTerm(null);
+  };
 
   const showAllTerms = () => {
     setQuery('');
@@ -111,7 +111,10 @@ const handleSave = (savedTerm) => {
             key={item.id}
             item={item}
             canManage={canManage}
-            onEdit={() => setAddOpen(true)}
+            onEdit={(item) => {
+              setSelectedTerm(item);
+              setAddOpen(true);
+            }}
           />
         ))}
       </div>
@@ -138,7 +141,7 @@ const handleSave = (savedTerm) => {
         </div>
 
         <div className="flex w-full items-center gap-2 sm:w-auto">
-         <label className="flex flex-1 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1.5 transition-[width,border-color,box-shadow] duration-300 focus-within:border-(--primary) focus-within:shadow-[0_0_0_3px_var(--primary-light)] sm:w-56 sm:flex-none sm:focus-within:w-[250px]">
+          <label className="flex flex-1 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1.5 transition-[width,border-color,box-shadow] duration-300 focus-within:border-(--primary) focus-within:shadow-[0_0_0_3px_var(--primary-light)] sm:w-56 sm:flex-none sm:focus-within:w-[250px]">
             <Search size={12} className="text-(--text-muted)" />
             <input
               type="text"
@@ -154,7 +157,10 @@ const handleSave = (savedTerm) => {
           {canManage && (
             <button
               type="button"
-              onClick={() => setAddOpen(true)}
+              onClick={() => {
+                setSelectedTerm(null);
+                setAddOpen(true);
+              }}
               className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-(--primary) px-3.5 py-1.5 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
             >
               <Plus size={12} /> Add term
@@ -170,8 +176,8 @@ const handleSave = (savedTerm) => {
           type="button"
           onClick={() => changeLetter('All')}
           className={`kb-mono shrink-0 cursor-pointer rounded-xl px-3 py-1 text-[11px] font-semibold transition-colors ${letter === 'All'
-              ? 'bg-(--primary) text-(--primary-contrast)'
-              : 'text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
+            ? 'bg-(--primary) text-(--primary-contrast)'
+            : 'text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
             }`}
         >
           All ({terms.length})
@@ -186,10 +192,10 @@ const handleSave = (savedTerm) => {
                 disabled={count === 0}
                 onClick={() => changeLetter(l)}
                 className={`kb-mono flex h-6 w-6 items-center justify-center rounded-lg text-[11px] font-semibold transition-colors ${active
-                    ? 'cursor-pointer bg-(--bg-surface-subtle) text-(--text-primary)'
-                    : count
-                      ? 'cursor-pointer text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
-                      : 'cursor-not-allowed text-(--text-muted) opacity-40'
+                  ? 'cursor-pointer bg-(--bg-surface-subtle) text-(--text-primary)'
+                  : count
+                    ? 'cursor-pointer text-(--text-secondary) hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)'
+                    : 'cursor-not-allowed text-(--text-muted) opacity-40'
                   }`}
               >
                 {l}
@@ -236,7 +242,17 @@ const handleSave = (savedTerm) => {
         </div>
       )}
 
-      {addOpen && <AddGlossaryTermModal onClose={() => setAddOpen(false)} onSave={handleAdd} />}
+{addOpen && (
+  <AddGlossaryTermModal
+    onClose={() => {
+      setAddOpen(false);
+      setSelectedTerm(null);
+    }}
+    onSave={handleSave}
+    mode={selectedTerm ? 'edit' : 'add'}
+    item={selectedTerm}
+  />
+)}
     </section>
   );
 }

@@ -61,7 +61,7 @@ function SummarySidebar({
             <button
               type="button"
               onClick={onReindex}
-              className={`${actionBtn} group text-[#1b79a8] hover:border-[#1f718e] hover:bg-[#1f718e] hover:text-white`}
+              className={`${actionBtn} inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1.5 text-[11px] font-semibold text-(--text-primary) transition-colors hover:bg-(--bg-surface-subtle)`}
             >
               <RefreshCw size={12} className="text-sky-600 group-hover:text-white" /> Re-index Chunks
             </button>

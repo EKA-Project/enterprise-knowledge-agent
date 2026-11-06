@@ -1,13 +1,14 @@
+
 import { departments, formats } from './StorageData';
 import { DeptIcon } from './StorageBits';
 import '../../../styles/Document.css';
 
 const FORMAT_TILE = {
-  PDF: 'bg-[#fde2e1] text-[#d9373f]',
-  DOCX: 'bg-[#e3ecfc] text-[#3b6fd4]',
-  CSV: 'bg-[#dcf7ea] text-[#0f9d6b]',
-  MD: 'bg-[#e6e9ff] text-[#5461d6]',
-  TXT: 'bg-[#eef1f4] text-[#6b7f8f]',
+  PDF: 'bg-(--status-danger-bg) text-(--status-danger)',
+  DOCX: 'bg-(--status-info-bg) text-(--status-info)',
+  CSV: 'bg-(--status-success-bg) text-(--status-success)',
+  MD: 'bg-(--primary-light) text-(--primary)',
+  TXT: 'bg-(--bg-surface-subtle) text-(--text-secondary)',
 };
 
 // Department / format cards under the capacity card. Click = filter the Free up space table.
@@ -20,7 +21,7 @@ function AllocationCards({ mode, active, hoveredKey, usedGb, documents, onSelect
     name: isDept ? 'All Enterprise Departments' : 'All Indexed Formats',
     gb: Number(usedGb),
     share: 100,
-    color: '#1381b7',
+    color: 'var(--primary)',
   };
   const cards = [all, ...(isDept ? departments : formats)];
 
@@ -30,6 +31,7 @@ function AllocationCards({ mode, active, hoveredKey, usedGb, documents, onSelect
         const isAll = c.key === 'ALL';
         const isActive = active === c.key;
         const isLinked = hoveredKey === c.key && !isActive;
+
         return (
           <button
             key={c.key}
@@ -39,46 +41,64 @@ function AllocationCards({ mode, active, hoveredKey, usedGb, documents, onSelect
             onMouseEnter={() => onHover(isAll ? null : c.key)}
             onMouseLeave={() => onHover(null)}
             style={isLinked ? { borderColor: c.color } : undefined}
-          className={`flex h-[144px] cursor-pointer flex-col rounded-[20px] border-2 border-t-[4px] bg-white p-[12px] text-left transition-colors ${
-              isActive ? 'border-[#1b79a8] shadow-[0_0_0_3px_rgba(27,121,168,0.12)]' : isLinked ? '' : 'border-[#e8f1f8] hover:border-[#bcd8ee]'
+            className={`flex h-[144px] cursor-pointer flex-col rounded-[20px] border-2 border-t-[4px] bg-(--bg-surface) p-[12px] text-left transition-colors ${
+              isActive
+                ? 'border-(--primary) shadow-(--shadow-md)'
+                : isLinked
+                  ? ''
+                  : 'border-(--border-subtle) hover:border-(--border-medium)'
             }`}
           >
             <div className="flex items-center justify-between">
               {isAll ? (
-                <span className="doc-mono rounded-md border border-[#cfe3f3] bg-white px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.08em] text-[#10283f]">
+                <span className="doc-mono rounded-md border border-(--border-medium) bg-(--bg-surface) px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.08em] text-(--text-primary)">
                   {c.tag}
                 </span>
               ) : isDept ? (
-                <span className="flex h-6 w-6 items-center justify-center rounded " style={{ color: c.color, backgroundColor: `${c.color}1f` }}>
+                <span
+                  className="flex h-6 w-6 items-center justify-center rounded"
+                  style={{ color: c.color, backgroundColor: `${c.color}1f` }}
+                >
                   <DeptIcon name={c.key} size={10} />
                 </span>
               ) : (
-                <span className={`doc-mono inline-flex h-7 items-center rounded-md px-3 text-[11px] font-bold uppercase ${FORMAT_TILE[c.key]}`}>
+                <span className={`doc-mono inline-flex h-7 items-center rounded-md px-3 text-[11px] font-bold uppercase ${FORMAT_TILE[c.key] ?? 'bg-(--bg-surface-subtle) text-(--text-secondary)'}`}>
                   {c.key}
                 </span>
               )}
-              <span className={`doc-mono text-[9px] rounded-md bg-[#eef4f9] px-2 py-0.5 text-[#7c949a] ${!isAll && isDept ? 'rounded-md bg-[#eef4f9] px-2 py-0.5' : ''}`}>
+
+              <span className="doc-mono rounded-md bg-(--bg-surface-subtle) px-2 py-0.5 text-[9px] text-(--text-muted)">
                 {isAll ? c.count : isDept ? `${c.docs} ${c.docs === 1 ? 'doc' : 'docs'}` : `${c.files} files`}
               </span>
             </div>
 
-            <p className="mt-3 text-[10px] font-semibold text-[#10283f]">{isAll || isDept ? c.name ?? c.key : c.label}</p>
+            <p className="mt-3 text-[10px] font-semibold text-(--text-primary)">
+              {isAll || isDept ? c.name ?? c.key : c.label}
+            </p>
 
             <div className="mt-1 flex items-end justify-between">
-              <span className="doc-mono text-[20px] font-black leading-9 text-[#10283f]">
+              <span className="doc-mono text-[20px] font-black leading-9 text-(--text-primary)">
                 {c.gb.toFixed(1)}
-                <span className="ml-1 text-[11px] font-black text-[#7c949a]">GB</span>
+                <span className="ml-1 text-[11px] font-black text-(--text-muted)">GB</span>
               </span>
+
               <span
                 className="doc-mono mb-1 rounded-md px-2 py-0.5 text-[9px] font-black"
-                style={isAll ? { color: '#1b79a8', backgroundColor: '#e1f0fa' } : { color: c.color, backgroundColor: `${c.color}1f` }}
+                style={
+                  isAll
+                    ? { color: 'var(--primary)', backgroundColor: 'var(--primary-light)' }
+                    : { color: c.color, backgroundColor: `${c.color}1f` }
+                }
               >
                 {c.share}%
               </span>
             </div>
 
-            <div className="mt-2.5 h-1 rounded-full bg-[#e8f0f6]">
-              <div className="h-full rounded-full" style={{ width: `${c.share}%`, backgroundColor: c.color }} />
+            <div className="mt-2.5 h-1 rounded-full bg-(--bg-surface-subtle)">
+              <div
+                className="h-full rounded-full"
+                style={{ width: `${c.share}%`, backgroundColor: c.color }}
+              />
             </div>
           </button>
         );

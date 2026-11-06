@@ -43,7 +43,7 @@ function Tooltip({ children }) {
   );
 }
 
-function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen, onArchive, onEditMetadata, onReindex, onDelete}) {
+function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen, onArchive, onEditMetadata, onReindex, onDelete }) {
   // "Pinned" / "Saved" tags appear when the user toggles a flag on this card
   // (not for documents that were already pinned / saved when the page loaded).
   const [showPinnedTag, setShowPinnedTag] = useState(false);
@@ -134,7 +134,7 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
                         className={document.isPinned ? 'fill-current' : 'group-hover:fill-current'}
                       />
                     </button>
-                    <Tooltip>{document.isPinned ? 'Unpin Document' : 'Pin Document'}</Tooltip>
+
                   </div>
                 ) : (
                   // Employee / Manager: a pinned document just shows a static red pin

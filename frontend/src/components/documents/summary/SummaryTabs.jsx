@@ -1,3 +1,4 @@
+
 import { FileText, BookOpen, Share2 } from 'lucide-react';
 
 const tabs = [
@@ -6,10 +7,13 @@ const tabs = [
   { key: 'graph', label: 'Connected Knowledge Graph', icon: Share2 },
 ];
 
-// Tab bar (Oct-20 video): light-blue bar, dark-green active pill.
+// Tab bar with theme-aware active and inactive states.
 function SummaryTabs({ active, onChange }) {
   return (
-    <div role="tablist" className="flex flex-wrap items-center gap-1 rounded-full bg-[#e2eef9] p-1.5">
+    <div
+      role="tablist"
+      className="flex flex-wrap items-center gap-1 rounded-full bg-(--bg-surface-subtle) p-1.5"
+    >
       {tabs.map(({ key, label, icon: Icon }) => (
         <button
           key={key}
@@ -19,8 +23,8 @@ function SummaryTabs({ active, onChange }) {
           onClick={() => onChange(key)}
           className={`inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
             active === key
-              ? 'bg-[#153830] text-white'
-              : 'text-(--text-primary) hover:bg-white/60'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-primary) hover:bg-(--bg-surface)'
           }`}
         >
           <Icon size={13} />

@@ -34,15 +34,23 @@ function CapacityCard({ summary, mode, onModeChange, hoveredKey, onHover }) {
 
 const toggleBtn = (on) =>
   `inline-flex h-[25px] cursor-pointer items-center gap-1.5 rounded-full pl-[4px] pr-[6px] text-[11px] font-bold transition-colors ${
-    on ? 'bg-[#0b6a9c] text-white shadow-sm' : 'text-[#44596a] hover:text-[#10283f]'
+    on
+      ? 'bg-(--primary) text-(--primary-contrast) shadow-sm'
+      : 'text-(--text-secondary) hover:text-(--text-primary)'
   }`;
+
 const iconCircle = (on) =>
   `flex h-[16px] w-[17px] items-center justify-center rounded-full ${
-    on ? 'bg-white/20 text-white' : 'bg-white text-[#44596a]'
+    on
+      ? 'bg-white/20 text-white'
+      : 'bg-(--bg-surface) text-(--text-secondary)'
   }`;
+
 const badge = (on) =>
   `doc-mono rounded-full px-1 py-1 text-[9px] font-bold leading-none ${
-    on ? 'bg-[#56a8ca] text-white' : 'bg-[#d4e5f2] text-[#7c949a]'
+    on
+      ? 'bg-(--accent-highlight) text-(--primary-contrast)'
+      : 'bg-(--bg-surface-subtle) text-(--text-muted)'
   }`;
   return (
     <section className="rounded-[16px] border border-(--border-subtle) bg-(--bg-surface) px-[17px] pb-[9px] pt-[13px] shadow-(--shadow-sm)">

@@ -9,11 +9,18 @@ const labelClass =
 
 // Add Glossary Term modal (admin action).
 // onSave receives the new term object; the parent decides where it goes.
-export default function AddGlossaryTermModal({ onClose, onSave }) {
-  const [term, setTerm] = useState('');
-  const [category, setCategory] = useState('Product Strategy & Design');
-  const [expansion, setExpansion] = useState('');
-  const [definition, setDefinition] = useState('');
+export default function AddGlossaryTermModal({
+  onClose,
+  onSave,
+  mode = 'add',
+  item = null,
+}) {
+  const [term, setTerm] = useState(item?.term ?? '');
+  const [category, setCategory] = useState(
+    item?.category ?? 'Product Strategy & Design'
+  );
+  const [expansion, setExpansion] = useState(item?.expansion ?? '');
+  const [definition, setDefinition] = useState(item?.definition ?? '');
 
   // Close on Escape
   useEffect(() => {
@@ -27,7 +34,7 @@ export default function AddGlossaryTermModal({ onClose, onSave }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     onSave({
-      id: `gl-${Date.now()}`,
+      id: mode === 'edit' ? item.id : `gl-${Date.now()}`,
       term: term.trim(),
       expansion: expansion.trim(),
       category,
@@ -63,9 +70,11 @@ export default function AddGlossaryTermModal({ onClose, onSave }) {
                 Admin Action
               </span>
             </div>
-            <h3 className="kb-serif text-lg font-bold text-(--text-primary)">Add Glossary Term</h3>
+            <h3 className="kb-serif text-lg font-bold text-(--text-primary)">
+              {mode === 'edit' ? 'Edit Glossary Term' : 'Add Glossary Term'}
+            </h3>
           </div>
-                   <button
+          <button
             type="button"
             aria-label="Close"
             onClick={onClose}
@@ -152,7 +161,7 @@ export default function AddGlossaryTermModal({ onClose, onSave }) {
             type="submit"
             className="cursor-pointer rounded-full bg-(--primary) px-4 py-1.5 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
           >
-            Save Term →
+           {mode === 'edit' ? 'Save Edits →' : 'Save Term →'}
           </button>
         </div>
       </form>
