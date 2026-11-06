@@ -92,7 +92,7 @@ function DocumentHealthOverview() {
     : `Real-time ingestion & health telemetry across ${total} total repository files.`;
 
   return (
-    <section className="mb-6 flex flex-col gap-2 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
+    <section className="mt-3 mb-6 flex flex-col gap-2 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
       {/* Left: ring + title */}
       <div className="flex items-center gap-5 lg:basis-[460px] lg:shrink-0">
         <HealthDonut
