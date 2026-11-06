@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { CancelButton } from "../common/ActionButtons";
-import { ACCESS_LEVELS, DEPT_SHORT_LABELS, USER_ROLES } from "./OrganizationData";
+import { DEPT_SHORT_LABELS, USER_ROLES } from "./OrganizationData";
 
 const label = "block text-[13.5px] font-semibold text-(--text-primary)";
 const field =
@@ -42,8 +42,8 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="md" icon={null} onClick={close} />
-            <Button variant="solid" size="md" type="submit" form="invite-form">Send Invitation</Button>
+            <CancelButton size="sm" icon={null} onClick={close} />
+            <Button variant="solid" size="sm" type="submit" form="invite-form">Send Invitation</Button>
           </div>
         );
       }}

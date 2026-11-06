@@ -4,8 +4,8 @@ import AuthBackground from '../../../../components/auth/AuthBackground';
 import BackLink from '../../../../components/common/BackLink';
 import PasswordInput from '../../../../components/auth/PasswordInput';
 import PasswordStrength from '../../../../components/auth/PasswordStrength';
-import '../../../../styles/auth.css';
-
+import styles from '../../../../styles/auth.module.css';
+/// STEP INDICATOR TOP
 const INVITE_STEPS = [
   { label: 'Verify', done: 'Verified' },
   { label: 'Account' },
@@ -18,44 +18,48 @@ const NO_INVITE_STEPS = [
   { label: 'Create Account' },
   { label: 'Approval' },
 ];
-
+// Step indicator component
 function StepIndicator({ steps, current }) {
   return (
-    <div className="step-indicator">
+    <div className={styles['step-indicator']}>
       {steps.map((step, i) => (
         <Fragment key={step.label}>
-          <div className={`step ${i <= current ? 'active' : ''}`}>
+          <div className={`${styles['step']} ${i <= current ? styles['active'] : ''}`}>
             <span
-              className={`step-num ${
-                i < current ? 'step-num--check' : i === current ? 'step-num--current' : ''
-              }`}
+              className={`${styles['step-num']} ${
+              i < current
+              ? styles['step-num--check']
+              : i === current
+              ? styles['step-num--current']
+              : ''
+            }`}
             >
               {i < current ? '✓' : i + 1}
             </span>
             {i < current && step.done ? step.done : step.label}
           </div>
-          {i < steps.length - 1 && <span className="step-arrow">→</span>}
+          {i < steps.length - 1 && <span className={styles['step-arrow']}>→</span>}
         </Fragment>
       ))}
     </div>
   );
 }
-
+//WORKSPACE CARD
 function WorkspaceCard() {
   return (
-    <div className="invite-card invite-card--simple">
-      <div className="invite-card-header invite-card-header--no-border">
-        <span className="invite-avatar">NS</span>
+    <div className={`${styles['invite-card']} ${styles['invite-card--simple']}`}>
+      <div className={`${styles['invite-card-header']} ${styles['invite-card-header--no-border']}`}>
+        <span className={styles['invite-avatar']}>NS</span>
         <div>
-          <p className="invite-label">Joining Workspace</p>
-          <p className="invite-company-name">Northstar Studio</p>
+          <p className={styles['invite-label']}>Joining Workspace</p>
+          <p className={styles['invite-company-name']}>Northstar Studio</p>
         </div>
-        <span className="workspace-role-badge">🔒 Engineering · Employee</span>
+        <span className={styles['workspace-role-badge']}>🔒 Engineering · Employee</span>
       </div>
     </div>
   );
 }
-
+///EXPORT PAGE MAIN COMPONENT
 export default function EmployeeCreateAccountPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -71,33 +75,33 @@ export default function EmployeeCreateAccountPage() {
   }
 
   return (
-    <div className="auth-shell">
+    <div className={styles['auth-shell']}>
       <AuthBackground />
 
-      <div className="auth-form-panel">
-        <div className="auth-card">
+      <div className={styles['auth-form-panel']}>
+        <div className={styles['auth-card']}>
           <StepIndicator steps={steps} current={current} />
 
-          <div className="auth-context-row">
+          <div className={styles['auth-context-row']}>
             <BackLink>← Back</BackLink>
-            <span className="auth-context-badge">👤 EMPLOYEE ACCOUNT</span>
+            <span className={styles['auth-context-badge']}>👤 EMPLOYEE ACCOUNT</span>
           </div>
 
-          <h2 className="auth-title">Create your EKA account</h2>
-          <p className="auth-description">Set up your secure access credentials.</p>
+          <h2 className={styles['auth-title']}>Create your EKA account</h2>
+          <p className={styles['auth-description']}>Set up your secure access credentials.</p>
 
           <WorkspaceCard />
 
-          <div className="auth-field">
+          <div className={styles['auth-field']}>
             <label htmlFor="full-name">Full Name</label>
             <input id="full-name" type="text" defaultValue="Alex Morgan" />
           </div>
 
-          <div className="auth-field">
-            <div className="auth-field-label-row">
+          <div className={styles['auth-field']}>
+            <div className={styles['auth-field-label-row']}>
               <label htmlFor="work-email">Work Email</label>
               {flow === 'invitation' && (
-                <span className="prefilled-badge">🔒 Pre-filled from invitation</span>
+                <span className={styles['prefilled-badge']}>🔒 Pre-filled from invitation</span>
               )}
             </div>
             <input
@@ -107,8 +111,8 @@ export default function EmployeeCreateAccountPage() {
             />
           </div>
 
-          <div className="password-fields-row">
-            <div className="auth-field">
+          <div className={styles['password-fields-row']}>
+            <div className={styles['auth-field']}>
               <label htmlFor="password">Password</label>
               <PasswordInput
                 id="password"
@@ -121,21 +125,21 @@ export default function EmployeeCreateAccountPage() {
               <PasswordStrength password={password} />
             </div>
 
-            <div className="auth-field">
+            <div className={styles['auth-field']}>
               <label htmlFor="confirm-password">Confirm Password</label>
               <input id="confirm-password" type="password" placeholder="••••••••••••••" />
             </div>
           </div>
 
           
-          <label className="terms-checkbox-row">
+          <label className={styles['terms-checkbox-row']}>
             <input type="checkbox" defaultChecked />
             <span>
               I agree to EKA's <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>.
             </span>
           </label>
 
-          <button onClick={handleCreateAccount} className="option-card-btn option-card-btn--teal">
+          <button onClick={handleCreateAccount} className={styles['option-card-btn'] + ' ' + styles['option-card-btn--teal']}>
             Send Request
             <span aria-hidden="true">→</span>
           </button>
