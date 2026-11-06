@@ -50,7 +50,7 @@ function MyEkaUsageChart({ data }) {
               <button
                 key={range}
                 type="button"
-                className={`rounded-full px-[0.65rem] py-[0.2rem] font-mono text-[0.72rem] transition-all duration-200 ${
+                className={`cursor-pointer rounded-full px-[0.65rem] py-[0.2rem] font-mono text-[0.6rem] transition-all duration-200 ${
                   activeRange === range
                     ? "bg-(--primary) font-bold text-white"
                     : "font-semibold text-(--text-muted)"
@@ -81,7 +81,7 @@ function MyEkaUsageChart({ data }) {
       </div>
 
       {/* Stacked Bar Chart */}
-      <div className="mt-4 flex h-36.25 w-full items-end justify-between gap-[0.65rem] border-b border-(--border-subtle) px-1 pb-[0.4rem] pt-2">
+      <div className="mt-8 flex h-40 w-full items-end justify-between gap-[0.65rem] border-b border-(--border-subtle) px-1 pb-[0.4rem] pt-2">
         {rangeData.data.map((item, index) => {
           const total = item.questions + item.documents + item.searches;
           const barHeight = (total / rangeData.maxValue) * 100;
@@ -155,7 +155,7 @@ function MyEkaUsageChart({ data }) {
 
       {/* Footer / Summary line */}
       <div
-        className={`mt-3 flex items-center justify-between gap-4 font-sans text-[0.74rem] transition-colors duration-150 ${
+        className={`mt-6 flex items-center justify-between gap-4 font-sans text-[0.74rem] transition-colors duration-150 ${
           hoveredIndex !== null ? "text-(--primary)" : "text-(--text-muted)"
         }`}
       >

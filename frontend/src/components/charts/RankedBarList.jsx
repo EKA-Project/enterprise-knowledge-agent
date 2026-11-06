@@ -30,13 +30,13 @@ function RankedBarList({ data, headerAction }) {
     >
       <div>
         {/* Header */}
-        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
-          <div className="min-w-0 grow basis-60">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0 flex-1">
             <h3 className="font-serif text-[1.2rem] font-bold text-(--text-primary)">
               {title}
             </h3>
 
-            {/* Hover text adopts the hovered row's color */}
+            {/* Hover text */}
             <p
               className={`mt-1 truncate text-[0.78rem] transition-all duration-150 ${
                 hovered ? "font-semibold" : "text-(--text-muted)"
@@ -51,16 +51,17 @@ function RankedBarList({ data, headerAction }) {
                   }`
                 : subtext}
             </p>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+            {/* Top user badge */}
             {badge && (
-              <span className="rounded-full bg-(--bg-surface-subtle) px-2.5 py-1 font-mono text-[0.68rem] font-semibold text-(--text-secondary)">
+              <span className="mt-3 inline-flex rounded-full bg-(--bg-surface-subtle) px-2.5 py-1 font-mono text-[0.68rem] font-semibold text-(--text-secondary)">
                 {badge}
               </span>
             )}
-            {headerAction}
           </div>
+
+          {/* Date range toggle */}
+          {headerAction && <div className="shrink-0">{headerAction}</div>}
         </div>
 
         {/* Rows */}
