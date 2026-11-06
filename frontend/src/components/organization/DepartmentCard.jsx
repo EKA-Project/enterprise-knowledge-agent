@@ -45,13 +45,19 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
   onClick={() => onEdit(dept.id)}
   aria-label={`Edit ${dept.name}`}
   title="Edit department"
-  className="grid size-8 cursor-pointer place-items-center rounded-lg text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--primary-light) hover:text-(--primary) active:scale-95"
+  className="grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--primary-light) hover:text-(--primary) active:scale-95"
 >
   <SquarePen size={17} />
 </button>
-          <button type="button" onClick={onDelete} aria-label={`Delete ${dept.name}`} title="Delete"className={`${iconBtn} hover:rotate-6 hover:bg-(--status-failure-bg) hover:text-(--status-failure)`}>
-            <Trash2 size={16} />
-          </button>
+          <button
+  type="button"
+  onClick={() => onDelete(dept.id)}
+  aria-label={`Delete ${dept.name}`}
+  title="Delete department"
+  className="grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--status-danger-bg) hover:text-(--status-danger) active:scale-95"
+>
+  <Trash2 size={17} />
+</button>
         </div>
       </div>
 

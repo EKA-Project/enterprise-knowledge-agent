@@ -32,6 +32,7 @@ export default function AnalyticsDonutChart({ segments, activeId = null, onHover
                 style={{ stroke: seg.color, opacity: dimmed ? 0.3 : 1, transition: "stroke-width 0.2s, opacity 0.2s" }}
                 onMouseEnter={() => onHover?.(seg.id)}
                 onMouseLeave={() => onHover?.(null)}
+                className="cursor-pointer transition-all duration-200"
               />
             );
           })}

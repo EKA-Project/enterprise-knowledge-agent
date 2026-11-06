@@ -6,9 +6,9 @@ const select =
 
 export default function UserFilters({ filters, onChange, departmentNames }) {
   return (
-<div className="org-rise flex flex-wrap items-center gap-3 rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-4 shadow-(--shadow-sm)">
-<label className="flex min-w-[240px] flex-1 items-center gap-2.5 rounded-xl border border-(--badge-border) bg-(--accent-chip) px-3.5 py-2.5 transition focus-within:border-(--border-focus) focus-within:shadow-[0_0_0_3px_var(--primary-glow)]">
-          <Search size={15} className="shrink-0 text-(--text-muted)" aria-hidden="true" />
+    <div className="org-rise flex flex-wrap items-center gap-3 rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-4 shadow-(--shadow-sm)">
+      <label className="flex min-w-[240px] flex-1 items-center gap-2.5 rounded-xl border border-(--badge-border) bg-(--primary-light) px-3.5 py-2.5 transition focus-within:border-(--border-focus) focus-within:shadow-[0_0_0_3px_var(--primary-glow)]">
+        <Search size={15} className="shrink-0 text-(--text-muted)" aria-hidden="true" />
         <input
           value={filters.query}
           onChange={(e) => onChange({ query: e.target.value })}
@@ -26,10 +26,7 @@ export default function UserFilters({ filters, onChange, departmentNames }) {
         <option value="all">All Roles</option>
         {USER_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
       </select>
-      <select aria-label="Access level" value={filters.access} onChange={(e) => onChange({ access: e.target.value })} className={select}>
-        <option value="all">All Access</option>
-        {ACCESS_LEVELS.map((a) => <option key={a} value={a}>{a}</option>)}
-      </select>
+      
       <select aria-label="Status" value={filters.status} onChange={(e) => onChange({ status: e.target.value })} className={select}>
         <option value="all">All Status</option>
         {USER_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
