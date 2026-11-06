@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { ACCESS_LEVELS, USER_ROLES, USER_STATUSES } from "./OrganizationData";
+import {  USER_ROLES, USER_STATUSES } from "./OrganizationData";
 
 const select =
   "cursor-pointer rounded-xl border border-(--badge-border) bg-(--accent-chip) px-3 py-1.5 text-[12.5px] font-semibold text-(--text-primary) outline-none transition hover:border-(--primary) focus:border-(--primary) focus:shadow-[0_0_0_3px_var(--primary-glow)]";

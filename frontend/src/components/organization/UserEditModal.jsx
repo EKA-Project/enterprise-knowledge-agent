@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { CancelButton } from "../common/ActionButtons";
-import { ACCESS_LEVELS, getInitials } from "./OrganizationData";
+import {  getInitials } from "./OrganizationData";
 
 const label = "text-[13.5px] font-semibold text-(--text-primary)";
 const hint = "text-[11px] text-(--text-muted)";
