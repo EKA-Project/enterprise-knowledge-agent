@@ -1,4 +1,4 @@
-import { FileText, Upload, UserPlus, UserX, X } from "lucide-react";
+import { FileText, Send, Upload, UserPlus, UserX, X } from "lucide-react";
 import Button from "./Button";
 
 /* ==========================================================================
@@ -52,6 +52,19 @@ export function IngestionLibraryButton(props) {
       {...props}
     >
       Ingestion Library →
+    </Button>
+  );
+}
+
+export function SendInvitationButton(props) {
+  return (
+    <Button
+      variant="solid"
+      icon={Send}
+      title="Send the invitation email"
+      {...props}
+    >
+      Send Invitation
     </Button>
   );
 }

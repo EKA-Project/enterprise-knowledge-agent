@@ -1,59 +1,129 @@
-import { useEffect } from "react";
-import { CheckCircle2, Info, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AlertCircle, CheckCircle2, Info, X } from "lucide-react";
+import "../../styles/toast.css";
 
-/**
- * toast: { id, message, tone?: "success" | "dark" | undefined }
- *   success   -> green
- *   dark      -> navy (used by Ask EKA / Chat History)
- *   (default) -> white card
- * onDismiss: (id) => void   (must be a stable function, e.g. from useCallback)
- */
-function ToastItem({ toast, onDismiss, animationClass }) {
+/* ==========================================================================
+   Toast  (components/common/Toast.jsx)
+   --------------------------------------------------------------------------
+   One notification card. The ToastProvider (context/ToastContext.jsx) owns
+   the list and the stack position; this file only draws a single toast.
+
+   Look: deep midnight card (same as the sidebar), serif message, sans
+   description, small coloured icon, countdown line along the bottom.
+
+   Props:
+     message      string   the main line
+     description  string   optional quieter second line
+     type         "success" | "error" | "info"   (default "info")
+     duration     ms before it closes itself; 0 = stays until closed
+     onDismiss    () => void   called after the exit animation (provider removes it)
+   ========================================================================== */
+
+/* ---------- Settings ---------- */
+
+// Keep in sync with the exit animation in styles/toast.css
+const EXIT_MS = 150;
+
+// Icon, icon colour, countdown-line colour and accessibility role per type.
+// The colours are brighter tints so they stay readable on the dark card.
+// Errors use role="alert" so screen readers announce them immediately.
+const TYPES = {
+  success: {
+    icon: CheckCircle2,
+    color: "text-[#4ade80]",
+    bar: "bg-[#4ade80]",
+    role: "status",
+  },
+  error: {
+    icon: AlertCircle,
+    color: "text-[#f87171]",
+    bar: "bg-[#f87171]",
+    role: "alert",
+  },
+  info: {
+    icon: Info,
+    color: "text-(--accent-highlight)",
+    bar: "bg-(--accent-highlight)",
+    role: "status",
+  },
+};
+
+function Toast({ message, description, type = "info", duration, onDismiss }) {
+  /* ---------- State and refs ---------- */
+  const [closing, setClosing] = useState(false); // true while the exit animation plays
+  const exitTimer = useRef(null);
+  const onDismissRef = useRef(onDismiss);
+
+  const config = TYPES[type] ?? TYPES.info;
+  const Icon = config.icon;
+
+  /* ---------- Closing ---------- */
+
+  // Always call the latest onDismiss, even if the provider re-rendered meanwhile
   useEffect(() => {
-    if (!toast?.id) return;
+    onDismissRef.current = onDismiss;
+  }, [onDismiss]);
 
-    const timer = setTimeout(() => {
-      onDismiss(toast.id);
-    }, 3800);
+  // Play the exit animation, then ask the provider to remove this toast.
+  // Called by the X button AND by the countdown line when it finishes.
+  const close = useCallback(() => {
+    if (exitTimer.current) return; // already closing
+    setClosing(true);
+    exitTimer.current = setTimeout(() => onDismissRef.current(), EXIT_MS);
+  }, []);
 
-    return () => clearTimeout(timer);
-  }, [toast?.id, onDismiss]);
+  // Don't leave a timer behind if the toast is removed early
+  useEffect(() => () => clearTimeout(exitTimer.current), []);
 
-  if (!toast) return null;
-  // ↑ Each toast removes itself after 3.8 seconds.
-  const success = toast.tone === "success";
-  const dark = toast.tone === "dark";
-  const Icon = success ? CheckCircle2 : Info;
-
+  /* ---------- Layout ---------- */
   return (
     <div
-      role="status"
-      aria-live="polite"
-      className={`${animationClass} pointer-events-auto flex max-w-sm items-start gap-2.5 rounded-xl border border-(--border-subtle) px-4 py-3 text-[12.5px] font-semibold shadow-(--shadow-lg) ${
-        success
-          ? "bg-(--status-success) text-white"
-          : dark
-            ? "bg-(--sidebar-bg) text-white"
-            : "bg-(--bg-surface) text-(--text-primary)"
-      }`}
+      role={config.role}
+      data-closing={closing || undefined}
+      className="toast group pointer-events-auto relative flex w-fit max-w-full items-start gap-2.5 self-end overflow-hidden rounded-2xl border border-(--sidebar-border) bg-(--sidebar-bg) py-2.5 pr-3 pl-3.5 font-sans shadow-[0_10px_30px_rgba(8,32,53,0.35)]"
     >
+      {/* Small coloured icon (no chip, for a lighter look) */}
       <Icon
-        size={15}
-        className={`mt-0.5 shrink-0 ${dark ? "text-(--accent-highlight)" : ""}`}
-        aria-hidden="true"
+        size={16}
+        strokeWidth={2.25}
+        className={`mt-px shrink-0 ${config.color}`}
       />
-      <span className="min-w-0 flex-1 leading-snug">{toast.message}</span>
 
+      {/* Text: serif message (like the modal titles), sans description */}
+      <div className="min-w-0 pr-1">
+        <p className="font-serif text-[0.85rem] leading-snug font-bold text-(--sidebar-text)">
+          {message}
+        </p>
+        {description && (
+          <p className="mt-0.5 text-[0.72rem] leading-snug font-medium text-(--sidebar-text-muted)">
+            {description}
+          </p>
+        )}
+      </div>
+
+      {/* Close button: faint until the toast is hovered or focused */}
       <button
         type="button"
-        onClick={() => onDismiss(toast.id)}
+        onClick={close}
         aria-label="Dismiss notification"
-        title="Dismiss notification"
-        className="shrink-0 rounded-full p-1 opacity-75 transition hover:bg-black/10 hover:opacity-100 focus-visible:outline-2"
+        className="-mr-1 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-(--sidebar-text-muted) opacity-50 transition hover:bg-(--sidebar-hover-bg) hover:text-(--sidebar-text) group-focus-within:opacity-100 group-hover:opacity-100"
       >
-        <X size={14} aria-hidden="true" />
+        <X size={12} />
       </button>
+
+      {/* Countdown line along the bottom edge. It shrinks over `duration`;
+          when the animation ends, the toast closes. duration = 0 means the toast
+          stays until closed, so no line is drawn. */}
+      {duration > 0 && (
+        <span
+          aria-hidden="true"
+          onAnimationEnd={close}
+          style={{ "--toast-ms": `${duration}ms` }}
+          className={`toast-bar absolute inset-x-0 bottom-0 h-0.5 origin-left ${config.bar}`}
+        />
+      )}
     </div>
   );
 }
-export default ToastItem;
+
+export default Toast;

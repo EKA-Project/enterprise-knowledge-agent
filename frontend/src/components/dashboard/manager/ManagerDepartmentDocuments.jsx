@@ -7,7 +7,7 @@ import {
   IngestDocumentButton,
   IngestionLibraryButton,
 } from "../../common/ActionButtons";
-
+import useUpload from "../../../hooks/useUpload";
 /* ==========================================================================
    ManagerDepartmentDocuments
    --------------------------------------------------------------------------
@@ -53,13 +53,14 @@ const actionLink =
 function ManagerDepartmentDocuments({
   documents,
   department,
-  onIngest = () => console.log("ingest document"),
+  onIngest, // optional override; by default the button opens the upload modal
   onOpenLibrary = () => console.log("open ingestion library"),
   onOpen = (doc) => console.log("open", doc.id),
   onEdit = (doc) => console.log("edit", doc.id),
   onReindex = (doc) => console.log("re-index", doc.id),
 }) {
   // ---- Pagination state + current page slice ----
+  const { openUpload, canUpload } = useUpload();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const startIdx = (page - 1) * pageSize;
@@ -131,7 +132,9 @@ function ManagerDepartmentDocuments({
             {row.chunks} chunks
           </span>
         ) : (
-          <span className="font-mono text-[0.72rem] text-(--text-muted)">—</span>
+          <span className="font-mono text-[0.72rem] text-(--text-muted)">
+            —
+          </span>
         ),
     },
     {
@@ -198,7 +201,10 @@ function ManagerDepartmentDocuments({
       subtitle="Scoped documents and playbooks indexed into your department's vector space."
       actions={
         <>
-          <IngestDocumentButton onClick={onIngest} />
+          <IngestDocumentButton
+            onClick={onIngest ?? openUpload}
+            disabled={!canUpload}
+          />
           <IngestionLibraryButton onClick={onOpenLibrary} />
         </>
       }
