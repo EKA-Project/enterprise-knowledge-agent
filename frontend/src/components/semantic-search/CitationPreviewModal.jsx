@@ -27,7 +27,7 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
       onClose={onClose}
       eyebrow={
         <>
-          <span className="rounded-md border border-[#b7ead8] bg-[#e3f7ee] px-2 py-0.5 text-[9.5px] font-bold tracking-wider text-[#278567]">
+          <span className="rounded-md border border-(--match-score-border) bg-(--match-score-bg) px-2 py-0.5 text-[9.5px] font-bold tracking-wider text-(--match-score-text)">
             {result.fileType}
           </span>
           <span className="rounded-full border border-(--border-medium) bg-(--bg-surface-subtle) px-2.5 py-0.5 text-[11px] font-semibold normal-case tracking-normal text-(--text-secondary)">
@@ -87,7 +87,7 @@ export default function CitationPreviewModal({ result, terms, onClose, onFollowU
             <p className="flex items-center gap-1.5 font-(family-name:--font-mono) text-[10px] font-bold uppercase tracking-widest text-(--text-secondary)">
               <span aria-hidden="true">🛡️</span> Verified document excerpt
             </p>
-            <span className="rounded-full border border-[#b7ead8] bg-[#e3f7ee] px-2 py-0.5 text-[10px] font-semibold text-[#278567]">
+            <span className="rounded-full border border-(--match-score-border) bg-(--match-score-bg) px-2 py-0.5 text-[10px] font-semibold text-(--match-score-text)">
               ✓ Grounded Source
             </span>
           </div>

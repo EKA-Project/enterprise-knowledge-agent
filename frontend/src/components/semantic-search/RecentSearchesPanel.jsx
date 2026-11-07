@@ -10,7 +10,7 @@ export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear
       <div className="flex items-center justify-between">
         <h3 className="flex items-center gap-2 text-[14px] font-bold text-(--text-primary)">
           <Clock size={14} aria-hidden="true" /> Recent searches
-          <span className="rounded-full bg-[#edf4fa] px-1.5 py-0.5 font-(family-name:--font-mono) text-[10px] font-semibold text-[#607a91]">
+          <span className="rounded-full bg-(--bg-surface-subtle) px-1.5 py-0.5 font-(family-name:--font-mono) text-[10px] font-semibold text-(--text-secondary)">
             {items.length}
           </span>
           <CircleHelp size={12} className="text-(--text-muted)" aria-hidden="true" />
@@ -19,8 +19,7 @@ export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear
           <button
             type="button"
             onClick={onClear}
-            className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-(--text-muted) transition-colors duration-200 hover:text-red-500"
-          >
+            className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-(--text-muted) transition-colors duration-200 hover:text-(--status-danger)">
             <Trash2 size={12} aria-hidden="true" /> Clear
           </button>
         )}
@@ -33,8 +32,8 @@ export default function RecentSearchesPanel({ items, onSelect, onRemove, onClear
           {items.map((item) => (
             <li
               key={item.id}
-              className="group flex items-center rounded-lg border border-[#c8e2f3] bg-[#e0eff9] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[#c8e2f3] hover:bg-white hover:shadow-sm"
-            >
+              className="group flex items-center rounded-lg border border-(--border-medium) bg-(--bg-surface-subtle) transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-(--bg-surface) hover:shadow-(--shadow-sm)"
+              >
               <button
                 type="button"
                 onClick={() => onSelect(item.query)}
