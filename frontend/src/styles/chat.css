@@ -74,7 +74,7 @@
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  border: 2px solid #fb923c;
+  border: 2px solid var(--status-warning);
   pointer-events: none;
   animation: ask-eka-ring 1.4s ease-out infinite;
 }
@@ -113,18 +113,6 @@
   to   { opacity: 1; transform: none; }
 }
 
-/* ---------- Toasts (used on both pages) ---------- */
-.chat-toast-in  { animation: chat-toast-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.chat-toast-out { animation: chat-toast-out 0.2s ease-in both; }
-@keyframes chat-toast-in {
-  from { opacity: 0; transform: translateX(28px) scale(0.97); }
-  to   { opacity: 1; transform: none; }
-}
-@keyframes chat-toast-out {
-  from { opacity: 1; transform: none; }
-  to   { opacity: 0; transform: translateX(28px) scale(0.97); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ask-eka-page .ask-eka-rise,
   .ask-eka-page .ask-eka-cursor,
@@ -133,7 +121,5 @@
   .ask-eka-page .ask-eka-stop::after,
   .ask-eka-page .ask-eka-blink,
   .chat-history-page .chat-rise,
-  .chat-history-page .chat-pop,
-  .chat-toast-in,
-  .chat-toast-out { animation: none; }
+  .chat-history-page .chat-pop { animation: none; }
 }

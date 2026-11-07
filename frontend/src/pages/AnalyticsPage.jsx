@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RefreshCw, Shield, Zap } from "lucide-react";
 import "../styles/analytics.css";
+import PageHero from "../components/common/PageHero";
 import HealthMetricsRow from "../components/analytics/HealthMetricsRow";
 import IngestionAuditPanel from "../components/analytics/IngestionAuditPanel";
 import ContradictionCard from "../components/analytics/ContradictionCard";
@@ -10,7 +11,7 @@ import KnowledgeGapSection from "../components/analytics/KnowledgeGapSection";
 import SentimentCard from "../components/analytics/SentimentCard";
 import DocumentMatrix from "../components/analytics/DocumentMatrix";
 import UsageSummary from "../components/analytics/UsageSummary";
-import ToastStack from "../components/common/Toast";
+import useToast from "../hooks/useToast.js";
 import {
   INGEST_CATEGORIES, INITIAL_CONTRADICTIONS, INITIAL_FAILURES, METRICS_BY_RANGE,
   RANGE_OPTIONS, buildReportCsv,
@@ -26,9 +27,7 @@ export default function AnalyticsPage() {
   const [contradictions, setContradictions] = useState(() =>
     INITIAL_CONTRADICTIONS.map((c) => ({ ...c, resolved: false })),
   );
-  const [toasts, setToasts] = useState([]);
   const [upload, setUpload] = useState(null); // null = closed, otherwise { title, category }
-  const toastId = useRef(0);
   const timers = useRef([]);
 
   useEffect(() => {
@@ -39,12 +38,14 @@ export default function AnalyticsPage() {
 
   const later = (fn, ms) => timers.current.push(setTimeout(fn, ms));
 
-  const pushToast = useCallback((message, tone = "info") => {
-    toastId.current += 1;
-    setToasts((prev) => [...prev.slice(-2), { id: toastId.current, message, tone }]);
-  }, []);
-  const dismissToast = useCallback((id) => setToasts((prev) => prev.filter((t) => t.id !== id)), []);
-
+   const toast = useToast();
+  const pushToast = useCallback(
+    (message, tone = "info") => {
+      const type = tone === "success" || tone === "error" ? tone : "info";
+      toast[type](message);
+    },
+    [toast],
+  );
   const metrics = METRICS_BY_RANGE[range];
   const alertCount = contradictions.filter((c) => !c.resolved).length;
 
@@ -103,59 +104,52 @@ export default function AnalyticsPage() {
 // Render the AnalyticsPage component with various sections and modals for knowledge analytics
   return (
     <div className="analytics-page mx-auto w-full max-w-6xl space-y-6">
-      <header className="anl-rise flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <p className="font-(family-name:--font-mono) text-[10.5px] font-medium uppercase tracking-[0.18em] text-(--text-eyebrow)">
-            Enterprise knowledge telemetry
-          </p>
-          <h2 className="mt-2 font-(family-name:--font-serif) text-[48px] font-bold leading-none tracking-tight text-(--text-primary)">
-            Knowledge Analytics.
-          </h2>
-          <p className="mt-3 max-w-[52ch] text-[13px] leading-relaxed text-(--text-secondary)">
-            Comprehensive audit metrics, grounding accuracy telemetry, cross-document discrepancy detection, and ungrounded query gap analysis.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2.5">
-          <div role="group" aria-label="Time range" className="inline-flex rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5">
-            {RANGE_OPTIONS.map((o) => (
+            <div className="anl-rise">
+        <PageHero
+          eyebrow="Enterprise knowledge telemetry"
+          title="Knowledge Analytics."
+          description="Comprehensive audit metrics, grounding accuracy telemetry, cross-document discrepancy detection, and ungrounded query gap analysis."
+          actions={
+            <>
+              <div role="group" aria-label="Time range" className="inline-flex rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5">
+                {RANGE_OPTIONS.map((o) => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    aria-pressed={range === o.id}
+                    onClick={() => setRange(o.id)}
+                    className={`rounded-full px-2 py-0.5 text-[11.5px] font-semibold transition ${
+                      range === o.id ? "bg-(--text-primary) text-(--primary-contrast)" : "text-(--text-muted) hover:text-(--primary)"
+                    }`}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
               <button
-                key={o.id}
                 type="button"
-                aria-pressed={range === o.id}
-                onClick={() => setRange(o.id)}
-                className={`rounded-full px-2 py-0.5 text-[11.5px] font-semibold transition ${
-                  range === o.id ? "bg-(--text-primary) text-white" : "text-(--text-muted) hover:text-(--primary)"
-                }`}
+                onClick={runScan}
+                disabled={scanning}
+                className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-2 py-0.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95"
               >
-                {o.label}
+                {scanning ? (
+                  <RefreshCw size={12} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <Zap size={12} className="fill-(--status-warning) text-(--status-warning)" strokeWidth={1.5} aria-hidden="true" />
+                )}
+                Run Audit
               </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={runScan}
-            disabled={scanning}
-            className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-2 py-0.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95"
-          >
-            {scanning ? <RefreshCw size={12} className="animate-spin" aria-hidden="true" /> : 
-            <Zap
-                size={12}
-                className="fill-amber-400 text-amber-400"
-                strokeWidth={1.5}
-                aria-hidden="true"
-            />}
-            Run Audit
-          </button>
-          <button
-            type="button"
-            onClick={exportReport}
-            className="rounded-full bg-(--text-primary) px-2 py-0.5 text-[12px] font-bold text-white transition hover:bg-(--primary) active:scale-95"
-          >
-            Export Report ↗
-          </button>
-        </div>
-      </header>
+              <button
+                type="button"
+                onClick={exportReport}
+                className="rounded-full bg-(--text-primary) px-2 py-0.5 text-[12px] font-bold text-(--primary-contrast) transition hover:bg-(--primary) active:scale-95"
+              >
+                Export Report ↗
+              </button>
+            </>
+          }
+        />
+      </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="flex items-center gap-2 font-(family-name:--font-serif) text-[17px] font-bold text-(--text-primary)">
@@ -222,8 +216,6 @@ export default function AnalyticsPage() {
           onSubmit={submitUpload}
         />
       )}
-
-      <ToastStack toasts={toasts} onDismiss={dismissToast} />
     </div>
   );
 }
