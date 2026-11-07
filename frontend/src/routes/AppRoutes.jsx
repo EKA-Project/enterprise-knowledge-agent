@@ -23,8 +23,6 @@ import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMember
 import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
-
-import Dashboard from "../pages/Dashboard.jsx";
 import SettingsPage from "../pages/SettingsPage.jsx";
 import AskEkaPage from "../pages/AskEkaPage";
 import ChatHistoryPage from "../pages/ChatHistoryPage";
