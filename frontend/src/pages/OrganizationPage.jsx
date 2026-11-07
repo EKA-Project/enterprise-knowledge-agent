@@ -161,13 +161,15 @@ export default function OrganizationPage() {
           Export Structure CSV
         </Button>
 
-        <Button
-          variant="solid"
-          size="sm"
-          onClick={() => setModal({ type: "create" })}
-        >
-          + Create Department
-        </Button>
+       <Button
+  variant="solid"
+  size="sm"
+  icon={Plus}
+  iconChip
+  onClick={() => setModal({ type: "create" })}
+>
+  Create Department
+</Button>
       </>
     ) : (
       <>

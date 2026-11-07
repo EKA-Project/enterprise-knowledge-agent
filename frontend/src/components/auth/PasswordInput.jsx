@@ -1,6 +1,8 @@
+import styles from '../../styles/auth.module.css';
+
 export default function PasswordInput({ id, value, onChange, showPassword, setShowPassword, placeholder, defaultValue }) {
   return (
-    <div className="password-input-wrap">
+    <div className={styles['password-input-wrap']}>
       <input
         id={id}
         type={showPassword ? 'text' : 'password'}
@@ -11,7 +13,7 @@ export default function PasswordInput({ id, value, onChange, showPassword, setSh
       />
       <button
         type="button"
-        className="password-toggle-btn"
+        className={styles['password-toggle-btn']}
         onClick={() => setShowPassword(!showPassword)}
         aria-label="Toggle password visibility"
       >

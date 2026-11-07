@@ -42,8 +42,8 @@ export default function DepartmentDeleteModal({ dept, lead, onClose, onConfirm }
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="md" onClick={close} />
-            <Button variant="danger" size="md" icon={Trash2} disabled={!ready} onClick={confirm}>
+            <CancelButton size="sm" onClick={close} />
+            <Button variant="danger" size="sm" icon={Trash2} disabled={!ready} onClick={confirm}>
               Permanently Delete
             </Button>
           </div>
