@@ -2,23 +2,28 @@ import { Box, Download, FileText } from "lucide-react";
 import { useState } from "react";
 import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
-import Button from "../../common/Button";
 import {
   IngestDocumentButton,
   IngestionLibraryButton,
 } from "../../common/ActionButtons";
+import {
+  ViewButton,
+  EditButton,
+  ReindexButton,
+} from "../../common/RowIconButtons";
 import useUpload from "../../../hooks/useUpload";
 import useDepartmentDocuments from "../../../hooks/useDepartmentDocuments";
 import { reindexDocument } from "../../../services/documentService.js";
-import ManagerDocumentRowMenu from "./ManagerDocumentRowMenu.jsx";
+
 /* ==========================================================================
    ManagerDepartmentDocuments
    --------------------------------------------------------------------------
-   Documents table for the Manager overview page. Built on the shared shell:
-   this file decides the COLUMNS and what goes in each cell. The data comes
-   from useDepartmentDocuments (services), one server-side page at a time.
+   Documents table for the Manager overview page. This file decides the
+   COLUMNS and what goes in each cell. The data comes from useDepartmentDocuments,
+   one server-side page at a time.
 
-   Columns: Document | Uploader | Size | Vector Chunks | Status | Action
+   Columns: Document | Uploaded At | Size | Vector Chunks | Status | Action
+   The Action column holds icon buttons only. Each page supplies its own handlers.
    ========================================================================== */
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -79,9 +84,8 @@ function TableSkeleton() {
 function ManagerDepartmentDocuments({
   onIngest, // optional override; by default the button opens the upload modal
   onOpenLibrary = () => console.log("open ingestion library"),
-  onOpen = (doc) => console.log("open", doc.id),
   // Placeholders until the Summary / Edit pages are wired (a teammate owns them)
-  onViewDetails = (doc) => console.log("view details", doc.id),
+  onView = (doc) => console.log("view", doc.id),
   onEdit = (doc) => console.log("edit metadata", doc.id),
   onReindexed = () => {}, // lets the page refresh the KPI cards after a re-index
 }) {
@@ -104,7 +108,7 @@ function ManagerDepartmentDocuments({
     setBusyId(row.id);
     try {
       await reindexDocument(row.id);
-      // Reload once, no polling: the row now reads "Processing…" and turns Ready
+      // Reload once, no polling: the row now reads "Processing" and turns Ready
       // on a later refresh (the mock pipeline needs about 1.5 s).
       reload();
       onReindexed();
@@ -155,21 +159,13 @@ function ManagerDepartmentDocuments({
       ),
     },
     {
-      key: "uploader",
-      header: "Uploader",
-      width: "19%",
+      key: "uploadedAt",
+      header: "Uploaded At",
+      width: "15%",
       render: (row) => (
-        <div className="flex items-center gap-2.5">
-          <span
-            aria-hidden="true"
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) font-mono text-[0.65rem] font-bold text-(--text-secondary)"
-          >
-            {row.uploader.charAt(0).toUpperCase()}
-          </span>
-          <span className="whitespace-nowrap text-[0.78rem] text-(--text-secondary)">
-            {row.uploader}
-          </span>
-        </div>
+        <span className="whitespace-nowrap font-mono text-[0.72rem] text-(--text-secondary)">
+          {row.uploadedAt}
+        </span>
       ),
     },
     {
@@ -217,40 +213,17 @@ function ManagerDepartmentDocuments({
     {
       key: "actions",
       header: "Action",
-      width: "11%",
+      width: "15%",
       align: "right",
       render: (row) => (
-        <div className="flex items-center justify-end gap-2">
-          {row.status === "indexed" && (
-            <Button
-              size="xs"
-              onClick={(e) => {
-                e.stopPropagation(); // do not also trigger the row click
-                onOpen(row);
-              }}
-            >
-              Open →
-            </Button>
-          )}
-          {row.status === "failed" && (
-            <button
-              type="button"
-              disabled={busyId !== null}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleReindex(row);
-              }}
-              className="cursor-pointer text-[0.75rem] font-semibold text-(--status-danger) hover:underline disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {busyId === row.id ? "Retrying…" : "Retry"}
-            </button>
-          )}
-          <ManagerDocumentRowMenu
-            row={row}
-            reindexDisabled={row.status === "indexing" || busyId !== null}
-            onViewDetails={onViewDetails}
-            onEdit={onEdit}
-            onReindex={handleReindex}
+        <div className="flex items-center justify-end gap-1">
+          <ViewButton onClick={() => onView(row)} />
+          <EditButton onClick={() => onEdit(row)} />
+          <ReindexButton
+            failed={row.status === "failed"}
+            loading={busyId === row.id}
+            disabled={row.status === "indexing" || busyId !== null}
+            onClick={() => handleReindex(row)}
           />
         </div>
       ),
@@ -277,7 +250,7 @@ function ManagerDepartmentDocuments({
       </div>
     );
   } else {
-       body = (
+    body = (
       <>
         {actionError && (
           <p
@@ -292,7 +265,7 @@ function ManagerDepartmentDocuments({
           rows={data.items}
           getRowKey={(row) => row.id}
           emptyMessage="No documents indexed for this department yet."
-          onRowClick={(row) => row.status === "indexed" && onOpen(row)}
+          onRowClick={(row) => onView(row)}
         />
       </>
     );
