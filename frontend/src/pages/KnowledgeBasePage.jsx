@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
-import UploadContext from '../context/UploadContext.jsx';
+import useUpload from '../hooks/useUpload.js';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
@@ -20,7 +20,7 @@ import {
 
 export default function KnowledgeBasePage() {
   const { activeRole } = useContext(AuthContext);
-  const { openUpload, canUpload } = useContext(UploadContext);
+  const { openUpload, canUpload } = useUpload();
   const [demoState, setDemoState] = useState('normal');
   const resetDemo = () => setDemoState('normal');
   // Category whose Collection Insights modal is open (null = closed)
@@ -42,21 +42,21 @@ export default function KnowledgeBasePage() {
             A map of what your team knows, grouped in ways that make sense.
           </p>
         </div>
-<div className="flex items-center gap-2">
-  {canUpload && (
-    <IngestDocumentButton onClick={openUpload} />
-  )}
+        <div className="flex items-center gap-2">
+          {canUpload && (
+            <IngestDocumentButton onClick={openUpload} />
+          )}
 
-  <Link
-    to="/documents"
-    className="cursor-pointer inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-2 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
-  >
-    <LayoutGrid size={12} /> Browse all
-  </Link>
-</div>
-</div>
+          <Link
+            to="/documents"
+            className="cursor-pointer inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-2 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
+          >
+            <LayoutGrid size={12} /> Browse all
+          </Link>
+        </div>
+      </div>
 
-<KnowledgeStats stats={knowledgeStats} />
+      <KnowledgeStats stats={knowledgeStats} />
 
       {/* Browse by Department */}
       <section className="mt-8">
@@ -114,7 +114,7 @@ export default function KnowledgeBasePage() {
           onClose={() => setInsightsCategory(null)}
         />
       )}
-      
+
       <DemoStatesBar value={demoState} onChange={setDemoState} />
     </div>
   );

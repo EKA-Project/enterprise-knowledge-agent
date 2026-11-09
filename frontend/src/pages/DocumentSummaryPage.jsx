@@ -78,13 +78,13 @@ function DocumentSummaryPage() {
   const archived = Boolean(
     live ? live.isArchived : baseDoc?.archived,
   );
-
   // Page data + edits / re-index made anywhere.
   const doc = useMemo(() => {
     if (!baseDoc) return null;
 
     return {
       ...baseDoc,
+      ...(live ? { status: live.status } : {}),
       ...(live?.edited
         ? {
             title: live.title,
@@ -103,7 +103,6 @@ function DocumentSummaryPage() {
   useEffect(() => {
     loadDocuments();
   }, []);
-
   useEffect(() => {
     let alive = true;
 
@@ -196,14 +195,14 @@ function DocumentSummaryPage() {
 
   // Re-index sends you to the Documents list.
   const reindex = () => {
-    startReindex(doc, { info, success });
+    startReindex(doc, { info, success, error });
     navigate('/documents');
   };
 
   const saveMetadata = (changes) => {
     setEditing(false);
 
-    saveDocumentMetadata(doc, changes, { info, success });
+    saveDocumentMetadata(doc, changes, { info, success, error });
 
     navigate('/documents');
   };
