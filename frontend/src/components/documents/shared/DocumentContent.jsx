@@ -1,4 +1,3 @@
-
 import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -66,7 +65,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const isManager = variant === 'manager';
   const navigate = useNavigate();
 
-  const { info, success } = useToast();
+  const { info, success, error } = useToast();
 
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState(ALL_CATEGORIES);
@@ -88,7 +87,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
-  // Confirm archive or restore.
+  // Confirm archive or restore. The list updates first; it is rolled back if the call fails.
   const confirmArchive = async () => {
     const doc = archiveTarget;
     const next = !doc.isArchived;
@@ -96,13 +95,18 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     setArchiveTarget(null);
     setDocumentArchivedFlag(doc.id, next);
 
-    await setDocumentArchived(doc.id, next);
+    try {
+      await setDocumentArchived(doc.id, next);
 
-    info(
-      next
-        ? `📦 Document "${doc.title}" archived`
-        : `Document "${doc.title}" restored to active repository`,
-    );
+      info(
+        next
+          ? `📦 Document "${doc.title}" archived`
+          : `Document "${doc.title}" restored to active repository`,
+      );
+    } catch {
+      setDocumentArchivedFlag(doc.id, !next);
+      error(`Could not update "${doc.title}". Please try again.`);
+    }
   };
 
   useEffect(() => {
@@ -167,7 +171,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
   // Re-index with shared toast notifications.
   const handleReindex = (doc) => {
-    return startReindex(doc, { info, success });
+    return startReindex(doc, { info, success, error });
   };
 
   return (
@@ -296,10 +300,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
         <>
           {viewMode === 'grid' ? (
             <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {pageItems.map((document) => (
+              {pageItems.map((doc) => (
                 <DocumentCard
-                  key={document.id}
-                  document={document}
+                  key={doc.id}
+                  document={doc}
                   adminMode={adminMode}
                   onToggleFlag={handleToggleFlag}
                   onOpen={openSummary}
@@ -354,7 +358,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           }}
           onClose={() => setEditTarget(null)}
           onSave={(changes) => {
-            saveDocumentMetadata(editTarget, changes, { info, success });
+            saveDocumentMetadata(editTarget, changes, { info, success, error });
             setEditTarget(null);
           }}
         />
