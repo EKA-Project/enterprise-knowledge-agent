@@ -104,6 +104,7 @@ function SummaryHeader({
               onReindex={onReindex}
               onArchive={onArchive}
               onDelete={onDelete}
+              archived={archived}
             />
           </>
         )}

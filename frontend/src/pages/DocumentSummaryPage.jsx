@@ -190,7 +190,7 @@ function DocumentSummaryPage() {
         : `Document "${doc.title}" restored to active repository`,
     );
 
-    navigate('/documents');
+
   };
 
   // Re-index sends you to the Documents list.
@@ -204,7 +204,7 @@ function DocumentSummaryPage() {
 
     saveDocumentMetadata(doc, changes, { info, success, error });
 
-    navigate('/documents');
+    
   };
 
   if (notFound) {

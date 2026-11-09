@@ -3,6 +3,7 @@ import {
   Pencil,
   RefreshCw,
   Archive,
+  ArchiveRestore,
   Trash2,
 } from 'lucide-react';
 
@@ -21,6 +22,7 @@ const Item = ({ label, onClick, danger, icon: Icon }) => (
 );
 
 export default function SummaryKebabMenu({
+  archived = false,
   onEdit,
   onReindex,
   onArchive,
@@ -84,8 +86,8 @@ export default function SummaryKebabMenu({
           />
 
           <Item
-            label="Archive Document"
-            icon={Archive}
+            label={archived ? 'Unarchive Document' : 'Archive Document'}
+            icon={archived ? ArchiveRestore : Archive}
             onClick={run(onArchive)}
           />
 

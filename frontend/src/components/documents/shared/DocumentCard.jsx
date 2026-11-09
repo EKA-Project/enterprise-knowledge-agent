@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Pin, Bookmark } from 'lucide-react';
 import '../../../styles/Document.css';
 
@@ -55,19 +54,8 @@ function DocumentCard({
   onDelete,
 }) {
   // The "Pinned" / "Saved" tags only show after the user toggles them in this session
-  const [showPinnedTag, setShowPinnedTag] = useState(false);
-  const [showSavedTag, setShowSavedTag] = useState(false);
-
-  const togglePin = () => {
-    setShowPinnedTag(!doc.isPinned);
-    onToggleFlag?.(doc.id, 'isPinned');
-  };
-
-  const toggleSave = () => {
-    setShowSavedTag(!doc.isBookmarked);
-    onToggleFlag?.(doc.id, 'isBookmarked');
-  };
-
+  const togglePin = () => onToggleFlag?.(doc.id, 'isPinned');
+  const toggleSave = () => onToggleFlag?.(doc.id, 'isBookmarked');
   // Run a handler without opening the card
   const stop = (fn) => (event) => {
     event.stopPropagation();
@@ -103,17 +91,10 @@ function DocumentCard({
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-              {adminMode && showPinnedTag && doc.isPinned && (
-                <span className="rounded-full border border-(--border-subtle) bg-(--bg-surface) px-2.5 py-1 text-[10px] font-semibold text-(--primary)">
-                  📌 Pinned
-                </span>
-              )}
-
               <span className="min-w-0 truncate rounded-full bg-(--bg-surface-subtle) px-3 py-1 text-[10px] font-semibold text-(--text-secondary)">
                 {doc.category}
               </span>
 
-              {showSavedTag && doc.isBookmarked && <Badge text="⭐ Saved" type="warning" size="sm" />}
             </div>
 
             {showActions && (
@@ -124,15 +105,14 @@ function DocumentCard({
                     aria-label={doc.isPinned ? 'Unpin document' : 'Pin document'}
                     aria-pressed={Boolean(doc.isPinned)}
                     onClick={stop(togglePin)}
-                    className={`group cursor-pointer rounded-md p-1 transition-colors ${
-                      doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted) hover:text-[#e5484d]'
-                    }`}
+                    className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted) hover:text-[#e5484d]'
+                      }`}
                   >
                     <Pin size={14} className={doc.isPinned ? 'fill-current' : 'group-hover:fill-current'} />
                   </button>
                 ) : (
                   doc.isPinned && (
-                    <span className="p-1 text-[#e5484d]" aria-label="Pinned by admin">
+                    <span className="p-1 text-[#e5484d]" title="Pinned by admin" aria-label="Pinned by admin">
                       <Pin size={14} className="fill-current" />
                     </span>
                   )
@@ -143,11 +123,10 @@ function DocumentCard({
                   aria-label={doc.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
                   aria-pressed={Boolean(doc.isBookmarked)}
                   onClick={stop(toggleSave)}
-                  className={`cursor-pointer rounded-md p-1 transition-colors ${
-                    doc.isBookmarked ? 'text-amber-500' : 'text-(--text-muted) hover:text-(--text-primary)'
-                  }`}
+                  className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isBookmarked ? 'text-[#f39c0a]' : 'text-(--text-muted) hover:text-[#f39c0a]'
+                    }`}
                 >
-                  <Bookmark size={14} className={doc.isBookmarked ? 'fill-current' : ''} />
+                  <Bookmark size={14} className={doc.isBookmarked ? 'fill-current' : 'group-hover:fill-current'} />
                 </button>
 
                 <DocumentCardMenu

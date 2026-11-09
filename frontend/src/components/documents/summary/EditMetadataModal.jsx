@@ -45,7 +45,7 @@ function EditMetadataModal({ doc, onClose, onSave }) {
       icon={<Pencil size={14} />}
       onClose={onClose}
       size="md"
-      spacing="regular"
+      spacing="compact"
       footer={
         <div className="flex items-center justify-end gap-2">
           <Button

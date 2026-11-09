@@ -145,7 +145,7 @@ function DocumentList({
               </button>
             ) : (
               doc.isPinned && (
-                <span className="p-1 text-(--primary)" aria-label="Pinned by admin">
+                <span className="p-1 text-(--primary)" title="Pinned by admin" aria-label="Pinned by admin">
                   <Pin size={14} className="fill-current" />
                 </span>
               )
