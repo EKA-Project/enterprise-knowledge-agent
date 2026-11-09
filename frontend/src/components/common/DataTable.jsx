@@ -42,8 +42,8 @@ function DataTable({
   onRowClick,
 }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-separate border-spacing-0 text-left">
+    <div className="w-full">
+      <table className="w-full table-fixed border-separate border-spacing-0 text-left">
         {caption && <caption className="sr-only">{caption}</caption>}
 
         {/* ---- Column widths ---- */}
@@ -62,7 +62,7 @@ function DataTable({
               <th
                 key={column.key}
                 scope="col"
-                className={`bg-(--table-header-bg) px-4 py-3 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-(--text-secondary) first:rounded-tl-(--radius-table) last:rounded-tr-(--radius-table) ${
+                className={`bg-(--table-header-bg)) px-4 py-3font-mono text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-(--text-secondary) first:rounded-tl-(--radius-table) last:rounded-tr-(--radius-table) ${
                   ALIGN[column.align ?? "left"]
                 }`}
               >

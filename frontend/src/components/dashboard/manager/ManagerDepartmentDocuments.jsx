@@ -1,6 +1,7 @@
 import { Box, Download, FileText } from "lucide-react";
 import { useState } from "react";
 import TableContainer from "../../common/TableContainer";
+import Pagination from "../../common/Pagination";
 import DataTable from "../../common/DataTable";
 import {
   IngestDocumentButton,
@@ -91,7 +92,7 @@ function ManagerDepartmentDocuments({
 }) {
   const { openUpload, canUpload } = useUpload();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const pageSize = DEFAULT_PAGE_SIZE;
   const { data, loading, error, reload } = useDepartmentDocuments(
     page,
     pageSize,
@@ -285,15 +286,15 @@ function ManagerDepartmentDocuments({
           <IngestionLibraryButton onClick={onOpenLibrary} />
         </>
       }
-      page={page}
-      pageSize={pageSize}
-      total={meta?.total ?? 0}
-      itemLabel="documents"
-      onPageChange={setPage}
-      onPageSizeChange={(newSize) => {
-        setPageSize(newSize);
-        setPage(1);
-      }}
+      footer={
+        <Pagination
+          page={page}
+          pageSize={pageSize}
+          total={meta?.total ?? 0}
+          itemLabel="documents"
+          onPageChange={setPage}
+        />
+      }
     >
       {body}
     </TableContainer>
