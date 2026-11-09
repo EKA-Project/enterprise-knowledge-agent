@@ -10,7 +10,7 @@ import BulkActionBar from '../components/documents/storage/BulkActionBar.jsx';
 import FileActionModal from '../components/documents/storage/FileActionModal.jsx';
 import TwoFactorModal from '../components/documents/storage/TwoFactorModal.jsx';
 import { storageFiles, storageSummary } from '../components/documents/storage/StorageData.js';
-import { DocToastHost, showDocToast } from '../components/documents/shared/DocToast';
+import { useToast } from '../context/ToastContext.jsx';
 import '../styles/Document.css';
 
 const BIN_SEED = storageFiles.filter((f) => f.startsInBin).map((f) => f.id);
@@ -18,9 +18,11 @@ const mb = (x) => `${Number(x.toFixed(1))} MB`; // 21 -> "21 MB"
 
 // Three chips under the hero text: Export Storage Audit / Free Up Space / Back to Documents.
 function HeroChips({ reclaimMb, onExport, onFreeUp }) {
-  const base = 'inline-flex h-8 cursor-pointer items-center gap-2 rounded-full border pl-2 pr-3 text-[11px] font-semibold transition-colors';
+  const base =
+    'inline-flex h-8 cursor-pointer items-center gap-2 rounded-full border pl-2 pr-3 text-[11px] font-semibold transition-colors';
+
   return (
-    <div className="mt-3  flex flex-wrap items-center gap-3.5">
+    <div className="mt-3 flex flex-wrap items-center gap-3.5">
       <button
         type="button"
         onClick={onExport}
@@ -31,6 +33,7 @@ function HeroChips({ reclaimMb, onExport, onFreeUp }) {
         </span>
         Export Storage Audit
       </button>
+
       <button
         type="button"
         onClick={onFreeUp}
@@ -46,13 +49,14 @@ function HeroChips({ reclaimMb, onExport, onFreeUp }) {
           {reclaimMb.toFixed(1)} MB
         </span>
       </button>
-
     </div>
   );
 }
 
 // Admin-only Storage Management page (route: /documents/storage).
 function StorageManagementPage() {
+  const { success, info } = useToast();
+
   const [mode, setMode] = useState('dept'); // 'dept' | 'format' (capacity toggle)
   const [activeKey, setActiveKey] = useState('ALL'); // selected card = filter for the table
   const [hoveredKey, setHoveredKey] = useState(null);
@@ -66,11 +70,21 @@ function StorageManagementPage() {
   const all = useMemo(
     () =>
       storageFiles.map((f) =>
-        restored.has(f.id) ? { ...f, opened: 'Restored just now', cited: 'Just now', idleDays: 0, status: 'Ready' } : f,
+        restored.has(f.id)
+          ? {
+              ...f,
+              opened: 'Restored just now',
+              cited: 'Just now',
+              idleDays: 0,
+              status: 'Ready',
+            }
+          : f,
       ),
     [restored],
   );
+
   const byId = useMemo(() => new Map(all.map((f) => [f.id, f])), [all]);
+
   const isActive = (f) => !bin.includes(f.id) && !purged.has(f.id);
 
   const activeFiles = all.filter(isActive);
@@ -78,17 +92,25 @@ function StorageManagementPage() {
   const selectedFiles = activeFiles.filter((f) => selected.has(f.id));
   const selectedMb = selectedFiles.reduce((s, f) => s + f.sizeMb, 0);
 
-  // Capacity numbers follow the actions
+  // Capacity numbers follow the actions.
   let usedMb = storageSummary.usedGb * 1000;
+
   all.forEach((f) => {
     const on = isActive(f);
+
     if (!f.startsInBin && !on) usedMb -= f.sizeMb;
     if (f.startsInBin && on) usedMb += f.sizeMb;
   });
-  const largeReclaim = activeFiles.filter((f) => f.sizeMb > 10 && !f.isProtected).reduce((s, f) => s + f.sizeMb, 0);
+
+  const largeReclaim = activeFiles
+    .filter((f) => f.sizeMb > 10 && !f.isProtected)
+    .reduce((s, f) => s + f.sizeMb, 0);
+
   const summary = {
     usedMb,
-    documents: storageSummary.documents - all.filter((f) => !f.startsInBin && purged.has(f.id)).length,
+    documents:
+      storageSummary.documents -
+      all.filter((f) => !f.startsInBin && purged.has(f.id)).length,
     reclaimableGb: (largeReclaim / 1000).toFixed(1),
     softDeleted: bin.length,
   };
@@ -99,7 +121,10 @@ function StorageManagementPage() {
   };
 
   const goFreeUp = () => {
-    document.getElementById('free-up-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document
+      .getElementById('free-up-card')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     setGlow(true);
     setTimeout(() => setGlow(false), 1600);
   };
@@ -116,57 +141,87 @@ function StorageManagementPage() {
 
     if (confirm.kind === 'recycle') {
       setBin((prev) => [...confirm.ids, ...prev]);
-      showDocToast(`✓ Moved ${n} ${n === 1 ? 'file' : 'files'} to Recycle Bin. ${mb(size)} freed.`, 'success');
+
+      success(
+        `✓ Moved ${n} ${n === 1 ? 'file' : 'files'} to Recycle Bin. ${mb(size)} freed.`,
+      );
     } else {
       setPurged((prev) => new Set([...prev, ...confirm.ids]));
       setBin((prev) => prev.filter((id) => !confirm.ids.includes(id)));
+
       if (confirm.from === 'bin') {
-        showDocToast(`✓ Two-Factor Verified: Permanently deleted "${files[0].name}" from Recycle Bin.`, 'success');
+        success(
+          `✓ Two-Factor Verified: Permanently deleted "${files[0].name}" from Recycle Bin.`,
+        );
       } else if (confirm.from === 'empty') {
-        showDocToast('🗑 Documents & staged data recycled into containment!', 'neutral');
-        showDocToast(`✓ Emptied Recycle Bin (${n} files, ${size.toFixed(1)} MB purged permanently).`, 'success');
+        info('🗑 Documents & staged data recycled into containment!');
+
+        success(
+          `✓ Emptied Recycle Bin (${n} files, ${size.toFixed(1)} MB purged permanently).`,
+        );
       } else {
-        showDocToast(`✓ Permanently purged ${n} files. ${mb(size)} freed.`, 'success'); // "1 files" like the video
+        success(
+          `✓ Permanently purged ${n} files. ${mb(size)} freed.`,
+        ); // "1 files" like the video
       }
     }
+
     finish();
   };
 
   const restore = (f) => {
     setBin((prev) => prev.filter((id) => id !== f.id));
     setRestored((prev) => new Set([...prev, f.id]));
-    showDocToast(`✓ Restored "${f.name}" from Recycle Bin to active library`, 'success');
+
+    success(`✓ Restored "${f.name}" from Recycle Bin to active library`);
   };
 
-  const confirmFiles = confirm ? confirm.ids.map((id) => byId.get(id)) : [];
-  const use2fa = confirm && confirm.kind === 'purge' && confirm.from === 'bin';
+  const confirmFiles = confirm
+    ? confirm.ids.map((id) => byId.get(id))
+    : [];
+
+  const use2fa =
+    confirm && confirm.kind === 'purge' && confirm.from === 'bin';
 
   return (
-    // 28px between cards, content starts at x=346 (1520px wide), like the video
+    // 28px between cards, content starts at x=346 (1520px wide), like the video.
     <div className="w-full space-y-5 pb-24 pt-[0px]">
-      <div className="[&_h1]:text-[34px] [&_h1]:leading-[0.5] [&_p:first-of-type]:text-[#7c949a] [&_p:last-of-type]:mt-4 [&_p:last-of-type]:max-w-[650px] [&_p:last-of-type]:text-[12px] [&_p:last-of-type]:font-light [&_p:last-of-type]:leading-[20px]">
+      <div className="[&>h1]:text-[34px] [&>h1]:leading-[0.5] [&>p:first-of-type]:text-[#7c949a] [&>p:last-of-type]:mt-4 [&>p:last-of-type]:max-w-[650px] [&>p:last-of-type]:text-[12px] [&>p:last-of-type]:font-light [&>p:last-of-type]:leading-[20px]">
         <PageHero
           bare
           eyebrow={
             <>
-              <Link to="/documents" className="transition-colors hover:text-[#1f718e]">
+              <Link
+                to="/documents"
+                className="transition-colors hover:text-[#1f718e]"
+              >
                 ← Documents
               </Link>
+
               <span className="mx-3">/</span>
+
               Storage Management
             </>
           }
           title="Know what's taking space."
           description="Enterprise document volume telemetry, format allocations, and intelligent reclamation suggestions to keep retrieval precision fast and lean."
         />
+
         <HeroChips
           reclaimMb={largeReclaim}
-          onExport={() => showDocToast('📄 Storage audit exported', 'neutral')}
+          onExport={() => info('📄 Storage audit exported')}
           onFreeUp={goFreeUp}
         />
       </div>
 
-      <CapacityCard summary={summary} mode={mode} onModeChange={changeMode} hoveredKey={hoveredKey} onHover={setHoveredKey} />
+      <CapacityCard
+        summary={summary}
+        mode={mode}
+        onModeChange={changeMode}
+        hoveredKey={hoveredKey}
+        onHover={setHoveredKey}
+      />
+
       <AllocationCards
         mode={mode}
         active={activeKey}
@@ -183,37 +238,60 @@ function StorageManagementPage() {
         onClearFilter={() => setActiveKey('ALL')}
         selected={selected}
         onSelectedChange={setSelected}
-        onSweep={() => showDocToast('✨ Swept 0s and 1s out of storage!', 'neutral')}
-        onToast={(m) => showDocToast(m, 'neutral')}
+        onSweep={() => info('✨ Swept 0s and 1s out of storage!')}
+        onToast={(m) => info(m)}
         glow={glow}
       />
 
       <RecycleBinSection
         items={binFiles}
         onRestore={restore}
-        onPurge={(f) => setConfirm({ kind: 'purge', ids: [f.id], from: 'bin' })}
-        onEmpty={() => setConfirm({ kind: 'purge', ids: [...bin], from: 'empty' })}
+        onPurge={(f) =>
+          setConfirm({ kind: 'purge', ids: [f.id], from: 'bin' })
+        }
+        onEmpty={() =>
+          setConfirm({ kind: 'purge', ids: [...bin], from: 'empty' })
+        }
       />
 
       <BulkActionBar
         count={selectedFiles.length}
         reclaimMb={selectedMb}
-        onRecycle={() => setConfirm({ kind: 'recycle', ids: selectedFiles.map((f) => f.id), from: 'table' })}
-        onPurge={() => setConfirm({ kind: 'purge', ids: selectedFiles.map((f) => f.id), from: 'table' })}
+        onRecycle={() =>
+          setConfirm({
+            kind: 'recycle',
+            ids: selectedFiles.map((f) => f.id),
+            from: 'table',
+          })
+        }
+        onPurge={() =>
+          setConfirm({
+            kind: 'purge',
+            ids: selectedFiles.map((f) => f.id),
+            from: 'table',
+          })
+        }
         onDisarm={() => setSelected(new Set())}
       />
 
       {confirm && use2fa && (
-        <TwoFactorModal file={confirmFiles[0]} onClose={() => setConfirm(null)} onVerified={runConfirm} />
+        <TwoFactorModal
+          file={confirmFiles[0]}
+          onClose={() => setConfirm(null)}
+          onVerified={runConfirm}
+        />
       )}
+
       {confirm && !use2fa && (
-        <FileActionModal variant={confirm.kind} files={confirmFiles} onClose={() => setConfirm(null)} onConfirm={runConfirm} />
+        <FileActionModal
+          variant={confirm.kind}
+          files={confirmFiles}
+          onClose={() => setConfirm(null)}
+          onConfirm={runConfirm}
+        />
       )}
-      <DocToastHost />
     </div>
   );
 }
 
 export default StorageManagementPage;
-
-

@@ -14,6 +14,9 @@ import { knowledgeStats, knowledgeCategories } from '../components/knowledge/Kno
 import '../styles/knowledge.css';
 import DemoStatesBar from '../components/knowledge/DemoStatesBar';
 import SectionState from '../components/knowledge/SectionState';
+import {
+  IngestDocumentButton,
+} from '../components/common/ActionButtons.jsx';
 
 export default function KnowledgeBasePage() {
   const { activeRole } = useContext(AuthContext);
@@ -39,26 +42,21 @@ export default function KnowledgeBasePage() {
             A map of what your team knows, grouped in ways that make sense.
           </p>
         </div>
+<div className="flex items-center gap-2">
+  {canUpload && (
+    <IngestDocumentButton onClick={openUpload} />
+  )}
 
-        <div className="flex items-center gap-2">
-          {canUpload && (
-            <button
-              type="button"
-              onClick={openUpload}
-              className="cursor-pointer inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-3.5 py-1 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
-            >
-              <Upload size={12} /> Upload document
-            </button>
-          )}
-          <Link
-            to="/documents"
-            className="cursor-pointer inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
-          >
-            <LayoutGrid size={12} /> Browse all
-          </Link>
-        </div>
-      </div>
-      <KnowledgeStats stats={knowledgeStats} />
+  <Link
+    to="/documents"
+    className="cursor-pointer inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-2 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
+  >
+    <LayoutGrid size={12} /> Browse all
+  </Link>
+</div>
+</div>
+
+<KnowledgeStats stats={knowledgeStats} />
 
       {/* Browse by Department */}
       <section className="mt-8">

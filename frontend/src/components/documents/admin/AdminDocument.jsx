@@ -7,6 +7,7 @@ import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
 import { useDocumentCountText } from '../shared/documentResults.js';
 import { Upload } from 'lucide-react';
+import { IngestDocumentButton } from '../../common/ActionButtons.jsx';
 
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
@@ -32,17 +33,11 @@ function AdminDocument() {
           {/* Not wired yet: compare / redline flow comes later */}
 
 
-          <button
-            type="button"
-            onClick={openUpload}
-            disabled={!canUpload}
-            className="ml-auto inline-flex h-[34px] cursor-pointer items-center gap-2 rounded-full bg-(--primary) pl-1.5 pr-3.5 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/25">
-              <Upload size={11} />
-            </span>
-            Ingest Document
-          </button>
+<IngestDocumentButton
+  onClick={openUpload}
+  disabled={!canUpload}
+  className="ml-auto"
+/>
         </div>
       
 

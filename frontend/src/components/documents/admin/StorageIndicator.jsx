@@ -2,6 +2,7 @@
 import { Save, ExternalLink } from 'lucide-react';
 import { documentStorage } from '../shared/DocumentData';
 import { Link } from 'react-router-dom';
+import Badge from '../../common/Badge.jsx';
 
 // Storage pill beside the header buttons.
 function StorageIndicator() {
@@ -25,9 +26,11 @@ function StorageIndicator() {
             {usedGb} GB / {totalGb} GB
           </span>
 
-          <span className="rounded-full border border-(--status-success-bg) bg-(--status-success-bg) px-2 py-0.5 text-[10px] font-semibold text-(--status-success)">
-            {percent.toFixed(1)}% Capacity
-          </span>
+<Badge
+  text={`${percent.toFixed(1)}% Capacity`}
+  type="success"
+  size="sm"
+/>
 
           {/* Not wired yet: storage management page comes later */}
           <Link
