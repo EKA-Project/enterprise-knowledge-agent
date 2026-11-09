@@ -17,7 +17,7 @@ function Pagination({
   const end = Math.min(page * pageSize, total);
 
   const buttonClass =
-    "cursor-pointer rounded-full border border-(--border-subtle) px-3 py-1 text-xs font-medium text-(--text-secondary) transition-colors hover:bg-(--primary-light) disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent";
+    "inline-flex cursor-pointer items-center gap-1 rounded-full border border-(--border-medium) bg-(--bg-surface-elevated) px-3.5 py-1.5 text-xs font-semibold text-(--text-secondary) shadow-(--shadow-sm) transition-colors hover:border-(--primary) hover:bg-(--primary-light) hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary) disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:hover:border-(--border-medium) disabled:hover:bg-(--bg-surface-elevated) disabled:hover:text-(--text-secondary)";
 
   return (
     <nav

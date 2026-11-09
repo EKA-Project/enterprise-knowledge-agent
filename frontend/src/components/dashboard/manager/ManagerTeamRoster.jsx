@@ -21,7 +21,7 @@ import RemoveMemberModal from "../../common/RemoveMemberModal";
    space, not as a scrollbar.
    ========================================================================== */
 
-const ROSTER_PAGE_SIZE = 6;
+const ROSTER_PAGE_SIZE = 10;
 
 function getInitials(name) {
   return name

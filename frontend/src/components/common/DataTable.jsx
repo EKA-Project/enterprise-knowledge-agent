@@ -62,7 +62,7 @@ function DataTable({
               <th
                 key={column.key}
                 scope="col"
-                className={`bg-(--table-header-bg)) px-4 py-3font-mono text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-(--text-secondary) first:rounded-tl-(--radius-table) last:rounded-tr-(--radius-table) ${
+                className={`border-b border-(--border-medium) bg-(--table-header-bg) px-4 py-3.5 font-mono text-[0.68rem] font-bold uppercase tracking-[0.16em] text-(--text-secondary) first:rounded-tl-(--radius-table) last:rounded-tr-(--radius-table) ${
                   ALIGN[column.align ?? "left"]
                 }`}
               >
