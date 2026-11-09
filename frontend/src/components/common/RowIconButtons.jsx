@@ -20,11 +20,11 @@ import Tooltip from "./Tooltip";
 // Colour per tone. Only theme tokens, so every theme works.
 const TONE = {
   neutral:
-    "text-(--text-muted) hover:bg-(--bg-surface-subtle) hover:text-(--primary)",
+    "text-(--text-muted) hover:-translate-y-0.5 hover:border-(--primary)/30 hover:bg-(--accent-chip) hover:text-(--primary) hover:shadow-sm",
   danger:
-    "text-(--text-muted) hover:bg-(--status-failure-subtle) hover:text-(--status-danger)",
+    "text-(--text-muted) hover:-translate-y-0.5 hover:border-(--status-danger)/30 hover:bg-(--status-failure-subtle) hover:text-(--status-danger) hover:shadow-sm",
   failed:
-    "text-(--status-danger) hover:bg-(--status-failure-subtle)",
+    "text-(--status-danger) hover:-translate-y-0.5 hover:border-(--status-danger)/30 hover:bg-(--status-failure-subtle) hover:shadow-sm",
 };
 
 // Shared base. Not exported: pages use the named wrappers below.
@@ -42,23 +42,23 @@ function RowIconButton({
     onClick?.(event);
   }
 
+  // Native title: the browser draws it outside the table, so it is never clipped
   return (
-    <Tooltip label={label}>
-      <button
-        type="button"
-        aria-label={label}
-        aria-busy={loading || undefined}
-        disabled={disabled || loading}
-        onClick={handleClick}
-        className={`inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${TONE[tone]} ${className}`}
-      >
-        <Icon
-          size={14}
-          aria-hidden="true"
-          className={loading ? "animate-spin" : ""}
-        />
-      </button>
-    </Tooltip>
+    <button
+      type="button"
+      title={label}
+      aria-label={label}
+      aria-busy={loading || undefined}
+      disabled={disabled || loading}
+      onClick={handleClick}
+      className={`inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg border border-transparent transition-[transform,background-color,color,border-color,box-shadow] duration-200 ease-out active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 ${TONE[tone]} ${className}`}
+    >
+      <Icon
+        size={14}
+        aria-hidden="true"
+        className={loading ? "animate-spin" : ""}
+      />
+    </button>
   );
 }
 
