@@ -154,6 +154,7 @@ function DocumentCard({
                   doc={doc}
                   adminMode={adminMode}
                   isPinned={Boolean(doc.isPinned)}
+                  isArchived={Boolean(doc.isArchived)}
                   isBookmarked={Boolean(doc.isBookmarked)}
                   onOpen={withDoc(onOpen)}
                   onToggleBookmark={toggleSave}

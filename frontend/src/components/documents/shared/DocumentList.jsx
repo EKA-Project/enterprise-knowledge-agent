@@ -16,7 +16,8 @@ const deptStyle = {
   'Product Strategy & Design': { icon: Palette, cls: 'bg-[#efe6fd] text-[#7b4fc9]' },
   'Legal & Finance': { icon: Scale, cls: 'bg-[#e6efe9] text-[#4b6a58]' },
 };
-
+// Turns onX(doc) into a no-arg callback for the menu; stays undefined when the parent didn't pass it.
+const bindDoc = (fn, doc) => (fn ? () => fn(doc) : undefined);
 // List view of the documents, built on the shared DataTable.
 // Rows and the "Summary →" button open the summary page.
 function DocumentList({
@@ -173,17 +174,18 @@ function DocumentList({
 
           {showActions && (
             <DocumentCardMenu
-              doc={document}
+              doc={doc}
               adminMode={adminMode}
               isPinned={Boolean(doc.isPinned)}
+              isArchived={Boolean(doc.isArchived)}
               isBookmarked={Boolean(doc.isBookmarked)}
-              onOpen={() => onOpen?.(doc)}
+              onOpen={bindDoc(onOpen, doc)}
               onToggleBookmark={() => onToggleFlag?.(doc.id, 'isBookmarked')}
               onTogglePin={() => onToggleFlag?.(doc.id, 'isPinned')}
-              onArchive={() => onArchive?.(doc)}
-              onEditMetadata={() => onEditMetadata?.(doc)}
-              onReindex={() => onReindex?.(doc)}
-              onDelete={() => onDelete?.(doc)}
+              onArchive={bindDoc(onArchive, doc)}
+              onEditMetadata={bindDoc(onEditMetadata, doc)}
+              onReindex={bindDoc(onReindex, doc)}
+              onDelete={bindDoc(onDelete, doc)}
             />
           )}
         </div>
