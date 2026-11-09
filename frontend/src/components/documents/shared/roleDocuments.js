@@ -44,29 +44,33 @@ export function setDocumentArchivedFlag(id, value) {
   emit();
 }
 
-// Re-index flow: queued notification + Processing card, then success notification.
 export async function startReindex(doc, notify = {}) {
-  if (processing[doc.id]) return;
+  if (processing[doc.id]) {
+    notify.info?.(`"${doc.title}" is already being re-indexed`);
+    return;
+  }
 
   processing = { ...processing, [doc.id]: true };
   emit();
 
-  notify.info?.(
-    `⏳ Queued vector re-indexing for "${doc.title}"…`,
-  );
+  notify.info?.(`⏳ Queued vector re-indexing for "${doc.title}"…`);
 
-  await reindexDocument(doc.id);
+  try {
+    await reindexDocument(doc.id);
 
-  await new Promise((r) => setTimeout(r, 3000)); // mock pipeline time, remove with the real API
+    await new Promise((r) => setTimeout(r, 3000)); // mock pipeline time, remove with the real API
 
-  processing = { ...processing, [doc.id]: false };
-  reindexed = { ...reindexed, [doc.id]: true };
+    reindexed = { ...reindexed, [doc.id]: true };
 
-  emit();
-
-  notify.success?.(
-    `✓ Successfully re-indexed vector embeddings for "${doc.title}"`,
-  );
+    notify.success?.(
+      `✓ Successfully re-indexed vector embeddings for "${doc.title}"`,
+    );
+  } catch {
+    notify.error?.(`Re-indexing failed for "${doc.title}"`);
+  } finally {
+    processing = { ...processing, [doc.id]: false };
+    emit();
+  }
 }
 
 // "Save Changes & Re-index" of the Edit Metadata modal.
@@ -98,18 +102,18 @@ export function useRoleDocuments() {
         .filter((d) => !deleted[d.id])
         .map((d) => {
           const e = edits[d.id];
-          const isArchived = archived[d.id] ?? false;
+          const isArchived = archived[d.id] ?? Boolean(d.isArchived);
 
           return {
             ...d,
             ...(e
               ? {
-                  title: e.title,
-                  category: e.category,
-                  author: e.author,
-                  description: e.executiveSummary,
-                  edited: true,
-                }
+                title: e.title,
+                category: e.category,
+                author: e.author,
+                description: e.executiveSummary,
+                edited: true,
+              }
               : {}),
             isBookmarked:
               bookmarks[activeRole]?.[d.id] ??
