@@ -1,4 +1,5 @@
-import { KeyRound, MoreVertical } from "lucide-react";
+import { Copy, KeyRound } from "lucide-react";
+import { ViewButton, RemoveButton } from "../../common/RowIconButtons";
 import { useState } from "react";
 import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
@@ -20,7 +21,18 @@ function ManagerTeamRoster({
   const [selectedMember, setSelectedMember] = useState(null);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [memberToRemove, setMemberToRemove] = useState(null);
-  const [openMenu, setOpenMenu] = useState(null); // { row, top, right }
+  const [copiedId, setCopiedId] = useState(null); // member whose Emp ID was just copied
+
+  // Copies the Emp ID and shows "Copied" on that chip for 1.5 seconds
+  async function copyEmployeeCode(member) {
+    try {
+      await navigator.clipboard.writeText(member.employeeCode);
+      setCopiedId(member.id);
+      setTimeout(() => setCopiedId(null), 1500);
+    } catch {
+      // Clipboard can be blocked (for example on a non-secure page). The code stays visible.
+    }
+  }
 
   const getInitials = (name) =>
     name
@@ -42,7 +54,7 @@ function ManagerTeamRoster({
       render: (row) => (
         <div className="flex items-center gap-2">
           <div
-            className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full font-mono text-[0.5rem] font-bold ${
+            className={`flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full font-mono text-[0.5rem] font-bold ${
               row.id === currentUserId
                 ? "bg-(--primary) text-white"
                 : "border border-(--primary)/20 bg-(--accent-chip) text-(--accent-chip-text)"
@@ -70,18 +82,22 @@ function ManagerTeamRoster({
       ),
     },
     {
-      key: "title",
-      header: "Role",
+      key: "employeeCode",
+      header: "Emp ID",
       width: "24%",
       render: (row) => (
-        <div>
-          <p className="whitespace-nowrap text-[0.77rem] font-semibold leading-tight text-(--text-primary)">
-            {row.title}
-          </p>
-          <p className="font-mono text-[0.55rem] uppercase leading-tight tracking-wider text-(--text-muted)">
-            {row.role}
-          </p>
-        </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation(); // keep the click away from the row (it opens the user view)
+            copyEmployeeCode(row);
+          }}
+          title="Copy Emp ID"
+          className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-(--border-subtle) bg-(--bg-surface) px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-(--text-secondary) transition-colors hover:border-(--primary) hover:text-(--primary)"
+        >
+          {copiedId === row.id ? "Copied" : row.employeeCode}
+          {copiedId !== row.id && <Copy size={11} aria-hidden="true" />}
+        </button>
       ),
     },
     {
@@ -103,7 +119,7 @@ function ManagerTeamRoster({
     {
       key: "queries",
       header: "Queries",
-      width: "17%",
+      width: "15%",
       render: (row) => (
         <div>
           <p className="whitespace-nowrap text-[0.72rem] leading-tight text-(--text-muted)">
@@ -121,34 +137,22 @@ function ManagerTeamRoster({
     {
       key: "actions",
       header: "Actions",
-      width: "10%",
+      width: "12%",
       align: "center",
-      render: (row) => {
-        if (row.id === currentUserId) return null;
-
-        return (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              const rect = e.currentTarget.getBoundingClientRect();
-              setOpenMenu(
-                openMenu?.row.id === row.id
-                  ? null
-                  : {
-                      row,
-                      top: rect.bottom + 4,
-                      right: window.innerWidth - rect.right,
-                    },
-              );
-            }}
-            className="cursor-pointer rounded p-1 text-(--text-muted) transition-colors hover:bg-(--bg-surface-subtle) hover:text-(--text-primary)"
-            aria-label="Open actions menu"
-          >
-            <MoreVertical size={14} />
-          </button>
-        );
-      },
+      render: (row) => (
+        <div className="flex items-center justify-center gap-1">
+          <ViewButton
+            label={`View ${row.name}`}
+            onClick={() => setSelectedMember(row)}
+          />
+          {row.id !== currentUserId && (
+            <RemoveButton
+              label={`Remove ${row.name} from team`}
+              onClick={() => setMemberToRemove(row)}
+            />
+          )}
+        </div>
+      ),
     },
   ];
 
@@ -179,40 +183,6 @@ function ManagerTeamRoster({
         />
       </TableContainer>
 
-      {openMenu && (
-        <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setOpenMenu(null)}
-          />
-          <div
-            className="fixed z-50 w-40 overflow-hidden rounded-lg border border-(--border-subtle) bg-(--bg-surface) shadow-md"
-            style={{ top: openMenu.top, right: openMenu.right }}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                console.log("View clicked:", openMenu.row);
-                setSelectedMember(openMenu.row);
-                setOpenMenu(null);
-              }}
-              className="block w-full cursor-pointer px-3 py-1.5 text-left text-[0.75rem] font-semibold text-(--primary) transition-colors hover:bg-(--bg-surface-subtle)"
-            >
-              View
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setMemberToRemove(openMenu.row);
-                setOpenMenu(null);
-              }}
-              className="block w-full cursor-pointer border-t border-(--border-subtle) px-3 py-1.5 text-left text-[0.75rem] font-semibold text-(--status-danger) transition-colors hover:bg-(--status-failure-subtle)"
-            >
-              Remove from Team
-            </button>
-          </div>
-        </>
-      )}
 
       {isInviteOpen && (
         <InviteMemberModal
