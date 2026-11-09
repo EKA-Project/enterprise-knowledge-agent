@@ -20,11 +20,11 @@ import Tooltip from "./Tooltip";
 // Colour per tone. Only theme tokens, so every theme works.
 const TONE = {
   neutral:
-    "text-(--text-muted) hover:-translate-y-0.5 hover:border-(--primary)/30 hover:bg-(--accent-chip) hover:text-(--primary) hover:shadow-sm",
+    "text-(--text-muted) hover:border-(--primary)/30 hover:bg-(--accent-chip) hover:text-(--primary) hover:shadow-sm",
   danger:
-    "text-(--text-muted) hover:-translate-y-0.5 hover:border-(--status-danger)/30 hover:bg-(--status-failure-subtle) hover:text-(--status-danger) hover:shadow-sm",
+    "text-(--text-muted) hover:border-(--status-danger)/30 hover:bg-(--status-failure-subtle) hover:text-(--status-danger) hover:shadow-sm",
   failed:
-    "text-(--status-danger) hover:-translate-y-0.5 hover:border-(--status-danger)/30 hover:bg-(--status-failure-subtle) hover:shadow-sm",
+    "text-(--status-danger) hover:border-(--status-danger)/30 hover:bg-(--status-failure-subtle) hover:shadow-sm",
 };
 
 // Shared base. Not exported: pages use the named wrappers below.
@@ -42,6 +42,14 @@ function RowIconButton({
     onClick?.(event);
   }
 
+  // Spin while loading. Shake on hover only when the button is clickable.
+  // motion-reduce turns the shake off for users who ask for less motion.
+  const iconClass = loading
+    ? "animate-spin"
+    : disabled
+      ? ""
+      : "group-hover:animate-[row-icon-shake_0.45s_ease-in-out] motion-reduce:animate-none";
+
   // Native title: the browser draws it outside the table, so it is never clipped
   return (
     <button
@@ -51,13 +59,9 @@ function RowIconButton({
       aria-busy={loading || undefined}
       disabled={disabled || loading}
       onClick={handleClick}
-      className={`inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg border border-transparent transition-[transform,background-color,color,border-color,box-shadow] duration-200 ease-out active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 ${TONE[tone]} ${className}`}
+      className={`group inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg border border-transparent transition-[transform,background-color,color,border-color,box-shadow] duration-200 ease-out active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 ${TONE[tone]} ${className}`}
     >
-      <Icon
-        size={14}
-        aria-hidden="true"
-        className={loading ? "animate-spin" : ""}
-      />
+      <Icon size={14} aria-hidden="true" className={iconClass} />
     </button>
   );
 }
