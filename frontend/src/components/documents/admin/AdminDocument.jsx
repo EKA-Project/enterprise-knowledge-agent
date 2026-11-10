@@ -9,6 +9,7 @@ import { useDocumentCountText } from '../shared/documentResults.js';
 import { Upload } from 'lucide-react';
 import { IngestDocumentButton } from '../../common/ActionButtons.jsx';
 
+
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
   const countText = useDocumentCountText(documents.length);
@@ -33,11 +34,18 @@ function AdminDocument() {
           {/* Not wired yet: compare / redline flow comes later */}
 
 
-<IngestDocumentButton
+<button
+  type="button"
   onClick={openUpload}
   disabled={!canUpload}
-  className="ml-auto"
-/>
+  title={canUpload ? 'Ingest a new document' : 'Uploads are limited to Admins and Managers'}
+  className="ml-auto inline-flex h-9 cursor-pointer items-center gap-2 rounded-(--radius-pill) bg-(--primary) pl-1.5 pr-4 text-xs font-bold text-(--primary-contrast) transition-colors duration-200 hover:bg-(--primary-hover) hover:text-(--primary-contrast) disabled:cursor-not-allowed disabled:opacity-50"
+>
+  <span className="flex h-6 w-6 items-center justify-center rounded-(--radius-full) bg-(--primary-contrast)/20 text-(--primary-contrast)">
+    <Upload size={14} />
+  </span>
+  Ingest Document
+</button>
         </div>
       
 
