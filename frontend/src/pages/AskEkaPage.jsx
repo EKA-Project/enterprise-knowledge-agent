@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useChat from '../hooks/useChat';
-import useToastStack from '../hooks/useToastStack';
+import useToast from '../hooks/useToast.js';
+import PageHero from "../components/common/PageHero";
 import ChatMessageList from '../components/chat/ChatMessageList';
 import ChatInputBox from '../components/chat/ChatInputBox';
 import ChatSidebar from '../components/chat/ChatSidebar';
-import ToastStack from '../components/chat/ToastStack';
 import { ClockIcon, FileIcon, FlaskIcon, PanelIcon, PlusIcon, ShieldCheckIcon } from '../components/chat/ChatIcons';
 import { EYEBROW, MONO, SERIF, getDocumentLink } from '../components/chat/ChatUtils';
 import '../styles/chat.css'; // hard animations live here
@@ -127,8 +127,16 @@ function EmptyState({ onPick }) {
 export default function AskEkaPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { toasts, push, dismiss } = useToastStack();
-  const chat = useChat({ notify: push });
+  const toast = useToast();
+  // Keeps the old push(message, tone) calls working with the shared toast.
+  const push = useCallback(
+    (message, tone = 'dark') => {
+      if (tone === 'success') toast.success(message);
+      else if (tone === 'error') toast.error(message);
+      else toast.info(message);
+    },
+    [toast],
+  );  const chat = useChat({ notify: push });
 
   const [inputValue, setInputValue] = useState(''); // the typed text
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -220,8 +228,6 @@ export default function AskEkaPage() {
           </section>
         </div>
       </div>
-
-      <ToastStack toasts={toasts} onDismiss={dismiss} />
     </div>
   );
 }

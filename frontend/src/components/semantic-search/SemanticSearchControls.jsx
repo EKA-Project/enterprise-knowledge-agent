@@ -72,12 +72,12 @@ const label = isKeyword ? 'Exact keyword codes:' : suggestionLabel;
 
           <button
             type="submit"
-            className={`inline-flex items-center gap-1.5 rounded-full bg-[linear-gradient(135deg,var(--primary-deep),var(--primary)_55%,var(--accent-highlight))] px-3.5 py-2 text-[12px] font-bold text-white shadow-sm transition hover:brightness-110 active:scale-95 ${focusRing}`}
+            className={`inline-flex items-center gap-1.5 rounded-full bg-[linear-gradient(135deg,var(--primary-deep),var(--primary)_55%,var(--accent-highlight))] px-3 py-1 text-[11px] font-bold text-white shadow-sm transition hover:brightness-110 active:scale-95 ${focusRing}`}
           >
-            <Sparkle size={13} fill="currentColor" className="text-sky-200" aria-hidden="true" />
+            <Sparkle size={12} fill="currentColor" className="text-sky-200" aria-hidden="true" />
             Search
             <span className="grid size-5 place-items-center rounded bg-white/25" aria-hidden="true">
-              <CornerDownLeft size={11} />
+              <CornerDownLeft size={10} />
             </span>
           </button>
         </div>
@@ -118,7 +118,7 @@ const label = isKeyword ? 'Exact keyword codes:' : suggestionLabel;
                 onClick={() => onSourceChange(s.id)}
                 className={`inline-flex items-center rounded-full border px-1.5 py-0.5 text-[10px] font-bold transition-all duration-200 ${focusRing} ${
                     source === s.id
-                    ? "border-(--primary) bg-(--primary) text-white shadow-sm"
+                    ? "border-(--primary) bg-(--primary) text-(--primary-contrast) shadow-sm"
                     : "border-(--border-medium) bg-(--primary-light) text-(--text-muted) hover:border-(--primary) hover:text-(--primary)"
                 }`}
               >

@@ -73,7 +73,7 @@ function TurnCard({
                 type="button"
                 disabled={busy}
                 onClick={() => setEditing(true)}
-                className={`${MONO} flex cursor-pointer items-center gap-1.5 rounded-xl border border-[var(--border-subtle)] px-2.5 py-1 text-[10px] font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-50`}
+                className={`${MONO} flex cursor-pointer items-center gap-1.5 rounded-xl border border-[var(--border-subtle)] px-2.5 py-1 text-[10px] font-semibold text-[var(--text-primary)] transition duration-200 hover:-translate-y-0.5 hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--text-primary)] hover:shadow-[var(--shadow-md)] active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none`}
               >
                 <EditIcon size={12} /> Edit
               </button>

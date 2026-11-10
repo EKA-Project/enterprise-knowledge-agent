@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, Info } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import useToast from "../hooks/useToast.js";
 import "../styles/semantic-search.css";
+import PageHero from "../components/common/PageHero";
 import SemanticSearchControls from "../components/semantic-search/SemanticSearchControls";
 import GroundedAnswerCard from "../components/semantic-search/GroundedAnswerCard";
 import SearchResultCard from "../components/semantic-search/SearchResultCard";
@@ -56,11 +58,10 @@ export default function SemanticSearchPage() {
   const [source, setSource] = useState("all");
   const [recent, setRecent] = useState(loadRecent);
   const [citationResult, setCitationResult] = useState(null);
-  const [toast, setToast] = useState("");
+  const toast = useToast();
   const [regenKey, setRegenKey] = useState(0);
   const [regenerating, setRegenerating] = useState(false);
   const [expandedKey, setExpandedKey] = useState("");
-  const toastTimer = useRef(null);
   const regenTimer = useRef(null);
   const pageTopRef = useRef(null);
   const [scrollTick, setScrollTick] = useState(0);
@@ -68,7 +69,6 @@ export default function SemanticSearchPage() {
 useEffect(() => {
   if (scrollTick === 0) return;
   const parent = getScrollParent(pageTopRef.current);
-  console.log("scrolling parent:", parent);
   parent.scrollTo({ top: 0, behavior: "smooth" });
 }, [scrollTick]);
 
@@ -82,7 +82,6 @@ useEffect(() => {
 
   useEffect(
     () => () => {
-      clearTimeout(toastTimer.current);
       clearTimeout(regenTimer.current);
     },
     [],
@@ -102,11 +101,7 @@ useEffect(() => {
   const visibleResults = showAll ? search.results : search.results.slice(0, INITIAL_RESULTS);
   const hiddenCount = search.results.length - visibleResults.length;
 
-  const showToast = (message) => {
-    setToast(message);
-    clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(""), 2600);
-  };
+  const showToast = (message) => toast.info(message);
 
   const changeMode = (id) => {
     setMode(id);
@@ -159,23 +154,20 @@ const handleTryTip = (example) => {
 
   return (
 <div ref={pageTopRef} className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
-        <header className="ssp-rise">
-        <div className="flex items-center gap-2.5">
-          <p className="font-(family-name:--font-mono) text-[10.5px] font-medium uppercase tracking-[0.18em] text-(--text-eyebrow)">
-            Knowledge discovery
-          </p>
-          <span className="rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 font-(family-name:--font-mono) text-[9.5px] font-bold uppercase tracking-wider text-(--badge-text)">
-            EKA Vector Agent
-          </span>
-        </div>
-        <h2 className="mt-2 font-(family-name:--font-serif) text-[40px] font-bold leading-tight tracking-tight text-(--text-primary)">
-          Search by meaning, not just words.
-        </h2>
-        <p className="mt-2 max-w-[56ch] text-[14px] leading-relaxed text-(--text-secondary)">
-          Find company guidelines, policies, and runbooks using everyday natural language concepts and plain English phrases.
-        </p>
-      </header>
-
+      <div className="ssp-rise">
+        <PageHero
+          eyebrow={
+            <>
+              Knowledge discovery
+              <span className="ml-2.5 rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 text-[9.5px] font-bold tracking-wider text-(--badge-text)">
+                EKA Vector Agent
+              </span>
+            </>
+          }
+          title="Search by meaning, not just words."
+          description="Find company guidelines, policies, and runbooks using everyday natural language concepts and plain English phrases."
+        />
+      </div>
       {/* Sticky: stays pinned while results scroll, like the video */}
         <SemanticSearchControls
           inputRef={inputRef}
@@ -225,8 +217,8 @@ const handleTryTip = (example) => {
               <button
                 type="button"
                 onClick={() => goFollowUp(activeQuery)}
-                className="mt-5 rounded-full bg-(--sidebar-bg) px-5 py-2 text-[12.5px] font-bold text-white transition hover:opacity-90 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
-              >
+                className="mt-5 rounded-full bg-(--sidebar-bg) px-5 py-2 text-[12.5px] font-bold text-(--sidebar-text) transition hover:opacity-90 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
+                >
                 Ask EKA Generative AI →
               </button>
             </div>
@@ -300,16 +292,6 @@ const handleTryTip = (example) => {
           }
           onOpenReader={openReader}
         />
-      )}
-
-      {toast && (
-        <div
-          role="status"
-          className="ssp-toast fixed bottom-6 right-6 z-[60] flex max-w-sm items-center gap-2.5 rounded-xl bg-(--sidebar-bg) px-4 py-3 text-[12.5px] font-semibold text-white shadow-(--shadow-lg)"
-        >
-          <Info size={15} className="shrink-0 text-(--accent-highlight)" aria-hidden="true" />
-          {toast}
-        </div>
       )}
     </div>
   );

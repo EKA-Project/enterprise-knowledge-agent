@@ -1,5 +1,5 @@
 /// chat history/////
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   deleteConversation,
@@ -8,10 +8,10 @@ import {
   setConversationArchived,
   subscribe,
 } from '../components/chat/chatApi';
-import useToastStack from '../hooks/useToastStack';
+import PageHero from '../components/common/PageHero';
+import useToast from '../hooks/useToast.js';
 import ThreadTabs from '../components/chat/ThreadTabs';
 import HistoryEmptyState from '../components/chat/HistoryEmptyState';
-import ToastStack from '../components/chat/ToastStack';
 import { ArchiveIcon, ArrowRightIcon, MessageIcon, PlusIcon, SearchIcon, TrashIcon } from '../components/chat/ChatIcons';
 import { MONO, SERIF, formatUpdated } from '../components/chat/ChatUtils';
 import '../styles/chat.css'; // hard animations live here
@@ -70,8 +70,16 @@ function ThreadCard({ conversation, index, onResume, onArchive, onDelete }) {
 export default function ChatHistoryPage() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
-  const { toasts, push, dismiss } = useToastStack();
-
+  const toast = useToast();
+  // Keeps the old push(message, tone) calls working with the shared toast.
+  const push = useCallback(
+    (message, tone = 'dark') => {
+      if (tone === 'success') toast.success(message);
+      else if (tone === 'error') toast.error(message);
+      else toast.info(message);
+    },
+    [toast],
+  );
   const tab = params.get('tab') === 'archived' ? 'archived' : 'active';
   const setTab = (next) => setParams(next === 'archived' ? { tab: 'archived' } : {}, { replace: true });
   const isArchived = tab === 'archived';
@@ -120,7 +128,7 @@ export default function ChatHistoryPage() {
       await action();
       push(doneMessage, tone);
     } catch (e) {
-      push(e.message || 'Something went wrong. Please try again.');
+      toast.error(e.message || 'Something went wrong. Please try again.');
     }
   }
 
@@ -143,43 +151,36 @@ export default function ChatHistoryPage() {
   return (
 <div className="chat-history-page mx-auto w-full max-w-none">
         {/* ---------- header ---------- */}
-      <div className="chat-rise mb-5 flex items-end justify-between gap-6">
-        <div className="min-w-0">
-          <span className={`${MONO} mb-3 inline-flex rounded-md border border-[var(--badge-border)] bg-[var(--badge-bg)] px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] text-[var(--badge-text)]`}>
-            {isArchived ? 'Thread archives' : 'Active chat history'}
-          </span>
-          <h1 className={`${SERIF} m-0 mb-1.5 text-[38px] font-bold leading-tight text-[var(--text-primary)]`}>Pick up where you left off.</h1>
-          <p className="m-0 max-w-[560px] text-[13.5px] leading-relaxed text-[var(--text-secondary)]">
-            Revisit past reasoning traces, grounded answers, and active intelligence threads.
-          </p>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2.5">
-          {tabItems.length > 0 && (
-            <button
-              type="button"
-              onClick={handleClear}
-              className="flex cursor-pointer items-center gap-1.5 rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--primary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)] active:scale-95"
-            >
-              <TrashIcon size={13} /> {isArchived ? 'Clear Archive' : 'Delete Active History'}
-            </button>
-          )}
-          <button
-  type="button"
-  onClick={() => navigate('/ask-eka')}
-  className="group inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-(--accent-secondary) bg-(--accent-secondary) pl-1 pr-3 text-xs font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-(--primary-deep) hover:bg-(--primary-deep) hover:shadow-(--shadow-md) active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
->
-  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white/30">
-    <PlusIcon
-      size={13}
-      className="transition-transform duration-300 ease-out group-hover:rotate-90"
-    />
-  </span>
-  Start New Thread
-</button>
-        </div>
+            <div className="chat-rise mb-3">
+        <PageHero
+          eyebrow={isArchived ? "Thread archives" : "Active chat history"}
+          title="Pick up where you left off."
+          description="Revisit past reasoning traces, grounded answers, and active intelligence threads."
+          actions={
+            <>
+              {tabItems.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="flex cursor-pointer items-center gap-1.5 rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--primary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--status-failure-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)] active:scale-95"
+                >
+                  <TrashIcon size={13} /> {isArchived ? "Clear Archive" : "Delete Active History"}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => navigate("/ask-eka")}
+                className="group inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-(--accent-secondary) bg-(--accent-secondary) pl-1 pr-3 text-xs font-semibold text-(--primary-contrast) transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-(--primary-deep) hover:bg-(--primary-deep) hover:shadow-(--shadow-md) active:translate-y-0 active:scale-95"
+              >
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white/30">
+                  <PlusIcon size={13} className="transition-transform duration-300 ease-out group-hover:rotate-90" />
+                </span>
+                Start New Thread
+              </button>
+            </>
+          }
+        />
       </div>
-
       {/* ---------- tabs ---------- */}
       <div className="chat-rise mb-4" style={{ animationDelay: '60ms' }}>
         <ThreadTabs tab={tab} activeCount={activeCount} archivedCount={archivedCount} onChange={setTab} />
@@ -231,8 +232,6 @@ export default function ChatHistoryPage() {
           )}
         </div>
       )}
-
-      <ToastStack toasts={toasts} onDismiss={dismiss} />
     </div>
   );
 }
