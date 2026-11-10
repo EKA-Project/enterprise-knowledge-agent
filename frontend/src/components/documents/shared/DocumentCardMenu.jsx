@@ -97,10 +97,7 @@ function DocumentCardMenu({
             Open Document
           </button>
 
-          <button type="button" role="menuitem" className={itemClass} onClick={run(onCompare)}>
-            <Columns2 size={13} className={iconClass} />
-            Compare / Redline
-          </button>
+
 
           <button type="button" role="menuitem" className={itemClass} onClick={run(onToggleBookmark)}>
             <Bookmark

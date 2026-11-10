@@ -161,9 +161,12 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
                 setSelectedTerm(null);
                 setAddOpen(true);
               }}
-              className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-(--primary) px-3.5 py-1.5 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-(--primary) py-1.5 pl-1.5 pr-4 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
             >
-              <Plus size={12} /> Add term
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--primary-contrast)/20">
+                <Plus size={12} />
+              </span>
+              Add term
             </button>
           )}
         </div>

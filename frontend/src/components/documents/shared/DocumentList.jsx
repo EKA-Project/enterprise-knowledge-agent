@@ -138,11 +138,16 @@ function DocumentList({
                 aria-label={doc.isPinned ? 'Unpin document' : 'Pin document'}
                 aria-pressed={Boolean(doc.isPinned)}
                 onClick={() => onToggleFlag?.(doc.id, 'isPinned')}
-                className={`${iconButton} ${doc.isPinned ? 'text-(--primary)' : 'text-(--text-muted) hover:text-(--text-primary)'
+                className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted) hover:text-[#e5484d]'
+
                   }`}
               >
-                <Pin size={14} className={doc.isPinned ? 'fill-current' : ''} />
+                <Pin size={14} className={doc.isPinned ? 'fill-current' : 'group-hover:fill-current'} />
+
               </button>
+
+
+
             ) : (
               doc.isPinned && (
                 <span className="p-1 text-(--primary)" title="Pinned by admin" aria-label="Pinned by admin">
