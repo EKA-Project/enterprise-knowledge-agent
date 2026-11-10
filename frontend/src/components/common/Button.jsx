@@ -71,6 +71,7 @@ export default function Button({
   children,
   icon: Icon,
   iconChip = false,
+   chipClassName = "", // <--- Allows custom chip hover (like dark chip for export or emerald for restore)
   variant = "light",
   size = "sm", // Defaults to standard EKA compact pill if omitted
   type = "button",
