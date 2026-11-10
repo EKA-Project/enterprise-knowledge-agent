@@ -5,6 +5,7 @@ import { CancelButton } from "../common/ActionButtons";
 
 const label = "block font-(family-name:--font-mono) text-[10.5px] uppercase tracking-[0.12em] text-(--text-secondary)";
 
+// DepartmentAssignLeadModal
 export default function DepartmentAssignLeadModal({ dept, currentLead, members = [], onClose, onConfirm }) {
   const [selected, setSelected] = useState(currentLead?.id ?? "");
   const closeRef = useRef(() => {});
@@ -27,8 +28,8 @@ export default function DepartmentAssignLeadModal({ dept, currentLead, members =
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="md" onClick={close} />
-            <Button variant="solid" size="md" disabled={!canConfirm} onClick={confirm}>
+            <CancelButton size="sm" onClick={close} />
+            <Button variant="solid" size="sm" disabled={!canConfirm} onClick={confirm}>
               Confirm Manager Assignment
             </Button>
           </div>

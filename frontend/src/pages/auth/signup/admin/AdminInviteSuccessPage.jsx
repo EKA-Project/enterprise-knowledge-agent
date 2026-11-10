@@ -1,36 +1,35 @@
 import { Link } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
-import '../../../../styles/auth.css';
-
+import styles from '../../../../styles/auth.module.css';
 function InvitedMemberRow({ initial, email, roleDept }) {
   return (
-    <div className="invited-member-row">
-      <span className="invited-member-avatar">{initial}</span>
-      <div className="invited-member-info">
-        <p className="invited-member-email">{email}</p>
-        <p className="invited-member-role">{roleDept}</p>
+    <div className={styles['invited-member-row']}>
+      <span className={styles['invited-member-avatar']}>{initial}</span>
+      <div className={styles['invited-member-info']}>
+        <p className={styles['invited-member-email']}>{email}</p>
+        <p className={styles['invited-member-role']}>{roleDept}</p>
       </div>
-      <span className="invited-badge">Invited</span>
+      <span className={styles['invited-badge']}>Invited</span>
     </div>
   );
 }
 
 export default function AdminInviteSuccessPage() {
   return (
-    <div className="auth-shell">
+    <div className={styles['auth-shell']}>
       <AuthBackground />
 
-      <div className="auth-form-panel">
-        <div className="auth-card">
-          <div className="success-header-row">
-            <div className="status-icon-circle--success-sm">✓</div>
+      <div className={styles['auth-form-panel']}>
+        <div className={styles['auth-card']}>
+          <div className={styles['success-header-row']}>
+            <div className={styles['status-icon-circle--success-sm']}>✓</div>
             <div>
-              <h2 className="auth-title">Invitations ready</h2>
-              <p className="auth-description">1 invitations dispatched to team members.</p>
+              <h2 className={styles['auth-title']}>Invitations ready</h2>
+              <p className={styles['auth-description']}>1 invitations dispatched to team members.</p>
             </div>
           </div>
 
-          <div className="invited-members-list">
+          <div className={styles['invited-members-list']}>
             <InvitedMemberRow
               initial="L"
               email="liam.o@northstar.studio"
@@ -38,7 +37,7 @@ export default function AdminInviteSuccessPage() {
             />
           </div>
 
-          <Link to="/dashboard" className="option-card-btn option-card-btn--teal">
+          <Link to="/dashboard" className={`${styles['option-card-btn']} ${styles['option-card-btn--teal']}`}>
             Go to Admin Workspace
             <span aria-hidden="true">→</span>
           </Link>

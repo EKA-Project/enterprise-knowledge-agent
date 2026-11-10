@@ -1,8 +1,8 @@
 import { Search } from "lucide-react";
-import { ACCESS_LEVELS, USER_ROLES, USER_STATUSES } from "./OrganizationData";
+import {  USER_ROLES, USER_STATUSES } from "./OrganizationData";
 
 const select =
-  "rounded-xl border border-(--border-medium) bg-white px-3 py-2 text-[12px] font-semibold text-(--text-primary) outline-none transition duration-200 hover:border-(--primary) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)]";
+  "cursor-pointer rounded-xl border border-(--badge-border) bg-(--accent-chip) px-3 py-1.5 text-[12.5px] font-semibold text-(--text-primary) outline-none transition hover:border-(--primary) focus:border-(--primary) focus:shadow-[0_0_0_3px_var(--primary-glow)]";
 
 export default function UserFilters({ filters, onChange, departmentNames }) {
   return (
@@ -26,10 +26,7 @@ export default function UserFilters({ filters, onChange, departmentNames }) {
         <option value="all">All Roles</option>
         {USER_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
       </select>
-      <select aria-label="Access level" value={filters.access} onChange={(e) => onChange({ access: e.target.value })} className={select}>
-        <option value="all">All Access</option>
-        {ACCESS_LEVELS.map((a) => <option key={a} value={a}>{a}</option>)}
-      </select>
+      
       <select aria-label="Status" value={filters.status} onChange={(e) => onChange({ status: e.target.value })} className={select}>
         <option value="all">All Status</option>
         {USER_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
