@@ -8,6 +8,7 @@ import {
   RotateCw,
   Flame,
   UserX,
+  Database ,
   X,
 } from "lucide-react";
 import Button from "./Button";
@@ -18,6 +19,13 @@ import TrashLidIcon from "../icons/TrashLidIcon";
    Micro-Animated Icons (Respond automatically to button hover)
    ========================================================================== */
 
+// Micro-animation: Database stacks lift slightly on hover
+const AnimatedDatabaseIcon = ({ size, className = "" }) => (
+  <Database
+    size={size}
+    className={`transition-transform duration-200 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 ${className}`}
+  />
+);
 // Download arrow dips downward into device tray
 const DippingDownloadIcon = ({ size, className = "" }) => (
   <Download
@@ -340,6 +348,26 @@ export function SurpriseMeButton({ isSurprising = false, rollCount = 0, ...props
     >
       <DiceIcon key={rollCount} rolling={isSurprising} />
       Surprise Me
+    </Button>
+  );
+}
+
+/**
+ * Start Vector Ingestion Action (Solid Primary Pill)
+ * Where to use:
+ *   - Ingestion / Document Upload Modal submit CTA (components/modals/UploadDocumentModal.jsx)
+ *   - Pipeline Re-index trigger
+ */
+export function StartVectorIngestionButton(props) {
+  return (
+    <Button
+      variant="solid"
+      icon={AnimatedDatabaseIcon}
+      iconChip
+      title="Start vectorizing and embedding document into semantic store"
+      {...props}
+    >
+      Start Vector Ingestion
     </Button>
   );
 }
