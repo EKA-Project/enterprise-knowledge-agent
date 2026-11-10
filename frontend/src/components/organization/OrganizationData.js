@@ -48,8 +48,7 @@ export function buildStructureCsv(departments) {
 }
 // =====================  TEAM DIRECTORY  =====================
 
-export const ACCESS_LEVELS = ["Basic", "Restricted", "Admin"];
-export const USER_ROLES = ["Admin", "Manager", "Employee"];
+export const USER_ROLES = ["Manager", "Employee"];
 export const USER_STATUSES = ["Active", "Invited", "Suspended", "Terminated"];
 
 // Short labels used by the Invite dialog (the video shows "Engineering", "HR / Ops"...).

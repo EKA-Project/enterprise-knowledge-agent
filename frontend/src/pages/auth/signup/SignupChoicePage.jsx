@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import AuthBackground from '../../../components/auth/AuthBackground';
 import ekaLogo from '../../../assets/images/eka_logo.jpeg';
-import '../../../styles/auth.css';
+import styles from '../../../styles/auth.module.css';
 
 // Keep OptionCard() as-is — that's still local to this page
 
@@ -20,15 +20,15 @@ function OptionCard({
 }) 
 {
   return (
-    <div className="option-card">
-      <div className={`option-card-icon ${iconClass}`}>{icon}</div>
-      <span className={`option-card-tag ${tagClass}`}>{tag}</span>
+    <div className={styles['option-card']}>
+      <div className={`${styles['option-card-icon']} ${styles[iconClass]}`}>{icon}</div>
+      <span className={`${styles['option-card-tag']} ${styles[tagClass]}`}>{tag}</span>
       <h3>{title}</h3>
       <p>{description}</p>
-      <div className="option-card-note">
+      <div className={styles['option-card-note']}>
         {noteIcon} {note}
       </div>
-      <Link to={to}  className={`option-card-btn ${buttonClass}`}>
+      <Link to={to}  className={`${styles['option-card-btn']} ${styles[buttonClass]}`}>
         {buttonLabel}
         <span aria-hidden="true">→</span>
       </Link>
@@ -38,17 +38,17 @@ function OptionCard({
 
 export default function SignupChoicePage() {
   return (
-    <div className="auth-shell">
+    <div className={styles['auth-shell']}>
       <AuthBackground />
-      <div className="auth-form-panel">
-        <div className="auth-card">
-          <div className="auth-card-brand">
+      <div className={styles['auth-form-panel']}>
+        <div className={styles['auth-card']}>
+          <div className={styles['auth-card-brand']}>
             <img src={ekaLogo} alt="EKA" />
             EKA.
           </div>
-          <div className="auth-badge">✦ GET STARTED</div>
-          <h2 className="auth-title">How will you get started?</h2>
-          <p className="auth-description">
+          <div className={styles['auth-badge']}>✦ GET STARTED</div>
+          <h2 className={styles['auth-title']}>How will you get started?</h2>
+          <p className={styles['auth-description']}>
             Choose how you wish to connect with your organization's workspace.
           </p>
           <OptionCard
@@ -77,7 +77,7 @@ export default function SignupChoicePage() {
             buttonClass="option-card-btn--dark"
             to="/signup/admin/account"
           />
-          <p className="auth-footer">
+          <p className={styles['auth-footer']}>
             Already have an account? <Link to="/login">Sign in</Link>
           </p>
         </div>

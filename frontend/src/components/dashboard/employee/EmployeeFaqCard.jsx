@@ -21,9 +21,9 @@ function EmployeeFaqCard() {
           <h2 className="flex items-center gap-2 font-sans text-[1rem] font-bold text-(--text-primary)">
             <span
               aria-hidden="true"
-              className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#fef2f2] text-(--status-danger)"
+              className="flex h-6 w-6 items-center justify-center rounded-lg  text-(--status-danger)"
             >
-              <CircleHelp size={14} />
+              <CircleHelp size={24} />
             </span>
             Frequently Asked Questions
           </h2>

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { CancelButton } from "../common/ActionButtons";
-import { ACCESS_LEVELS, getInitials } from "./OrganizationData";
+import {  getInitials } from "./OrganizationData";
 
 const label = "text-[13.5px] font-semibold text-(--text-primary)";
 const hint = "text-[11px] text-(--text-muted)";
@@ -47,8 +47,8 @@ export default function UserEditModal({ user, departmentNames, onClose, onSubmit
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="md" icon={null} onClick={close} />
-            <Button variant="solid" size="md" type="submit" form="edit-user-form">Save Changes</Button>
+            <CancelButton size="sm" icon={null} onClick={close} />
+            <Button variant="solid" size="sm" type="submit" form="edit-user-form">Save Changes</Button>
           </div>
         );
       }}

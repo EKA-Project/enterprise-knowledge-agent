@@ -43,3 +43,6 @@
 .semantic-search-page button:disabled {
   cursor: not-allowed;
 }
+.modal-card:has([data-citation-modal]) {
+  border-top: 4px solid var(--primary);
+}

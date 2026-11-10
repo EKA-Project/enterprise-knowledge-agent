@@ -1,10 +1,11 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Download, Plus } from "lucide-react";
 import "../styles/organization.css";
+import PageHero from "../components/common/PageHero";
 import Button from "../components/common/Button";
 import Tooltip from "../components/common/Tooltip";
-import ToastStack from "../components/common/Toast";
+import useToast from "../hooks/useToast.js";
 import OrganizationTabs from "../components/organization/OrganizationTabs";
 import DepartmentManagementTab from "../components/organization/DepartmentManagementTab";
 import DepartmentCreateModal from "../components/organization/DepartmentCreateModal";
@@ -55,14 +56,16 @@ export default function OrganizationPage() {
   const [users, setUsers] = useState(INITIAL_USERS);
   // modal: { type: "create" | "edit" | "assign" | "delete" | "invite" | "view" | "user-edit" | "terminate", dept?, user? }
   const [modal, setModal] = useState(null);
-  const [toasts, setToasts] = useState([]);
-  const toastId = useRef(0);
 
-  const pushToast = useCallback((message, tone = "success") => {
-    toastId.current += 1;
-    setToasts((prev) => [...prev.slice(-2), { id: toastId.current, message, tone }]);
-  }, []);
-  const dismissToast = useCallback((id) => setToasts((prev) => prev.filter((t) => t.id !== id)), []);
+  const toast = useToast();
+  // Keeps the old pushToast(message, tone) calls working with the shared toast.
+  const pushToast = useCallback(
+    (message, tone = "success") => {
+      const type = tone === "error" || tone === "info" ? tone : "success";
+      toast[type](message);
+    },
+    [toast],
+  );
   const closeModal = useCallback(() => setModal(null), []);
 
   // Dialogs keep their own copy, so they stay on screen while their exit animation plays.
@@ -131,71 +134,39 @@ export default function OrganizationPage() {
 
   return (
     <div className="organization-page mx-auto w-full max-w-[1400px] space-y-5">
-<header className="org-rise flex flex-col gap-4 px-2 py-3 lg:flex-row lg:items-end lg:justify-between lg:gap-4">  {/* Page title and description */}
-  <div className="min-w-0 flex-1">
-    <p className="font-(family-name:--font-mono) text-xs font-medium uppercase tracking-[0.18em] text-(--text-eyebrow)">
-      {header.eyebrow}
-    </p>
-
-    <h2 className="mt-1 whitespace-normal font-(family-name:--font-serif) text-[30px] font-bold leading-tight tracking-tight text-(--text-primary) lg:whitespace-nowrap">
-      {header.title}
-    </h2>
-
-    <p className="mt-1 max-w-[56ch] text-sm text-(--text-secondary)">
-      {header.description}
-    </p>
-  </div>
-
-  {/* Tabs and action buttons */}
-  <div className="flex shrink-0 flex-wrap items-center gap-1.5">
-    <OrganizationTabs value={tab} onChange={changeTab} />
-
-    {tab === "departments" ? (
-      <>
-        <Button
-          variant="light"
-          size="sm"
-          icon={Download}
-          onClick={exportStructureCsv}
-        >
-          Export Structure CSV
-        </Button>
-
-        <Button
-          variant="solid"
-          size="sm"
-          onClick={() => setModal({ type: "create" })}
-        >
-          + Create Department
-        </Button>
-      </>
-    ) : (
-      <>
-        <Tooltip label="Export Directory to CSV format">
-          <Button
-            variant="light"
-            size="sm"
-            icon={Download}
-            onClick={exportUsersCsv}
-          >
-            Export Directory CSV
-          </Button>
-        </Tooltip>
-
-        <Button
-          variant="solid"
-          size="sm"
-          icon={Plus}
-          iconChip
-          onClick={() => setModal({ type: "invite" })}
-        >
-          Invite New Member
-        </Button>
-      </>
-    )}
-  </div>
-</header>
-
+      <div className="org-rise">
+        <PageHero
+          eyebrow={header.eyebrow}
+          title={header.title}
+          description={header.description}
+          actions={
+            <>
+              <OrganizationTabs value={tab} onChange={changeTab} />
+              {tab === "departments" ? (
+                <>
+                  <Button variant="light" size="sm" icon={Download} onClick={exportStructureCsv}>
+                    Export Structure CSV
+                  </Button>
+                  <Button variant="solid" size="sm" icon={Plus} iconChip onClick={() => setModal({ type: "create" })}>
+                    Create Department
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Tooltip label="Export Directory to CSV format">
+                    <Button variant="light" size="sm" icon={Download} onClick={exportUsersCsv}>
+                      Export Directory CSV
+                    </Button>
+                  </Tooltip>
+                  <Button variant="solid" size="sm" icon={Plus} iconChip onClick={() => setModal({ type: "invite" })}>
+                    Invite New Member
+                  </Button>
+                </>
+              )}
+            </>
+          }
+        />
+      </div>
 
       {tab === "departments" ? (
         <DepartmentManagementTab
@@ -254,8 +225,6 @@ export default function OrganizationPage() {
       {modal?.type === "terminate" && activeUser && (
         <UserTerminateModal user={activeUser} onClose={closeModal} onConfirm={() => handleTerminate(activeUser)} />
       )}
-
-      <ToastStack toasts={toasts} onDismiss={dismissToast} />
     </div>
   );
 }

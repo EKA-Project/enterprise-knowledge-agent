@@ -1,42 +1,64 @@
-import { Search, X, Sparkles, Hash, Layers } from "lucide-react";
-
-const MODE_ICONS = { semantic: Sparkles, keyword: Hash, hybrid: Layers };
-
+import { Search, X, Sparkle, CornerDownLeft } from "lucide-react";
+import { SUGGESTED_CONCEPTS, SUGGESTED_KEYWORDS, HYBRID_PROMPTS } from './semanticmock';
+const MODE_EMOJIS = { semantic: "✨", keyword: "🎯", hybrid: "⚡" };
 const focusRing =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)";
 
 const segment = (active) =>
-  `inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold transition ${focusRing} ${
-    active
-      ? "bg-(--primary) text-(--primary-contrast) shadow-sm"
-      : "text-(--text-muted) hover:bg-(--primary-light) hover:text-(--primary)"
+      `inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-bold transition-all duration-200 ${focusRing} ${
+      active
+      ? "bg-(--primary) text-white shadow-sm"
+      : "bg-transparent text-(--text-muted) hover:bg-(--primary-light) hover:text-(--primary)"
   }`;
 
+
 export default function SemanticSearchControls({
-  value, onChange, onSubmit, onClear,
-  modes, mode, onModeChange,
-  sources, source, onSourceChange,
-  suggestionLabel, suggestions, onPickSuggestion,
+  value,
+  onChange,
+  onSubmit,
+  onClear,
+  inputRef,
+  modes,
+  mode,
+  onModeChange,
+  sources,
+  source,
+  onSourceChange,
+  suggestionLabel,
+  suggestions,
+  onPickSuggestion,
+  onExpand,
+  onSettings,
+  onVoice,
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit();
   };
-  // ↑ Enter in the input and the Search button both land here.
+
+  const isKeyword = mode === 'keyword';
+  const chips = isKeyword ? SUGGESTED_KEYWORDS : suggestions;
+const label = isKeyword ? 'Exact keyword codes:' : suggestionLabel;
 
   return (
-    <div className="ssp-rise rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
+    <div className="ssp-rise rounded-3xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">      {/* ---------- Search bar ---------- */}
       <form onSubmit={handleSubmit} className="flex items-center gap-3">
-        <div className="flex flex-1 items-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-app) px-4 py-3 transition focus-within:border-(--border-focus)">
-          <Search size={17} className="shrink-0 text-(--text-primary)" aria-hidden="true" />
+        <div className="group flex flex-1 items-center gap-2 rounded-full border border-(--badge-border) bg-(--bg-surface-subtle) py-1.5 pl-3 pr-2 transition focus-within:border-(--accent-highlight) focus-within:shadow-[0_0_0_3px_rgba(56,189,248,0.25)]">
+          <Search size={20} strokeWidth={2.2} className="shrink-0 text-(--primary)" aria-hidden="true" />
+
           <input
+            ref={inputRef}
             type="text"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="Describe what you need, in your own words..."
+            placeholder="Search enterprise knowledge (e.g. 'time off work', 'working from home', 'health benefits')..."
             aria-label="Search query"
             className="w-full bg-transparent text-[14px] text-(--text-primary) outline-none placeholder:text-(--text-muted)"
           />
+
+          {/* "/" hint: hidden while the input is focused */}
+          
+
           {value && (
             <button
               type="button"
@@ -47,41 +69,44 @@ export default function SemanticSearchControls({
               <X size={15} />
             </button>
           )}
-        </div>
 
-        <button
-          type="submit"
-          className={`inline-flex items-center gap-2 rounded-xl bg-(--primary) px-6 py-3 text-[13px] font-bold text-(--primary-contrast) transition hover:bg-(--primary-hover) active:scale-95 ${focusRing}`}
-        >
-          Search <span aria-hidden="true">→</span>
-        </button>
+          <button
+            type="submit"
+            className={`inline-flex items-center gap-1.5 rounded-full bg-[linear-gradient(135deg,var(--primary-deep),var(--primary)_55%,var(--accent-highlight))] px-3 py-1 text-[11px] font-bold text-white shadow-sm transition hover:brightness-110 active:scale-95 ${focusRing}`}
+          >
+            <Sparkle size={12} fill="currentColor" className="text-sky-200" aria-hidden="true" />
+            Search
+            <span className="grid size-5 place-items-center rounded bg-white/25" aria-hidden="true">
+              <CornerDownLeft size={10} />
+            </span>
+          </button>
+        </div>
       </form>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-        <div
+      {/* ---------- Mode / Expand with AI / Sources ---------- */}
+        <div className="mt-3 flex items-center gap-2">
+          <div
           role="group"
           aria-label="Search mode"
-          className="inline-flex items-center gap-0.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5"
+          className="inline-flex w-fit items-center gap-0.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5"
         >
-          {modes.map((m) => {
-            const Icon = MODE_ICONS[m.id];
-            return (
-              <button
-                key={m.id}
-                type="button"
-                aria-pressed={mode === m.id}
-                onClick={() => onModeChange(m.id)}
-                className={segment(mode === m.id)}
-              >
-                <Icon size={12} aria-hidden="true" />
-                {m.label}
-              </button>
-            );
-          })}
+          {modes.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              aria-pressed={mode === m.id}
+              onClick={() => onModeChange(m.id)}
+              className={segment(mode === m.id)}
+            >
+              <span aria-hidden="true" className="text-[12px] leading-none">{MODE_EMOJIS[m.id]}</span>
+              {m.label}
+            </button>
+          ))}
         </div>
 
-        <div className="inline-flex items-center gap-2">
-          <span className="font-(family-name:--font-mono) text-[10px] uppercase tracking-[0.14em] text-(--text-muted)">
+
+          <div className="ml-auto inline-flex items-center gap-2">  
+            <span className="font-(family-name:--font-mono) text-[10px] font-semibold uppercase tracking-[0.14em] text-(--text-muted)">
             Sources:
           </span>
           <div role="group" aria-label="Source filter" className="inline-flex items-center gap-1.5">
@@ -91,7 +116,11 @@ export default function SemanticSearchControls({
                 type="button"
                 aria-pressed={source === s.id}
                 onClick={() => onSourceChange(s.id)}
-                className={`${segment(source === s.id)} border border-(--border-subtle)`}
+                className={`inline-flex items-center rounded-full border px-1.5 py-0.5 text-[10px] font-bold transition-all duration-200 ${focusRing} ${
+                    source === s.id
+                    ? "border-(--primary) bg-(--primary) text-(--primary-contrast) shadow-sm"
+                    : "border-(--border-medium) bg-(--primary-light) text-(--text-muted) hover:border-(--primary) hover:text-(--primary)"
+                }`}
               >
                 {s.label}
               </button>
@@ -100,23 +129,24 @@ export default function SemanticSearchControls({
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-dashed border-(--border-medium) pt-4">
-        <span className="font-(family-name:--font-mono) text-[10px] uppercase tracking-[0.14em] text-(--text-muted)">
-          {suggestionLabel}:
-        </span>
-        {suggestions.map((s) => (
-          <button
-            key={s}
-            type="button"
-            onClick={() => onPickSuggestion(s)}
-            className={`inline-flex items-center gap-1.5 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11.5px] font-semibold text-(--text-primary) transition hover:-translate-y-0.5 hover:border-(--primary) hover:text-(--primary) ${focusRing}`}
-          >
-            <Search size={11} aria-hidden="true" />
-            {s}
-          </button>
-        ))}
-      </div>
+      {/* ---------- Suggestions ---------- */}
+        <div className="flex flex-wrap items-center gap-2.5 border-t border-dashed border-[var(--border-subtle)] pt-3.5">
+  <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.12em] text-[var(--text-muted)]">
+    {label}
+  </span>
+  {chips.map((chip) => (
+    <button
+      key={chip}
+      type="button"
+      onClick={() => onPickSuggestion(chip)}
+ className={`flex shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap rounded-full border border-(--badge-border) bg-(--accent-chip) px-1.5 py-1.5 text-[10.5px] font-bold text-(--text-primary) transition-all duration-150 hover:-translate-y-0.5 hover:border-(--primary) hover:bg-(--bg-surface) ${focusRing}`}
+
+    >
+<span aria-hidden="true" className="text-[10px] leading-none">{MODE_EMOJIS[mode]}</span>
+      {chip}
+    </button>
+  ))}
+</div>
     </div>
   );
 }
-// ↑ Display only. All state lives in SemanticSearchPage.
