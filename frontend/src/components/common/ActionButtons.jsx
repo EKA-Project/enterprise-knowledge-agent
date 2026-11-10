@@ -52,10 +52,13 @@ const WarningUserXIcon = ({ size, className = "" }) => (
 );
 
 // Dismiss / Cancel 'X' spins 90 degrees
+
+// Bolder, punchy cross with smooth spring rotation
 const SpinXIcon = ({ size, className = "" }) => (
   <X
     size={size}
-    className={`transition-transform duration-200 ease-out group-hover:rotate-90 ${className}`}
+    strokeWidth={2.6}
+    className={`transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-90 group-hover:scale-110 ${className}`}
   />
 );
 
