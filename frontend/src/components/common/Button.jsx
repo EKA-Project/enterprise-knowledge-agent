@@ -1,5 +1,3 @@
-import React from "react";
-
 /* ==========================================================================
    Button  (components/common/Button.jsx)
    Shared pill base with EKA 160ms timing, craft borders & active spring.
@@ -12,6 +10,10 @@ const VARIANTS = {
   // 1. Secondary Light Pill (Add Member, Compare & Redline, etc.)
   light:
     "border-(--border-medium) bg-(--bg-surface) text-(--text-primary) shadow-[var(--shadow-sm)] hover:border-(--primary) hover:bg-(--bg-surface-elevated) hover:text-(--primary) hover:shadow-[0_3px_10px_rgba(0,135,102,0.12)]",
+
+  // High-contrast dark hover (used by Export Storage Audit)
+  darkHover:
+    "border-(--border-medium) bg-(--bg-surface) text-(--text-primary) shadow-[var(--shadow-sm)] hover:border-(--text-primary) hover:text-(--text-primary) hover:shadow-[0_3px_10px_rgba(0,0,0,0.08)]",
 
   // 2. Primary Solid Pill (Ingest Document, Send Invitation, etc.)
   solid:
@@ -61,17 +63,22 @@ const SIZES = {
 };
 
 const CHIP_COLORS = {
-  light: "bg-(--bg-surface-subtle) text-(--primary) group-hover:bg-[rgba(0,135,102,0.14)]",
+  light:
+    "bg-(--bg-surface-subtle) text-(--primary) group-hover:bg-[rgba(0,135,102,0.14)]",
+  // ✨ Add this single line:
+  darkHover:
+    "bg-(--bg-surface-subtle) text-(--text-secondary) group-hover:bg-(--text-primary) group-hover:text-white",
   solid: "bg-white/20 text-white group-hover:bg-white/30",
   danger: "bg-white/20 text-white group-hover:bg-white/30",
-  dangerSoft: "bg-[rgba(220,38,38,0.12)] text-[#dc2626] group-hover:bg-[rgba(220,38,38,0.22)]",
+  dangerSoft:
+    "bg-[rgba(220,38,38,0.12)] text-[#dc2626] group-hover:bg-[rgba(220,38,38,0.22)]",
 };
 
 export default function Button({
   children,
   icon: Icon,
   iconChip = false,
-   chipClassName = "", // <--- Allows custom chip hover (like dark chip for export or emerald for restore)
+  chipClassName = "", // <--- Allows custom chip hover (like dark chip for export or emerald for restore)
   variant = "light",
   size = "sm", // Defaults to standard EKA compact pill if omitted
   type = "button",
@@ -85,7 +92,7 @@ export default function Button({
     <button
       type={type}
       className={`${BASE} ${VARIANTS[variant] ?? VARIANTS.light} ${s.btn} ${s.padding(
-        hasChip
+        hasChip,
       )} ${className}`}
       {...rest}
     >

@@ -18,7 +18,7 @@ export default function TrashLidIcon({ size = 13, className = "" }) {
       className={`overflow-visible ${className}`}
     >
       {/* Animated Lid: Rotates and lifts when parent group is hovered */}
-      <g className="origin-[4px_6px] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-[2.8px] group-hover:-rotate-[38deg]">
+      <g className="origin-[4px_6px] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-y-[-2.8px] group-hover:rotate-[-38deg]">
         <path d="M4 6h16" />
         <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
       </g>
