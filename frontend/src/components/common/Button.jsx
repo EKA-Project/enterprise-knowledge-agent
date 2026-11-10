@@ -24,7 +24,8 @@ const VARIANTS = {
     "border-(--status-danger) bg-(--status-danger) text-white shadow-[0_2px_6px_rgba(220,38,38,0.2)] hover:bg-[#b91c1c] hover:border-[#b91c1c] hover:shadow-[0_3px_12px_rgba(220,38,38,0.3)]",
 
   // 4. Soft Pill (Cancel / Close)
-  soft: "border-(--border-subtle) bg-(--bg-surface) text-(--primary) hover:border-(--primary)/40 hover:bg-(--accent-chip)",
+// In VARIANTS inside Button.jsx:
+soft: "border-(--border-subtle) bg-(--bg-surface) text-(--text-secondary) hover:border-[rgba(220,38,38,0.4)] hover:bg-[rgba(220,38,38,0.10)] hover:text-[#dc2626] hover:shadow-[0_2px_10px_rgba(220,38,38,0.15)]",
 
   // 5. Danger Soft Pill (Delete History, Empty Bin, Remove from Team)
   dangerSoft:

@@ -34,13 +34,14 @@ const FlyingSendIcon = ({ size, className = "" }) => (
   />
 );
 
-// Full 360° counter-clockwise rewind spin for document restoration
-const SpinningRestoreIcon = ({ size, className = "" }) => (
+// Rewind icon spins counter-clockwise on hover
+const RewindIcon = ({ size, className = "" }) => (
   <RotateCw
     size={size}
-    className={`transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-rotate-360 group-hover:scale-115 ${className}`}
+    className={`transition-transform duration-300 ease-out group-hover:-rotate-180 group-hover:scale-105 ${className}`}
   />
 );
+
 
 // Warning icon tilts and scales backward
 const WarningUserXIcon = ({ size, className = "" }) => (
@@ -173,11 +174,9 @@ export function RestoreButton(props) {
   return (
     <Button
       variant="light"
-      icon={SpinningRestoreIcon}
-      iconChip
-      chipClassName="text-emerald-600 group-hover:!bg-emerald-500 group-hover:!text-white"
-      className="hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50/40"
+      icon={RewindIcon}
       title="Restore back to active library"
+      className="text-(--text-secondary) hover:border-emerald-700/50 hover:bg-emerald-700/10 hover:text-emerald-700 hover:shadow-[0_2px_8px_rgba(4,120,87,0.14)]"
       {...props}
     >
       Restore
