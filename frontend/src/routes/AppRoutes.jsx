@@ -1,9 +1,7 @@
+
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import AppLayout from "../components/layout/AppLayout.jsx";
-import KnowledgeBasePage from "../pages/KnowledgeBasePage.jsx";
-import DocumentsPage from "../pages/DocumentsPage.jsx";
-import DocumentSummaryPage from "../pages/DocumentSummaryPage.jsx";
-import StorageManagementPage from "../pages/StorageManagementPage.jsx";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import RoleGuard from "../components/common/RoleGuard.jsx";
 
@@ -18,33 +16,40 @@ import EmployeeCreateAccountPage from "../pages/auth/signup/employee/EmployeeCre
 import AdminAccountPage from "../pages/auth/signup/admin/AdminAccountPage";
 import AdminEnterpriseInitializedPage from "../pages/auth/signup/admin/AdminEnterpriseInitializedPage";
 import AdminEnterpriseProfilePage from "../pages/auth/signup/admin/AdminEnterpriseProfilePage";
-import LoginPage from "../pages/auth/LoginPage";
-import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import AdminInviteMembersPage from "../pages/auth/signup/admin/AdminInviteMembersPage";
 import AdminInviteSuccessPage from "../pages/auth/signup/admin/AdminInviteSuccessPage";
+import LoginPage from "../pages/auth/LoginPage";
+import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
+
 // EKA pages
 import Dashboard from "../pages/Dashboard.jsx";
-import SettingsPage from "../pages/SettingsPage.jsx";
 import AskEkaPage from "../pages/AskEkaPage";
 import ChatHistoryPage from "../pages/ChatHistoryPage";
+import KnowledgeBasePage from "../pages/KnowledgeBasePage.jsx";
+import DocumentsPage from "../pages/DocumentsPage.jsx";
+import DocumentSummaryPage from "../pages/DocumentSummaryPage.jsx";
+import StorageManagementPage from "../pages/StorageManagementPage.jsx";
 import SemanticSearchPage from "../pages/SemanticSearchPage.jsx";
 import AnalyticsPage from "../pages/AnalyticsPage.jsx";
 import OrganizationPage from "../pages/OrganizationPage.jsx";
-// ...other EKA pages
+import SettingsPage from "../pages/SettingsPage.jsx";
 
 function AppRoutes() {
   return (
     <Routes>
-      {/* Redirect the root URL to the main dashboard. */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Redirect */}
+      <Route
+        path="/"
+        element={<Navigate to="/dashboard" replace />}
+      />
 
-      {/* Public / authentication routes */}
+      {/* Public / Authentication routes */}
       <Route path="/landing" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupChoicePage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-      {/* Other signup routes */}
+      {/* Employee signup routes */}
       <Route path="/signup/Join" element={<EmployeeJoinMethodPage />} />
       <Route
         path="/signup/invite-preview"
@@ -62,7 +67,12 @@ function AppRoutes() {
         path="/signup/create-account"
         element={<EmployeeCreateAccountPage />}
       />
-      <Route path="/signup/admin/account" element={<AdminAccountPage />} />
+
+      {/* Admin signup routes */}
+      <Route
+        path="/signup/admin/account"
+        element={<AdminAccountPage />}
+      />
       <Route
         path="/signup/admin/enterprise"
         element={<AdminEnterpriseInitializedPage />}
@@ -71,7 +81,10 @@ function AppRoutes() {
         path="/signup/admin/confirmation"
         element={<AdminEnterpriseProfilePage />}
       />
-      <Route path="/signup/admin/invite" element={<AdminInviteMembersPage />} />
+      <Route
+        path="/signup/admin/invite"
+        element={<AdminInviteMembersPage />}
+      />
       <Route
         path="/signup/admin/invite-success"
         element={<AdminInviteSuccessPage />}
@@ -86,72 +99,58 @@ function AppRoutes() {
         }
       >
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/ask-eka" element={<h1>Ask EKA</h1>} />
-        <Route path="/ask-eka/history" element={<h1>Ask EKA</h1>} />
+
+        <Route path="/ask-eka" element={<AskEkaPage />} />
+        <Route path="/ask-eka/history" element={<ChatHistoryPage />} />
+
         <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
         <Route path="/documents" element={<DocumentsPage />} />
-        <Route path="/documents/summary" element={<DocumentSummaryPage />} />
-        <Route path="/documents/storage" element={<RoleGuard allowedRoles={["Admin"]}><StorageManagementPage /></RoleGuard>} />
-        <Route path="/semantic-search" element={<h1>Semantic Search</h1>} />
+        <Route
+          path="/documents/summary"
+          element={<DocumentSummaryPage />}
+        />
+
+        <Route
+          path="/documents/storage"
+          element={
+            <RoleGuard allowedRoles={["Admin"]}>
+              <StorageManagementPage />
+            </RoleGuard>
+          }
+        />
+
+        <Route
+          path="/semantic-search"
+          element={<SemanticSearchPage />}
+        />
 
         <Route
           path="/analytics"
           element={
             <RoleGuard allowedRoles={["Admin"]}>
-              <h1>AnalyticsPage </h1>
+              <AnalyticsPage />
             </RoleGuard>
           }
         />
+
         <Route
           path="/organization"
           element={
             <RoleGuard allowedRoles={["Admin"]}>
-              <h1>OrganizationPage </h1>
+              <OrganizationPage />
             </RoleGuard>
           }
         />
+
         <Route path="/settings" element={<SettingsPage />} />
+
         <Route
           path="/help-support"
           element={<h1>Answers whenever you need them.</h1>}
         />
-<Route path="/dashboard" element={<Dashboard />} />
-
-<Route path="/ask-eka" element={<AskEkaPage />} />
-<Route path="/ask-eka/history" element={<ChatHistoryPage />} />
-
-<Route path="/knowledge-base" element={<KnowledgeBasePage />} />
-<Route path="/documents" element={<DocumentsPage />} />
-<Route path="/documents/summary" element={<DocumentSummaryPage />} />
-
-<Route path="/semantic-search" element={<SemanticSearchPage />} />
-
-<Route
-  path="/analytics"
-  element={
-    <RoleGuard allowedRoles={["Admin"]}>
-      <AnalyticsPage />
-    </RoleGuard>
-  }
-/>
-
-<Route
-  path="/organization"
-  element={
-    <RoleGuard allowedRoles={["Admin"]}>
-      <OrganizationPage />
-    </RoleGuard>
-  }
-/>
-
-<Route path="/settings" element={<SettingsPage />} />
-
-<Route
-  path="/help-support"
-  element={<h1>Answers whenever you need them.</h1>}
-/>
       </Route>
     </Routes>
   );
 }
+
 export default AppRoutes;
