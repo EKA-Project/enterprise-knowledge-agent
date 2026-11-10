@@ -1,4 +1,5 @@
 import { estimateReadTime } from "./estimateReadTime.js";
+import { formatDate } from "./formatDate.js";
 import { formatFileSize } from "./formatFileSize.js";
 
 // Stored document.status -> the status the manager table works with.
@@ -18,9 +19,8 @@ function buildReadyMeta(doc) {
 }
 
 // What one row of the manager documents table needs. Every value is derived from
-// the stored document (blueprint rule 6). `userNames` is a Map of userId -> name,
-// because documents store ids, never names (blueprint rule 3).
-export function toManagerDocumentRow(doc, userNames) {
+// the stored document (blueprint rule 6).
+export function toManagerDocumentRow(doc) {
   const status = TABLE_STATUS_BY_DOCUMENT_STATUS[doc.status] ?? "indexing";
 
   let meta;
@@ -33,7 +33,7 @@ export function toManagerDocumentRow(doc, userNames) {
     title: doc.title,
     type: doc.format, // picks the file-type chip colour
     meta,
-    uploader: userNames.get(doc.uploadedById) ?? "Unknown user",
+    uploadedAt: formatDate(doc.uploadedAt), // upload date only; re-indexing does not change it
     size: formatFileSize(doc.sizeBytes),
     chunks: doc.chunkCount, // 0 for processing and failed documents
     status,

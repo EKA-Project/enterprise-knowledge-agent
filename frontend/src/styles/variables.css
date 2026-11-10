@@ -348,3 +348,13 @@
     animation: none;
   }
 }
+
+
+/* Row icon hover: a short, small side-to-side shake. Used by RowIconButtons.jsx. */
+@keyframes row-icon-shake {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20%      { transform: translateX(-1.5px) rotate(-6deg); }
+  40%      { transform: translateX(1.5px) rotate(6deg); }
+  60%      { transform: translateX(-1px) rotate(-3deg); }
+  80%      { transform: translateX(1px) rotate(3deg); }
+}
