@@ -73,7 +73,7 @@ function RemoveMemberModal({ member, department, onClose, onConfirm }) {
   return (
     <Modal
       size="confirm"
-      spacing="roomy"
+      spacing="regular"
       onClose={onClose}
       /* ---------- Header: icon tile ---------- */
       icon={
@@ -103,9 +103,9 @@ function RemoveMemberModal({ member, department, onClose, onConfirm }) {
       {/* ======================= BODY ======================= */}
       <div className="space-y-[17.6px]">
         {/* ---------- 1. Member card ----------
-            Light-blue card: square avatar with initials, name + status
+            card: square avatar with initials, name + status
             badge, and "title • email" line. */}
-        <div className="flex items-center gap-[15.2px] rounded-[14px] border-[1.5px] border-[#bae6fd] bg-[#ecf8ff] px-[18.4px] py-[15.2px]">
+        <div className="flex items-center gap-[15.2px] rounded-[14px] border-[1.5px] border-(--border-medium) bg-(--bg-surface-subtle) px-[18.4px] py-[15.2px]">
           {/* Avatar (44px rounded square with initials) */}
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] bg-(--primary) font-mono text-[0.92rem] font-bold text-white shadow-[0_2px_6px_rgb(0_0_0/0.08)]">
             {getInitials(member.name)}
@@ -146,9 +146,8 @@ function RemoveMemberModal({ member, department, onClose, onConfirm }) {
           team?
         </p>
 
-        {/* ---------- 3. Department scope notice ----------
-            Soft-red warning box listing what removal does and doesn't do. */}
-        <div className="rounded-xl border-[1.5px] border-[#ffbfc6] bg-[#FFF5F5] px-[18.4px] py-3">
+        {/* ---------- 3. Department scope notice ---------- */}
+        <div className="rounded-xl border-[1.5px] border-(--status-danger-border) bg-(--status-danger-subtle) px-[18.4px] py-3 text-(--status-danger-text)">
           {/* Notice heading */}
           <p className="mb-1.5 flex items-center gap-1.5 text-[0.85rem] font-bold text-(--status-danger-light)">
             <span aria-hidden="true">⚠️</span>
@@ -178,9 +177,7 @@ function RemoveMemberModal({ member, department, onClose, onConfirm }) {
           </ul>
         </div>
 
-        {/* ---------- 4. Type-to-confirm input ----------
-            Label with the member's name in a mono chip, then the text field.
-            The footer button unlocks only when the typed value matches. */}
+        {/* ---------- 4. Type-to-confirm input ---------- */}
         <div className="pt-0.5">
           {/* Label with name chip */}
           <label
@@ -188,7 +185,7 @@ function RemoveMemberModal({ member, department, onClose, onConfirm }) {
             className="mb-1.5 block text-[0.8rem] font-semibold text-(--text-secondary)"
           >
             Type{" "}
-            <code className="rounded bg-[#f1f5f9] px-[5px] py-px font-mono text-(--text-primary)">
+            <code className="rounded border border-(--border-subtle) bg-(--bg-surface-subtle) px-[6px] py-0.5 font-mono text-[0.78rem] font-semibold text-(--text-primary)">
               {member.name}
             </code>{" "}
             to confirm:
