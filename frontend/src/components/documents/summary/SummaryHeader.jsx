@@ -26,7 +26,7 @@ function SummaryHeader({
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-         <span className="rounded-full bg-[#e1f0fa] px-3 py-1 text-[11px] font-semibold text-[#3d5a73]">
+          <span className="rounded-full bg-[#e1f0fa] px-3 py-1 text-[11px] font-semibold text-[#3d5a73]">
             {doc.category}
           </span>
           {archived ? (
@@ -36,8 +36,8 @@ function SummaryHeader({
           ) : (
             <span
               className={`rounded-full px-3 py-1 text-[11px] font-semibold ${doc.status === 'Indexed'
-                  ? 'border border-[#bdeedb] bg-[#edfdf7] text-[#0f8f63]'
-                  : status.style
+                ? 'border border-[#bdeedb] bg-[#edfdf7] text-[#0f8f63]'
+                : status.style
                 }`}
             >
               {status.label}
@@ -63,7 +63,7 @@ function SummaryHeader({
         <Link
           to="/ask-eka"
           state={{ question: `Tell me about "${doc.title}"` }}
-          className="inline-flex items-center gap-1.5 rounded-full bg-[#153830] px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#0f2b25]"
+          className="inline-flex items-center rounded-(--radius-pill) border border-(--primary) bg-(--primary) px-2 py-1 text-(length:--font-size-sm) font-bold text-(--primary-contrast) [transition:background-color_var(--transition-fast)] hover:bg-(--primary-hover)"
         >
           Ask About This Doc →
         </Link>

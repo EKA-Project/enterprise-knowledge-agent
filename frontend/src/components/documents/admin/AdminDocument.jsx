@@ -1,53 +1,34 @@
-import { Columns2, Sparkles } from 'lucide-react';
 import PageHero from '../../common/PageHero.jsx';
+import { IngestDocumentButton } from '../../common/ActionButtons.jsx';
 import DocumentContent from '../shared/DocumentContent.jsx';
 import { documents } from '../shared/DocumentData';
 import StorageIndicator from './StorageIndicator.jsx';
 import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
 import { useDocumentCountText } from '../shared/documentResults.js';
-import { Upload } from 'lucide-react';
-import { IngestDocumentButton } from '../../common/ActionButtons.jsx';
-
 
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
   const countText = useDocumentCountText(documents.length);
+
   return (
     <>
-      {/* Admin header: hero, then storage + buttons in one row below it */}
-<div className="mb-6">
-  <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
-    Ingestion Repository / {countText}
-  </p>
+      {/* Admin header: hero, then storage + ingest button in one row below it */}
+      <PageHero
+        eyebrow={`Ingestion Repository / ${countText}`}
+        title="Raw sources, structured."
+        description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
+      />
 
-  <PageHero
-    bare
-    title="Raw sources, structured."
-    description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
-  />
-</div>
+      <div className="mb-4  flex flex-wrap items-center gap-3">
+        <StorageIndicator />
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <StorageIndicator />
-
-          {/* Not wired yet: compare / redline flow comes later */}
-
-
-<button
-  type="button"
-  onClick={openUpload}
-  disabled={!canUpload}
-  title={canUpload ? 'Ingest a new document' : 'Uploads are limited to Admins and Managers'}
-  className="ml-auto inline-flex h-9 cursor-pointer items-center gap-2 rounded-(--radius-pill) bg-(--primary) pl-1.5 pr-4 text-xs font-bold text-(--primary-contrast) transition-colors duration-200 hover:bg-(--primary-hover) hover:text-(--primary-contrast) disabled:cursor-not-allowed disabled:opacity-50"
->
-  <span className="flex h-6 w-6 items-center justify-center rounded-(--radius-full) bg-(--primary-contrast)/20 text-(--primary-contrast)">
-    <Upload size={14} />
-  </span>
-  Ingest Document
-</button>
-        </div>
-      
+        <IngestDocumentButton
+          onClick={openUpload}
+          disabled={!canUpload}
+          className="ml-auto"
+        />
+      </div>
 
       {/* Admin-only document health overview */}
       <DocumentHealthOverview />
