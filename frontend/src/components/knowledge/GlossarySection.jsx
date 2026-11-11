@@ -4,6 +4,8 @@ import { glossaryTerms } from './KnowledgeData.js';
 import GlossaryCard from './GlossaryCard.jsx';
 import AddGlossaryTermModal from './AddGlossaryTermModal.jsx';
 import SectionState, { SkeletonCards } from './SectionState.jsx';
+import Button from '../common/Button.jsx';
+import Pagination from '../common/Pagination.jsx';
 
 const PAGE_SIZE = 4;
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -42,7 +44,7 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const start = (page - 1) * PAGE_SIZE;
   const visible = filtered.slice(start, start + PAGE_SIZE);
-  const remaining = filtered.length - (start + PAGE_SIZE);
+  
 
   const changeLetter = (next) => {
     setLetter(next);
@@ -155,19 +157,18 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
             />
           </label>
           {canManage && (
-            <button
-              type="button"
+            <Button
+              variant="solid"
+              icon={Plus}
+              iconChip
+              title="Add a glossary term"
               onClick={() => {
                 setSelectedTerm(null);
                 setAddOpen(true);
               }}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-(--primary) py-1.5 pl-1.5 pr-4 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--primary-contrast)/20">
-                <Plus size={12} />
-              </span>
               Add term
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -216,46 +217,30 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
       {body}
 
       {/* Pagination (only when there is more than one page) */}
+      {/* Pagination (only when there is more than one page) */}
       {showPagination && (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-(--bg-surface-subtle) px-4 py-2.5">
-          <span className="kb-mono text-[10px] text-(--text-muted)">
-            Showing {start + 1}-{Math.min(start + PAGE_SIZE, filtered.length)} of {filtered.length} terms
-          </span>
-          <div className="flex items-center gap-2 text-[11px] font-medium">
-            <button
-              type="button"
-              disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
-              className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-(--text-secondary) shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
-            >
-              ← Previous
-            </button>
-            <span className="kb-mono rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-(--text-secondary) shadow-(--shadow-sm)">
-              Page {page} of {totalPages}
-            </span>
-            <button
-              type="button"
-              disabled={page === totalPages}
-              onClick={() => setPage((p) => p + 1)}
-              className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 font-semibold text-(--text-primary) shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
-            >
-              Next{remaining > 0 ? ` ${Math.min(PAGE_SIZE, remaining)}` : ''} →
-            </button>
-          </div>
+        <div className="mt-0">
+          <Pagination
+            page={page}
+            pageSize={PAGE_SIZE}
+            total={filtered.length}
+            onPageChange={setPage}
+            itemLabel="terms"
+          />
         </div>
       )}
 
-{addOpen && (
-  <AddGlossaryTermModal
-    onClose={() => {
-      setAddOpen(false);
-      setSelectedTerm(null);
-    }}
-    onSave={handleSave}
-    mode={selectedTerm ? 'edit' : 'add'}
-    item={selectedTerm}
-  />
-)}
+      {addOpen && (
+        <AddGlossaryTermModal
+          onClose={() => {
+            setAddOpen(false);
+            setSelectedTerm(null);
+          }}
+          onSave={handleSave}
+          mode={selectedTerm ? 'edit' : 'add'}
+          item={selectedTerm}
+        />
+      )}
     </section>
   );
 }
