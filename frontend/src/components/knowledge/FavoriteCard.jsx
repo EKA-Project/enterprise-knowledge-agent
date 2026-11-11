@@ -46,7 +46,10 @@ export default function FavoriteCard({ item, rank, mode }) {
           </span>
         </div>
         {/* Format badge */}
-        <Badge format={item.format} />
+              <Badge
+        format={item.format}
+        className="doc-mono !h-8 !w-8 !rounded-1xl !text-[10px]"
+      />
       </div>
 
       <h4 className="kb-serif mt-3 text-[15px] font-bold leading-snug text-(--text-primary)">{item.title}</h4>
