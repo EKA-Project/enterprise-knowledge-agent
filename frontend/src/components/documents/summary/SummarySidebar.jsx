@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom';
 import { Zap, RefreshCw, Archive, ArchiveRestore, Link2, ArrowRight } from 'lucide-react';
-import { formatStyles } from '../shared/DocumentCard';
 import '../../../styles/Document.css';
+
+// Format badge colours come from the theme's --doc-* variables.
+const docBadge = {
+  PDF: 'border-(--doc-pdf-border) bg-(--doc-pdf-bg) text-(--doc-pdf-color)',
+  DOC: 'border-(--doc-doc-border) bg-(--doc-doc-bg) text-(--doc-doc-color)',
+  DOCX: 'border-(--doc-docx-border) bg-(--doc-docx-bg) text-(--doc-docx-color)',
+  CSV: 'border-(--doc-csv-border) bg-(--doc-csv-bg) text-(--doc-csv-color)',
+  MD: 'border-(--doc-md-border) bg-(--doc-md-bg) text-(--doc-md-color)',
+  TXT: 'border-(--doc-txt-border) bg-(--doc-txt-bg) text-(--doc-txt-color)',
+  FIG: 'border-(--doc-fig-border) bg-(--doc-fig-bg) text-(--doc-fig-color)',
+};
 
 const card =
     'rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) p-7 shadow-(--shadow-sm)';
@@ -95,9 +105,9 @@ function SummarySidebar({
           ))}
         </div>
       </section>
-      {related.length > 0 && (
+       {related.length > 0 && (
         <section className={card}>
-          <h2 className="doc-heading flex items-center gap-2 text-base font-bold text-(--text-primary)">
+          <h2 className="flex items-center gap-2 font-(family-name:--font-serif) text-base font-bold text-(--text-primary)">
             <Link2 size={14} className="text-(--text-muted)" /> Related Knowledge
           </h2>
           <div className="mt-3 space-y-2">
@@ -106,11 +116,12 @@ function SummarySidebar({
                 key={d.id}
                 type="button"
                 onClick={() => onOpenRelated(d)}
-                className="flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-[#dce8f2] bg-white px-3 py-2 text-left transition-colors hover:border-transparent hover:bg-[#e1f0fa]"
+                className="flex w-full cursor-pointer items-center gap-3 rounded-(--radius-md) border border-(--border-subtle) bg-(--bg-surface-subtle) px-3 py-2 text-left [transition:background-color_var(--transition-fast),border-color_var(--transition-fast)] hover:border-(--border-medium) hover:bg-(--bg-surface)"
               >
                 <span
-                  className={`doc-mono flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[8px] font-bold ${formatStyles[d.format] ?? 'bg-(--bg-surface) text-(--text-primary)'
-                    }`}
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-(--radius-sm) border font-(family-name:--font-mono) text-[8px] font-bold ${
+                    docBadge[d.format] ?? 'border-(--border-subtle) bg-(--bg-surface) text-(--text-primary)'
+                  }`}
                 >
                   {d.format}
                 </span>

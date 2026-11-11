@@ -50,7 +50,7 @@ function AiSummaryTab({ doc, onReadPage, onSearchTag }) {
               key={tag}
               type="button"
               onClick={() => onSearchTag(tag)}
-              className="cursor-pointer rounded-(--radius-pill) border-[1.5px] border-(--border-medium) bg-(--bg-surface-subtle) px-1.5 py-0.5 text-(length:--font-size-sm) font-semibold text-(--text-primary) [transition:color_var(--transition-fast),background-color_var(--transition-fast),border-color_var(--transition-fast)] hover:border-(--primary) hover:bg-(--bg-surface) hover:text-(--primary)"
+              className="cursor-pointer rounded-(--radius-pill) border-[1.5px] border-(--border-medium) bg-(--bg-surface-subtle) px-2 py-1 text-(length:--font-size-sm) font-semibold text-(--text-primary) [transition:color_var(--transition-fast),background-color_var(--transition-fast),border-color_var(--transition-fast)] hover:border-(--primary) hover:bg-(--bg-surface) hover:text-(--primary)"
             >
               # {tag}
             </button>
