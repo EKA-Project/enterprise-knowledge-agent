@@ -10,6 +10,7 @@ import {
   UserX,
   Database ,
   X,
+  Check,
 } from "lucide-react";
 import Button from "./Button";
 import DiceIcon from "../icons/DiceIcon";
@@ -69,7 +70,14 @@ const SpinXIcon = ({ size, className = "" }) => (
     className={`transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-90 group-hover:scale-110 ${className}`}
   />
 );
-
+// Micro-animation: Check pops and springs on hover
+const PopCheckIcon = ({ size, className = "" }) => (
+  <Check
+    size={size}
+    strokeWidth={2.5}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-120 group-hover:rotate-6 ${className}`}
+  />
+);
 /* ==========================================================================
    SECTION 1: Core Primary Actions (Most Frequently Used Across App)
    ========================================================================== */
@@ -323,7 +331,7 @@ export function CancelButton(props) {
 export function RemoveFromTeamButton(props) {
   return (
     <Button
-      variant="dangerSoft"
+      variant="danger"
       icon={WarningUserXIcon}
       iconChip
       title="Remove this member from the team"
@@ -358,16 +366,36 @@ export function SurpriseMeButton({ isSurprising = false, rollCount = 0, ...props
  *   - Ingestion / Document Upload Modal submit CTA (components/modals/UploadDocumentModal.jsx)
  *   - Pipeline Re-index trigger
  */
-export function StartVectorIngestionButton(props) {
+export function StartVectorIngestionButton({
+  children = "Start Vector Ingestion",
+  icon = AnimatedDatabaseIcon,
+  ...props
+}) {
   return (
     <Button
       variant="solid"
-      icon={AnimatedDatabaseIcon}
+      icon={icon}
       iconChip
       title="Start vectorizing and embedding document into semantic store"
       {...props}
     >
-      Start Vector Ingestion
+      {children}
+    </Button>
+  );
+}
+/**
+ * Done Action (Light Pill with Animated Checkmark)
+ * Where to use: Read-only modals (Employee View, Document Preview, Activity Logs)
+ */
+export function DoneButton(props) {
+  return (
+    <Button
+      variant="light"
+      icon={PopCheckIcon}
+      title="Finish viewing"
+      {...props}
+    >
+      Done
     </Button>
   );
 }
