@@ -19,10 +19,10 @@ import CustomThresholdModal from './CustomThresholdModal';
 import '../../../styles/Document.css';
 
 const TABS = [
-  { key: 'large', label: 'Large files', icon: Archive, on: 'bg-[#0a7bc4] text-white', off: 'bg-[#e3f0fa] text-[#1b79a8]' },
-  { key: 'idle', label: 'Not opened recently', icon: History, on: 'bg-[#f08a1c] text-white', off: 'bg-[#fff0dc] text-[#d9822b]' },
-  { key: 'failed', label: 'Failed ingestions', icon: AlertTriangle, on: 'bg-[#e5484d] text-white', off: 'bg-[#ffe9e8] text-[#e5484d]' },
-  { key: 'dupes', label: 'Duplicates', icon: Copy, on: 'bg-[#7c5ce0] text-white', off: 'bg-[#ece8fd] text-[#7c5ce0]' },
+  { key: 'large', label: 'Large files', icon: Archive, on: 'scale-[1.08] bg-[#0284c7] text-white', off: 'bg-[rgba(2,132,199,0.09)] text-[#0284c7]' },
+  { key: 'idle', label: 'Not opened recently', icon: History, on: 'scale-[1.08] bg-[#d97706] text-white', off: 'bg-[rgba(217,119,6,0.09)] text-[#d97706]' },
+  { key: 'failed', label: 'Failed ingestions', icon: AlertTriangle, on: 'scale-[1.08] bg-[#dc2626] text-white', off: 'bg-[rgba(220,38,38,0.09)] text-[#dc2626]' },
+  { key: 'dupes', label: 'Duplicates', icon: Copy, on: 'scale-[1.08] bg-[#6366f1] text-white', off: 'bg-[rgba(99,102,241,0.09)] text-[#6366f1]' },
 ];
 
 const LARGE_CHIPS = [10, 50, 100];
@@ -238,8 +238,8 @@ function FreeUpCard({
         </span>
       </div>
 
-      {/* Tabs */}
-      <div className="mt-5 flex flex-wrap gap-2 border-b border-[#e3eef7]">
+       {/* Tabs */}
+      <div className="mt-5 flex flex-wrap gap-2 border-b border-(--border-subtle)">
         {TABS.map((t) => {
           const isOn = tab === t.key;
           const Icon = t.icon;
@@ -249,27 +249,27 @@ function FreeUpCard({
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
-              className={`-mb-px flex cursor-pointer items-center gap-3 rounded-t-xl border-b-2 px-3 pb-2 pt-1.5 text-[13px] font-semibold text-[#10283f] transition-colors ${
+              className={`group -mb-px flex cursor-pointer items-center gap-3 rounded-t-[8px] border-b-2 px-3 pb-2 pt-1.5 text-[13px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
                 isOn
-                  ? 'border-[#1796a8] bg-[#f1f8fd]'
-                  : 'border-transparent hover:bg-[#f7fbfe]'
+                  ? 'border-(--primary) bg-[rgba(2,132,199,0.03)] font-bold text-(--primary)'
+                  : 'border-transparent font-semibold text-(--text-secondary) hover:bg-[rgba(0,0,0,0.02)] hover:text-(--text-primary)'
               }`}
             >
               <span
-                className={`flex h-[22px] w-[22px] items-center justify-center rounded-xl ${
+                className={`flex h-[22px] w-[22px] items-center justify-center rounded-[7px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
                   isOn ? t.on : t.off
                 }`}
               >
-                <Icon size={13} />
+                <Icon size={13} className="transition-transform duration-200 group-hover:-translate-y-px" />
               </span>
 
               {t.label}
 
               <span
-                className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-full px-2.5 text-[12px] font-bold ${
+                className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-(--radius-pill) border px-2.5 text-[12px] font-bold [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
                   isOn
-                    ? 'bg-[#0a7bc4] text-white'
-                    : 'bg-[#e3eef7] text-[#7c949a]'
+                    ? 'border-transparent bg-(--primary) text-white shadow-[0_1px_4px_rgba(2,132,199,0.3)]'
+                    : 'border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary) group-hover:border-(--border-medium) group-hover:text-(--text-primary)'
                 }`}
               >
                 {rowsFor(t.key).length}

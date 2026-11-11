@@ -15,6 +15,7 @@ import '../styles/knowledge.css';
 import DemoStatesBar from '../components/knowledge/DemoStatesBar';
 import SectionState from '../components/knowledge/SectionState';
 import Button from '../components/common/Button.jsx';
+import PageHero from '../components/common/PageHero.jsx';
 
 export default function KnowledgeBasePage() {
   const { activeRole } = useContext(AuthContext);
@@ -26,43 +27,40 @@ export default function KnowledgeBasePage() {
 
 
   return (
-    <div className="px-4 py-2">
+    <div className="px-0 py-0">
       {/* Hero section */}
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
-            Browse the collective
-          </p>
-          <h2 className="kb-hero-heading text-[2rem] sm:text-[2.5rem] font-bold leading-tight text-(--text-primary)">
-            Find the thread.
-          </h2>
-          <p className="mt-1 text-sm text-(--text-secondary)">
-            A map of what your team knows, grouped in ways that make sense.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-              {canUpload && (
-            <Button
-              variant="solid"
-              icon={Upload}
-              iconChip
-              title="Upload a new document"
-              onClick={openUpload}
+           {/* Hero section */}
+      <PageHero
+        eyebrow="Browse the collective"
+        title="Find the thread."
+        description="A map of what your team knows, grouped in ways that make sense."
+        className="mb-2"
+        actions={
+          <>
+            {canUpload && (
+              <Button
+                variant="solid"
+                icon={Upload}
+                iconChip
+                title="Upload a new document"
+                onClick={openUpload}
+              >
+                Upload Document
+              </Button>
+            )}
+
+            <Link
+              to="/documents"
+              className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-colors duration-200 hover:border-(--border-medium)"
             >
-              Upload Document
-            </Button>
-          )}
-          <Link
-            to="/documents"
-            className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-colors duration-200 hover:border-(--border-medium)"
-          >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-colors duration-200 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
-              <LayoutGrid size={12} />
-            </span>
-            Browse all
-          </Link>
-        </div>
-      </div>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-colors duration-200 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
+                <LayoutGrid size={12} />
+              </span>
+              Browse all
+            </Link>
+          </>
+        }
+      />
 
       <KnowledgeStats stats={knowledgeStats} />
 
