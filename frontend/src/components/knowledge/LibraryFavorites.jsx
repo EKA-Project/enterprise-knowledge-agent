@@ -84,9 +84,12 @@ export default function LibraryFavorites({ state = 'normal', onReset }) {
             <button
               key={m.id}
               type="button"
+              aria-pressed={mode === m.id}
               onClick={() => setMode(m.id)}
-              className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold ${
-                mode === m.id ? 'bg-(--primary) text-(--primary-contrast)' : 'text-(--text-secondary)'
+              className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold transition-colors ${
+                mode === m.id
+                  ? 'bg-(--primary) text-(--primary-contrast)'
+                  : 'text-(--text-secondary) hover:text-(--text-primary)'
               }`}
             >
               {m.label}
