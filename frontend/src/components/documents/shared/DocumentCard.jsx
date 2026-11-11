@@ -1,18 +1,7 @@
 import { Pin, Bookmark } from 'lucide-react';
 import '../../../styles/Document.css';
-
 import DocumentCardMenu from './DocumentCardMenu.jsx';
 import Badge from '../../common/Badge.jsx';
-
-// File-type tile colours.
-export const formatStyles = {
-  PDF: 'bg-(--status-danger-bg) text-(--status-danger)',
-  DOCX: 'bg-sky-100 text-sky-700',
-  MD: 'bg-indigo-100 text-indigo-700',
-  TXT: 'bg-(--bg-surface-subtle) text-(--text-secondary)',
-  FIG: 'bg-purple-100 text-purple-700',
-  CSV: 'bg-green-100 text-green-700',
-};
 
 // Status pill text + colours.
 export const statusMeta = {
@@ -37,8 +26,6 @@ export const statusMeta = {
     type: 'danger',
   },
 };
-
-const DEFAULT_TILE = 'bg-(--bg-surface-subtle) text-(--text-primary)';
 
 // The parent still passes the prop as `document`; it is renamed to `doc` here
 // so it does not hide the browser's global `document`.
@@ -70,7 +57,7 @@ function DocumentCard({
     label: doc.status,
     style: 'border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary)',
   };
-  const tileStyle = formatStyles[doc.format] ?? DEFAULT_TILE;
+
 
   return (
     <article
@@ -82,11 +69,10 @@ function DocumentCard({
       className="flex cursor-pointer flex-col rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-all hover:border-(--accent-highlight) hover:shadow-(--shadow-md)"
     >
       <div className="flex items-start gap-4">
-        <span
-          className={`doc-mono flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[10px] font-bold ${tileStyle}`}
-        >
-          {doc.format}
-        </span>
+      <Badge
+        format={doc.format}
+        className="doc-mono !h-10 !w-10 !rounded-2xl !text-[11px]"
+      />
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">

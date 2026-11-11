@@ -24,7 +24,6 @@ import SummaryHeader from '../components/documents/summary/SummaryHeader';
 import SummaryTabs from '../components/documents/summary/SummaryTabs';
 import AiSummaryTab from '../components/documents/summary/AiSummaryTab';
 import ReaderTab from '../components/documents/summary/ReaderTab';
-import GraphTab from '../components/documents/summary/GraphTab';
 import SummarySidebar from '../components/documents/summary/SummarySidebar';
 
 import EditMetadataModal from '../components/documents/summary/EditMetadataModal';
@@ -268,20 +267,7 @@ function DocumentSummaryPage() {
           />
         )}
 
-        {tab === 'graph' && (
-          <GraphTab
-            articles={doc.connectedArticles}
-            sisters={doc.sisterDocuments}
-            onOpenArticle={(a) =>
-              navigate('/knowledge-base', {
-                state: { articleId: a.id },
-              })
-            }
-            onOpenDocument={(d) =>
-              navigate(`/documents/summary?id=${d.id}`)
-            }
-          />
-        )}
+ 
 
         <SummarySidebar
           doc={doc}

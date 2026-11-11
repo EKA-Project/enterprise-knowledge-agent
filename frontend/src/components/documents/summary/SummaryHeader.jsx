@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, Bookmark, Pin } from 'lucide-react';
 import SummaryKebabMenu from './SummaryKebabMenu';
-import { formatStyles, statusMeta } from '../shared/DocumentCard';
+import { statusMeta } from '../shared/DocumentCard';
+import Badge from '../../common/Badge.jsx';
 import '../../../styles/Document.css';
 
 const circle =
@@ -13,16 +14,14 @@ function SummaryHeader({
   onCopyLink, onToggleSave, onTogglePin,
   onEdit, onReindex, onArchive, onDelete,
 }) {
-  const tile = formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)';
   const status = statusMeta[doc.status] ?? statusMeta.Indexed;
 
   return (
     <header className="flex flex-col gap-4 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) px-8 py-7 shadow-(--shadow-sm) sm:flex-row sm:items-start">
-      <span
-        className={`doc-mono flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#f5b9bd] text-[11px] font-bold ${tile}`}
-      >
-        {doc.format}
-      </span>
+      <Badge
+        format={doc.format}
+        className="doc-mono !h-12 !w-12 !rounded-2xl !text-[11px]"
+      />
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
@@ -34,14 +33,15 @@ function SummaryHeader({
               Archived
             </span>
           ) : (
-            <span
-              className={`rounded-full px-3 py-1 text-[11px] font-semibold ${doc.status === 'Indexed'
-                ? 'border border-[#bdeedb] bg-[#edfdf7] text-[#0f8f63]'
-                : status.style
+            <Badge
+              text={status.label}
+              type={status.type}
+              size="sm"
+              className={`!px-3 !py-1 !text-[11px] ${doc.status === 'Indexed'
+                  ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
+                  : status.style
                 }`}
-            >
-              {status.label}
-            </span>
+            />
           )}
           <span className="doc-mono text-xs text-[#7c949a]">
             {doc.size} • {doc.readTime} • {doc.pages} pages

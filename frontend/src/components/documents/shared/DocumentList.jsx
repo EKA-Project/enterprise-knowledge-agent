@@ -1,6 +1,7 @@
 import { Bookmark, Pin, Code2, TrendingUp, Shield, Users, Palette, Scale } from 'lucide-react';
 import DataTable from '../../common/DataTable.jsx';
-import { formatStyles, statusMeta } from './DocumentCard.jsx';
+import Badge from '../../common/Badge.jsx';
+import { statusMeta } from './DocumentCard.jsx';
 import DocumentCardMenu from './DocumentCardMenu.jsx';
 
 // Short status text used in the admin / employee list ("● Ready").
@@ -41,12 +42,7 @@ function DocumentList({
       width: '30%',
       render: (doc) => (
         <div className="flex items-center gap-3">
-          <span
-            className={`doc-mono flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[10px] font-bold ${formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-              }`}
-          >
-            {doc.format}
-          </span>
+          <Badge format={doc.format} />
           <div className="min-w-0">
             <p className="doc-heading text-[13px] font-bold leading-5 text-(--text-primary)">
               {doc.title}
@@ -112,11 +108,12 @@ function DocumentList({
         };
         const label = shortStatus ? `● ${SHORT_LABEL[doc.status] ?? status.label}` : status.label;
         return (
-          <span
-            className={`inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-semibold ${status.style}`}
-          >
-            {label}
-          </span>
+          <Badge
+            text={label}
+            type={status.type ?? 'danger'}
+            size="sm"
+            className={`!whitespace-nowrap !px-2.5 !py-1 !text-[10px] ${status.style}`}
+          />
         );
       },
     },
