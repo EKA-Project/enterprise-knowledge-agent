@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
+import { ExportAuditButton } from '../components/common/ActionButtons.jsx';
 import PageHero from '../components/common/PageHero.jsx';
 import CapacityCard from '../components/documents/storage/CapacityCard.jsx';
 import AllocationCards from '../components/documents/storage/AllocationCards.jsx';
@@ -17,35 +18,24 @@ const BIN_SEED = storageFiles.filter((f) => f.startsInBin).map((f) => f.id);
 const mb = (x) => `${Number(x.toFixed(1))} MB`; // 21 -> "21 MB"
 
 // Three chips under the hero text: Export Storage Audit / Free Up Space / Back to Documents.
+// Two chips under the hero text: Export Storage Audit (common button) / Free Up Space.
 function HeroChips({ reclaimMb, onExport, onFreeUp }) {
-  const base =
-    'inline-flex h-8 cursor-pointer items-center gap-2 rounded-full border pl-2 pr-3 text-[11px] font-semibold transition-colors';
-
   return (
     <div className="mt-3 flex flex-wrap items-center gap-3.5">
-      <button
-        type="button"
-        onClick={onExport}
-        className={`${base} group border-[#d6e6f2] bg-white text-[#10283f] transition-all duration-300 hover:scale-[1.02] hover:border-black hover:bg-white`}
-      >
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#e8f1f8] text-[#44596a] transition-colors duration-300 group-hover:bg-[#10283f] group-hover:text-white">
-          <Download size={12} />
-        </span>
-        Export Storage Audit
-      </button>
+      <ExportAuditButton onClick={onExport} />
 
       <button
         type="button"
         onClick={onFreeUp}
-        className={`${base} group border-[#f6d9a8] text-[#9a5a00] transition-all duration-300 hover:scale-[1.02] hover:border-[#f0b957] hover:bg-[#ffefd0] hover:shadow-[0_0_12px_rgba(245,159,12,0.18)] active:scale-[0.97]`}
+        className="group inline-flex h-8 cursor-pointer items-center gap-2 rounded-(--radius-pill) border-[1.5px] border-[rgba(245,158,11,0.35)] bg-[rgba(245,158,11,0.08)] pl-2 pr-3 text-[11px] font-semibold text-[#b45309] shadow-(--shadow-sm) [transition:all_var(--transition-fast)] hover:-translate-y-px hover:border-[#f59e0b] hover:bg-[rgba(245,158,11,0.14)] hover:text-[#92400e] hover:shadow-[0_3px_10px_rgba(245,158,11,0.2)] active:translate-y-[0.5px] active:scale-[0.98]"
       >
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#ffe3b8] text-[#e8801a] transition-colors duration-300 group-hover:bg-[#e8801a] group-hover:text-white">
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(245,158,11,0.18)] text-[#d97706] [transition:all_var(--transition-fast)] group-hover:-translate-y-px group-hover:scale-[1.08] group-hover:bg-[#f59e0b] group-hover:text-white">
           <Zap size={12} className="fill-current" />
         </span>
 
         Free Up Space
 
-        <span className="doc-mono rounded-full bg-[#f59f0c] px-2.5 py-0.5 text-[10.5px] font-bold text-white transition-all duration-300 group-hover:scale-105 group-hover:bg-[#e88900]">
+        <span className="rounded-(--radius-pill) bg-[#f59e0b] px-2.5 py-0.5 font-(family-name:--font-mono) text-[0.7rem] font-bold text-white">
           {reclaimMb.toFixed(1)} MB
         </span>
       </button>
