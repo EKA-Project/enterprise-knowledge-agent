@@ -65,12 +65,12 @@ function StorageManagementPage() {
       storageFiles.map((f) =>
         restored.has(f.id)
           ? {
-              ...f,
-              opened: 'Restored just now',
-              cited: 'Just now',
-              idleDays: 0,
-              status: 'Ready',
-            }
+            ...f,
+            opened: 'Restored just now',
+            cited: 'Just now',
+            idleDays: 0,
+            status: 'Ready',
+          }
           : f,
       ),
     [restored],
@@ -181,20 +181,7 @@ function StorageManagementPage() {
     <div className="w-full space-y-5 pb-24 pt-[0px]">
       <div className="[&>h1]:text-[34px] [&>h1]:leading-[0.5] [&>p:first-of-type]:text-[#7c949a] [&>p:last-of-type]:mt-4 [&>p:last-of-type]:max-w-[650px] [&>p:last-of-type]:text-[12px] [&>p:last-of-type]:font-light [&>p:last-of-type]:leading-[20px]">
         <PageHero
-          eyebrow={
-            <>
-              <Link
-                to="/documents"
-                className="transition-colors hover:text-[#1f718e]"
-              >
-                ← Documents
-              </Link>
-
-              <span className="mx-3">/</span>
-
-              Storage Management
-            </>
-          }
+          eyebrow="Storage Management"
           title={hero.title}
           description={hero.description}
         />

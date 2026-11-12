@@ -76,7 +76,7 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
                   key={p.page}
                   type="button"
                   onClick={() => go(p.page)}
-                  className={`min-w-0 flex-1 cursor-pointer rounded-xl px-3 py-2 text-left transition-colors md:flex-none ${p.page === current?.page
+                  className={`min-w-0 flex-1 cursor-pointer rounded-2xl px-3 py-2 text-left transition-colors md:flex-none ${p.page === current?.page
                     ? 'bg-[#153830] text-white'
                     : 'bg-[#e1f0fa] text-(--text-primary) hover:bg-[#d4e8f7]'
                     }`}
