@@ -94,7 +94,7 @@ function SummaryHeader({
             aria-label={pinned ? 'Unpin document' : 'Pin document'}
             aria-pressed={pinned}
             onClick={onTogglePin}
-            className={`${circle} text-[#e5484d]`}
+            className={`${circle} `}
           >
             <Pin size={14} className={pinned ? 'fill-current' : ''} />
           </button>

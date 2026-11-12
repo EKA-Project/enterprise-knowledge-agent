@@ -10,7 +10,6 @@ function EmployeeDocument() {
     <>
       <div className="mb-6">
         <PageHero
-          bare
           eyebrow={`Company Documents / ${countText}`}
           title="Knowledge, organized for you."
           description="Explore the documents and knowledge available to you through EKA."

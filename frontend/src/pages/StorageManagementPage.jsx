@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Zap } from 'lucide-react';
 import { ExportAuditButton } from '../components/common/ActionButtons.jsx';
 import PageHero from '../components/common/PageHero.jsx';
+import pageMetadata from '../config/pageMetadata.js';
 import CapacityCard from '../components/documents/storage/CapacityCard.jsx';
 import AllocationCards from '../components/documents/storage/AllocationCards.jsx';
 import FreeUpCard from '../components/documents/storage/FreeUpCard.jsx';
@@ -17,7 +18,6 @@ import '../styles/Document.css';
 const BIN_SEED = storageFiles.filter((f) => f.startsInBin).map((f) => f.id);
 const mb = (x) => `${Number(x.toFixed(1))} MB`; // 21 -> "21 MB"
 
-// Three chips under the hero text: Export Storage Audit / Free Up Space / Back to Documents.
 // Two chips under the hero text: Export Storage Audit (common button) / Free Up Space.
 function HeroChips({ reclaimMb, onExport, onFreeUp }) {
   return (
@@ -46,6 +46,9 @@ function HeroChips({ reclaimMb, onExport, onFreeUp }) {
 // Admin-only Storage Management page (route: /documents/storage).
 function StorageManagementPage() {
   const { success, info } = useToast();
+
+  // Hero text comes from the shared page config
+  const hero = pageMetadata.documentStorage;
 
   const [mode, setMode] = useState('dept'); // 'dept' | 'format' (capacity toggle)
   const [activeKey, setActiveKey] = useState('ALL'); // selected card = filter for the table
@@ -178,7 +181,6 @@ function StorageManagementPage() {
     <div className="w-full space-y-5 pb-24 pt-[0px]">
       <div className="[&>h1]:text-[34px] [&>h1]:leading-[0.5] [&>p:first-of-type]:text-[#7c949a] [&>p:last-of-type]:mt-4 [&>p:last-of-type]:max-w-[650px] [&>p:last-of-type]:text-[12px] [&>p:last-of-type]:font-light [&>p:last-of-type]:leading-[20px]">
         <PageHero
-          bare
           eyebrow={
             <>
               <Link
@@ -193,8 +195,8 @@ function StorageManagementPage() {
               Storage Management
             </>
           }
-          title="Know what's taking space."
-          description="Enterprise document volume telemetry, format allocations, and intelligent reclamation suggestions to keep retrieval precision fast and lean."
+          title={hero.title}
+          description={hero.description}
         />
 
         <HeroChips

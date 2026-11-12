@@ -16,6 +16,7 @@ import DemoStatesBar from '../components/knowledge/DemoStatesBar';
 import SectionState from '../components/knowledge/SectionState';
 import Button from '../components/common/Button.jsx';
 import PageHero from '../components/common/PageHero.jsx';
+import pageMetadata from '../config/pageMetadata.js';
 
 export default function KnowledgeBasePage() {
   const { activeRole } = useContext(AuthContext);
@@ -25,15 +26,16 @@ export default function KnowledgeBasePage() {
   // Category whose Collection Insights modal is open (null = closed)
   const [insightsCategory, setInsightsCategory] = useState(null);
 
+  // Hero text comes from the shared page config
+  const hero = pageMetadata.knowledgeBase;
 
   return (
     <div className="px-0 py-0">
       {/* Hero section */}
-           {/* Hero section */}
       <PageHero
-        eyebrow="Browse the collective"
-        title="Find the thread."
-        description="A map of what your team knows, grouped in ways that make sense."
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        description={hero.description}
         className="mb-2"
         actions={
           <>
@@ -49,18 +51,17 @@ export default function KnowledgeBasePage() {
               </Button>
             )}
 
-<Link
-  to="/documents"
-  className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-all duration-200 hover:-translate-y-0.5 hover:border-(--border-medium)"
->
-  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-all duration-200 group-hover:-translate-y-0.5 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
-    <LayoutGrid size={12} />
-  </span>
-  Browse all
-</Link>
+            <Link
+              to="/documents"
+              className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-all duration-200 hover:-translate-y-0.5 hover:border-(--border-medium)"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-all duration-200 group-hover:-translate-y-0.5 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
+                <LayoutGrid size={12} />
+              </span>
+              Browse all
+            </Link>
           </>
         }
-        
       />
 
       <KnowledgeStats stats={knowledgeStats} />
@@ -126,4 +127,3 @@ export default function KnowledgeBasePage() {
     </div>
   );
 }
-
