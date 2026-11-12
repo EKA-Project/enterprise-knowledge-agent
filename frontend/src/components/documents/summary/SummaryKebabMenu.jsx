@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react';
 import {
   Pencil,
@@ -22,6 +23,7 @@ const Item = ({ label, onClick, danger, icon: Icon }) => (
 );
 
 export default function SummaryKebabMenu({
+  circleClass = '',
   archived = false,
   onEdit,
   onReindex,
@@ -61,13 +63,14 @@ export default function SummaryKebabMenu({
       <button
         type="button"
         aria-label="More actions"
+        aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="w-9 h-9 rounded-full bg-white grid place-items-center hover:bg-[#e1f0fa]"
+        className={`${circleClass} !border-0 text-(--text-secondary)`}
       >
         <span className="flex gap-[3px]" aria-hidden="true">
-          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
-          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
-          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
+          <span className="h-[4px] w-[4px] rounded-full bg-current" />
+          <span className="h-[4px] w-[4px] rounded-full bg-current" />
+          <span className="h-[4px] w-[4px] rounded-full bg-current" />
         </span>
       </button>
 

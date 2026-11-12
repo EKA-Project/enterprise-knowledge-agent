@@ -29,7 +29,7 @@ export const statusMeta = {
 export function PinnedByAdmin({ className = 'p-1' }) {
   return (
     <span
-      className={`group relative text-(--status-danger) ${className}`}
+      className={`group relative text-(--action-pinned) ${className}`}
       aria-label="Pinned by admin"
     >
       <Pin size={14} className="fill-current" />
@@ -106,9 +106,15 @@ function DocumentCard({
                     aria-label={doc.isPinned ? 'Unpin document' : 'Pin document'}
                     aria-pressed={Boolean(doc.isPinned)}
                     onClick={stop(togglePin)}
-className={`cursor-pointer rounded-md p-1 ${doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted)'}`}
+                    className={`cursor-pointer rounded-md p-1 ${doc.isPinned
+                      ? 'text-(--action-pinned)'
+                      : 'text-(--text-muted)'
+                      }`}
                   >
-                    <Pin size={14} className={doc.isPinned ? 'fill-current' : 'group-hover:fill-current'} />
+                    <Pin
+                      size={14}
+                      className={doc.isPinned ? 'fill-current' : ''}
+                    />
                   </button>
                 ) : (
                   doc.isPinned && <PinnedByAdmin />
@@ -119,10 +125,15 @@ className={`cursor-pointer rounded-md p-1 ${doc.isPinned ? 'text-[#e5484d]' : 't
                   aria-label={doc.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
                   aria-pressed={Boolean(doc.isBookmarked)}
                   onClick={stop(toggleSave)}
-                  className={`cursor-pointer rounded-md p-1  ${doc.isBookmarked ? 'text-[#f39c0a]' : 'text-(--text-muted) hover:text-[#f39c0a]'
+                  className={`cursor-pointer rounded-md p-1 ${doc.isBookmarked
+                      ? 'text-(--action-saved)'
+                      : 'text-(--text-muted)'
                     }`}
                 >
-                  <Bookmark size={14} className={doc.isBookmarked ? 'fill-current' : 'group-hover:fill-current'} />
+                  <Bookmark
+                    size={14}
+                    className={doc.isBookmarked ? 'fill-current' : ''}
+                  />
                 </button>
 
 

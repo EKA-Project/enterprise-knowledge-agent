@@ -1,16 +1,28 @@
+
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, Bookmark, Pin } from 'lucide-react';
 import SummaryKebabMenu from './SummaryKebabMenu';
 import Badge from '../../common/Badge.jsx';
 import '../../../styles/Document.css';
 import { statusMeta, PinnedByAdmin } from '../shared/DocumentCard';
+
 const circle =
   'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-medium) bg-(--bg-surface) transition-colors hover:bg-(--bg-surface-subtle)';
+
 // Top card. Admin gets bookmark / pin / kebab next to the link button.
 function SummaryHeader({
-  doc, adminMode, archived, saved, pinned,
-  onCopyLink, onToggleSave, onTogglePin,
-  onEdit, onReindex, onArchive, onDelete,
+  doc,
+  adminMode,
+  archived,
+  saved,
+  pinned,
+  onCopyLink,
+  onToggleSave,
+  onTogglePin,
+  onEdit,
+  onReindex,
+  onArchive,
+  onDelete,
 }) {
   const status = statusMeta[doc.status] ?? statusMeta.Indexed;
 
@@ -26,6 +38,7 @@ function SummaryHeader({
           <span className="rounded-full bg-[#e1f0fa] px-3 py-1 text-[11px] font-semibold text-[#3d5a73]">
             {doc.category}
           </span>
+
           {archived ? (
             <span className="rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary)">
               Archived
@@ -35,12 +48,14 @@ function SummaryHeader({
               text={status.label}
               type={status.type}
               size="sm"
-              className={`!px-3 !py-1 !text-[11px] ${doc.status === 'Indexed'
-                ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
-                : status.style
-                }`}
+              className={`!px-3 !py-1 !text-[11px] ${
+                doc.status === 'Indexed'
+                  ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
+                  : status.style
+              }`}
             />
           )}
+
           <span className="doc-mono text-xs text-[#7c949a]">
             {doc.size} • {doc.readTime} • {doc.pages} pages
           </span>
@@ -51,9 +66,26 @@ function SummaryHeader({
         </h1>
 
         <p className="mt-2 flex flex-wrap gap-x-6 gap-y-0.5 text-sm text-[#7c949a]">
-          <span>Author: <b className="font-medium text-[#3d4f63]">{doc.author}</b></span>
-          <span>Uploaded: <b className="font-medium text-[#3d4f63]">{doc.uploaded}</b></span>
-          <span>Indexed Chunks: <b className="font-medium text-[#3d4f63]">{doc.chunks}</b></span>
+          <span>
+            Author:{' '}
+            <b className="font-medium text-[#3d4f63]">
+              {doc.author}
+            </b>
+          </span>
+
+          <span>
+            Uploaded:{' '}
+            <b className="font-medium text-[#3d4f63]">
+              {doc.uploaded}
+            </b>
+          </span>
+
+          <span>
+            Indexed Chunks:{' '}
+            <b className="font-medium text-[#3d4f63]">
+              {doc.chunks}
+            </b>
+          </span>
         </p>
       </div>
 
@@ -66,6 +98,7 @@ function SummaryHeader({
           Ask About This Doc →
         </Link>
 
+        {/* Copy Link */}
         <button
           type="button"
           aria-label="Copy document link"
@@ -75,43 +108,54 @@ function SummaryHeader({
           <LinkIcon size={14} />
         </button>
 
+        {/* Individual Bookmark - All Roles */}
         <button
           type="button"
           aria-label={saved ? 'Remove bookmark' : 'Bookmark document'}
-          aria-pressed={saved}
+          aria-pressed={Boolean(saved)}
           onClick={onToggleSave}
-          className={`${circle} ${saved ? 'text-[#f39c0a]' : 'text-(--text-secondary)'}`}
+          className={`${circle} ${
+            saved
+              ? 'text-(--action-saved)'
+              : 'text-(--text-secondary)'
+          }`}
         >
-          <Bookmark size={14} className={saved ? 'fill-current' : ''} />
+          <Bookmark
+            size={14}
+            className={saved ? 'fill-current' : ''}
+          />
         </button>
 
+        {/* Pin - Admin Only */}
         {adminMode ? (
-
-
-
           <button
             type="button"
             aria-label={pinned ? 'Unpin document' : 'Pin document'}
-            aria-pressed={pinned}
+            aria-pressed={Boolean(pinned)}
             onClick={onTogglePin}
-            className={`${circle} `}
+            className={`${circle} ${
+              pinned
+                ? 'text-(--action-pinned)'
+                : 'text-(--text-secondary)'
+            }`}
           >
-            <Pin size={14} className={pinned ? 'fill-current' : ''} />
+            <Pin
+              size={14}
+              className={pinned ? 'fill-current' : ''}
+            />
           </button>
-
-
-
-
-
-
-
-
         ) : (
-          pinned && <PinnedByAdmin className={`${circle} !cursor-default`} />
+          pinned && (
+            <PinnedByAdmin
+              className={`${circle} !cursor-default`}
+            />
+          )
         )}
 
+        {/* Admin-only 3-dots Menu */}
         {adminMode && (
           <SummaryKebabMenu
+            circleClass={circle}
             onEdit={onEdit}
             onReindex={onReindex}
             onArchive={onArchive}
