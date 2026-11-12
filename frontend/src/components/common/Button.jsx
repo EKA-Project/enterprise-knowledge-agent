@@ -1,109 +1,115 @@
 /* ==========================================================================
    Button  (components/common/Button.jsx)
-   --------------------------------------------------------------------------
-   The shared BASE for every button in EKA. All EKA buttons are the same pill;
-   they only differ in colour scheme, icon and label. So this file holds the
-   pill + the two colour schemes. Named buttons (Add Member, Ingest Document,
-   ...) live in ActionButtons.jsx and are built on top of this.
-
-   Colour schemes (variant):
-     "light" (default)  white  -> on hover: blue border + blue text
-         "solid"            blue   -> on hover: white with blue text + blue border
-         "danger"           red    -> on hover: darker red (destructive confirms)
-     "soft"             white, blue text -> on hover: light blue fill (Cancel / Close)
-     "dangerSoft"       light red -> on hover: solid red with white text
-
-   Props:
-     variant:  "light" | "solid"
-     size:     "sm" (default, small and minimal) | "md"
-     icon:     a lucide-react icon component, e.g. icon={UserPlus}
-     iconChip: true wraps the icon in a small round chip
-     children: the label
-     ...rest:  passed to <button> (onClick, title, disabled, className, ...)
+   Shared pill base with EKA 160ms timing, craft borders & active spring.
    ========================================================================== */
 
-// ---- The pill shape shared by every button ----
 const BASE =
-  "group inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border font-semibold transition-[color,background-color,border-color,box-shadow,transform,translate,scale] disabled:cursor-not-allowed disabled:opacity-50";
+  "group inline-flex cursor-pointer select-none items-center justify-center gap-1.5 whitespace-nowrap rounded-full border-[1.5px] font-semibold transition-all duration-160 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:active:scale-100";
 
-// ---- Colour schemes: edit these to restyle every button in the app ----
 const VARIANTS = {
+  // 1. Secondary Light Pill (Add Member, Compare & Redline, etc.)
   light:
-    "border-(--border-medium) bg-white text-(--text-primary) hover:border-(--primary) hover:text-(--primary)",
+    "border-(--border-medium) bg-(--bg-surface) text-(--text-primary) shadow-[var(--shadow-sm)] hover:border-(--primary) hover:bg-(--bg-surface-elevated) hover:text-(--primary) hover:shadow-[0_3px_10px_rgba(0,135,102,0.12)]",
+
+  // High-contrast dark hover (used by Export Storage Audit)
+  darkHover:
+    "border-(--border-medium) bg-(--bg-surface) text-(--text-primary) shadow-[var(--shadow-sm)] hover:border-(--text-primary) hover:text-(--text-primary) hover:shadow-[0_3px_10px_rgba(0,0,0,0.08)]",
+
+  // 2. Primary Solid Pill (Ingest Document, Send Invitation, etc.)
   solid:
-    "border-(--accent-secondary) bg-(--accent-secondary) text-white hover:border-(--primary-deep) hover:bg-(--primary-deep)",
+    "border-white/16 bg-(--primary) text-(--primary-contrast) shadow-[0_2px_6px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.22)] hover:bg-(--primary-hover) hover:border-white/25 hover:shadow-[0_3px_12px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.28)]",
+
+  // 3. Destructive Primary (Modal confirmations)
   danger:
-    "border-(--status-danger) bg-(--status-danger) text-white hover:border-[#b91c1c] hover:bg-[#b91c1c]",
-  // Same look as the modal's close button: quiet at rest, reacts on hover
-  soft: "border-(--border-subtle) bg-white text-(--primary) hover:border-(--primary)/40 hover:bg-(--accent-chip)",
+    "border-(--status-danger) bg-(--status-danger) text-white shadow-[0_2px_6px_rgba(220,38,38,0.2)] hover:bg-[#b91c1c] hover:border-[#b91c1c] hover:shadow-[0_3px_12px_rgba(220,38,38,0.3)]",
+
+  // 4. Soft Pill (Cancel / Close)
+// In VARIANTS inside Button.jsx:
+soft: "border-(--border-subtle) bg-(--bg-surface) text-(--text-secondary) hover:border-[rgba(220,38,38,0.4)] hover:bg-[rgba(220,38,38,0.10)] hover:text-[#dc2626] hover:shadow-[0_2px_10px_rgba(220,38,38,0.15)]",
+
+  // 5. Danger Soft Pill (Delete History, Empty Bin, Remove from Team)
   dangerSoft:
-    "border-[#fca5a5] bg-[#fee2e2] text-(--status-danger) hover:border-(--status-danger) hover:bg-(--status-danger) hover:text-white",
-  // Theme-aware elevated pill that lifts on hover (no hard-coded white, so dark themes work). Used by Surprise Me.
+    "border-[rgba(220,38,38,0.28)] bg-[rgba(220,38,38,0.08)] text-[#dc2626] hover:border-[rgba(220,38,38,0.52)] hover:bg-[rgba(220,38,38,0.16)] hover:text-[#b91c1c] hover:shadow-[0_2px_10px_rgba(220,38,38,0.22)]",
+
+  // 6. Surface Pill (Surprise Me)
   surface:
-    "border-(--border-medium) bg-(--bg-surface-elevated) text-(--text-primary) shadow-(--shadow-sm) hover:-translate-y-px hover:border-(--primary) hover:bg-(--bg-surface) hover:text-(--primary) hover:shadow-[0_4px_14px_var(--primary-glow)] active:translate-y-0 active:scale-[0.97]",
+    "border-(--border-medium) bg-(--bg-surface-elevated) text-(--text-primary) shadow-(--shadow-sm) hover:border-(--primary) hover:bg-(--bg-surface) hover:text-(--primary) hover:shadow-[0_4px_14px_var(--primary-glow)]",
 };
-// ---- Sizes: height + text size ----
+
+// All size parameters co-located in one single lookup
 const SIZES = {
-  xs: "h-6 text-[0.7rem]",
-  sm: "h-8 text-xs",
-  md: "h-10 text-sm",
+  xs: {
+    btn: "h-6 text-[0.7rem]",
+    padding: (hasChip) => (hasChip ? "pl-1 pr-2.5" : "px-2.5"),
+    chipBox: "h-5 w-5",
+    iconSize: 12,
+    chipIconSize: 10,
+  },
+  sm: {
+    // EKA default compact pill
+    btn: "h-8 text-xs",
+    padding: (hasChip) => (hasChip ? "pl-1 pr-3" : "px-3"),
+    chipBox: "h-[22px] w-[22px]",
+    iconSize: 14,
+    chipIconSize: 12,
+  },
+  md: {
+    // Larger pill (e.g. Surprise Me or landing CTA)
+    btn: "h-10 text-sm",
+    padding: (hasChip) => (hasChip ? "pl-1.5 pr-4" : "px-4"),
+    chipBox: "h-7 w-7",
+    iconSize: 16,
+    chipIconSize: 14,
+  },
 };
 
-// ---- Horizontal padding (smaller on the left when an icon chip is shown) ----
-const PADDING = {
-  xs: { plain: "px-2.5", chip: "pl-1 pr-2.5" },
-  sm: { plain: "px-3", chip: "pl-1 pr-3" },
-  md: { plain: "px-4", chip: "pl-1.5 pr-4" },
-};
-
-// ---- Icon sizes ----
-const ICON_SIZE = { sm: 14, md: 16 };
-const CHIP_ICON_SIZE = { sm: 13, md: 15 };
-const CHIP_BOX = { sm: "h-6 w-6", md: "h-7 w-7" };
-
-// ---- Icon chip colours (follow the button's hover, via `group`) ----
 const CHIP_COLORS = {
-  light: "bg-(--primary-light) text-(--primary)",
+  light:
+    "bg-(--bg-surface-subtle) text-(--primary) group-hover:bg-[rgba(0,135,102,0.14)]",
+  // ✨ Add this single line:
+  darkHover:
+    "bg-(--bg-surface-subtle) text-(--text-secondary) group-hover:bg-(--text-primary) group-hover:text-white",
   solid: "bg-white/20 text-white group-hover:bg-white/30",
   danger: "bg-white/20 text-white group-hover:bg-white/30",
-  dangerSoft: "bg-white text-(--status-danger)",
+  dangerSoft:
+    "bg-[rgba(220,38,38,0.12)] text-[#dc2626] group-hover:bg-[rgba(220,38,38,0.22)]",
 };
 
-function Button({
+export default function Button({
   children,
   icon: Icon,
   iconChip = false,
+  chipClassName = "", // <--- Allows custom chip hover (like dark chip for export or emerald for restore)
   variant = "light",
-  size = "sm",
+  size = "sm", // Defaults to standard EKA compact pill if omitted
   type = "button",
   className = "",
   ...rest
 }) {
   const hasChip = Boolean(Icon && iconChip);
+  const s = SIZES[size] ?? SIZES.sm;
 
   return (
     <button
       type={type}
-      className={`${BASE} ${VARIANTS[variant] ?? VARIANTS.light} ${
-        SIZES[size] ?? SIZES.sm
-      } ${PADDING[size]?.[hasChip ? "chip" : "plain"] ?? PADDING.sm.plain} ${className}`}
+      className={`${BASE} ${VARIANTS[variant] ?? VARIANTS.light} ${s.btn} ${s.padding(
+        hasChip,
+      )} ${className}`}
       {...rest}
     >
       {Icon &&
         (iconChip ? (
           <span
-            className={`flex items-center justify-center rounded-full transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:scale-110 ${
-              CHIP_BOX[size] ?? CHIP_BOX.sm
+            className={`flex items-center justify-center rounded-full transition-all duration-160 ease-out group-hover:translate-y-[-0.5px] group-hover:scale-108 ${
+              s.chipBox
             } ${CHIP_COLORS[variant] ?? CHIP_COLORS.light}`}
           >
-            <Icon size={CHIP_ICON_SIZE[size] ?? CHIP_ICON_SIZE.sm} />
+            <Icon size={s.chipIconSize} strokeWidth={2.2} />
           </span>
         ) : (
-          <Icon size={ICON_SIZE[size] ?? ICON_SIZE.sm} />
+          <Icon size={s.iconSize} strokeWidth={2} />
         ))}
       {children}
     </button>
   );
 }
-
-export default Button;

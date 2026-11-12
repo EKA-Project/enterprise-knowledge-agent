@@ -1,8 +1,10 @@
 import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useToast } from '../../../context/ToastContext.jsx';
+
 import { documentCategories, documentFormats } from './DocumentData';
-import { DocToastHost } from './DocToast';
 import {
   ALL_CATEGORIES,
   ALL_FORMATS,
@@ -17,24 +19,36 @@ import {
   useStatusFilter,
   loadDocuments,
 } from './documentResults.js';
-import { deleteDocument, useRoleDocuments, setDocumentArchivedFlag, startReindex, saveDocumentMetadata } from './roleDocuments.js';
+import {
+  deleteDocument,
+  useRoleDocuments,
+  setDocumentArchivedFlag,
+  startReindex,
+  saveDocumentMetadata,
+} from './roleDocuments.js';
+
 import EditMetadataModal from '../summary/EditMetadataModal.jsx';
 import ArchiveModal from '../summary/ArchiveModal.jsx';
-import { showDocToast } from './DocToast';
 import { setDocumentArchived } from '../summary/summaryService';
+
 import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
 import DocumentPagination from './DocumentPagination.jsx';
 import DocumentEmptyState from './DocumentEmptyState.jsx';
 import DeleteModal from '../summary/DeleteModal.jsx';
 
-// Single place that knows the summary URL (matches the route in AppRoutes)
+// Single place that knows the summary URL (matches the route in AppRoutes).
 const summaryPath = (doc) => `/documents/summary?id=${doc.id}`;
-// Small "Filtered by: …" chip with a clear button
+
+// Small "Filtered by: …" chip with a clear button.
 function FilterChip({ label, value, clearLabel, onClear }) {
   return (
     <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) py-1.5 pl-3 pr-2 text-xs text-(--text-secondary)">
-      {label} <strong className="font-semibold text-(--text-primary)">{value}</strong>
+      {label}{' '}
+      <strong className="font-semibold text-(--text-primary)">
+        {value}
+      </strong>
+
       <button
         type="button"
         aria-label={clearLabel}
@@ -50,6 +64,9 @@ function FilterChip({ label, value, clearLabel, onClear }) {
 function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const isManager = variant === 'manager';
   const navigate = useNavigate();
+
+  const { info, success, error } = useToast();
+
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState(ALL_CATEGORIES);
   const [format, setFormat] = useState(ALL_FORMATS);
@@ -57,27 +74,39 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  // Status picked in the admin Document Health Overview ("" = none)
+  // Status picked in the admin Document Health Overview ("" = none).
   const status = useStatusFilter();
 
-  const { items: docs, loading, toggleFlag: handleToggleFlag } = useRoleDocuments();
-  const [archiveTarget, setArchiveTarget] = useState(null); // doc waiting for Confirm Archive
+  const {
+    items: docs,
+    loading,
+    toggleFlag: handleToggleFlag,
+  } = useRoleDocuments();
+
+  const [archiveTarget, setArchiveTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
-
+  // Confirm archive or restore. The list updates first; it is rolled back if the call fails.
   const confirmArchive = async () => {
     const doc = archiveTarget;
     const next = !doc.isArchived;
+
     setArchiveTarget(null);
     setDocumentArchivedFlag(doc.id, next);
-    await setDocumentArchived(doc.id, next);
-    showDocToast(
-      next
-        ? `📦 Document "${doc.title}" archived`
-        : `Document "${doc.title}" restored to active repository`,
-      'neutral',
-    );
+
+    try {
+      await setDocumentArchived(doc.id, next);
+
+      info(
+        next
+          ? `📦 Document "${doc.title}" archived`
+          : `Document "${doc.title}" restored to active repository`,
+      );
+    } catch {
+      setDocumentArchivedFlag(doc.id, !next);
+      error(`Could not update "${doc.title}". Please try again.`);
+    }
   };
 
   useEffect(() => {
@@ -86,14 +115,23 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
   const openSummary = (doc) => navigate(summaryPath(doc));
 
-  const filteredDocuments = filterDocuments(docs, { search, category, format, status });
-  const { pageItems, total, totalPages, current, from, to } = paginate(
-    filteredDocuments,
-    page,
-    pageSize,
-  );
+  const filteredDocuments = filterDocuments(docs, {
+    search,
+    category,
+    format,
+    status,
+  });
 
-  // Back to page 1 whenever the filter or page size changes
+  const {
+    pageItems,
+    total,
+    totalPages,
+    current,
+    from,
+    to,
+  } = paginate(filteredDocuments, page, pageSize);
+
+  // Back to page 1 whenever the filter or page size changes.
   useEffect(() => {
     setPage(1);
   }, [search, category, format, status, pageSize]);
@@ -105,20 +143,24 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     setStatusFilter('');
   };
 
-  // Text shown in the "Filtered by" chip (category label, or Saved / Pinned)
+  // Text shown in the "Filtered by" chip.
   const categoryLabel =
-    documentCategories.find((cat) => cat.value === category)?.label ?? category;
+    documentCategories.find((cat) => cat.value === category)?.label ??
+    category;
+
   const isCategoryFiltered = category !== ALL_CATEGORIES;
 
-  // Tell the page hero how many documents the current filter shows
+  // Tell the page hero how many documents the current filter shows.
   useEffect(() => {
     if (loading) return;
+
     setDocumentResults({
       count: total,
       filterLabel: isCategoryFiltered ? categoryLabel : '',
     });
   }, [loading, total, isCategoryFiltered, categoryLabel]);
-  // Reset shared state when leaving the page
+
+  // Reset shared state when leaving the page.
   useEffect(
     () => () => {
       setDocumentResults({ count: null, filterLabel: '' });
@@ -127,12 +169,18 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
     [],
   );
 
+  // Re-index with shared toast notifications.
+  const handleReindex = (doc) => {
+    return startReindex(doc, { info, success, error });
+  };
+
   return (
     <>
       {/* Filter controls */}
       <section className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-3 shadow-(--shadow-sm)">
         <div className="flex w-full min-w-0 items-center gap-4 rounded-full bg-(--bg-surface-subtle) px-2.5 py-2 lg:w-auto lg:flex-1">
           <Search size={16} className="shrink-0 text-(--text-muted)" />
+
           <input
             type="text"
             placeholder={
@@ -155,6 +203,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             onClear={() => setCategory(ALL_CATEGORIES)}
           />
         )}
+
         {status && (
           <FilterChip
             label="Status:"
@@ -168,11 +217,14 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           <select
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
+            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-1 pl-3 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
             <option value={ALL_CATEGORIES}>
-              {isManager ? `All Categories (${documentCategories.length})` : 'All Departments'}
+              {isManager
+                ? `All Categories (${documentCategories.length})`
+                : 'All Departments'}
             </option>
+
             <option value={SAVED_FILTER}>⭐ Saved Bookmarks</option>
             <option value={PINNED_FILTER}>📌 Admin Pinned</option>
 
@@ -185,7 +237,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
           <ChevronDown
             size={14}
-            className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-(--text-muted)"
+            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-(--text-muted)"
           />
         </div>
 
@@ -193,7 +245,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           <select
             value={format}
             onChange={(event) => setFormat(event.target.value)}
-            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-2 pl-4 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
+            className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-1 pl-3 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
             <option value={ALL_FORMATS}>All Formats</option>
 
@@ -206,21 +258,22 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
           <ChevronDown
             size={14}
-            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-(--text-muted)"
+            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-(--text-muted)"
           />
         </div>
 
-        {/* Grid / list toggle: active button is solid */}
-        <div className="flex shrink-0 items-center gap-1 rounded-xl border border-(--border-subtle) p-1">
+        {/* Grid / list toggle */}
+        <div className="flex shrink-0 items-center gap-1 rounded-xl border border-(--border-subtle) p-0">
           <button
             type="button"
             aria-label="Grid view"
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'grid'
-              ? 'bg-(--primary) text-(--primary-contrast)'
-              : 'text-(--text-muted) hover:text-(--text-primary)'
-              }`}
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${
+              viewMode === 'grid'
+                ? 'bg-(--primary) text-(--primary-contrast)'
+                : 'text-(--text-muted) hover:text-(--text-primary)'
+            }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -230,12 +283,13 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="List view"
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`cursor-pointer rounded-lg p-2 transition-colors ${viewMode === 'list'
-              ? 'bg-(--primary) text-(--primary-contrast)'
-              : 'text-(--text-muted) hover:text-(--text-primary)'
-              }`}
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${
+              viewMode === 'list'
+                ? 'bg-(--primary) text-(--primary-contrast)'
+                : 'text-(--text-muted) hover:text-(--text-primary)'
+            }`}
           >
-            <List size={15} />
+            <List size={14} />
           </button>
         </div>
       </section>
@@ -246,16 +300,16 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
         <>
           {viewMode === 'grid' ? (
             <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {pageItems.map((document) => (
+              {pageItems.map((doc) => (
                 <DocumentCard
-                  key={document.id}
-                  document={document}
+                  key={doc.id}
+                  document={doc}
                   adminMode={adminMode}
                   onToggleFlag={handleToggleFlag}
                   onOpen={openSummary}
                   onArchive={adminMode ? setArchiveTarget : undefined}
                   onEditMetadata={adminMode ? setEditTarget : undefined}
-                  onReindex={adminMode ? startReindex : undefined}
+                  onReindex={adminMode ? handleReindex : undefined}
                   onDelete={adminMode ? setDeleteTarget : undefined}
                 />
               ))}
@@ -269,7 +323,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
               onOpen={openSummary}
               onArchive={adminMode ? setArchiveTarget : undefined}
               onEditMetadata={adminMode ? setEditTarget : undefined}
-              onReindex={adminMode ? startReindex : undefined}
+              onReindex={adminMode ? handleReindex : undefined}
               onDelete={adminMode ? setDeleteTarget : undefined}
             />
           )}
@@ -286,6 +340,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           />
         </>
       )}
+
       {archiveTarget && (
         <ArchiveModal
           title={archiveTarget.title}
@@ -293,30 +348,35 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
           onClose={() => setArchiveTarget(null)}
           onConfirm={confirmArchive}
         />
-
       )}
+
       {editTarget && (
         <EditMetadataModal
-          doc={{ ...editTarget, executiveSummary: editTarget.description }}
+          doc={{
+            ...editTarget,
+            executiveSummary: editTarget.description,
+          }}
           onClose={() => setEditTarget(null)}
           onSave={(changes) => {
-            saveDocumentMetadata(editTarget, changes);
+            saveDocumentMetadata(editTarget, changes, { info, success, error });
             setEditTarget(null);
           }}
         />
       )}
+
       {deleteTarget && (
         <DeleteModal
           doc={deleteTarget}
           onClose={() => setDeleteTarget(null)}
           onConfirm={() => {
             deleteDocument(deleteTarget.id);
-            showDocToast(`🗑 Document "${deleteTarget.title}" deleted`, 'neutral');
+
+            info(`🗑 Document "${deleteTarget.title}" deleted`);
+
             setDeleteTarget(null);
           }}
         />
       )}
-      <DocToastHost />
     </>
   );
 }

@@ -1,43 +1,55 @@
 import { Save, ExternalLink } from 'lucide-react';
 import { documentStorage } from '../shared/DocumentData';
+import { Link } from 'react-router-dom';
 
-// Storage pill beside the header buttons (reference screenshot):
-// floppy tile, "EKA STORAGE: used / total", capacity pill, Manage pill, bar below.
+// Storage pill beside the header buttons. The whole pill opens Storage Management.
+// Every colour, radius, shadow and font size comes from the theme variables.
 function StorageIndicator() {
   const { usedGb, totalGb } = documentStorage;
-  const percent = (usedGb / totalGb) * 100; // 14.2 / 50 -> 28.4
+  const percent = (usedGb / totalGb) * 100;
 
   return (
-    <div className="flex items-center gap-3 rounded-[22px] border border-[#cfe3f3] bg-[#e1f0fa] px-3 py-2">
-      {/* Icon tile */}
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#dff3e8] text-[#8a3a8f]">
+    <Link
+      to="/documents/storage"
+      aria-label="Manage storage"
+      className="group flex cursor-pointer items-center gap-3 rounded-(--radius-lg) border border-(--border-medium) bg-(--bg-surface-subtle) px-3 py-2 shadow-(--shadow-xs) transition-[background-color,border-color,box-shadow] duration-200 hover:border-(--primary) hover:bg-(--bg-surface) hover:shadow-(--shadow-md)"
+    >
+      {/* [2] Icon box */}
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-sm) bg-(--badge-bg) text-(--badge-text)">
         <Save size={14} />
       </span>
 
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-medium uppercase text-[#7c949a]">EKA Storage:</span>
-          <span className="doc-mono text-[11px] font-bold text-(--text-primary)">
+          {/* [3] Label + metric */}
+          <span className="font-(family-name:--font-sans) text-(length:--font-size-sm) font-medium uppercase text-(--text-muted)">
+            EKA Storage:
+          </span>
+
+          <span className="font-(family-name:--font-mono) text-(length:--font-size-sm) font-bold text-(--text-primary)">
             {usedGb} GB / {totalGb} GB
           </span>
-          <span className="rounded-full border border-[#bdeedb] bg-[#edfdf7] px-2 py-0.5 text-[10px] font-semibold text-[#0f8f63]">
+
+          {/* [4] Capacity badge */}
+          <span className="inline-flex items-center rounded-(--radius-pill) border border-(--badge-border) bg-(--badge-bg) px-2.5 py-0.5 text-(length:--font-size-badge) font-semibold text-(--badge-text)">
             {percent.toFixed(1)}% Capacity
           </span>
-          {/* Not wired yet: storage management page comes later */}
-          <button
-            type="button"
-            className="doc-mono inline-flex cursor-pointer items-center gap-1 rounded-full bg-[#cfe3f3] px-2 py-0.5 text-[10px] font-semibold text-[#1f718e] transition-colors hover:bg-[#bcd8ee]"
-          >
-            Manage <ExternalLink size={10} />
-          </button>
+
+          {/* [5] Manage pill: looks like a button, the whole capsule is the link */}
+          <span className="ml-1.5 inline-flex items-center gap-1.5 rounded-(--radius-pill) border border-(--border-medium) px-3 py-[3px] font-(family-name:--font-mono) text-(length:--font-size-2xs) font-semibold text-(--primary) transition-colors duration-200 group-hover:border-(--primary) group-hover:bg-(--primary) group-hover:text-(--primary-contrast)">
+            Manage <ExternalLink size={12} />
+          </span>
         </div>
 
-        {/* Usage bar */}
-        <div className="mt-1.5 h-1 w-[210px] max-w-full rounded-full bg-white/70">
-          <div className="h-full rounded-full bg-(--primary)" style={{ width: `${percent}%` }} />
+        {/* [6] Progress track + bar */}
+        <div className="mt-1.5 h-1 w-[210px] max-w-full rounded-(--radius-pill) bg-(--border-subtle)">
+          <div
+            className="h-full rounded-(--radius-pill) bg-(--primary)"
+            style={{ width: `${percent}%` }}
+          />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

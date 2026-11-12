@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, Bookmark, Pin } from 'lucide-react';
 import SummaryKebabMenu from './SummaryKebabMenu';
-import { formatStyles, statusMeta } from '../shared/DocumentCard';
+import { statusMeta } from '../shared/DocumentCard';
+import Badge from '../../common/Badge.jsx';
 import '../../../styles/Document.css';
 
 const circle =
@@ -13,20 +14,18 @@ function SummaryHeader({
   onCopyLink, onToggleSave, onTogglePin,
   onEdit, onReindex, onArchive, onDelete,
 }) {
-  const tile = formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)';
   const status = statusMeta[doc.status] ?? statusMeta.Indexed;
 
   return (
     <header className="flex flex-col gap-4 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) px-8 py-7 shadow-(--shadow-sm) sm:flex-row sm:items-start">
-      <span
-        className={`doc-mono flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#f5b9bd] text-[11px] font-bold ${tile}`}
-      >
-        {doc.format}
-      </span>
+      <Badge
+        format={doc.format}
+        className="doc-mono !h-12 !w-12 !rounded-2xl !text-[11px]"
+      />
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-         <span className="rounded-full bg-[#e1f0fa] px-3 py-1 text-[11px] font-semibold text-[#3d5a73]">
+          <span className="rounded-full bg-[#e1f0fa] px-3 py-1 text-[11px] font-semibold text-[#3d5a73]">
             {doc.category}
           </span>
           {archived ? (
@@ -34,14 +33,15 @@ function SummaryHeader({
               Archived
             </span>
           ) : (
-            <span
-              className={`rounded-full px-3 py-1 text-[11px] font-semibold ${doc.status === 'Indexed'
-                  ? 'border border-[#bdeedb] bg-[#edfdf7] text-[#0f8f63]'
+            <Badge
+              text={status.label}
+              type={status.type}
+              size="sm"
+              className={`!px-3 !py-1 !text-[11px] ${doc.status === 'Indexed'
+                  ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
                   : status.style
                 }`}
-            >
-              {status.label}
-            </span>
+            />
           )}
           <span className="doc-mono text-xs text-[#7c949a]">
             {doc.size} • {doc.readTime} • {doc.pages} pages
@@ -63,7 +63,7 @@ function SummaryHeader({
         <Link
           to="/ask-eka"
           state={{ question: `Tell me about "${doc.title}"` }}
-          className="inline-flex items-center gap-1.5 rounded-full bg-[#153830] px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#0f2b25]"
+          className="inline-flex items-center rounded-(--radius-pill) border border-(--primary) bg-(--primary) px-2 py-1 text-(length:--font-size-sm) font-bold text-(--primary-contrast) [transition:background-color_var(--transition-fast)] hover:bg-(--primary-hover)"
         >
           Ask About This Doc →
         </Link>
@@ -94,9 +94,9 @@ function SummaryHeader({
               aria-label={pinned ? 'Unpin document' : 'Pin document'}
               aria-pressed={pinned}
               onClick={onTogglePin}
-              className={`${circle} ${pinned ? 'text-[#3561bb]' : 'text-(--text-secondary)'}`}
+              className={`group ${circle} ${pinned ? 'text-[#e5484d]' : 'text-(--text-secondary) hover:text-[#e5484d]'}`}
             >
-              <Pin size={14} className={pinned ? 'fill-current' : ''} />
+              <Pin size={14} className={pinned ? 'fill-current' : 'group-hover:fill-current'} />
             </button>
 
             <SummaryKebabMenu
@@ -104,6 +104,7 @@ function SummaryHeader({
               onReindex={onReindex}
               onArchive={onArchive}
               onDelete={onDelete}
+              archived={archived}
             />
           </>
         )}

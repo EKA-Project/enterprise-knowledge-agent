@@ -1,91 +1,127 @@
-import { useState } from 'react';
-import { Search, LayoutGrid } from 'lucide-react';
-import TopicFilterPills from '../components/knowledge/TopicFilterPills.jsx';
+import { Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
+import useUpload from '../hooks/useUpload.js';
+import { Upload, LayoutGrid } from 'lucide-react';
+import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
-import RecentlySurfacedList from '../components/knowledge/RecentlySurfacedList.jsx';
-import PinnedGuides from '../components/knowledge/PinnedGuides.jsx';
-import MissingSomething from '../components/knowledge/MissingSomething.jsx';
+import GlossarySection from '../components/knowledge/GlossarySection';
+import AuthContext from '../context/AuthContext.jsx';
+import LibraryFavorites from '../components/knowledge/LibraryFavorites';
+import RecentlyUpdated from '../components/knowledge/RecentlyUpdated';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
-import { topicFilters, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
+import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
 import '../styles/knowledge.css';
+import DemoStatesBar from '../components/knowledge/DemoStatesBar';
+import SectionState from '../components/knowledge/SectionState';
+import Button from '../components/common/Button.jsx';
+import PageHero from '../components/common/PageHero.jsx';
 
-// Knowledge Base landing page — browse the collective knowledge, filter by
-// topic, and jump into recently surfaced docs or pinned guides.
-// Note: page title/subtitle are NOT rendered here — Topbar already shows
-// them based on the current route (see routeMetadata in Topbar.jsx).
 export default function KnowledgeBasePage() {
-  // Active topic filter — lifted up here so the category grid (next step)
-  // can also read/react to it.
-  const [activeTopic, setActiveTopic] = useState('all');
+  const { activeRole } = useContext(AuthContext);
+  const { openUpload, canUpload } = useUpload();
+  const [demoState, setDemoState] = useState('normal');
+  const resetDemo = () => setDemoState('normal');
+  // Category whose Collection Insights modal is open (null = closed)
+  const [insightsCategory, setInsightsCategory] = useState(null);
+
 
   return (
-    <div className="px-4 py-2">
+    <div className="px-0 py-0">
       {/* Hero section */}
-      <div className="mb-6 flex items-start justify-between">
-        <div>
-          <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
-            Browse the collective
-          </p>
-          <h2 className="kb-hero-heading text-[2.5rem] font-bold leading-tight text-(--text-primary)">
-            Find the thread.
-          </h2>
-          <p className="mt-1 text-sm text-(--text-secondary)">
-            A map of what your team knows, grouped in ways that make sense.
-          </p>
-        </div>
+           {/* Hero section */}
+      <PageHero
+        eyebrow="Browse the collective"
+        title="Find the thread."
+        description="A map of what your team knows, grouped in ways that make sense."
+        className="mb-2"
+        actions={
+          <>
+            {canUpload && (
+              <Button
+                variant="solid"
+                icon={Upload}
+                iconChip
+                title="Upload a new document"
+                onClick={openUpload}
+              >
+                Upload Document
+              </Button>
+            )}
 
-        <button
-          type="button"
-          className="flex items-center gap-2 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-0.5 text-xs font-semibold text-(--text-primary) hover:bg-(--bg-surface-subtle)"
-        >
-
-          <LayoutGrid size={14} />
-          Browse all
-        </button>
-      </div>
-
-      {/* Search bar (static for now — no search/navigation logic yet) */}
-      <div className="mb-6 flex items-center gap-3 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-5 py-2.5 shadow-(--shadow-sm)">
-        <Search size={18} className="text-(--text-muted)" />
-        <input
-          type="text"
-          placeholder="Search policies, guides, rituals, runbooks…"
-          className="w-full border-0 bg-transparent text-sm text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none"
-        />
-      </div>
-      {/* Topic filter pills */}
-      <TopicFilterPills
-        topics={topicFilters}
-        activeTopic={activeTopic}
-        onChange={setActiveTopic}
+            <Link
+              to="/documents"
+              className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-colors duration-200 hover:border-(--border-medium)"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-colors duration-200 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
+                <LayoutGrid size={12} />
+              </span>
+              Browse all
+            </Link>
+          </>
+        }
       />
 
-      {/* Category grid — filtered by the active topic pill.
-            "all" shows every category; a specific topic shows only its
-            matching card (Company foundations has no pill, so it only
-            appears under "All topics"). */}
-      <div className="grid grid-cols-3 gap-9">
-        {knowledgeCategories
-          .filter((category) => activeTopic === 'all' || category.id === activeTopic)
-          .map((category) => (
-            <CategoryCard key={category.id} category={category} />
-          ))}
-      </div>
-      {/* Recently surfaced and pinned guides share the same two-column layout
-            shown in the approved Knowledge Base reference. */}
-      <div className="mt-8 grid grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-10">
-        <RecentlySurfacedList />
+      <KnowledgeStats stats={knowledgeStats} />
 
-        {/* Right column: pinned guides followed by the missing-content prompt. */}
-        <div>
-          <PinnedGuides />
-          <MissingSomething />
+      {/* Browse by Department */}
+      <section className="mt-8">
+        <div className="mb-4 flex items-end justify-between">
+          <div>
+            <p className="kb-mono text-[10px] uppercase tracking-[0.12em] text-(--text-muted)">
+              Knowledge Directory
+            </p>
+            <h2 className="kb-serif text-xl font-bold text-(--text-primary)">
+              Browse by Department
+            </h2>
+          </div>
+          <span className="kb-mono text-[11px] text-(--text-muted)">
+            {knowledgeCategories.length} Collections Indexed
+          </span>
         </div>
-      </div>
+        {demoState === 'empty' ? (
+          <SectionState
+            icon={LayoutGrid}
+            title="No collections indexed yet"
+            message="Create a department in Admin Settings to begin populating collections."
+            actionLabel="Reset View"
+            onAction={resetDemo}
+          />
+        ) : demoState === 'error' ? (
+          <SectionState
+            variant="error"
+            title="Unable to load department collections"
+            message="A transient storage error occurred while building the index."
+            actionLabel="Retry"
+            onAction={resetDemo}
+          />
+        ) : (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {knowledgeCategories.map((category) => (
+              <CategoryCard
+                key={category.id}
+                category={category}
+                onOpenInsights={setInsightsCategory}
+              />
+            ))}
+          </div>
+        )}
+      </section>
 
+      <GlossarySection canManage={activeRole === 'Admin'} state={demoState} onReset={resetDemo} />
+      <LibraryFavorites state={demoState} onReset={resetDemo} />
+      <RecentlyUpdated state={demoState} onReset={resetDemo} />
 
       {/* Bottom guidance banner from the approved Knowledge Base reference. */}
       <AskQuestionBanner />
+      {insightsCategory && (
+        <CollectionInsightsModal
+          category={insightsCategory}
+          onClose={() => setInsightsCategory(null)}
+        />
+      )}
+
+      <DemoStatesBar value={demoState} onChange={setDemoState} />
     </div>
   );
 }

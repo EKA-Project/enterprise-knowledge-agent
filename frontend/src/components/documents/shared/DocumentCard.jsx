@@ -1,142 +1,104 @@
-import { useState } from 'react';
-import { Pin, Bookmark, MoreHorizontal } from 'lucide-react';
+import { Pin, Bookmark } from 'lucide-react';
 import '../../../styles/Document.css';
 import DocumentCardMenu from './DocumentCardMenu.jsx';
+import Badge from '../../common/Badge.jsx';
 
-// File-type tile colours (keyed by document.format). Unknown formats fall back to neutral.
-// Exported so the list view and the summary page use the same colours.
-export const formatStyles = {
-  PDF: 'bg-(--status-danger-bg) text-(--status-danger)',
-  DOCX: 'bg-sky-100 text-sky-700',
-  MD: 'bg-indigo-100 text-indigo-700',
-  TXT: 'bg-(--bg-surface-subtle) text-(--text-secondary)',
-  FIG: 'bg-purple-100 text-purple-700',
-  CSV: 'bg-green-100 text-green-700',
-};
-
-// Status pill text + colours (keyed by document.status).
+// Status pill text + colours.
 export const statusMeta = {
   Indexed: {
     label: '✓ Indexed & Ready',
     style: 'border border-(--status-verified-border) bg-(--status-verified-bg) text-(--status-success)',
+    type: 'success',
   },
   Processing: {
     label: 'Processing',
     style: 'border border-sky-200 bg-(--status-info-bg) text-(--status-info)',
+    type: 'info',
   },
   Outdated: {
     label: 'Outdated',
     style: 'border border-amber-200 bg-(--status-warning-bg) text-(--status-warning)',
+    type: 'warning',
   },
   Failed: {
     label: '⚠ Failed Ingestion',
-    style: 'border border-orange-200 bg-orange-50 text-orange-600',
+    style: 'border border-(--status-danger) bg-(--status-danger-bg) text-(--status-danger)',
+    type: 'danger',
   },
 };
 
-// Small dark tooltip shown under an icon button on hover.
-function Tooltip({ children }) {
-  return (
-    <span className="pointer-events-none absolute right-0 top-full z-10 mt-1 hidden whitespace-nowrap rounded-md bg-(--sidebar-bg) px-2 py-1 text-[10px] font-medium text-white group-hover:block">
-      {children}
-    </span>
-  );
-}
-
-function DocumentCard({ document, adminMode = false, showActions = true, onToggleFlag, onOpen, onArchive }) {
-  // "Pinned" / "Saved" tags appear when the user toggles a flag on this card
-  // (not for documents that were already pinned / saved when the page loaded).
-  const [showPinnedTag, setShowPinnedTag] = useState(false);
-  const [showSavedTag, setShowSavedTag] = useState(false);
-
-  // Pin toggle (used by the pin icon and the "..." menu)
-  const togglePin = () => {
-    setShowPinnedTag(!document.isPinned);
-    onToggleFlag(document.id, 'isPinned');
+// The parent still passes the prop as `document`; it is renamed to `doc` here
+// so it does not hide the browser's global `document`.
+function DocumentCard({
+  document: doc,
+  adminMode = false,
+  showActions = true,
+  onToggleFlag,
+  onOpen,
+  onArchive,
+  onEditMetadata,
+  onReindex,
+  onDelete,
+}) {
+  // The "Pinned" / "Saved" tags only show after the user toggles them in this session
+  const togglePin = () => onToggleFlag?.(doc.id, 'isPinned');
+  const toggleSave = () => onToggleFlag?.(doc.id, 'isBookmarked');
+  // Run a handler without opening the card
+  const stop = (fn) => (event) => {
+    event.stopPropagation();
+    fn();
   };
 
-  const handlePin = (e) => {
-    e.stopPropagation(); // don't open the summary when pinning
-    togglePin();
-  };
+  // Give the menu a callback only when the parent supplied one. Otherwise the menu
+  // falls back to its built-in action (e.g. Edit Metadata modal, Re-index).
+  const withDoc = (fn) => (fn ? () => fn(doc) : undefined);
 
-  // Bookmark toggle (used by the bookmark icon and the "..." menu)
-  const toggleSave = () => {
-    setShowSavedTag(!document.isBookmarked);
-    onToggleFlag(document.id, 'isBookmarked');
-  };
-
-  const handleSave = (e) => {
-    e.stopPropagation();
-    toggleSave();
-  };
-
-  const status = statusMeta[document.status] ?? {
-    label: document.status,
+  const status = statusMeta[doc.status] ?? {
+    label: doc.status,
     style: 'border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary)',
   };
 
-  const tileStyle =
-    formatStyles[document.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)';
 
   return (
     <article
       role="link"
       tabIndex={0}
-      onClick={() => onOpen?.(document)}
-      onKeyDown={(e) => e.key === 'Enter' && onOpen?.(document)}
+      onClick={() => onOpen?.(doc)}
+      // Enter opens the card only when the card itself is focused, not a button inside it
+      onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onOpen?.(doc)}
       className="flex cursor-pointer flex-col rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-all hover:border-(--accent-highlight) hover:shadow-(--shadow-md)"
     >
-      {/* Header: format tile on the left, tags + title in the column beside it */}
       <div className="flex items-start gap-4">
-        <span
-          className={`doc-mono flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[10px] font-bold ${tileStyle}`}
-        >
-          {document.format}
-        </span>
+      <Badge
+        format={doc.format}
+        className="doc-mono !h-10 !w-10 !rounded-2xl !text-[11px]"
+      />
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
-            {/* Tags */}
             <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-              {adminMode && showPinnedTag && document.isPinned && (
-                <span className="rounded-full border border-(--border-subtle) bg-(--bg-surface) px-2.5 py-1 text-[10px] font-semibold text-(--primary)">
-                  📌 Pinned
-                </span>
-              )}
               <span className="min-w-0 truncate rounded-full bg-(--bg-surface-subtle) px-3 py-1 text-[10px] font-semibold text-(--text-secondary)">
-                {document.category}
+                {doc.category}
               </span>
-              {showSavedTag && document.isBookmarked && (
-                <span className="rounded-full bg-(--status-warning-bg) px-2.5 py-1 text-[10px] font-semibold text-(--status-warning)">
-                  ⭐ Saved
-                </span>
-              )}
+
             </div>
 
-            {/* Actions (hidden in the manager view, like the video) */}
             {showActions && (
               <div className="flex shrink-0 items-center gap-1">
                 {adminMode ? (
-                  <div className="group relative">
-                    <button
-                      type="button"
-                      aria-label={document.isPinned ? 'Unpin document' : 'Pin document'}
-                      aria-pressed={Boolean(document.isPinned)}
-                      onClick={handlePin}
-                      className={`cursor-pointer rounded-md p-1 transition-colors ${document.isPinned
-                        ? 'text-(--primary)'
-                        : 'text-(--text-muted) hover:text-(--text-primary)'
-                        }`}
-                    >
-                      <Pin size={14} className={document.isPinned ? 'fill-current' : ''} />
-                    </button>
-                    <Tooltip>{document.isPinned ? 'Unpin Document' : 'Pin Document'}</Tooltip>
-                  </div>
+                  <button
+                    type="button"
+                    aria-label={doc.isPinned ? 'Unpin document' : 'Pin document'}
+                    aria-pressed={Boolean(doc.isPinned)}
+                    onClick={stop(togglePin)}
+                    className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted) hover:text-[#e5484d]'
+                      }`}
+                  >
+                    <Pin size={14} className={doc.isPinned ? 'fill-current' : 'group-hover:fill-current'} />
+                  </button>
                 ) : (
-                  // Employee / Manager: a pinned document just shows a static blue pin
-                  document.isPinned && (
-                    <span className="p-1 text-(--primary)" aria-label="Pinned by admin">
+                  doc.isPinned && (
+                    <span className="p-1 text-[#e5484d]" title="Pinned by admin" aria-label="Pinned by admin">
                       <Pin size={14} className="fill-current" />
                     </span>
                   )
@@ -144,57 +106,56 @@ function DocumentCard({ document, adminMode = false, showActions = true, onToggl
 
                 <button
                   type="button"
-                  aria-label={document.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
-                  aria-pressed={Boolean(document.isBookmarked)}
-                  onClick={handleSave}
-                  className={`cursor-pointer rounded-md p-1 transition-colors ${document.isBookmarked
-                    ? 'text-amber-500'
-                    : 'text-(--text-muted) hover:text-(--text-primary)'
+                  aria-label={doc.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
+                  aria-pressed={Boolean(doc.isBookmarked)}
+                  onClick={stop(toggleSave)}
+                  className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isBookmarked ? 'text-[#f39c0a]' : 'text-(--text-muted) hover:text-[#f39c0a]'
                     }`}
                 >
-                  <Bookmark size={14} className={document.isBookmarked ? 'fill-current' : ''} />
+                  <Bookmark size={14} className={doc.isBookmarked ? 'fill-current' : 'group-hover:fill-current'} />
                 </button>
 
                 <DocumentCardMenu
+                  doc={doc}
                   adminMode={adminMode}
-                  isPinned={Boolean(document.isPinned)}
-                  isBookmarked={Boolean(document.isBookmarked)}
-                  onOpen={() => onOpen?.(document)}
+                  isPinned={Boolean(doc.isPinned)}
+                  isArchived={Boolean(doc.isArchived)}
+                  isBookmarked={Boolean(doc.isBookmarked)}
+                  onOpen={withDoc(onOpen)}
                   onToggleBookmark={toggleSave}
                   onTogglePin={togglePin}
-                  onArchive={() => onArchive?.(document)}
-                  onEditMetadata={() => onEditMetadata?.(document)}
-                  onReindex={() => onReindex?.(document)}
-                  onDelete={() => onDelete?.(document)}
+                  onArchive={withDoc(onArchive)}
+                  onEditMetadata={withDoc(onEditMetadata)}
+                  onReindex={withDoc(onReindex)}
+                  onDelete={withDoc(onDelete)}
                 />
               </div>
             )}
           </div>
 
-          <h2 className="doc-heading mt-2 text-lg font-bold leading-6 text-(--text-primary)">
-            {document.title}
-          </h2>
+          <h2 className="doc-heading mt-2 text-lg font-bold leading-6 text-(--text-primary)">{doc.title}</h2>
         </div>
       </div>
 
-      <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-(--text-secondary)">
-        {document.description}
-      </p>
+      <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-(--text-secondary)">{doc.description}</p>
 
-      {/* Divider, then meta info and status on one row */}
       <div className="mt-auto pt-4">
         <div className="border-t border-(--border-subtle)" />
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className="doc-mono text-[10px] text-(--text-muted)">
-            {document.readTime} • {document.size} • {document.pages} pages
+            {doc.readTime} • {doc.size} • {doc.pages} pages
           </p>
 
-          <span
-            className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-semibold ${status.style}`}
-          >
-            {status.label}
-          </span>
+          {status.type ? (
+            <Badge text={status.label} type={status.type} size="sm" />
+          ) : (
+            <span
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-semibold ${status.style}`}
+            >
+              {status.label}
+            </span>
+          )}
         </div>
       </div>
     </article>

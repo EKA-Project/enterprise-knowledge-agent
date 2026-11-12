@@ -1,23 +1,107 @@
-
-import { FileText, Send, Upload, UserPlus, UserX, X } from "lucide-react";
+import {
+  Upload,
+  UserPlus,
+  Columns,
+  Download,
+  FileText,
+  Send,
+  RotateCw,
+  Flame,
+  UserX,
+  Database ,
+  X,
+} from "lucide-react";
 import Button from "./Button";
+import '../../styles/Document.css';
 import DiceIcon from "../icons/DiceIcon";
+import TrashLidIcon from "../icons/TrashLidIcon";
 
 /* ==========================================================================
-   ActionButtons  (components/common/ActionButtons.jsx)
-   --------------------------------------------------------------------------
-   Named buttons for actions that appear in more than one place. Each one
-   fixes its own label, icon, colour scheme and tooltip, so a page just does:
-
-       <AddMemberButton onClick={handleAdd} />
-
-   Every button forwards its props to <Button>, so a page can still override
-   anything (onClick, title, size, disabled, ...).
-
-   To add a new one, copy a block below and change the label, icon, variant.
-   Anything used on only one page can just use <Button> directly instead.
+   Micro-Animated Icons (Respond automatically to button hover)
    ========================================================================== */
 
+// Micro-animation: Database stacks lift slightly on hover
+const AnimatedDatabaseIcon = ({ size, className = "" }) => (
+  <Database
+    size={size}
+    className={`transition-transform duration-200 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 ${className}`}
+  />
+);
+// Download arrow dips downward into device tray
+const DippingDownloadIcon = ({ size, className = "" }) => (
+  <Download
+    size={size}
+    className={`transition-transform duration-200 ease-out group-hover:translate-y-0.5 ${className}`}
+  />
+);
+
+// Paper airplane takes flight forward & upward
+const FlyingSendIcon = ({ size, className = "" }) => (
+  <Send
+    size={size}
+    className={`transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:-rotate-12 ${className}`}
+  />
+);
+
+// Rewind icon spins counter-clockwise on hover
+const RewindIcon = ({ size, className = "" }) => (
+  <RotateCw
+    size={size}
+    className={`transition-transform duration-300 ease-out group-hover:-rotate-180 group-hover:scale-105 ${className}`}
+  />
+);
+
+
+// Warning icon tilts and scales backward
+const WarningUserXIcon = ({ size, className = "" }) => (
+  <UserX
+    size={size}
+    className={`transition-transform duration-200 ease-out group-hover:scale-110 group-hover:-rotate-12 ${className}`}
+  />
+);
+
+// Dismiss / Cancel 'X' spins 90 degrees
+
+// Bolder, punchy cross with smooth spring rotation
+const SpinXIcon = ({ size, className = "" }) => (
+  <X
+    size={size}
+    strokeWidth={2.6}
+    className={`transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-90 group-hover:scale-110 ${className}`}
+  />
+);
+
+/* ==========================================================================
+   SECTION 1: Core Primary Actions (Most Frequently Used Across App)
+   ========================================================================== */
+
+/**
+ * Primary Ingest Action (Solid Green Pill)
+ * Where to use:
+ *   - Documents Header (pages/DocumentsPage.jsx)
+ *   - Manager Dashboard Header (components/dashboard/manager/ManagerOverview.jsx)
+ *   - Global Action Bar
+ */
+export function IngestDocumentButton(props) {
+  return (
+    <Button
+      variant="solid"
+      icon={Upload}
+      iconChip
+      title="Ingest a new document into EKA knowledge base"
+      {...props}
+    >
+      Ingest Document
+    </Button>
+  );
+}
+
+/**
+ * Add Team Member Action (Light Pill)
+ * Where to use:
+ *   - Organization / Team Roster (components/dashboard/manager/ManagerTeamRoster.jsx)
+ *   - User Directory Table Header (components/organization/UserDirectoryTable.jsx)
+ */
 export function AddMemberButton(props) {
   return (
     <Button
@@ -31,26 +115,36 @@ export function AddMemberButton(props) {
   );
 }
 
-export function IngestDocumentButton(props) {
+/**
+ * Compare & Redline Companion Pill (Light Pill)
+ * Where to use:
+ *   - Documents Header right next to Ingest button (pages/DocumentsPage.jsx)
+ *   - Document Summary Header (pages/DocumentSummaryPage.jsx)
+ */
+export function CompareRedlineButton(props) {
   return (
     <Button
-      variant="solid"
-      icon={Upload}
+      icon={Columns}
       iconChip
-      title="Ingest a new document"
+      title="Compare two documents and highlight redline diffs"
       {...props}
     >
-      Ingest Document
+      Compare &amp; Redline
     </Button>
   );
 }
 
+/**
+ * Ingestion Repository Link Button (Light Pill)
+ * Where to use:
+ *   - Employee & Manager Overview cards to quickly jump to repository
+ */
 export function IngestionLibraryButton(props) {
   return (
     <Button
       icon={FileText}
       iconChip
-      title="Open the ingestion library"
+      title="Open the ingestion repository"
       {...props}
     >
       Ingestion Library →
@@ -58,11 +152,151 @@ export function IngestionLibraryButton(props) {
   );
 }
 
+/* ==========================================================================
+   SECTION 2: Storage & Retention Actions
+   ========================================================================== */
+
+/**
+ * Export Storage / Audit CSV (Light Pill with Dark Chip Inversion on Hover)
+ * Where to use:
+ *   - Storage Overview Header (components/documents/admin/StorageIndicator.jsx)
+ *   - Analytics Export Toolbar (components/analytics/IngestionAuditPanel.jsx)
+ */
+export function ExportAuditButton(props) {
+  return (
+    <Button
+      variant="darkHover"
+      icon={DippingDownloadIcon}
+      iconChip
+      title="Export storage audit report (CSV)"
+      {...props}
+    >
+      Export Storage Audit
+    </Button>
+  );
+}
+
+/**
+ * Restore Document (Emerald Green Hover with 360° Rewind Spin)
+ * Where to use:
+ *   - Recycle Bin Table Rows (pages/Storage.jsx)
+ *   - Archived Document Details / Summary Sidebar (components/documents/summary/SummarySidebar.jsx)
+ */
+export function RestoreButton(props) {
+  return (
+    <Button
+      variant="light"
+      icon={RewindIcon}
+      title="Restore back to active library"
+      className="text-(--text-secondary) hover:border-emerald-700/50 hover:bg-emerald-700/10 hover:text-emerald-700 hover:shadow-[0_2px_8px_rgba(4,120,87,0.14)]"
+      {...props}
+    >
+      Restore
+    </Button>
+  );
+}
+
+/**
+ * Permanent Purge Action (Danger Soft with Flame Icon)
+ * Where to use:
+ *   - Recycle Bin row actions for permanent deletion
+ *   - Storage Cleanup Tab actions
+ */
+export function PurgeButton(props) {
+  return (
+    <Button
+      variant="dangerSoft"
+      icon={Flame}
+      iconChip
+      title="Permanently purge from cluster"
+      {...props}
+    >
+      Purge
+    </Button>
+  );
+}
+
+/* ==========================================================================
+   SECTION 3: Reusable Animated Delete Actions (Spring Lifting Trash Lid)
+   ========================================================================== */
+
+/**
+ * Master Delete / Trash Action Button
+ * Dynamically accepts label text, title, and toast message.
+ *
+ * Usage:
+ *   <DeleteActionButton onClick={handleDelete} toast="Thread deleted">
+ *     Delete Thread
+ *   </DeleteActionButton>
+ */
+export function DeleteActionButton({
+  children = "Delete",
+  title = "Delete item",
+  toast = null,
+  onToast,
+  onClick,
+  ...props
+}) {
+  const handleClick = (e) => {
+    if (onClick) onClick(e);
+    if (toast && onToast) onToast(toast);
+  };
+
+  return (
+    <Button
+      variant="dangerSoft"
+      icon={TrashLidIcon}
+      iconChip
+      title={title}
+      onClick={handleClick}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+}
+
+/**
+ * Empty Recycle Bin Action
+ * Where to use: Recycle Bin Tab Header toolbar
+ */
+export const EmptyRecycleBinButton = (props) => (
+  <DeleteActionButton
+    title="Permanently delete all files from Recycle Bin"
+    toast="Recycle Bin emptied successfully"
+    {...props}
+  >
+    Empty Recycle Bin
+  </DeleteActionButton>
+);
+
+/**
+ * Delete Active Chat History Action
+ * Where to use: Chat Sidebar & Chat History page toolbar
+ */
+export const DeleteActiveHistoryButton = (props) => (
+  <DeleteActionButton
+    title="Delete all active chat history"
+    toast="Active chat history deleted"
+    {...props}
+  >
+    Delete Active History
+  </DeleteActionButton>
+);
+
+/* ==========================================================================
+   SECTION 4: Modals, Form Submissions & Appearance
+   ========================================================================== */
+
+/**
+ * Send Invitation Action (Solid Pill with Flying Paper Airplane)
+ * Where to use: Inside InviteMemberModal.jsx and UserInviteModal.jsx
+ */
 export function SendInvitationButton(props) {
   return (
     <Button
       variant="solid"
-      icon={Send}
+      icon={FlyingSendIcon}
       title="Send the invitation email"
       {...props}
     >
@@ -71,19 +305,28 @@ export function SendInvitationButton(props) {
   );
 }
 
+/**
+ * Cancel / Dismiss Action (Soft Pill with 90° Spinning X)
+ * Where to use: Footer of all confirmation modals and drawer sheets
+ */
 export function CancelButton(props) {
   return (
-    <Button variant="soft" icon={X} title="Cancel" {...props}>
+    <Button variant="soft" icon={SpinXIcon} title="Cancel" {...props}>
       Cancel
     </Button>
   );
 }
 
+/**
+ * Remove Member Action (Danger Soft with Tilting User Warning Icon)
+ * Where to use: RemoveMemberModal.jsx and User Management action menus
+ */
 export function RemoveFromTeamButton(props) {
   return (
     <Button
       variant="dangerSoft"
-      icon={UserX}
+      icon={WarningUserXIcon}
+      iconChip
       title="Remove this member from the team"
       {...props}
     >
@@ -92,17 +335,91 @@ export function RemoveFromTeamButton(props) {
   );
 }
 
+
+/**
+ * Animated trash can (lid lifts from its left hinge, icon tilts).
+ * size?: number (px, default 24)
+ * spark?: boolean (fixed "+" beside the icon, does NOT move with the lid)
+ * open?: boolean (force the lid open, e.g. right after a delete)
+ * Hover: put the class "bin-group" on any parent (the card, button or circle)
+ * and the lid lifts while that parent is hovered.
+ */
+export default function AnimatedBin({ size = 24, spark = false, open = false, className = '' }) {
+  return (
+    <span
+      className={`relative inline-flex shrink-0 ${open ? 'bin-open' : ''} ${className}`}
+      style={{ width: size, height: size }}
+    >
+      <svg
+        className="bin-svg overflow-visible"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <g className="bin-lid">
+          <path d="M3 6h18" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </g>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+        <path d="M10 11v6M14 11v6" />
+      </svg>
+
+      {spark && (
+        <svg
+          className="absolute"
+          style={{ left: size * 0.75, top: -size * 0.125, width: size / 4, height: size / 4 }}
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        >
+          <path d="M6.5 1.5v4M4.5 3.5h4" />
+          <circle cx="3" cy="5.5" r="0.7" fill="currentColor" stroke="none" />
+        </svg>
+      )}
+    </span>
+  );
+}
+/**
+ * Randomize Atmosphere Action (Surface Pill with Rolling Dice)
+ * Where to use: Appearance Studio & Topbar Theme Randomizer
+ */
 export function SurpriseMeButton({ isSurprising = false, rollCount = 0, ...props }) {
-  // The spin state comes from SurpriseContext; the key restarts it on rapid clicks.
   return (
     <Button
       variant="surface"
       size="md"
-      title="Pick a random atmosphere"
+      title="Pick a random editorial atmosphere"
       {...props}
     >
       <DiceIcon key={rollCount} rolling={isSurprising} />
       Surprise Me
+    </Button>
+  );
+}
+
+/**
+ * Start Vector Ingestion Action (Solid Primary Pill)
+ * Where to use:
+ *   - Ingestion / Document Upload Modal submit CTA (components/modals/UploadDocumentModal.jsx)
+ *   - Pipeline Re-index trigger
+ */
+export function StartVectorIngestionButton(props) {
+  return (
+    <Button
+      variant="solid"
+      icon={AnimatedDatabaseIcon}
+      iconChip
+      title="Start vectorizing and embedding document into semantic store"
+      {...props}
+    >
+      Start Vector Ingestion
     </Button>
   );
 }
