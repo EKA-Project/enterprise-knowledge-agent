@@ -26,7 +26,22 @@ export const statusMeta = {
     type: 'danger',
   },
 };
-
+export function PinnedByAdmin({ className = 'p-1' }) {
+  return (
+    <span
+      className={`group relative text-(--status-danger) ${className}`}
+      aria-label="Pinned by admin"
+    >
+      <Pin size={14} className="fill-current" />
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-md bg-(--text-primary) px-2 py-1 text-[10px] font-semibold text-(--bg-surface) opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+      >
+        Pinned by admin
+      </span>
+    </span>
+  );
+}
 // The parent still passes the prop as `document`; it is renamed to `doc` here
 // so it does not hide the browser's global `document`.
 function DocumentCard({
@@ -69,10 +84,10 @@ function DocumentCard({
       className="flex cursor-pointer flex-col rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-all hover:border-(--accent-highlight) hover:shadow-(--shadow-md)"
     >
       <div className="flex items-start gap-4">
-      <Badge
-        format={doc.format}
-        className="doc-mono !h-10 !w-10 !rounded-2xl !text-[11px]"
-      />
+        <Badge
+          format={doc.format}
+          className="doc-mono !h-10 !w-10 !rounded-2xl !text-[11px]"
+        />
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
@@ -91,17 +106,12 @@ function DocumentCard({
                     aria-label={doc.isPinned ? 'Unpin document' : 'Pin document'}
                     aria-pressed={Boolean(doc.isPinned)}
                     onClick={stop(togglePin)}
-                    className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted) hover:text-[#e5484d]'
-                      }`}
+className={`cursor-pointer rounded-md p-1 ${doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted)'}`}
                   >
                     <Pin size={14} className={doc.isPinned ? 'fill-current' : 'group-hover:fill-current'} />
                   </button>
                 ) : (
-                  doc.isPinned && (
-                    <span className="p-1 text-[#e5484d]" title="Pinned by admin" aria-label="Pinned by admin">
-                      <Pin size={14} className="fill-current" />
-                    </span>
-                  )
+                  doc.isPinned && <PinnedByAdmin />
                 )}
 
                 <button
@@ -109,11 +119,12 @@ function DocumentCard({
                   aria-label={doc.isBookmarked ? 'Remove bookmark' : 'Bookmark document'}
                   aria-pressed={Boolean(doc.isBookmarked)}
                   onClick={stop(toggleSave)}
-                  className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isBookmarked ? 'text-[#f39c0a]' : 'text-(--text-muted) hover:text-[#f39c0a]'
+                  className={`cursor-pointer rounded-md p-1  ${doc.isBookmarked ? 'text-[#f39c0a]' : 'text-(--text-muted) hover:text-[#f39c0a]'
                     }`}
                 >
                   <Bookmark size={14} className={doc.isBookmarked ? 'fill-current' : 'group-hover:fill-current'} />
                 </button>
+
 
                 <DocumentCardMenu
                   doc={doc}

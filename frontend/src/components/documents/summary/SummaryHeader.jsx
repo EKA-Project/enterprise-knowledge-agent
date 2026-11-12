@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon, Bookmark, Pin } from 'lucide-react';
 import SummaryKebabMenu from './SummaryKebabMenu';
-import { statusMeta } from '../shared/DocumentCard';
 import Badge from '../../common/Badge.jsx';
 import '../../../styles/Document.css';
-
+import { statusMeta, PinnedByAdmin } from '../shared/DocumentCard';
 const circle =
-  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-medium) bg-white transition-colors hover:bg-[#e1f0fa]';
-
+  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-medium) bg-(--bg-surface) transition-colors hover:bg-(--bg-surface-subtle)';
 // Top card. Admin gets bookmark / pin / kebab next to the link button.
 function SummaryHeader({
   doc, adminMode, archived, saved, pinned,
@@ -38,8 +36,8 @@ function SummaryHeader({
               type={status.type}
               size="sm"
               className={`!px-3 !py-1 !text-[11px] ${doc.status === 'Indexed'
-                  ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
-                  : status.style
+                ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
+                : status.style
                 }`}
             />
           )}
@@ -77,36 +75,49 @@ function SummaryHeader({
           <LinkIcon size={14} />
         </button>
 
+        <button
+          type="button"
+          aria-label={saved ? 'Remove bookmark' : 'Bookmark document'}
+          aria-pressed={saved}
+          onClick={onToggleSave}
+          className={`${circle} ${saved ? 'text-[#f39c0a]' : 'text-(--text-secondary)'}`}
+        >
+          <Bookmark size={14} className={saved ? 'fill-current' : ''} />
+        </button>
+
+        {adminMode ? (
+
+
+
+          <button
+            type="button"
+            aria-label={pinned ? 'Unpin document' : 'Pin document'}
+            aria-pressed={pinned}
+            onClick={onTogglePin}
+            className={`${circle} text-[#e5484d]`}
+          >
+            <Pin size={14} className={pinned ? 'fill-current' : ''} />
+          </button>
+
+
+
+
+
+
+
+
+        ) : (
+          pinned && <PinnedByAdmin className={`${circle} !cursor-default`} />
+        )}
+
         {adminMode && (
-          <>
-            <button
-              type="button"
-              aria-label={saved ? 'Remove bookmark' : 'Bookmark document'}
-              aria-pressed={saved}
-              onClick={onToggleSave}
-              className={`${circle} ${saved ? 'text-[#f39c0a]' : 'text-(--text-secondary)'}`}
-            >
-              <Bookmark size={14} className={saved ? 'fill-current' : ''} />
-            </button>
-
-            <button
-              type="button"
-              aria-label={pinned ? 'Unpin document' : 'Pin document'}
-              aria-pressed={pinned}
-              onClick={onTogglePin}
-              className={`group ${circle} ${pinned ? 'text-[#e5484d]' : 'text-(--text-secondary) hover:text-[#e5484d]'}`}
-            >
-              <Pin size={14} className={pinned ? 'fill-current' : 'group-hover:fill-current'} />
-            </button>
-
-            <SummaryKebabMenu
-              onEdit={onEdit}
-              onReindex={onReindex}
-              onArchive={onArchive}
-              onDelete={onDelete}
-              archived={archived}
-            />
-          </>
+          <SummaryKebabMenu
+            onEdit={onEdit}
+            onReindex={onReindex}
+            onArchive={onArchive}
+            onDelete={onDelete}
+            archived={archived}
+          />
         )}
       </div>
     </header>
