@@ -6,18 +6,20 @@ import StorageIndicator from './StorageIndicator.jsx';
 import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
 import { useDocumentCountText } from '../shared/documentResults.js';
+import pageMetadata from '../../../config/pageMetadata.js';
 
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
   const countText = useDocumentCountText(documents.length);
+  const { documents: documentMeta } = pageMetadata;
 
   return (
     <>
       {/* Admin header: hero, then storage + ingest button in one row below it */}
       <PageHero
         eyebrow={`Ingestion Repository / ${countText}`}
-        title="Raw sources, structured."
-        description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
+        title={documentMeta.title}
+        description={documentMeta.description}
       />
 
       <div className="mb-4  flex flex-wrap items-center gap-3">
