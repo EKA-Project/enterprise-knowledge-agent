@@ -49,17 +49,18 @@ export default function KnowledgeBasePage() {
               </Button>
             )}
 
-            <Link
-              to="/documents"
-              className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-colors duration-200 hover:border-(--border-medium)"
-            >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-colors duration-200 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
-                <LayoutGrid size={12} />
-              </span>
-              Browse all
-            </Link>
+<Link
+  to="/documents"
+  className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-all duration-200 hover:-translate-y-0.5 hover:border-(--border-medium)"
+>
+  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-all duration-200 group-hover:-translate-y-0.5 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
+    <LayoutGrid size={12} />
+  </span>
+  Browse all
+</Link>
           </>
         }
+        
       />
 
       <KnowledgeStats stats={knowledgeStats} />
