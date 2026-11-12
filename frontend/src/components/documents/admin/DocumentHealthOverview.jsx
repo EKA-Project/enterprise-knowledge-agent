@@ -12,13 +12,14 @@ const BADGE_TYPE = {
 };
 
 // Ring made of one arc per status, drawn clockwise from 12 o'clock.
+// `activeKey`: that arc stays full, the others fade (hover / selected status).
 function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
   const radius = 42;
   const circumference = 2 * Math.PI * radius;
   let offset = 0;
 
   return (
-    <div className="relative h-[99px] w-[99px] shrink-0">
+    <div className="relative h-[120px] w-[120px] shrink-0">
       <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" aria-hidden="true">
         {items.map((item) => {
           const length = (item.count / total) * circumference;
@@ -42,7 +43,7 @@ function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
         })}
       </svg>
       <span
-        className="absolute inset-0 flex items-center justify-center font-serif text-[22px] font-black"
+        className="absolute inset-0 flex items-center justify-center font-serif text-[26px] font-black"
         style={{ color: centerColor }}
       >
         {centerText}
@@ -76,9 +77,9 @@ function DocumentHealthOverview() {
     : `Real-time ingestion & health telemetry across ${total} total repository files.`;
 
   return (
-    <section className="mb-6 flex flex-col gap-2 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
+    <section className="mb-6 flex flex-col gap-5 rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) px-9 py-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
       {/* Left: ring + title */}
-      <div className="flex items-center gap-5 lg:basis-[460px] lg:shrink-0">
+      <div className="flex items-center gap-7 lg:basis-[556px] lg:shrink-0">
         <HealthDonut
           items={documentHealth}
           total={total}
@@ -86,15 +87,15 @@ function DocumentHealthOverview() {
           centerColor={shown ? shown.color : 'var(--text-primary)'}
           activeKey={shown?.key}
         />
-        <div className="min-w-0 max-w-[300px]">
+        <div className="min-w-0 max-w-[400px]">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-serif text-[19px] font-bold leading-tight text-(--text-primary)">
+            <h2 className="font-serif text-[21px] font-bold leading-tight text-(--text-primary)">
               Document Health Overview
             </h2>
             <Badge text={badgeText} type={badgeType} size="sm" />
           </div>
           <p
-            className="mt-1.5 text-[11px] leading-4 text-(--text-muted)"
+            className="mt-1.5 text-[13px] leading-5 text-(--text-muted)"
             style={shown ? { color: shown.color } : undefined}
           >
             {subtitle}
@@ -103,9 +104,10 @@ function DocumentHealthOverview() {
       </div>
 
       {/* Right: one clickable card per status */}
-      <div className="grid flex-8 grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid flex-1 grid-cols-2 gap-3.5 lg:grid-cols-4">
         {documentHealth.map((item) => {
           const isActive = activeStatus === item.label;
+          const isHot = isActive || hoveredKey === item.key;
           return (
             <button
               key={item.key}
@@ -116,13 +118,9 @@ function DocumentHealthOverview() {
               onMouseLeave={() => setHoveredKey(null)}
               onFocus={() => setHoveredKey(item.key)}
               onBlur={() => setHoveredKey(null)}
-              style={{
-                borderColor: isActive || hoveredKey === item.key ? item.color : undefined,
-              }}
-              className={`min-h-[86px] cursor-pointer rounded-xl border px-4 py-1.5 text-left transition-colors ${
-                isActive || hoveredKey === item.key
-                  ? 'bg-white'
-                  : 'border-transparent bg-[#e1f0fa]'
+              style={{ borderColor: isHot ? item.color : undefined }}
+              className={`min-h-[105px] cursor-pointer rounded-xl border px-[18px] py-[17px] text-left transition-colors ${
+                isHot ? 'bg-white' : 'border-transparent bg-[#e1f0fa]'
               }`}
             >
               <div className="flex items-center justify-between gap-">

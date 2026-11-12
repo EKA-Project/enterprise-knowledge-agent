@@ -361,3 +361,43 @@ export async function deleteDocument(id) {
   db.related = db.related.filter((r) => r.documentId !== id && r.relatedDocumentId !== id); // mock-only table
   return { id };
 }
+
+// ============================================================================
+// PASTE INTO src/services/documentService.js  (for the teammate who owns services)
+// Two functions the Documents, Summary and Storage pages need. Written in the same style as
+// the rest of the file. Uses helpers that already exist there: delay, nowIso, clone, paginate,
+// ServiceError, db, canReadDocument, getMockCurrentUser, getManageableDocument, DEFAULT_LIMIT.
+//
+// Rules used (blueprint 4.3 and README):
+//  - archived documents are readable only by the admin and that department's manager
+//    (canReadDocument already enforces this);
+//  - restoring needs the same right as archiving (getManageableDocument);
+//  - the pin is NOT restored: archiving clears it, so a restored document is simply unpinned.
+// ============================================================================
+
+// GET /documents?archived=true   (Recycle Bin on the Storage page)
+// Newest archive first. An employee gets an empty list, because they cannot read archived documents.
+/**
+ * @param {{limit?: number, offset?: number}} [paging]
+ * @returns {Promise<{total: number, limit: number, offset: number, items: import('../types').Document[]}>}
+ */
+export async function getArchivedDocuments({ limit = DEFAULT_LIMIT, offset = 0 } = {}) {
+  await delay();
+  const user = getMockCurrentUser();
+  const matches = db.documents
+    .filter((doc) => doc.archivedAt && canReadDocument(user, doc))
+    .sort((a, b) => b.archivedAt.localeCompare(a.archivedAt) || a.id.localeCompare(b.id));
+  return clone(paginate(matches, limit, offset));
+}
+
+// POST /documents/{id}/unarchive
+// Puts the document back into every list and count. Its pin is not restored.
+/** @returns {Promise<import('../types').Document>} */
+export async function unarchiveDocument(id) {
+  await delay();
+  const doc = getManageableDocument(id);
+  if (!doc.archivedAt) throw new ServiceError(409, "The document is not archived");
+
+  Object.assign(doc, { archivedAt: null, updatedAt: nowIso() });
+  return clone(doc);
+}

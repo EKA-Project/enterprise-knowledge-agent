@@ -1,4 +1,4 @@
-import { Columns2, Sparkles } from 'lucide-react';
+import { Columns2, Upload } from 'lucide-react';
 import PageHero from '../../common/PageHero.jsx';
 import DocumentContent from '../shared/DocumentContent.jsx';
 import { documents } from '../shared/DocumentData';
@@ -6,7 +6,6 @@ import StorageIndicator from './StorageIndicator.jsx';
 import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
 import { useDocumentCountText } from '../shared/documentResults.js';
-import { Upload } from 'lucide-react';
 
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
@@ -22,16 +21,16 @@ function AdminDocument() {
           description="Every playbook, compliance standard, and contract that feeds EKA's intelligence."
         />
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-4 flex flex-wrap items-center gap-5">
           <StorageIndicator />
 
           {/* Not wired yet: compare / redline flow comes later */}
           <button
             type="button"
-            className="inline-flex h-[34px] cursor-pointer items-center gap-2 rounded-full border border-[#cfe3f3] bg-white pl-2 pr-4 text-xs font-semibold text-(--text-primary) transition-colors hover:bg-[#e1f0fa]"
+            className="inline-flex h-10 cursor-pointer items-center gap-2.5 rounded-full border border-[#cfe3f3] bg-white pl-2 pr-4 text-[13px] font-semibold text-(--text-primary) transition-colors hover:bg-[#e1f0fa]"
           >
-            <span className="flex h-5 w-5 items-center justify-center rounded bg-[#e1f0fa] text-[#1f718e]">
-              <Columns2 size={11} />
+            <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-[#e1f0fa] text-[#1f718e]">
+              <Columns2 size={13} />
             </span>
             Compare &amp; Redline
           </button>
@@ -40,10 +39,10 @@ function AdminDocument() {
             type="button"
             onClick={openUpload}
             disabled={!canUpload}
-            className="ml-auto inline-flex h-[34px] cursor-pointer items-center gap-2 rounded-full bg-(--primary) pl-1.5 pr-3.5 text-xs font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-10 cursor-pointer items-center gap-2.5 rounded-full bg-(--primary) pl-1.5 pr-4 text-[13px] font-semibold text-(--primary-contrast) transition-colors hover:bg-(--primary-hover) disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/25">
-              <Upload size={11} />
+            <span className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-white/25">
+              <Upload size={13} />
             </span>
             Ingest Document
           </button>
