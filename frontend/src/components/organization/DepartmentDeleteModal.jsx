@@ -19,8 +19,8 @@ export default function DepartmentDeleteModal({ dept, lead, onClose, onConfirm }
   };
 
   const impacts = [
-    `${dept.members} active member(s) will lose their department assignment.`,
-    `${dept.docs} document(s) will become unassigned.`,
+    `${dept.memberCount} active member(s) will lose their department assignment.`,
+    `${dept.documentCount} document(s) will become unassigned.`,
     lead ? `Designated Lead Manager (${lead.name}) privileges will be revoked.` : null,
     "Department-scoped knowledge and telemetry will be dissolved.",
   ].filter(Boolean);

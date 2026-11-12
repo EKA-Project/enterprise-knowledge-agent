@@ -27,8 +27,7 @@ export default function UserManagementTab({ users, departments, onView, onEdit, 
   const rows = filtered.slice((safePage - 1) * perPage, safePage * perPage);
 
   const deptByName = useMemo(() => Object.fromEntries(departments.map((d) => [d.name, d])), [departments]);
-  const getDept = (name) => deptByName[name] ?? { icon: "briefcase", tone: "indigo" };
-
+  const getDept = (name) => deptByName[name] ?? { iconKey: "briefcase", colorKey: "slate" };
   const changeFilters = (patch) => {
     setFilters((prev) => ({ ...prev, ...patch }));
     setPage(1);

@@ -13,7 +13,6 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
   const [email, setEmail] = useState("");
   const [department, setDepartment] = useState(departmentNames[0] ?? "");
   const [role, setRole] = useState("Employee");
-  const [access, setAccess] = useState("Basic");
   const [errors, setErrors] = useState({});
   const closeRef = useRef(() => {});
 
@@ -26,9 +25,9 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
     setErrors(next);
     if (Object.keys(next).length) return;
 
-    onSubmit({ name: name.trim(), email: email.trim(), department, role, access });
-    closeRef.current();
-  };
+      onSubmit({ name: name.trim(), email: email.trim(), department, role });
+      closeRef.current();
+    };
 
   const Error = ({ text }) => (text ? <span role="alert" className="mt-1 block text-[12px] font-medium text-(--status-failure)">{text}</span> : null);
 
@@ -75,13 +74,6 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
             </select>
           </label>
         </div>
-
-        <label className="block">
-          <span className={label}>Access Level</span>
-          <select value={access} onChange={(e) => setAccess(e.target.value)} className={field}>
-            {ACCESS_LEVELS.map((a) => <option key={a}>{a}</option>)}
-          </select>
-        </label>
       </form>
     </Modal>
   );

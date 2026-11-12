@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { CancelButton } from "../common/ActionButtons";
-import {  getInitials } from "./OrganizationData";
+import {getInitials} from "./OrganizationData";
 
 const label = "text-[13.5px] font-semibold text-(--text-primary)";
 const hint = "text-[11px] text-(--text-muted)";
@@ -23,7 +23,6 @@ const STATUS_OPTIONS = [
 export default function UserEditModal({ user, departmentNames, onClose, onSubmit }) {
   const [department, setDepartment] = useState(user.department);
   const [role, setRole] = useState(user.role);
-  const [access, setAccess] = useState(user.access);
   const [status, setStatus] = useState(user.status);
   const closeRef = useRef(() => {});
 
@@ -32,7 +31,7 @@ export default function UserEditModal({ user, departmentNames, onClose, onSubmit
 
   const submit = (e) => {
     e.preventDefault();
-    onSubmit({ department, role, access, status });
+    onSubmit({ department, role, status });
     closeRef.current();
   };
 
@@ -81,15 +80,6 @@ export default function UserEditModal({ user, departmentNames, onClose, onSubmit
           </select>
         </label>
 
-        <label className="block">
-          <span className="flex items-baseline justify-between">
-            <span className={label}>Access Level</span>
-            <span className={hint}>(Basic, Restricted, Admin)</span>
-          </span>
-          <select value={access} onChange={(e) => setAccess(e.target.value)} className={field}>
-            {ACCESS_LEVELS.map((a) => <option key={a}>{a}</option>)}
-          </select>
-        </label>
 
         <label className="block">
           <span className={label}>Account Status</span>

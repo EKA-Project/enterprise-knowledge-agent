@@ -30,7 +30,7 @@ export default function UserDirectoryTable({
       <div className="flex flex-wrap items-start justify-between gap-3 px-6 pb-4 pt-6">
         <div>
           <h3 className="font-(family-name:--font-serif) text-[22px] font-bold text-(--text-primary)">User Directory ({total})</h3>
-          <p className="mt-1 text-[12.5px] text-(--text-muted)">Manage member roles, access levels, and account statuses.</p>
+          <p className="mt-1 text-[12.5px] text-(--text-muted)">Manage member roles and account statuses.</p>
         </div>
         <div className="flex items-center gap-3">
   <label className="flex items-center gap-2 text-[12px] text-(--text-muted)">
@@ -90,7 +90,7 @@ export default function UserDirectoryTable({
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <DepartmentIcon icon={dept.icon} tone={dept.tone} />
+                        <DepartmentIcon colorKey={dept.colorKey} iconKey={dept.iconKey} />
                         <span className="truncate text-[13px] font-semibold text-(--text-primary)">{u.department}</span>
                       </div>
                       {u.leadOf && (

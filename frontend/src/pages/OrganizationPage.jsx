@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Download, Plus } from "lucide-react";
 import "../styles/organization.css";
@@ -17,10 +17,10 @@ import UserInviteModal from "../components/organization/UserInviteModal";
 import UserViewModal from "../components/organization/UserViewModal";
 import UserEditModal from "../components/organization/UserEditModal";
 import UserTerminateModal from "../components/organization/UserTerminateModal";
-import {
-  INITIAL_DEPARTMENTS, INITIAL_USERS, TEAM_MEMBERS,
-  buildStructureCsv, buildUsersCsv, getMember,
-} from "../components/organization/OrganizationData";
+import { buildStructureCsv, buildUsersCsv, toUserRow } from "../components/organization/OrganizationData";
+import useApi from "../hooks/useApi.js";
+import { getDepartments, assignManager, updateDepartment, createDepartment } from "../services/departmentService.js";
+import { getUsers } from "../services/userService.js";
 
 const HEADERS = {
   departments: {
@@ -31,7 +31,7 @@ const HEADERS = {
   directory: {
     eyebrow: "Organization directory",
     title: "User Management",
-    description: "Manage team roles, access levels (Basic, Restricted, Admin), and account statuses.",
+    description: "Manage team roles and account statuses.",
   },
 };
 
@@ -52,8 +52,33 @@ export default function OrganizationPage() {
   const tab = searchParams.get("tab") === "directory" ? "directory" : "departments";
   // ↑ The tab lives in the URL (?tab=directory), so the Topbar can read it too.
 
-  const [departments, setDepartments] = useState(INITIAL_DEPARTMENTS);
-  const [users, setUsers] = useState(INITIAL_USERS);
+  // Read from the services. useApi re-fetches when the role changes.
+    const { data, loading, error, reload } = useApi(async () => {
+      const [departments, users] = await Promise.all([getDepartments(), getUsers()]);
+    return { departments, users };
+  });
+
+  // TEMP bridge: local copies so the old write handlers keep working until
+  // each one is moved to a service (Step 3 onwards).
+  const [departments, setDepartments] = useState([]);
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    if (data) {
+      setDepartments(data.departments);
+      setUsers(data.users.map((u) => toUserRow(u, data.departments)));
+    }
+  }, [data]);
+
+  
+  const rawUsers = data?.users ?? [];
+  // replaces getMember(): the department's manager is a user
+  const getLead = (id) => rawUsers.find((u) => u.id === id) ?? null;
+  // Who the service will accept as this department's manager. The modal's
+  // option text reads m.role and m.department, so those are filled in here.
+  const managerCandidates = (dept) =>
+    rawUsers
+      .filter((u) => u.role === "manager" && u.departmentId === dept.id && u.status === "active")
+      .map((u) => ({ ...u, role: "Manager", department: dept.name }));
   // modal: { type: "create" | "edit" | "assign" | "delete" | "invite" | "view" | "user-edit" | "terminate", dept?, user? }
   const [modal, setModal] = useState(null);
 
@@ -75,25 +100,39 @@ export default function OrganizationPage() {
   const changeTab = (id) => setSearchParams(id === "departments" ? {} : { tab: id }, { replace: true });
 
   // ---------- Departments ----------
-  const handleCreate = (data) => {
-    const dept = { id: `dept-${Date.now()}`, ...data, icon: "briefcase", tone: "indigo", members: data.leadId ? 1 : 0, docs: 0 };
-    setDepartments((prev) => [...prev, dept]);
-    pushToast(`🏢 Department "${data.name}" created successfully!`);
+  const handleCreate = async (data) => {
+    try {
+      await createDepartment(data);
+      reload();
+      pushToast(`🏢 Department "${data.name}" created successfully!`);
+    } catch (e) {
+      pushToast(e.message, "error"); // 403 for non-admins, 409 if the name or code exists
+    }
   };
-  const handleEdit = (id, data) => {
-    setDepartments((prev) => prev.map((d) => (d.id === id ? { ...d, ...data, leadId: d.leadId } : d)));
-    pushToast(`✏️ Updated department "${data.name}"`);
+   const handleEdit = async (id, data) => {
+    try {
+      await updateDepartment(id, data);
+      reload();
+      pushToast(`✏️ Updated department "${data.name}"`);
+    } catch (e) {
+      pushToast(e.message, "error");
+    }
   };
-  const handleAssign = (dept, memberId) => {
-    setDepartments((prev) => prev.map((d) => (d.id === dept.id ? { ...d, leadId: memberId } : d)));
-    pushToast(`👤 Assigned Manager to ${dept.name}`);
+  const handleAssign = async (dept, userId) => {
+    try {
+      await assignManager(dept.id, userId);
+      reload(); // re-reads departments and users from the service
+      pushToast(`👤 Assigned Manager to ${dept.name}`);
+    } catch (e) {
+      pushToast(e.message, "error"); // e.g. 403 when the role is not Admin
+    }
   };
   const handleDelete = (dept) => {
     setDepartments((prev) => prev.filter((d) => d.id !== dept.id));
     pushToast(`🗑️ Deleted department "${dept.name}"`, "info");
   };
   const exportStructureCsv = () => {
-    download(buildStructureCsv(departments), "eka-department-structure.csv");
+    download(buildStructureCsv(departments, getLead), "eka-department-structure.csv");
     pushToast("📥 Structure exported as eka-department-structure.csv");
   };
 
@@ -112,7 +151,7 @@ export default function OrganizationPage() {
         return next;
       }),
     );
-    pushToast("User settings & access level updated successfully");
+    pushToast("User settings updated successfully");
   };
   const handleTerminate = (user) => {
     setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, status: "Terminated" } : u)));
@@ -128,6 +167,8 @@ export default function OrganizationPage() {
     pushToast("📥 Exported Team Directory CSV");
   };
 
+  if (loading) return <p className="p-6 text-(--text-muted)">Loading organization…</p>;
+  if (error) return <p className="p-6 text-(--status-danger)">Could not load: {error.message}</p>;
   const header = HEADERS[tab];
   const { dept: activeDept, user: activeUser } = modal ?? {};
   const departmentNames = departments.map((d) => d.name);
@@ -171,7 +212,7 @@ export default function OrganizationPage() {
       {tab === "departments" ? (
         <DepartmentManagementTab
           departments={departments}
-          getLead={getMember}
+          getLead={getLead}
           onCreate={() => setModal({ type: "create" })}
           onEdit={(id) => openDeptModal("edit", id)}
           onDelete={(id) => openDeptModal("delete", id)}
@@ -190,21 +231,21 @@ export default function OrganizationPage() {
       )}
 
       {/* ----- Department dialogs ----- */}
-      {modal?.type === "create" && <DepartmentCreateModal members={TEAM_MEMBERS} onClose={closeModal} onSubmit={handleCreate} />}
+      {modal?.type === "create" && <DepartmentCreateModal onClose={closeModal} onSubmit={handleCreate} />}
       {modal?.type === "edit" && activeDept && (
         <DepartmentEditModal initial={activeDept} onClose={closeModal} onSubmit={(data) => handleEdit(activeDept.id, data)} />
       )}
       {modal?.type === "assign" && activeDept && (
         <DepartmentAssignLeadModal
           dept={activeDept}
-          currentLead={getMember(activeDept.leadId)}
-          members={TEAM_MEMBERS}
+          currentLead={getLead(activeDept.managerId)}
+          members={managerCandidates(activeDept)}
           onClose={closeModal}
           onConfirm={(memberId) => handleAssign(activeDept, memberId)}
         />
       )}
       {modal?.type === "delete" && activeDept && (
-        <DepartmentDeleteModal dept={activeDept} lead={getMember(activeDept.leadId)} onClose={closeModal} onConfirm={() => handleDelete(activeDept)} />
+        <DepartmentDeleteModal dept={activeDept} lead={getLead(activeDept.managerId)} onClose={closeModal} onConfirm={() => handleDelete(activeDept)} />
       )}
 
       {/* ----- User dialogs ----- */}

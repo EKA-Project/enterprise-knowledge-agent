@@ -1,7 +1,7 @@
-import { Briefcase, Code, FileText, Layers, SquarePen, ShieldCheck, Trash2, TrendingUp, Users } from "lucide-react";
+import { SquarePen, Trash2 } from "lucide-react";
 import { getInitials } from "./OrganizationData";
+import { getDepartmentTheme } from "../../config/departmentTheme.js";
 // Tailwind class for the monospace font used in badges and labels
-const ICONS = { code: Code, users: Users, layers: Layers, shield: ShieldCheck, trend: TrendingUp, file: FileText, briefcase: Briefcase };
 // Tailwind classes for the department tone colors (background, border, text)
 const TONES = {
   teal: "bg-[#dcf4ee] border-[#bfe8dd] text-[#0f8f7a]",
@@ -17,7 +17,7 @@ const iconBtn =
 
   // DepartmentCard
 export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete, onReassign, onViewDocs }) {
-  const Icon = ICONS[dept.icon] ?? Briefcase;
+const { Icon, color, softBg, border } = getDepartmentTheme(dept.colorKey, dept.iconKey);
 // Tailwind class for the monospace font used in badges and labels
   return (
     <article
@@ -25,9 +25,10 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
       className="org-rise group flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
         <div className="flex items-start gap-4">
           <span
-            className={`grid size-12 shrink-0 place-items-center rounded-xl border text-[20px] transition duration-300 group-hover:scale-110 group-hover:shadow-(--shadow-md) ${TONES[dept.tone] ?? TONES.indigo}`}>
-            {dept.emoji ? <span aria-hidden="true">{dept.emoji}</span> : <Icon size={20} aria-hidden="true" />}
-        </span>
+            style={{ color, background: softBg, borderColor: border }}
+            className="grid size-12 shrink-0 place-items-center rounded-xl border transition duration-300 group-hover:scale-110 group-hover:shadow-(--shadow-md)">
+            <Icon size={20} aria-hidden="true" />
+          </span>
         <div className="min-w-0 flex-1">
       <h3
   title={dept.name}
@@ -95,8 +96,8 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
       <div className="mt-auto pt-8">
           <div className="flex items-center justify-between gap-3 border-t border-(--border-subtle) pt-5 text-[12px] text-(--text-muted)">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span><span aria-hidden="true">👥</span> <b className="text-(--text-primary)">{dept.members}</b> members</span>
-            <span><span aria-hidden="true">📄</span> <b className="text-(--text-primary)">{dept.docs}</b> scoped docs</span>
+            <span><span aria-hidden="true">👥</span> <b className="text-(--text-primary)">{dept.memberCount}</b> members</span>
+            <span><span aria-hidden="true">📄</span> <b className="text-(--text-primary)">{dept.documentCount}</b> scoped docs</span>
           </div>
           <button
             type="button"
