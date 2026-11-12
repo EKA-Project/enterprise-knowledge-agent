@@ -7,22 +7,47 @@ import {
   Copy,
   History,
   Lock,
-  Paintbrush,
   RotateCcw,
   Search,
   Zap,
 } from 'lucide-react';
 
 import { dupGroups } from './StorageData';
-import { DeptPill, StatusPill, TypeTile } from './StorageBits';
+import { DeptPill, StatusPill } from './StorageBits';
 import CustomThresholdModal from './CustomThresholdModal';
+import Pagination from '../../common/Pagination.jsx';
+import Badge from '../../common/Badge.jsx';
 import '../../../styles/Document.css';
 
 const TABS = [
-  { key: 'large', label: 'Large files', icon: Archive, on: 'scale-[1.08] bg-[#0284c7] text-white', off: 'bg-[rgba(2,132,199,0.09)] text-[#0284c7]' },
-  { key: 'idle', label: 'Not opened recently', icon: History, on: 'scale-[1.08] bg-[#d97706] text-white', off: 'bg-[rgba(217,119,6,0.09)] text-[#d97706]' },
-  { key: 'failed', label: 'Failed ingestions', icon: AlertTriangle, on: 'scale-[1.08] bg-[#dc2626] text-white', off: 'bg-[rgba(220,38,38,0.09)] text-[#dc2626]' },
-  { key: 'dupes', label: 'Duplicates', icon: Copy, on: 'scale-[1.08] bg-[#6366f1] text-white', off: 'bg-[rgba(99,102,241,0.09)] text-[#6366f1]' },
+  {
+    key: 'large',
+    label: 'Large files',
+    icon: Archive,
+    on: 'scale-[1.08] bg-[#0284c7] text-white',
+    off: 'bg-[rgba(2,132,199,0.09)] text-[#0284c7]',
+  },
+  {
+    key: 'idle',
+    label: 'Not opened recently',
+    icon: History,
+    on: 'scale-[1.08] bg-[#d97706] text-white',
+    off: 'bg-[rgba(217,119,6,0.09)] text-[#d97706]',
+  },
+  {
+    key: 'failed',
+    label: 'Failed ingestions',
+    icon: AlertTriangle,
+    on: 'scale-[1.08] bg-[#dc2626] text-white',
+    off: 'bg-[rgba(220,38,38,0.09)] text-[#dc2626]',
+  },
+  {
+    key: 'dupes',
+    label: 'Duplicates',
+    icon: Copy,
+    on: 'scale-[1.08] bg-[#6366f1] text-white',
+    off: 'bg-[rgba(99,102,241,0.09)] text-[#6366f1]',
+  },
 ];
 
 const LARGE_CHIPS = [10, 50, 100];
@@ -40,7 +65,8 @@ const SORTS = [
 const TH =
   'doc-mono px-3 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
 
-// `files` = active documents. `filter` = { mode: 'dept' | 'format', key } from the cards above.
+// `files` = active documents.
+// `filter` = { mode: 'dept' | 'format', key } from the cards above.
 function FreeUpCard({
   files,
   filter,
@@ -125,6 +151,7 @@ function FreeUpCard({
   const start = safePage * perPage;
   const visible = rows.slice(start, start + perPage);
   const selectable = visible.filter((f) => !f.isProtected);
+
   const allOnPage =
     selectable.length > 0 && selectable.every((f) => selected.has(f.id));
 
@@ -143,18 +170,16 @@ function FreeUpCard({
   };
 
   const chip = (on) =>
-    `doc-mono h-6 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${
-      on
-        ? 'bg-[#0a7bc4] text-white'
-        : 'text-[#44596a] hover:text-[#10283f]'
+    `doc-mono h-6 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${on
+      ? 'bg-[#0a7bc4] text-white'
+      : 'text-[#44596a] hover:text-[#10283f]'
     }`;
 
   return (
     <section
       id="free-up-card"
-      className={`overflow-hidden rounded-[23px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-7 pb-8 pt-[24px] shadow-(--shadow-sm) transition-shadow duration-500 ${
-        glow ? 'shadow-[0_0_0_5px_rgba(246,185,100,0.45)]' : ''
-      }`}
+      className={`overflow-hidden rounded-[23px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-7 pb-8 pt-[24px] shadow-(--shadow-sm) transition-shadow duration-500 ${glow ? 'shadow-[0_0_0_5px_rgba(246,185,100,0.45)]' : ''
+        }`}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
@@ -231,14 +256,18 @@ function FreeUpCard({
           </p>
         </div>
 
-        {/* Reclaimable Badge - Top Right */}
-        <span className="doc-mono inline-flex h-7 shrink-0 items-center gap-2 rounded-full border border-[#c4ecd9] bg-[#eefbf5] px-2 text-[11px] font-bold text-[#0f8f63]">
+        {/* Common Badge: Reclaimable */}
+        <Badge
+          type="success"
+          size="sm"
+          className="doc-mono h-7 shrink-0 gap-2"
+        >
           <Zap size={10} className="fill-current text-[#e8801a]" />
           {reclaim.toFixed(1)} MB Reclaimable
-        </span>
+        </Badge>
       </div>
 
-       {/* Tabs */}
+      {/* Tabs */}
       <div className="mt-5 flex flex-wrap gap-2 border-b border-(--border-subtle)">
         {TABS.map((t) => {
           const isOn = tab === t.key;
@@ -249,28 +278,28 @@ function FreeUpCard({
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
-              className={`group -mb-px flex cursor-pointer items-center gap-3 rounded-t-[8px] border-b-2 px-3 pb-2 pt-1.5 text-[13px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
-                isOn
+              className={`group -mb-px flex cursor-pointer items-center gap-3 rounded-t-[8px] border-b-2 px-3 pb-2 pt-1.5 text-[13px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${isOn
                   ? 'border-(--primary) bg-[rgba(2,132,199,0.03)] font-bold text-(--primary)'
                   : 'border-transparent font-semibold text-(--text-secondary) hover:bg-[rgba(0,0,0,0.02)] hover:text-(--text-primary)'
-              }`}
+                }`}
             >
               <span
-                className={`flex h-[22px] w-[22px] items-center justify-center rounded-[7px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
-                  isOn ? t.on : t.off
-                }`}
+                className={`flex h-[22px] w-[22px] items-center justify-center rounded-[7px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${isOn ? t.on : t.off
+                  }`}
               >
-                <Icon size={13} className="transition-transform duration-200 group-hover:-translate-y-px" />
+                <Icon
+                  size={13}
+                  className="transition-transform duration-200 group-hover:-translate-y-px"
+                />
               </span>
 
               {t.label}
 
               <span
-                className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-(--radius-pill) border px-2.5 text-[12px] font-bold [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
-                  isOn
+                className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-(--radius-pill) border px-2.5 text-[12px] font-bold [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${isOn
                     ? 'border-transparent bg-(--primary) text-white shadow-[0_1px_4px_rgba(2,132,199,0.3)]'
                     : 'border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary) group-hover:border-(--border-medium) group-hover:text-(--text-primary)'
-                }`}
+                  }`}
               >
                 {rowsFor(t.key).length}
               </span>
@@ -279,7 +308,7 @@ function FreeUpCard({
         })}
       </div>
 
-      {/* Summary + filters */}
+      {/* Summary + Filters */}
       <div className="mt-5 rounded-[18px] bg-(--primary-light) px-[15px] py-[11px]">
         <p className="text-[13px] text-[#44596a]">
           {count === 0 ? (
@@ -350,7 +379,9 @@ function FreeUpCard({
                   onClick={() => setCustomOpen(true)}
                   className={chip(customVal !== null)}
                 >
-                  {customVal !== null ? `> ${customVal} MB` : 'Custom ›'}
+                  {customVal !== null
+                    ? `> ${customVal} MB`
+                    : 'Custom ›'}
                 </button>
               )}
             </div>
@@ -385,250 +416,204 @@ function FreeUpCard({
       </div>
 
       {/* Table */}
+      <div className="mt-5 overflow-x-auto rounded-[14px] border border-(--border-subtle) bg-(--bg-surface)">
+        <table className="w-full min-w-[980px] text-left">
+          <thead className="bg-(--table-header-bg)">
+            <tr className="h-[48px]">
+              <th className="w-11 px-4">
+                <input
+                  type="checkbox"
+                  checked={allOnPage}
+                  onChange={toggleAll}
+                  disabled={selectable.length === 0}
+                  className="h-[16px] w-[16px] cursor-pointer accent-(--primary)"
+                />
+              </th>
 
-{/* Table */}
-<div className="mt-5 overflow-x-auto rounded-[14px] border border-(--border-subtle) bg-(--bg-surface)">
-  <table className="w-full min-w-[980px] text-left">
-    <thead className="bg-(--table-header-bg)">
-      <tr className="h-[48px]">
-        <th className="w-11 px-4">
-          <input
-            type="checkbox"
-            checked={allOnPage}
-            onChange={toggleAll}
-            disabled={selectable.length === 0}
-            className="h-[16px] w-[16px] cursor-pointer accent-(--primary)"
-          />
-        </th>
+              <th className={TH}>Type</th>
+              <th className={TH}>Document Name</th>
+              <th className={TH}>Department / Category</th>
+              <th className={TH}>Size</th>
+              <th className={TH}>Last Opened</th>
+              <th className={TH}>Last Cited</th>
+              <th className={TH}>Status</th>
+            </tr>
+          </thead>
 
-        <th className={TH}>Type</th>
-        <th className={TH}>Document Name</th>
-        <th className={TH}>Department / Category</th>
-        <th className={TH}>Size</th>
-        <th className={TH}>Last Opened</th>
-        <th className={TH}>Last Cited</th>
-        <th className={TH}>Status</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {visible.length === 0 && (
-        <tr>
-          <td
-            colSpan={8}
-            className="py-14 text-center text-[15px] text-(--text-muted)"
-          >
-            Nothing to clean up here.
-          </td>
-        </tr>
-      )}
-
-      {visible.map((f, i) => {
-        const isFirstOfGroup =
-          tab === 'dupes' && f.group !== visible[i - 1]?.group;
-
-        const grp = rows.filter((r) => r.group === f.group);
-
-        return (
-          <Fragment key={f.id}>
-            {isFirstOfGroup && (
+          <tbody>
+            {visible.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-3 pb-1 pt-3">
-                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-(--border-medium) border-l-[3px] border-l-(--primary) bg-(--primary-light) px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-(--primary-light) text-(--primary)">
-                        <ClipboardList size={15} />
-                      </span>
-
-                      <div>
-                        <p className="text-[14px] font-semibold text-(--text-primary)">
-                          Duplicate Group: {dupGroups[f.group].title}
-                        </p>
-
-                        <p className="doc-mono text-[10.5px] text-(--text-muted)">
-                          {dupGroups[f.group].note}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="doc-mono rounded-full border border-(--border-medium) bg-(--primary-light) px-3 py-1 text-[11px] font-bold text-(--primary)">
-                        {grp.length} Copies Detected
-                      </span>
-
-                      <span className="doc-mono rounded-full border border-(--border-medium) bg-(--status-success-bg) px-3 py-1 text-[11px] font-bold text-(--status-success)">
-                        +
-                        {grp
-                          .reduce((s, r) => s + r.sizeMb, 0)
-                          .toFixed(1)}{' '}
-                        MB Reclaimable
-                      </span>
-                    </div>
-                  </div>
+                <td
+                  colSpan={8}
+                  className="py-14 text-center text-[15px] text-(--text-muted)"
+                >
+                  Nothing to clean up here.
                 </td>
               </tr>
             )}
 
-            <tr
-              className={`border-t border-(--border-subtle) ${
-                selected.has(f.id)
-                  ? 'bg-(--primary-light)'
-                  : 'bg-(--bg-surface) hover:bg-(--bg-surface-subtle)'
-              }`}
-            >
-              <td className="px-4 py-[20px]">
-                <input
-                  type="checkbox"
-                  checked={selected.has(f.id)}
-                  disabled={f.isProtected}
-                  onChange={() => toggleOne(f.id)}
-                  className="h-[18px] w-[18px] cursor-pointer accent-(--primary) disabled:cursor-not-allowed disabled:opacity-30"
-                />
-              </td>
+            {visible.map((f, i) => {
+              const isFirstOfGroup =
+                tab === 'dupes' && f.group !== visible[i - 1]?.group;
 
-              <td className="px-1">
-                <TypeTile type={f.type} />
-              </td>
+              const grp = rows.filter((r) => r.group === f.group);
 
-              <td className="px-1">
-                <div className="flex items-center gap-3">
-                  <div className="min-w-0">
-                    <p className="max-w-[330px] truncate text-[12.5px] font-semibold text-(--text-primary)">
-                      {f.name}
-                    </p>
+              return (
+                <Fragment key={f.id}>
+                  {isFirstOfGroup && (
+                    <tr>
+                      <td colSpan={8} className="px-3 pb-1 pt-3">
+                        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-(--border-medium) border-l-[3px] border-l-(--primary) bg-(--primary-light) px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-(--primary-light) text-(--primary)">
+                              <ClipboardList size={15} />
+                            </span>
 
-                    <p className="doc-mono max-w-[310px] truncate text-[10px] text-(--text-muted)">
-                      {f.file}
-                    </p>
-                  </div>
+                            <div>
+                              <p className="text-[14px] font-semibold text-(--text-primary)">
+                                Duplicate Group: {dupGroups[f.group].title}
+                              </p>
 
-                  {f.isProtected && (
-                    <span className="group/p relative shrink-0">
-                      <span className="doc-mono inline-flex items-center gap-1 rounded-full border border-(--border-medium) bg-(--bg-surface-subtle) px-2.5 py-1 text-[10px] font-bold text-(--text-secondary)">
-                        <Lock size={10} /> Protected
-                      </span>
+                              <p className="doc-mono text-[10.5px] text-(--text-muted)">
+                                {dupGroups[f.group].note}
+                              </p>
+                            </div>
+                          </div>
 
-                      <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden w-max max-w-[190px] -translate-x-1/2 rounded-lg bg-(--text-secondary) px-3 py-1.5 text-center text-[11px] leading-4 text-white group-hover/p:block">
-                        {f.note}
-                      </span>
-                    </span>
+                          <div className="flex items-center gap-2">
+                            {/* Common Badge: Copies */}
+                            <Badge
+                              type="info"
+                              size="sm"
+                              className="doc-mono"
+                              text={`${grp.length} Copies Detected`}
+                            />
+
+                            {/* Common Badge: Reclaimable */}
+                            <Badge
+                              type="success"
+                              size="sm"
+                              className="doc-mono"
+                              text={`+${grp
+                                .reduce((s, r) => s + r.sizeMb, 0)
+                                .toFixed(1)} MB Reclaimable`}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
                   )}
-                </div>
-              </td>
 
-              <td className="px-7">
-                <DeptPill name={f.dept} />
-              </td>
+                  <tr
+                    className={`border-t border-(--border-subtle) ${selected.has(f.id)
+                        ? 'bg-(--primary-light)'
+                        : 'bg-(--bg-surface) hover:bg-(--bg-surface-subtle)'
+                      }`}
+                  >
+                    <td className="px-4 py-[20px]">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(f.id)}
+                        disabled={f.isProtected}
+                        onChange={() => toggleOne(f.id)}
+                        className="h-[18px] w-[18px] cursor-pointer accent-(--primary) disabled:cursor-not-allowed disabled:opacity-30"
+                      />
+                    </td>
 
-              <td className="doc-mono px-3 text-[12px] font-black text-(--text-primary)">
-                {f.sizeMb.toFixed(1)} MB
-              </td>
+                    <td className="px-1">
+                      <Badge format={f.type} />
+                    </td>
+                  
 
-              <td className="doc-mono px-3 text-[10px] text-(--text-muted)">
-                {f.opened}
-              </td>
+                  <td className="px-1">
+                    <div className="flex items-center gap-3">
+                      <div className="min-w-0">
+                        <p className="max-w-[330px] truncate text-[12.5px] font-semibold text-(--text-primary)">
+                          {f.name}
+                        </p>
 
-              <td className="doc-mono px-3 text-[10px] text-(--text-muted)">
-                {f.cited}
-              </td>
+                        <p className="doc-mono max-w-[310px] truncate text-[10px] text-(--text-muted)">
+                          {f.file}
+                        </p>
+                      </div>
 
-              <td className="px-3">
-                <StatusPill status={f.status} />
-              </td>
-            </tr>
-          </Fragment>
-        );
-      })}
-    </tbody>
-  </table>
-</div>
+                      {f.isProtected && (
+                        <span className="group/p relative shrink-0">
+                          {/* Common Badge: Protected */}
+                          <Badge
+                            type="info"
+                            size="sm"
+                            className="doc-mono gap-1"
+                          >
+                            <Lock size={10} />
+                            Protected
+                          </Badge>
 
+                          <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden w-max max-w-[190px] -translate-x-1/2 rounded-lg bg-(--text-secondary) px-3 py-1.5 text-center text-[11px] leading-4 text-white group-hover/p:block">
+                            {f.note}
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                  </td>
 
-      {/* Pagination (67px band, 34px page buttons) */}
+                  <td className="px-7">
+                    <DeptPill name={f.dept} />
+                  </td>
 
-{/* Pagination (67px band, 34px page buttons) */}
-<div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-(--primary-light) px-6 py-3 text-[12px] text-(--text-muted)">
-  <div className="flex items-center gap-5">
-    <span>
-      Showing{' '}
-      <strong className="text-(--text-primary)">
-        {count === 0
-          ? 0
-          : `${start + 1}–${Math.min(start + perPage, count)}`}
-      </strong>{' '}
-      of <strong className="text-(--text-primary)">{count}</strong> files
-    </span>
+                  <td className="doc-mono px-3 text-[12px] font-black text-(--text-primary)">
+                    {f.sizeMb.toFixed(1)} MB
+                  </td>
 
-    <label className="flex items-center gap-2">
-      Show per page:
+                  <td className="doc-mono px-3 text-[10px] text-(--text-muted)">
+                    {f.opened}
+                  </td>
 
-      <select
-        value={perPage}
-        onChange={(e) => {
-          setPerPage(Number(e.target.value));
-          setPage(0);
+                  <td className="doc-mono px-3 text-[10px] text-(--text-muted)">
+                    {f.cited}
+                  </td>
+
+                  <td className="px-3">
+                    <StatusPill status={f.status} />
+                  </td>
+                </tr>
+                </Fragment>
+          );
+            })}
+        </tbody>
+      </table>
+    </div>
+
+      {/* Common Pagination */ }
+  <Pagination
+    page={safePage + 1}
+    pageSize={perPage}
+    total={count}
+    onPageChange={(nextPage) => setPage(nextPage - 1)}
+    itemLabel="files"
+    showPageNumbers
+    pageSizeOptions={PER_PAGE}
+    onPageSizeChange={(size) => {
+      setPerPage(size);
+      setPage(0);
+    }}
+  />
+
+  {
+    customOpen && (
+      <CustomThresholdModal
+        initial={customVal ?? largeMin}
+        onClose={() => setCustomOpen(false)}
+        onApply={(mb) => {
+          setLargeMin(mb);
+          setCustomVal(mb);
+          setCustomOpen(false);
+          onToast(`Filtering files occupying > ${mb} MB`);
         }}
-        className="doc-mono h-6 w-[55px] cursor-pointer rounded-[9px] border border-(--border-medium) bg-(--bg-surface) px-2 text-[13px] text-(--text-primary) outline-none"
-      >
-        {PER_PAGE.map((n) => (
-          <option key={n} value={n}>
-            {n}
-          </option>
-        ))}
-      </select>
-    </label>
-  </div>
-
-  <div className="flex items-center gap-2">
-    <button
-      type="button"
-      disabled={safePage === 0}
-      onClick={() => setPage(safePage - 1)}
-      className="h-[23px] cursor-pointer rounded-full bg-(--bg-surface) px-3 text-[12px] font-semibold text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      ← Prev
-    </button>
-
-    {Array.from({ length: pages }, (_, i) => (
-      <button
-        key={i}
-        type="button"
-        onClick={() => setPage(i)}
-        className={`doc-mono h-[30px] w-[30px] cursor-pointer rounded-[9px] text-[11px] font-bold ${
-          i === safePage
-            ? 'bg-(--primary) text-white'
-            : 'text-(--text-secondary) hover:bg-(--bg-surface)'
-        }`}
-      >
-        {i + 1}
-      </button>
-    ))}
-
-    <button
-      type="button"
-      disabled={safePage >= pages - 1}
-      onClick={() => setPage(safePage + 1)}
-      className="h-[23px] cursor-pointer rounded-full bg-(--bg-surface) px-3 text-[12px] font-semibold text-(--text-primary) disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      Next →
-    </button>
-  </div>
-</div>
-
-
-      {customOpen && (
-        <CustomThresholdModal
-          initial={customVal ?? largeMin}
-          onClose={() => setCustomOpen(false)}
-          onApply={(mb) => {
-            setLargeMin(mb);
-            setCustomVal(mb);
-            setCustomOpen(false);
-            onToast(`Filtering files occupying > ${mb} MB`);
-          }}
-        />
-      )}
-    </section>
+      />
+    )
+  }
+    </section >
   );
 }
 

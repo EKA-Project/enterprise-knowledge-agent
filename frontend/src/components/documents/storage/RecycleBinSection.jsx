@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AlertCircle, ChevronDown, Droplet, RotateCcw, Trash2 } from 'lucide-react';
-import { DeptPill, TypeTile } from './StorageBits';
+import { DeptPill } from './StorageBits';
+import Badge from '../../common/Badge.jsx';
 import AnimatedBin, { RestoreButton, PurgeButton } from '../../common/ActionButtons.jsx';
 import '../../../styles/Document.css';
 
@@ -104,7 +105,9 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
                 <tbody>
                   {items.map((f) => (
                     <tr key={f.id} className="border-t border-[#e3eef7]">
-                      <td className="py-[18px] pl-5 pr-3"><TypeTile type={f.type} /></td>
+                      <td className="py-[18px] pl-5 pr-3">
+                        <Badge format={f.type} />
+                      </td>
                       <td className="px-3">
                         <p className="max-w-[330px] truncate text-[14px] font-semibold text-[#10283f]">{f.name}</p>
                         <p className="doc-mono max-w-[330px] truncate text-[11px] text-[#7c949a]">{f.file}</p>
