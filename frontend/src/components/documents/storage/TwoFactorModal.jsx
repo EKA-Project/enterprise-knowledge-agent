@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { RefreshCw, Shield, Smartphone, X } from 'lucide-react';
 import { TypeTile } from './StorageBits';
 import '../../../styles/Document.css';
+import { CancelButton } from '../../common/ActionButtons.jsx';
 
 const rand = () => 10 + Math.floor(Math.random() * 90);
 const makeCodes = () => {
@@ -155,13 +156,7 @@ function TwoFactorModal({ file, onClose, onVerified }) {
           >
             <RefreshCw size={15} /> Send new number
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="h-8 cursor-pointer rounded-full border border-[#b9d6ec] bg-white px-[18px] text-[14px] font-semibold text-[#10283f] transition-colors hover:bg-[#e1f0fa]"
-          >
-            Cancel
-          </button>
+<CancelButton onClick={onClose} />
         </div>
       </div>
     </div>
