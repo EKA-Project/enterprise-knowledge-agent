@@ -16,7 +16,7 @@ import UserManagementTab from "../components/organization/TeamDirectory/UserMana
 import UserInviteModal from "../components/organization/TeamDirectory/UserInviteModal.jsx";
 import UserViewModal from "../components/organization/TeamDirectory/UserViewModal.jsx";
 import UserEditModal from "../components/organization/TeamDirectory/UserEditModal.jsx";
-import UserTerminateModal from "../components/organization/UserTerminateModal";
+import UserTerminateModal from "../components/organization/TeamDirectory/UserTerminateModal";
 import {  STATUS_LABELS, buildStructureCsv, buildUsersCsv, toUserRow } from "../components/organization/OrganizationData";
 import useApi from "../hooks/useApi.js";
 import { getDepartments, assignManager, updateDepartment, createDepartment, deleteDepartment } from "../services/departmentService.js";

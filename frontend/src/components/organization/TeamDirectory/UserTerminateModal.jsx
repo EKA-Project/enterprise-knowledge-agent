@@ -1,4 +1,4 @@
-import TerminateMemberModal from "../common/TerminateMemberModal";
+import TerminateMemberModal from "../../common/TerminateMemberModal";
 
 export default function UserTerminateModal({ user, onClose, onConfirm }) {
   return (

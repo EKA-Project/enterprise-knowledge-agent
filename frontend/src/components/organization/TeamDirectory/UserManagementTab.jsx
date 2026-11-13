@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import UserStatCards from "./UserStatCards";
-import UserFilters from "../UserFilters";
+import UserFilters from "./UserFilters";
 import UserDirectoryTable from "./UserDirectoryTable";
 
 const EMPTY_FILTERS = { query: "", dept: "all", role: "all", status: "all" };

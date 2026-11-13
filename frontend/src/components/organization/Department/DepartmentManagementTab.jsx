@@ -1,4 +1,4 @@
-import DepartmentStatCards from "../DepartmentStatCards";
+import DepartmentStatCards from "./DepartmentStatCards";
 import DepartmentCard from "./DepartmentCard";
 // DepartmentManagementTab
 export default function DepartmentManagementTab({ departments, getLead, onCreate, onEdit, onDelete, onReassign, onViewDocs }) {
