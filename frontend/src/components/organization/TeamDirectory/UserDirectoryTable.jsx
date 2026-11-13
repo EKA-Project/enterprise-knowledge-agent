@@ -1,7 +1,7 @@
-import Tooltip from "../common/Tooltip";
+import Tooltip from "../../common/Tooltip";
 import DepartmentIcon from "./DepartmentIcon";
-import { getInitials } from "./OrganizationData";
-import Pagination from "../common/Pagination";
+import { getInitials } from "../OrganizationData";
+import Pagination from "../../common/Pagination";
 const mono = "font-(family-name:--font-mono)";
 const COLS = "grid grid-cols-[2.2fr_2.3fr_1fr_1fr_1.2fr_1.5fr] items-center gap-4";
 

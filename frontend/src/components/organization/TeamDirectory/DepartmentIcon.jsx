@@ -1,4 +1,4 @@
-import { getDepartmentTheme } from "../../config/departmentTheme.js";
+import { getDepartmentTheme } from "../../../config/departmentTheme.js";
 
 // Small tinted tile with the department icon (used in the directory table).
 export default function DepartmentIcon({ colorKey, iconKey }) {

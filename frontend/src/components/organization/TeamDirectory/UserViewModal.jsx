@@ -1,5 +1,5 @@
-import CommonUserViewModal from "../common/UserViewModal";
-import { getTelemetry } from "./OrganizationData";
+import CommonUserViewModal from "../../common/UserViewModal";
+import { getTelemetry } from "../OrganizationData";
 
 // Organization wrapper around the shared UserViewModal.
 // Keeps the old props (user, onClose, onEdit) and translates the user object

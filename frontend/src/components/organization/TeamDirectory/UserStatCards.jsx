@@ -1,5 +1,5 @@
 import { ShieldCheck, UserCheck, UserPlus, Users } from "lucide-react";
-import { getUserStats } from "./OrganizationData";
+import { getUserStats } from "../OrganizationData";
 
 const mono = "font-(family-name:--font-mono)";
 

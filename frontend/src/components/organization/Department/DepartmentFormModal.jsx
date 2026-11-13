@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import Modal from "../common/Modal";
-import Button from "../common/Button";
-import { CancelButton } from "../common/ActionButtons";
-import { DEPARTMENT_COLORS, DEPARTMENT_ICONS } from "../../config/departmentTheme.js";
+import Modal from "../../common/Modal.jsx";
+import Button from "../../common/Button.jsx";
+import { CancelButton } from "../../common/ActionButtons.jsx";
+import { DEPARTMENT_COLORS, DEPARTMENT_ICONS } from "../../../config/departmentTheme.js";
 
 const label = "block text-[0.8rem] font-semibold text-(--text-primary)";
 const field =

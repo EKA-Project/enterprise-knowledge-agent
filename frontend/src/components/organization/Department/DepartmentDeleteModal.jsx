@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { Trash2 } from "lucide-react";
-import Modal from "../common/Modal";
-import Button from "../common/Button";
-import { CancelButton } from "../common/ActionButtons";
+import Modal from "../../common/Modal";
+import Button from "../../common/Button";
+import { CancelButton } from "../../common/ActionButtons";
 
 const CONFIRM_WORD = "DELETE";
 

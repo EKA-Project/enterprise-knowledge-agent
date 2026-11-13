@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import Modal from "../common/Modal";
-import Button from "../common/Button";
-import { CancelButton } from "../common/ActionButtons";
+import Modal from "../../common/Modal";
+import Button from "../../common/Button";
+import { CancelButton } from "../../common/ActionButtons";
 
 const label = "block font-(family-name:--font-mono) text-[10.5px] uppercase tracking-[0.12em] text-(--text-secondary)";
 

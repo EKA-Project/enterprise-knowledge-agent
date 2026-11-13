@@ -1,6 +1,6 @@
 import { SquarePen, Trash2 } from "lucide-react";
-import { getInitials } from "./OrganizationData";
-import { getDepartmentTheme } from "../../config/departmentTheme.js";
+import { getInitials } from "../OrganizationData.js";
+import { getDepartmentTheme } from "../../../config/departmentTheme.js";
 // Tailwind class for the monospace font used in badges and labels
 
   // DepartmentCard

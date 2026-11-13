@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import Modal from "../common/Modal";
-import Button from "../common/Button";
-import { CancelButton } from "../common/ActionButtons";
-import { USER_ROLES } from "./OrganizationData";
+import Modal from "../../common/Modal";
+import Button from "../../common/Button";
+import { CancelButton } from "../../common/ActionButtons";
+import { USER_ROLES } from "../OrganizationData";
 
 const label = "block text-[13.5px] font-semibold text-(--text-primary)";
 const field =
