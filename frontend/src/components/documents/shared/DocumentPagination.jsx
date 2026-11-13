@@ -16,6 +16,7 @@ function DocumentPagination({
       total={total}
       onPageChange={onPageChange}
       itemLabel="documents"
+      variant='rounded'
       showPageNumbers
       pageSizeOptions={PAGE_SIZES}
       onPageSizeChange={onPageSizeChange}
