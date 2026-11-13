@@ -365,3 +365,27 @@ export async function reindexCollection(id) {
   scheduleOverviewRegeneration(id);
   return { id, documentsQueued: queued.length, documentsSkipped: active.length - queued.length };
 }
+// DELETE /departments/{id}  (admin only)
+// The blueprint leaves this rule undecided (Known gaps), so the rule here is the
+// safest one: only an EMPTY department can be deleted, so no document or user is
+// ever left without a department.
+/** @returns {Promise<{id: string}>} */
+export async function deleteDepartment(id) {
+  await delay();
+  const department = getDepartmentOrThrow(id);
+  requireAdmin();
+
+  const documentCount = db.documents.filter((doc) => doc.departmentId === id).length;
+  const userCount = db.users.filter((user) => user.departmentId === id).length;
+  if (documentCount > 0 || userCount > 0) {
+    throw new ServiceError(
+      409,
+      `${department.name} still has ${userCount} user(s) and ${documentCount} document(s). Move or remove them first.`,
+    );
+  }
+
+  db.departments = db.departments.filter((d) => d.id !== id);
+  // findings keep working: they only point at the department softly
+  for (const finding of db.findings) if (finding.departmentId === id) finding.departmentId = null;
+  return { id };
+}

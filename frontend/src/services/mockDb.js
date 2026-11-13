@@ -10,6 +10,7 @@ import { sections } from "../data/mock/sections.js";
 import { users } from "../data/mock/users.js";
 import { canReadDocument } from "../utils/canReadDocument.js";
 import { clone } from "./mockHelpers.js";
+import { createMockPersistence } from "./mockPersistence.js";
 
 // MOCK-ONLY working copy of every table. Deleted with src/data/mock/ in Phase C.
 //
@@ -19,7 +20,7 @@ import { clone } from "./mockHelpers.js";
 // is how one source of truth works here. A page reload resets it to the seed data.
 //
 // Only services import this file; pages never do.
-export const db = {
+export const seedDb = {
   departments: clone(departments),
   users: clone(users),
   documents: clone(documents),
@@ -31,6 +32,17 @@ export const db = {
   activityEvents: clone(activityEvents),
   findings: clone(findings),
 };
+
+// Starts from the saved copy when one exists and still matches the seed data.
+const persistence = createMockPersistence(seedDb);
+export const db = { ...seedDb, ...persistence.load() };
+persistence.attach(db);
+
+// Dev tool: forget every saved change and go back to the seed data.
+export function resetMockDb() {
+  persistence.reset();
+  window.location.reload();
+}
 
 /**
  * The read rule applied to active documents: what this user may see in lists and
@@ -58,4 +70,16 @@ let lastDocumentNumber = db.documents.reduce(
 export function nextDocumentId() {
   lastDocumentNumber += 1;
   return `doc_${String(lastDocumentNumber).padStart(3, "0")}`;
+}
+
+// New mock users get usr_019, usr_020, ... (the seed ends at usr_018). Counts up
+// from the highest id in the db, so an id is never reused.
+let lastUserNumber = db.users.reduce(
+  (highest, user) => Math.max(highest, Number(/^usr_(\d+)$/.exec(user.id)?.[1] ?? 0)),
+  0,
+);
+
+export function nextUserId() {
+  lastUserNumber += 1;
+  return `usr_${String(lastUserNumber).padStart(3, "0")}`;
 }
