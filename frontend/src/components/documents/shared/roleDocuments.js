@@ -88,10 +88,9 @@ export async function saveDocumentMetadata(doc, changes, notify = {}) {
     notify,
   );
 }
-
 // Same shape as useDocuments(), plus toggleFlag(id, 'isPinned' | 'isBookmarked').
 export function useRoleDocuments() {
-  const { activeRole } = useContext(AuthContext);
+  const { activeRole, department } = useContext(AuthContext);
   const { items, loading } = useDocuments();
 
   const v = useSyncExternalStore(subscribe, () => version);
@@ -108,12 +107,12 @@ export function useRoleDocuments() {
             ...d,
             ...(e
               ? {
-                title: e.title,
-                category: e.category,
-                author: e.author,
-                description: e.executiveSummary,
-                edited: true,
-              }
+                  title: e.title,
+                  category: e.category,
+                  author: e.author,
+                  description: e.executiveSummary,
+                  edited: true,
+                }
               : {}),
             isBookmarked:
               bookmarks[activeRole]?.[d.id] ??
@@ -126,9 +125,19 @@ export function useRoleDocuments() {
                 ? 'Processing'
                 : d.status,
           };
+        })
+        .filter((doc) => {
+          if (!doc.isArchived) return true;
+          if (activeRole === 'Admin') return true;
+
+          return (
+            activeRole === 'Manager' &&
+            Boolean(department) &&
+            doc.category === department
+          );
         }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [items, activeRole, v],
+    [items, activeRole, department, v],
   );
 
   const toggleFlag = (id, flag) => {

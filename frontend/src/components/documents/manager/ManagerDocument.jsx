@@ -4,6 +4,7 @@ import useUpload from '../../../hooks/useUpload.js';
 import pageMetadata from '../../../config/pageMetadata.js';
 import { IngestDocumentButton } from '../../common/ActionButtons.jsx';
 
+
 // Manager view: ingest button + document grid. No health overview or storage.
 function ManagerDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal

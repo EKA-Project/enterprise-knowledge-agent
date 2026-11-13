@@ -1,5 +1,6 @@
 import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from '../../../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 import { useToast } from '../../../context/ToastContext.jsx';
@@ -64,7 +65,7 @@ function FilterChip({ label, value, clearLabel, onClear }) {
 function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const isManager = variant === 'manager';
   const navigate = useNavigate();
-
+  const { activeRole } = useContext(AuthContext);
   const { info, success, error } = useToast();
 
   const [search, setSearch] = useState('');
@@ -89,6 +90,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
   // Confirm archive or restore. The list updates first; it is rolled back if the call fails.
   const confirmArchive = async () => {
+    if (activeRole !== 'Admin' || !adminMode || !archiveTarget) return;
+
     const doc = archiveTarget;
     const next = !doc.isArchived;
 
@@ -269,11 +272,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="Grid view"
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`cursor-pointer rounded-lg p-1 transition-colors ${
-              viewMode === 'grid'
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'grid'
                 ? 'bg-(--primary) text-(--primary-contrast)'
                 : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+              }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -283,11 +285,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="List view"
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`cursor-pointer rounded-lg p-1 transition-colors ${
-              viewMode === 'list'
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'list'
                 ? 'bg-(--primary) text-(--primary-contrast)'
                 : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+              }`}
           >
             <List size={14} />
           </button>
@@ -318,7 +319,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             <DocumentList
               documents={pageItems}
               adminMode={adminMode}
-              shortStatus={!isManager}
+              shortStatus={true}
               onToggleFlag={handleToggleFlag}
               onOpen={openSummary}
               onArchive={adminMode ? setArchiveTarget : undefined}
