@@ -11,6 +11,7 @@ import {
   Database ,
   X,
   Check,
+  Plus,
   Save
 } from "lucide-react";
 import Button from "./Button";
@@ -85,6 +86,15 @@ const AnimatedSaveIcon = ({ size, className = "" }) => (
     size={size}
     strokeWidth={2.2}
     className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-115 group-hover:-translate-y-0.5 ${className}`}
+  />
+);
+
+// Micro-animation: Plus springs and scales up on hover
+const ScalePlusIcon = ({ size, className = "" }) => (
+  <Plus
+    size={size}
+    strokeWidth={2.5}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-125 ${className}`}
   />
 );
 /* ==========================================================================
@@ -422,6 +432,36 @@ export function SaveButton({ children = "Save", title, ...props }) {
     <Button
       variant="solid"
       icon={AnimatedSaveIcon}
+      iconChip
+      title={title ?? children}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+}
+
+/**
+ * Universal Add / Create Action Button (Solid Primary Pill)
+ * Single unified button for all '+' creation actions across the app.
+ * 
+ * Usage:
+ *   <AddItemButton>New Thread</AddItemButton>        // Chat (replaces NewThreadButton)
+ *   <AddItemButton>Add Term</AddItemButton>          // Glossary
+ *   <AddItemButton>Create Department</AddItemButton> // User Management
+ *   <AddItemButton>Add Category</AddItemButton>      // Knowledge Base
+ *   <AddItemButton />                                // Default: "Add Item"
+ */
+export function AddItemButton({
+  children = "Add Item",
+  title,
+  variant = "solid",
+  ...props
+}) {
+  return (
+    <Button
+      variant={variant}
+      icon={ScalePlusIcon}
       iconChip
       title={title ?? children}
       {...props}
