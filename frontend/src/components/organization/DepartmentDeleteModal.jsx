@@ -7,22 +7,26 @@ import { CancelButton } from "../common/ActionButtons";
 const CONFIRM_WORD = "DELETE";
 
 // Department-specific delete dialog: impact list + type DELETE to enable the button.
-export default function DepartmentDeleteModal({ dept, lead, onClose, onConfirm }) {
+export default function DepartmentDeleteModal({ dept, lead, targets = [], onClose, onConfirm }) {
   const [typed, setTyped] = useState("");
+  const [moveTo, setMoveTo] = useState("");
   const closeRef = useRef(() => {});
-  const ready = typed === CONFIRM_WORD;
-
+  // A department that has members or documents needs a place to move them to.
+  const needsTarget = dept.memberCount > 0 || dept.documentCount > 0;
+  const ready = typed === CONFIRM_WORD && (!needsTarget || Boolean(moveTo));
   const confirm = () => {
     if (!ready) return;
-    onConfirm();
+    onConfirm(moveTo || null);
     closeRef.current(); // exit animation, then onClose runs
   };
 
+  const target = targets.find((d) => d.id === moveTo);
+  const where = target ? target.name : "the department you choose";
   const impacts = [
-    `${dept.memberCount} active member(s) will lose their department assignment.`,
-    `${dept.documentCount} document(s) will become unassigned.`,
-    lead ? `Designated Lead Manager (${lead.name}) privileges will be revoked.` : null,
-    "Department-scoped knowledge and telemetry will be dissolved.",
+    `${dept.memberCount} active member(s) will move to ${where}.`,
+    `${dept.documentCount} document(s) will move there too. Department-only documents become readable by that department.`,
+    lead ? `Lead Manager (${lead.name}) moves with the members and no longer leads a department.` : null,
+    "The department's collection overview will be removed.",
   ].filter(Boolean);
 
   return (
@@ -62,6 +66,19 @@ export default function DepartmentDeleteModal({ dept, lead, onClose, onConfirm }
           ))}
         </ul>
       </div>
+      <label className="mt-4 block text-[12.5px] text-(--text-secondary)">
+        Move members and documents to:
+        <select
+          value={moveTo}
+          onChange={(e) => setMoveTo(e.target.value)}
+          className="mt-2 w-full rounded-lg border border-(--border-medium) bg-(--bg-surface) px-3 py-2.5 text-[13px] text-(--text-primary) outline-none transition focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)]"
+        >
+          <option value="">-- Select a department --</option>
+          {targets.map((d) => (
+            <option key={d.id} value={d.id}>{d.name}</option>
+          ))}
+        </select>
+      </label>
 
       <label className="mt-5 block text-[12.5px] text-(--text-secondary)">
         To confirm deletion, please type{" "}

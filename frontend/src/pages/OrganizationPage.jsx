@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Download, Plus } from "lucide-react";
 import "../styles/organization.css";
@@ -17,11 +17,10 @@ import UserInviteModal from "../components/organization/UserInviteModal";
 import UserViewModal from "../components/organization/UserViewModal";
 import UserEditModal from "../components/organization/UserEditModal";
 import UserTerminateModal from "../components/organization/UserTerminateModal";
-import { buildStructureCsv, buildUsersCsv, toUserRow } from "../components/organization/OrganizationData";
+import {  STATUS_LABELS, buildStructureCsv, buildUsersCsv, toUserRow } from "../components/organization/OrganizationData";
 import useApi from "../hooks/useApi.js";
-import { getDepartments, assignManager, updateDepartment, createDepartment } from "../services/departmentService.js";
-import { getUsers } from "../services/userService.js";
-
+import { getDepartments, assignManager, updateDepartment, createDepartment, deleteDepartment } from "../services/departmentService.js";
+import { getUsers, createUser, updateUser, deactivateUser, reactivateUser } from "../services/userService.js";
 const HEADERS = {
   departments: {
     eyebrow: "Organization structure & units",
@@ -34,8 +33,6 @@ const HEADERS = {
     description: "Manage team roles and account statuses.",
   },
 };
-
-const todayLabel = () => new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 
 function download(text, filename) {
   const url = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
@@ -51,35 +48,27 @@ export default function OrganizationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") === "directory" ? "directory" : "departments";
   // ↑ The tab lives in the URL (?tab=directory), so the Topbar can read it too.
-
-  // Read from the services. useApi re-fetches when the role changes.
-    const { data, loading, error, reload } = useApi(async () => {
-      const [departments, users] = await Promise.all([getDepartments(), getUsers()]);
+  // Everything comes from the services. useApi re-fetches when the role changes,
+  // and reload() re-reads after a write.
+  const { data, loading, error, reload } = useApi(async () => {
+    const [departments, users] = await Promise.all([getDepartments(), getUsers()]);
     return { departments, users };
   });
-
-  // TEMP bridge: local copies so the old write handlers keep working until
-  // each one is moved to a service (Step 3 onwards).
-  const [departments, setDepartments] = useState([]);
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    if (data) {
-      setDepartments(data.departments);
-      setUsers(data.users.map((u) => toUserRow(u, data.departments)));
-    }
-  }, [data]);
-
-  
+  const departments = data?.departments ?? [];
   const rawUsers = data?.users ?? [];
-  // replaces getMember(): the department's manager is a user
+  // The directory table, filters and dialogs work with display rows (names and labels).
+  const users = useMemo(() => rawUsers.map((u) => toUserRow(u, departments)), [rawUsers, departments]);
+
+  // The department's manager is a user (service shape, not a display row).
   const getLead = (id) => rawUsers.find((u) => u.id === id) ?? null;
-  // Who the service will accept as this department's manager. The modal's
-  // option text reads m.role and m.department, so those are filled in here.
+  // Who the service will accept as this department's manager. The modal's option
+  // text reads m.role and m.department, so those are filled in here.
   const managerCandidates = (dept) =>
     rawUsers
       .filter((u) => u.role === "manager" && u.departmentId === dept.id && u.status === "active")
       .map((u) => ({ ...u, role: "Manager", department: dept.name }));
-  // modal: { type: "create" | "edit" | "assign" | "delete" | "invite" | "view" | "user-edit" | "terminate", dept?, user? }
+  // The dialogs work with names; the services work with ids.
+  const deptIdByName = (name) => departments.find((d) => d.name === name)?.id;
   const [modal, setModal] = useState(null);
 
   const toast = useToast();
@@ -98,38 +87,47 @@ export default function OrganizationPage() {
   const openUserModal = (type, id) => setModal({ type, user: users.find((u) => u.id === id) });
 
   const changeTab = (id) => setSearchParams(id === "departments" ? {} : { tab: id }, { replace: true });
+  // After a successful write: close any dialog, re-read from the services, say so.
+  const finish = (message, tone) => {
+    closeModal();
+    reload();
+    pushToast(message, tone);
+  };
+  const fail = (e) => pushToast(e.message, "error"); // 403 non-admin, 409 conflict, 422 invalid
 
   // ---------- Departments ----------
   const handleCreate = async (data) => {
     try {
       await createDepartment(data);
-      reload();
-      pushToast(`🏢 Department "${data.name}" created successfully!`);
+      finish(`🏢 Department "${data.name}" created successfully!`);
     } catch (e) {
-      pushToast(e.message, "error"); // 403 for non-admins, 409 if the name or code exists
+      fail(e);
     }
   };
-   const handleEdit = async (id, data) => {
+  const handleEdit = async (id, data) => {
     try {
       await updateDepartment(id, data);
-      reload();
-      pushToast(`✏️ Updated department "${data.name}"`);
+      finish(`✏️ Updated department "${data.name}"`);
     } catch (e) {
-      pushToast(e.message, "error");
+      fail(e);
     }
   };
   const handleAssign = async (dept, userId) => {
     try {
       await assignManager(dept.id, userId);
-      reload(); // re-reads departments and users from the service
-      pushToast(`👤 Assigned Manager to ${dept.name}`);
+      finish(`👤 Assigned Manager to ${dept.name}`);
     } catch (e) {
-      pushToast(e.message, "error"); // e.g. 403 when the role is not Admin
+      fail(e);
     }
   };
-  const handleDelete = (dept) => {
-    setDepartments((prev) => prev.filter((d) => d.id !== dept.id));
-    pushToast(`🗑️ Deleted department "${dept.name}"`, "info");
+  const handleDelete = async (dept, moveToId) => {
+    try {
+      const { movedUsers, movedDocuments } = await deleteDepartment(dept.id, moveToId);
+      const moved = movedUsers || movedDocuments ? ` (${movedUsers} member(s), ${movedDocuments} document(s) moved)` : "";
+      finish(`🗑️ Deleted department "${dept.name}"${moved}`, "info");
+    } catch (e) {
+      fail(e);
+    }
   };
   const exportStructureCsv = () => {
     download(buildStructureCsv(departments, getLead), "eka-department-structure.csv");
@@ -137,30 +135,47 @@ export default function OrganizationPage() {
   };
 
   // ---------- Team directory ----------
-  const handleInvite = (data) => {
-    const user = { id: `user-${Date.now()}`, ...data, status: "Active", lastActive: "Just now", joined: todayLabel(), leadOf: null, telemetry: null };
-    setUsers((prev) => [...prev, user]);
-    pushToast(`📨 Invitation sent to ${data.email}`);
+  const handleInvite = async (data) => {
+    try {
+      await createUser({
+        name: data.name,
+        email: data.email,
+        role: data.role.toLowerCase(),
+        departmentId: deptIdByName(data.department),
+      });
+      finish(`📨 ${data.name} added to ${data.department}`);
+    } catch (e) {
+      fail(e);
+    }
   };
-  const handleUserEdit = (id, patch) => {
-    setUsers((prev) =>
-      prev.map((u) => {
-        if (u.id !== id) return u;
-        const next = { ...u, ...patch };
-        if (next.role !== "Manager" || next.department !== u.department) next.leadOf = null;
-        return next;
-      }),
-    );
-    pushToast("User settings updated successfully");
+  const handleUserEdit = async (id, patch) => {
+    const current = users.find((u) => u.id === id);
+    try {
+      await updateUser(id, { role: patch.role.toLowerCase(), departmentId: deptIdByName(patch.department) });
+      if (patch.status !== current.status) {
+        await (patch.status === STATUS_LABELS.inactive ? deactivateUser(id) : reactivateUser(id));
+      }
+      finish("User updated successfully");
+    } catch (e) {
+      fail(e);
+    }
   };
-  const handleTerminate = (user) => {
-    setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, status: "Terminated" } : u)));
-    pushToast(`🚫 Terminated ${user.name}'s account`, "info");
+  const handleTerminate = async (user) => {
+    try {
+      await deactivateUser(user.id);
+      finish(`🚫 Terminated ${user.name}'s account`, "info");
+    } catch (e) {
+      fail(e); // 409 if they manage a department
+    }
   };
-  const handleReactivate = (id) => {
+  const handleReactivate = async (id) => {
     const user = users.find((u) => u.id === id);
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, status: "Active" } : u)));
-    pushToast(`✅ Re-activated ${user.name}`);
+    try {
+      await reactivateUser(id);
+      finish(`✅ Re-activated ${user.name}`);
+    } catch (e) {
+      fail(e);
+    }
   };
   const exportUsersCsv = () => {
     download(buildUsersCsv(users), `eka_team_directory_${new Date().toISOString().slice(0, 10)}.csv`);
@@ -245,7 +260,8 @@ export default function OrganizationPage() {
         />
       )}
       {modal?.type === "delete" && activeDept && (
-        <DepartmentDeleteModal dept={activeDept} lead={getLead(activeDept.managerId)} onClose={closeModal} onConfirm={() => handleDelete(activeDept)} />
+        <DepartmentDeleteModal dept={activeDept} lead={getLead(activeDept.managerId)} onClose={closeModal} targets={departments.filter((d) => d.id !== activeDept.id)}
+          onConfirm={(moveToId) => handleDelete(activeDept, moveToId)}/>
       )}
 
       {/* ----- User dialogs ----- */}

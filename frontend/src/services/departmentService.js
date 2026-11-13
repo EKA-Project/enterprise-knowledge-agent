@@ -365,27 +365,41 @@ export async function reindexCollection(id) {
   scheduleOverviewRegeneration(id);
   return { id, documentsQueued: queued.length, documentsSkipped: active.length - queued.length };
 }
-// DELETE /departments/{id}  (admin only)
-// The blueprint leaves this rule undecided (Known gaps), so the rule here is the
-// safest one: only an EMPTY department can be deleted, so no document or user is
-// ever left without a department.
-/** @returns {Promise<{id: string}>} */
-export async function deleteDepartment(id) {
+// DELETE /departments/{id}?moveTo={departmentId}  (admin only)
+// The blueprint leaves this rule undecided (Known gaps). The rule here: a department
+// with users or documents is deleted by moving them to another department, so no
+// user or document is ever left without one. An empty department needs no target.
+// Moving a department-only document changes who can read it, so the admin chooses
+// the target on purpose.
+/** @returns {Promise<{id: string, movedUsers: number, movedDocuments: number}>} */
+export async function deleteDepartment(id, moveToDepartmentId = null) {
   await delay();
   const department = getDepartmentOrThrow(id);
   requireAdmin();
 
-  const documentCount = db.documents.filter((doc) => doc.departmentId === id).length;
-  const userCount = db.users.filter((user) => user.departmentId === id).length;
-  if (documentCount > 0 || userCount > 0) {
-    throw new ServiceError(
-      409,
-      `${department.name} still has ${userCount} user(s) and ${documentCount} document(s). Move or remove them first.`,
-    );
+  const users = db.users.filter((user) => user.departmentId === id);
+  const documents = db.documents.filter((doc) => doc.departmentId === id);
+
+  if (users.length > 0 || documents.length > 0) {
+    if (!moveToDepartmentId) {
+      throw new ServiceError(
+        422,
+        `Choose a department to move ${users.length} user(s) and ${documents.length} document(s) from ${department.name} to.`,
+      );
+    }
+    if (moveToDepartmentId === id) throw new ServiceError(422, "Choose a different department to move them to");
+    if (!db.departments.some((d) => d.id === moveToDepartmentId)) {
+      throw new ServiceError(422, "Unknown department to move to");
+    }
   }
 
+  // Everything is validated above, so the changes below are applied together.
+  const now = nowIso();
+  for (const user of users) Object.assign(user, { departmentId: moveToDepartmentId, updatedAt: now });
+  for (const doc of documents) Object.assign(doc, { departmentId: moveToDepartmentId, updatedAt: now });
+  // findings point at the department softly, so they follow the documents
+  for (const finding of db.findings) if (finding.departmentId === id) finding.departmentId = moveToDepartmentId;
+
   db.departments = db.departments.filter((d) => d.id !== id);
-  // findings keep working: they only point at the department softly
-  for (const finding of db.findings) if (finding.departmentId === id) finding.departmentId = null;
-  return { id };
+  return { id, movedUsers: users.length, movedDocuments: documents.length };
 }

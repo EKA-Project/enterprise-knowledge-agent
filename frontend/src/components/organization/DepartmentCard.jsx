@@ -2,18 +2,6 @@ import { SquarePen, Trash2 } from "lucide-react";
 import { getInitials } from "./OrganizationData";
 import { getDepartmentTheme } from "../../config/departmentTheme.js";
 // Tailwind class for the monospace font used in badges and labels
-// Tailwind classes for the department tone colors (background, border, text)
-const TONES = {
-  teal: "bg-[#dcf4ee] border-[#bfe8dd] text-[#0f8f7a]",
-  green: "bg-[#dcfce7] border-[#bbf7d0] text-[#15803d]",
-  purple: "bg-[#f3e8ff] border-[#e4ccff] text-[#7e22ce]",
-  red: "bg-[#fee2e2] border-[#fecaca] text-[#dc2626]",
-  amber: "bg-[#fef3c7] border-[#fde68a] text-[#d97706]",
-  indigo: "bg-[#e0e7ff] border-[#c7d2fe] text-[#4f46e5]",
-};
-// Tailwind class for the icon buttons in the top-right corner of the card  
-const iconBtn =
-  "grid size-8 place-items-center rounded-lg text-(--text-muted) transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 hover:shadow-(--shadow-sm) active:scale-90 focus-visible:outline-2 focus-visible:outline-(--border-focus)";
 
   // DepartmentCard
 export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete, onReassign, onViewDocs }) {

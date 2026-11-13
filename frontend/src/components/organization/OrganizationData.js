@@ -21,8 +21,12 @@ export function buildStructureCsv(departments, getLead) {
 }
 // =====================  TEAM DIRECTORY  =====================
 
-export const USER_ROLES = ["Manager", "Employee"];
-export const USER_STATUSES = ["Active", "Invited", "Suspended", "Terminated"];
+// Stored enum -> label shown in the UI. The filter lists are built from these maps.
+export const ROLE_LABELS = { admin: "Admin", manager: "Manager", employee: "Employee" };
+export const STATUS_LABELS = { active: "Active", inactive: "Terminated" };
+
+export const USER_ROLES = [ROLE_LABELS.manager, ROLE_LABELS.employee];
+export const USER_STATUSES = Object.values(STATUS_LABELS);
 
 // Short labels used by the Invite dialog (the video shows "Engineering", "HR / Ops"...).
 export const DEPT_SHORT_LABELS = {
@@ -39,10 +43,10 @@ export const DEPT_SHORT_LABELS = {
 export function getUserStats(users) {
   return {
     total: users.length,
-    live: users.filter((u) => u.status === "Active" || u.status === "Invited").length,
-    admins: users.filter((u) => u.role === "Admin").length,
-    managers: users.filter((u) => u.role === "Manager").length,
-    pending: users.filter((u) => u.status === "Invited").length,
+    live: users.filter((u) => u.status === STATUS_LABELS.active).length,
+    admins: users.filter((u) => u.role === ROLE_LABELS.admin).length,
+    managers: users.filter((u) => u.role === ROLE_LABELS.manager).length,
+    pending: 0, // there is no "invited" state in the data model
   };
 }
 
@@ -66,24 +70,23 @@ export function buildUsersCsv(users) {
   return rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
 }
 
-
-const ROLE_LABELS = { admin: "Admin", manager: "Manager", employee: "Employee" };
+const NO_DATA = "—"; // shown where the data model has no value (no department, last active)
 
 // Turns a service user into the row shape the directory components read.
-// There is no data for last active, so it shows "—".
+// Names are looked up by id; last active has no data, so it shows a dash.
 export function toUserRow(user, departments) {
-  const dept = departments.find((d) => d.id === user.departmentId);
-  const leads = departments.find((d) => d.managerId === user.id);
+  const department = departments.find((d) => d.id === user.departmentId);
+  const led = departments.find((d) => d.managerId === user.id);
   return {
     id: user.id,
     name: user.name,
     email: user.email,
-    department: dept?.name ?? "—", // the admin has no department
+    department: department?.name ?? NO_DATA, // the admin has no department
     role: ROLE_LABELS[user.role],
-    status: user.status === "active" ? "Active" : "Terminated", // inactive = deactivated
-    lastActive: "—",
+    status: STATUS_LABELS[user.status],
+    lastActive: NO_DATA,
     joined: formatDate(user.createdAt),
-    leadOf: leads?.name ?? null,
+    leadOf: led?.name ?? null,
     telemetry: null,
   };
 }

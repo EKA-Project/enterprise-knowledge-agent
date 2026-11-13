@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { CancelButton } from "../common/ActionButtons";
-import { DEPT_SHORT_LABELS, USER_ROLES } from "./OrganizationData";
+import { USER_ROLES } from "./OrganizationData";
 
 const label = "block text-[13.5px] font-semibold text-(--text-primary)";
 const field =
@@ -64,7 +64,7 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
           <label className="block">
             <span className={label}>Department</span>
             <select value={department} onChange={(e) => setDepartment(e.target.value)} className={field}>
-              {departmentNames.map((n) => <option key={n} value={n}>{DEPT_SHORT_LABELS[n] ?? n}</option>)}
+              {departmentNames.map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
           <label className="block">

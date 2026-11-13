@@ -57,7 +57,7 @@ const errCls = "mt-1 block text-[12px] font-medium text-(--status-failure)";
       }
       subtitle={
   <span className="whitespace-nowrap text-xs text-(--text-muted)">
-    {editing ? `${initial.name} (${initial.code})` : "Establish an organizational unit with scoped manager privileges."}
+    {editing ? `${initial.name} (${initial.code})` : "Establish an organizational unit for scoped documents."}
   </span>
 }
     
@@ -85,53 +85,68 @@ const errCls = "mt-1 block text-[12px] font-medium text-(--status-failure)";
     >
       <form id="department-form" onSubmit={submit} className="space-y-4">
         <label className="block">
-          <span className={label}>Description {req}</span>
-          <textarea
-            value={description}
-            onChange={(e) => { setDescription(e.target.value); clear("description"); }}
-            rows={3}
-            placeholder="One or two sentences about the team."
-            className={`${field} resize-y`}
-          />
-          {errors.description && <span role="alert" className={errCls}>{errors.description}</span>}
-        </label>
-
-        <label className="block">
-          <span className={label}>Scope {req}</span>
+          <span className={label}>Department Name {req}</span>
           <input
-            value={scope}
-            onChange={(e) => { setScope(e.target.value); clear("scope"); }}
-            placeholder="What kinds of documents belong here"
+            autoFocus
+            value={name}
+            onChange={(e) => { setName(e.target.value); clear("name"); }}
+            placeholder="e.g. Data Science & AI Research"
             className={field}
           />
-          {errors.scope && <span role="alert" className={errCls}>{errors.scope}</span>}
+          {errors.name && <span role="alert" className={errCls}>{errors.name}</span>}
         </label>
-
-        <div className="grid grid-cols-2 gap-4">
-          <label className="block">
-            <span className={label}>Color</span>
-            <select value={colorKey} onChange={(e) => setColorKey(e.target.value)} className={field}>
-              {Object.keys(DEPARTMENT_COLORS).map((k) => <option key={k} value={k}>{k}</option>)}
-            </select>
-          </label>
-          <label className="block">
-            <span className={label}>Icon</span>
-            <select value={iconKey} onChange={(e) => setIconKey(e.target.value)} className={field}>
-              {Object.keys(DEPARTMENT_ICONS).map((k) => <option key={k} value={k}>{k}</option>)}
-            </select>
-          </label>
-        </div>
 
         <label className="block">
-          <span className={label}>{editing ? "Description" : "Description & scope"}</span>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            placeholder="Brief scope of responsibilities and knowledge scope..."
-            className={`${field} resize-y`}
+          <span className={label}>Department Code {req}</span>
+          <input
+            value={code}
+            maxLength={6}
+            onChange={(e) => {
+              setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, ""));
+              clear("code");
+            }}
+            placeholder="e.g. AIRES"
+            className={field}
           />
+          {errors.code && <span role="alert" className={errCls}>{errors.code}</span>}
         </label>
+            <label className="block">
+              <span className={label}>Description {req}</span>
+              <textarea
+                value={description}
+                onChange={(e) => { setDescription(e.target.value); clear("description"); }}
+                rows={3}
+                placeholder="One or two sentences about the team."
+                className={`${field} resize-y`}
+              />
+              {errors.description && <span role="alert" className={errCls}>{errors.description}</span>}
+            </label>
+
+            <label className="block">
+              <span className={label}>Scope {req}</span>
+              <input
+                value={scope}
+                onChange={(e) => { setScope(e.target.value); clear("scope"); }}
+                placeholder="What kinds of documents belong here"
+                className={field}
+              />
+              {errors.scope && <span role="alert" className={errCls}>{errors.scope}</span>}
+            </label>
+
+            <div>
+              <label className="block">
+                <span className={label}>Color</span>
+                <select value={colorKey} onChange={(e) => setColorKey(e.target.value)} className={field}>
+                  {Object.keys(DEPARTMENT_COLORS).map((k) => <option key={k} value={k}>{k}</option>)}
+                </select>
+              </label>
+              <label className="block">
+                <span className={label}>Icon</span>
+                <select value={iconKey} onChange={(e) => setIconKey(e.target.value)} className={field}>
+                  {Object.keys(DEPARTMENT_ICONS).map((k) => <option key={k} value={k}>{k}</option>)}
+                </select>
+              </label>
+            </div>
       </form>
     </Modal>
   );

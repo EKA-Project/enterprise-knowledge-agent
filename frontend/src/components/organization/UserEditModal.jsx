@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import { CancelButton } from "../common/ActionButtons";
-import {getInitials} from "./OrganizationData";
+import {STATUS_LABELS, getInitials} from "./OrganizationData";
 
 const label = "text-[13.5px] font-semibold text-(--text-primary)";
 const hint = "text-[11px] text-(--text-muted)";
@@ -14,11 +14,10 @@ const ROLE_OPTIONS = [
   ["Manager", "Manager (Dept Lead)"],
   ["Admin", "Administrator (Full Organizational)"],
 ];
-const STATUS_OPTIONS = [
-  ["Active", "Active (Access Enabled)"],
-  ["Suspended", "Suspended (Temporary Freeze)"],
-  ["Terminated", "Terminated (Access Revoked)"],
-];
+   const STATUS_OPTIONS = [
+     [STATUS_LABELS.active, "Active (Access Enabled)"],
+     [STATUS_LABELS.inactive, "Terminated (Access Revoked)"],
+  ];
 
 export default function UserEditModal({ user, departmentNames, onClose, onSubmit }) {
   const [department, setDepartment] = useState(user.department);
@@ -27,8 +26,7 @@ export default function UserEditModal({ user, departmentNames, onClose, onSubmit
   const closeRef = useRef(() => {});
 
   // A member who has not signed in yet keeps an "Invited" option until their status is changed.
-  const statusOptions = user.status === "Invited" ? [["Invited", "Invited (Awaiting setup)"], ...STATUS_OPTIONS] : STATUS_OPTIONS;
-
+  const statusOptions = STATUS_OPTIONS;
   const submit = (e) => {
     e.preventDefault();
     onSubmit({ department, role, status });
