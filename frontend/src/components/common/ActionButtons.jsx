@@ -11,6 +11,7 @@ import {
   Database ,
   X,
   Check,
+  Save
 } from "lucide-react";
 import Button from "./Button";
 import DiceIcon from "../icons/DiceIcon";
@@ -76,6 +77,14 @@ const PopCheckIcon = ({ size, className = "" }) => (
     size={size}
     strokeWidth={2.5}
     className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-120 group-hover:rotate-6 ${className}`}
+  />
+);
+// Save disk lifts and springs on hover
+const AnimatedSaveIcon = ({ size, className = "" }) => (
+  <Save
+    size={size}
+    strokeWidth={2.2}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-115 group-hover:-translate-y-0.5 ${className}`}
   />
 );
 /* ==========================================================================
@@ -396,6 +405,28 @@ export function DoneButton(props) {
       {...props}
     >
       Done
+    </Button>
+  );
+}
+
+/**
+ * Universal Save / Confirm Action Button (Solid Primary Pill)
+ * 
+ * Usage:
+ *   <SaveButton />                         // Default: "Save"
+ *   <SaveButton>Add Term</SaveButton>       // Custom: "Add Term" (for Glossary)
+ *   <SaveButton>Save Changes</SaveButton>   // Custom: "Save Changes" (for Edit forms)
+ */
+export function SaveButton({ children = "Save", title, ...props }) {
+  return (
+    <Button
+      variant="solid"
+      icon={AnimatedSaveIcon}
+      iconChip
+      title={title ?? children}
+      {...props}
+    >
+      {children}
     </Button>
   );
 }

@@ -3,30 +3,23 @@ import { useState } from "react";
 import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
 import Pagination from "../../common/Pagination";
-
-// All 14 button exports from your new ActionButtons module
-import {
-  IngestDocumentButton,
-  AddMemberButton,
-  CompareRedlineButton,
-  IngestionLibraryButton,
-  ExportAuditButton,
-  RestoreButton,
-  PurgeButton,
-  DeleteActionButton,
-  EmptyRecycleBinButton,
-  DeleteActiveHistoryButton,
-  SendInvitationButton,
-  CancelButton,
-  RemoveFromTeamButton,
-  SurpriseMeButton,
-  DoneButton,
-} from "../../common/ActionButtons";
-
+import { AddMemberButton } from "../../common/ActionButtons";
 import { ViewButton, RemoveButton } from "../../common/RowIconButtons";
 import UserViewModal from "../../common/UserViewModal";
 import InviteMemberModal from "../../common/InviteMemberModal";
 import RemoveMemberModal from "../../common/RemoveMemberModal";
+
+/* ==========================================================================
+   ManagerTeamRoster
+   --------------------------------------------------------------------------
+   The team table on the manager overview. It pages through members with the
+   shared Pagination, so it never scrolls. Its height is set by the parent
+   (fillHeight), which matches it to the left column.
+
+   ROSTER_PAGE_SIZE sets how many rows fit the card. Tune it so the card's
+   bottom edge lines up with the left column. Extra space shows as blank
+   space, not as a scrollbar.
+   ========================================================================== */
 
 const ROSTER_PAGE_SIZE = 10;
 
@@ -48,25 +41,16 @@ function ManagerTeamRoster({
   const [selectedMember, setSelectedMember] = useState(null);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [memberToRemove, setMemberToRemove] = useState(null);
-  const [copiedId, setCopiedId] = useState(null);
+  const [copiedId, setCopiedId] = useState(null); // member whose Emp ID was just copied
 
-  // States to test animated / interactive buttons
-  const [isSurprising, setIsSurprising] = useState(false);
-  const [rollCount, setRollCount] = useState(0);
-
-  const handleSurpriseTest = () => {
-    setIsSurprising(true);
-    setRollCount((c) => c + 1);
-    setTimeout(() => setIsSurprising(false), 800);
-  };
-
+  // Copies the Emp ID and shows "Copied" on that chip for 1.5 seconds
   async function copyEmployeeCode(member) {
     try {
       await navigator.clipboard.writeText(member.employeeCode);
       setCopiedId(member.id);
       setTimeout(() => setCopiedId(null), 1500);
     } catch {
-      // Clipboard blocked on non-secure context
+      // Clipboard can be blocked on non-secure pages. The code stays visible.
     }
   }
 
@@ -75,6 +59,7 @@ function ManagerTeamRoster({
     page * ROSTER_PAGE_SIZE,
   );
 
+  // Widths add up to 100%. The action column is wide enough for two icons.
   const columns = [
     {
       key: "member",
@@ -118,7 +103,7 @@ function ManagerTeamRoster({
         <button
           type="button"
           onClick={(event) => {
-            event.stopPropagation();
+            event.stopPropagation(); // keep the click away from the row (it opens the user view)
             copyEmployeeCode(row);
           }}
           title="Copy Emp ID"
@@ -187,84 +172,6 @@ function ManagerTeamRoster({
 
   return (
     <>
-      {/* ============================================================== */}
-      {/* 🧪 ALL ACTION BUTTONS TEST BENCH                               */}
-      {/* ============================================================== */}
-      <div className="mb-4 space-y-4 rounded-xl border border-dashed border-sky-400 bg-sky-50/50 p-4">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-sky-900">
-            Action Buttons Test Bench
-          </p>
-          <p className="text-[0.7rem] text-sky-700">
-            Hover over buttons to test micro-animations (dipping download, spinning restore, flying send, tilting warning, spinning X).
-          </p>
-        </div>
-
-        {/* Section 1: Core Primary */}
-        <div>
-          <p className="mb-1.5 font-mono text-[0.65rem] font-bold text-sky-800">
-            SECTION 1: Core Primary Actions
-          </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <IngestDocumentButton onClick={() => console.log("Ingest clicked")} />
-            <AddMemberButton onClick={() => setIsInviteOpen(true)} />
-            <CompareRedlineButton onClick={() => console.log("Compare clicked")} />
-            <IngestionLibraryButton onClick={() => console.log("Library clicked")} />
-          </div>
-        </div>
-
-        {/* Section 2: Storage & Retention */}
-        <div>
-          <p className="mb-1.5 font-mono text-[0.65rem] font-bold text-sky-800">
-            SECTION 2: Storage & Retention
-          </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <ExportAuditButton onClick={() => console.log("Export Audit CSV clicked")} />
-            <RestoreButton onClick={() => console.log("Restore clicked")} />
-            <PurgeButton onClick={() => alert("Permanent purge triggered!")} />
-          </div>
-        </div>
-
-        {/* Section 3: Animated Deletes */}
-        <div>
-          <p className="mb-1.5 font-mono text-[0.65rem] font-bold text-sky-800">
-            SECTION 3: Reusable Animated Delete Actions
-          </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <DeleteActionButton
-              toast="Item permanently removed"
-              onToast={(msg) => alert(`Toast: ${msg}`)}
-              onClick={() => console.log("Custom Delete clicked")}
-            >
-              Delete Item
-            </DeleteActionButton>
-            <EmptyRecycleBinButton onToast={(msg) => alert(`Toast: ${msg}`)} />
-            <DeleteActiveHistoryButton onToast={(msg) => alert(`Toast: ${msg}`)} />
-          </div>
-        </div>
-
-        {/* Section 4: Modals, Forms & Appearance */}
-        <div>
-          <p className="mb-1.5 font-mono text-[0.65rem] font-bold text-sky-800">
-            SECTION 4: Modals, Forms & Appearance
-          </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <SendInvitationButton onClick={() => console.log("Send Invitation clicked")} />
-            <CancelButton onClick={() => console.log("Cancel clicked")} />
-            <RemoveFromTeamButton onClick={() => console.log("Remove Team clicked")} />
-            <SurpriseMeButton
-              isSurprising={isSurprising}
-              rollCount={rollCount}
-              onClick={handleSurpriseTest}
-            />
-            <DoneButton onClick={() => console.log("Cancel clicked")} />
-          </div>
-        </div>
-      </div>
-
-      {/* ============================================================== */}
-      {/* Table Container                                                */}
-      {/* ============================================================== */}
       <TableContainer
         icon={<span aria-hidden="true">👥</span>}
         title={`${department.name} Team Roster (${teamMembers.length})`}
