@@ -107,9 +107,9 @@ function SummarySidebar({
       </section>
 
            <section className={card}>
-        <h2 className="font-(family-name:--font-serif) text-base font-bold text-(--text-primary)">
-          <span aria-hidden="true">💡</span> Suggested Questions
-        </h2>
+<h2 className="font-(family-name:--font-serif) text-lg font-extrabold text-(--text-primary)">
+  <span aria-hidden="true">💡</span> Suggested Questions
+</h2>
         <div className="mt-3 space-y-2">
           {questions.map((q) => (
             <Link

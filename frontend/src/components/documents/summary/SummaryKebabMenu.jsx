@@ -13,9 +13,9 @@ const Item = ({ label, onClick, danger, icon: Icon }) => (
   <button
     type="button"
     onClick={onClick}
-    className={`w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg text-xs font-medium hover:bg-[#e0eef7] ${
-      danger ? 'text-red-600' : 'text-(--text-primary)'
-    }`}
+   className={`w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg text-xs font-medium hover:bg-(--bg-surface-subtle) ${
+  danger ? 'text-(--status-error)' : 'text-(--text-primary)'
+}`}
   >
     <Icon size={14} />
     {label}
@@ -75,7 +75,7 @@ export default function SummaryKebabMenu({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-52 p-1.5 rounded-xl border border-(--border) bg-white shadow-lg z-30">
+       <div className="absolute right-0 mt-2 w-52 p-1.5 rounded-xl border border-(--border) bg-(--bg-surface) shadow-lg z-30">
           <Item
             label="Edit Metadata"
             icon={Pencil}
