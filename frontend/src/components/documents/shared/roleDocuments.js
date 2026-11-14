@@ -39,12 +39,9 @@ export function deleteDocument(id) {
   emit();
 }
 
-// ── service document -> the row shape the components already expect ─────────
-function readTimeText(wordCount) {
-  if (wordCount == null) return '—';
-  const result = estimateReadTime(wordCount);
-  if (typeof result === 'string') return result; // util already returns "4 min read"
-  return result ? `${result} min read` : '—';
+export function setDocumentArchivedFlag(id, value) {
+  archived = { ...archived, [id]: value };
+  emit();
 }
 
 export async function startReindex(doc, notify = {}) {
@@ -147,18 +144,10 @@ export function useRoleDocuments() {
     [items, activeRole, department, v],
   );
 
-  const toggleFlag = async (id, flag) => {
-    const row = state.items.find((item) => item.id === id);
-    if (!row) return;
-    const next = !row[flag];
-    patchRow(id, { [flag]: next }); // optimistic
-    try {
-      if (flag === 'isPinned') await setPinned(id, next); // admin only, 403 for others
-      else if (next) await addBookmark(id);
-      else await removeBookmark(id);
-    } catch (error) {
-      patchRow(id, { [flag]: !next }); // roll back
-      showDocToast(errorText(error), 'neutral');
+  const toggleFlag = (id, flag) => {
+    if (flag !== 'isBookmarked') {
+      toggleDocumentFlag(id, flag);
+      return;
     }
 
     const current = docs.find((d) => d.id === id)?.isBookmarked;
@@ -174,10 +163,5 @@ export function useRoleDocuments() {
     emit();
   };
 
-  const refresh = () => {
-    setState({ loading: true, error: null });
-    return refreshDocuments();
-  };
-
-  return { items: snapshot.items, loading: snapshot.loading, error: snapshot.error, refresh, toggleFlag };
+  return { items: docs, loading, toggleFlag };
 }

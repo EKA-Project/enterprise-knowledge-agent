@@ -20,7 +20,6 @@ const STATUS_COLOR = {
 };
 
 // Ring made of one arc per status, drawn clockwise from 12 o'clock.
-// `activeKey`: that arc stays full, the others fade (hover / selected status).
 function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
   const radius = 42;
   const circumference = 2 * Math.PI * radius;
@@ -56,7 +55,7 @@ function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
       </svg>
 
       <span
-        className="absolute inset-0 flex items-center justify-center font-serif text-[26px] font-black"
+        className="absolute inset-0 flex items-center justify-center font-serif text-[22px] font-black"
         style={{ color: centerColor }}
       >
         {centerText}
@@ -95,7 +94,7 @@ function DocumentHealthOverview() {
   return (
     <section className="mt-3 mb-6 flex flex-col gap-2 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
       {/* Left: ring + title */}
-      <div className="flex items-center gap-7 lg:basis-[556px] lg:shrink-0">
+      <div className="flex items-center gap-5 lg:basis-[460px] lg:shrink-0">
         <HealthDonut
           items={documentHealth}
           total={total}
@@ -108,7 +107,7 @@ function DocumentHealthOverview() {
 
         <div className="min-w-0 max-w-[300px]">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-serif text-[21px] font-bold leading-tight text-(--text-primary)">
+            <h2 className="font-serif text-[19px] font-bold leading-tight text-(--text-primary)">
               Document Health Overview
             </h2>
             <Badge text={badgeText} type={badgeType} size="sm" />
@@ -124,7 +123,7 @@ function DocumentHealthOverview() {
       </div>
 
       {/* Right: one clickable card per status */}
-      <div className="grid flex-1 grid-cols-2 gap-3.5 lg:grid-cols-4">
+      <div className="grid flex-8 grid-cols-2 gap-4 lg:grid-cols-4">
         {documentHealth.map((item) => {
           const isActive = activeStatus === item.label;
           const isHighlighted = isActive || hoveredKey === item.key;
