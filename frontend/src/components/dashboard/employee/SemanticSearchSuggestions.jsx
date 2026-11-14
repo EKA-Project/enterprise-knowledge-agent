@@ -9,7 +9,7 @@ function SemanticSearchSuggestions({ data }) {
           <h2 className="flex items-center gap-2 font-sans text-[1rem] font-bold text-(--text-primary)">
             <span
               aria-hidden="true"
-              className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#e0f2fe] text-[0.8rem]"
+              className="flex h-6 w-6 items-center justify-center rounded-lg  text-[1.3rem]"
             >
               ✨
             </span>
@@ -23,7 +23,7 @@ function SemanticSearchSuggestions({ data }) {
 
         <Link
           to="/semantic-search"
-          className="shrink-0 whitespace-nowrap text-[0.72rem] font-bold text-(--primary) underline transition-opacity hover:opacity-80"
+          className="shrink-0 whitespace-nowrap text-[0.72rem] font-bold text-(--primary) transition-opacity hover:opacity-80"
         >
           Open Search →
         </Link>

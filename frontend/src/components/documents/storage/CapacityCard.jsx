@@ -32,18 +32,26 @@ function CapacityCard({ summary, mode, onModeChange, hoveredKey, onHover }) {
     setTip(null);
   };
 
-const toggleBtn = (on) =>
-  `inline-flex h-[25px] cursor-pointer items-center gap-1.5 rounded-full pl-[4px] pr-[6px] text-[11px] font-bold transition-colors ${
-    on ? 'bg-[#0b6a9c] text-white shadow-sm' : 'text-[#44596a] hover:text-[#10283f]'
-  }`;
-const iconCircle = (on) =>
-  `flex h-[16px] w-[17px] items-center justify-center rounded-full ${
-    on ? 'bg-white/20 text-white' : 'bg-white text-[#44596a]'
-  }`;
-const badge = (on) =>
-  `doc-mono rounded-full px-1 py-1 text-[9px] font-bold leading-none ${
-    on ? 'bg-[#56a8ca] text-white' : 'bg-[#d4e5f2] text-[#7c949a]'
-  }`;
+  const toggleBtn = (on) =>
+    `group inline-flex h-[25px] cursor-pointer items-center gap-1.5 rounded-(--radius-pill) border pl-[4px] pr-[6px] font-(family-name:--font-sans) text-[11px] font-semibold [transition:all_0.2s_cubic-bezier(0.16,1,0.3,1)] active:translate-y-[0.5px] active:scale-[0.98] ${
+      on
+        ? 'border-[rgba(255,255,255,0.15)] bg-(--primary) text-(--primary-contrast) shadow-[0_2px_6px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.25)]'
+        : 'border-transparent bg-transparent text-(--text-secondary) hover:text-(--primary)'
+    }`;
+
+  const iconCircle = (on) =>
+    `flex h-[16px] w-[17px] items-center justify-center rounded-full border [transition:all_0.2s_cubic-bezier(0.16,1,0.3,1)] ${
+      on
+        ? 'border-[rgba(255,255,255,0.32)] bg-[rgba(255,255,255,0.2)] text-white'
+        : 'border-(--border-subtle) bg-(--bg-surface) text-(--text-secondary) group-hover:scale-[1.08] group-hover:border-[rgba(0,135,102,0.3)] group-hover:bg-white group-hover:text-(--primary)'
+    }`;
+
+  const badge = (on) =>
+    `rounded-full border px-1 py-1 font-(family-name:--font-mono) text-[9px] font-bold leading-none [transition:all_0.2s_cubic-bezier(0.16,1,0.3,1)] ${
+      on
+        ? 'border-[rgba(255,255,255,0.3)] bg-[rgba(255,255,255,0.22)] text-white'
+        : 'border-transparent bg-[rgba(0,0,0,0.05)] text-(--text-secondary) group-hover:bg-[rgba(0,135,102,0.12)] group-hover:text-(--primary)'
+    }`;
   return (
     <section className="rounded-[16px] border border-(--border-subtle) bg-(--bg-surface) px-[17px] pb-[9px] pt-[13px] shadow-(--shadow-sm)">
       <div className="flex flex-wrap items-start justify-between gap-6">
@@ -60,16 +68,16 @@ const badge = (on) =>
           </p>
         </div>
 
-        {/* Stat box (467 x 68) */}
-        <div className="flex gap-x-5 rounded-2xl bg-[#e1f0fa] px-[12px] py-3">
+               {/* Stat box (467 x 68) */}
+        <div className="flex gap-x-5 rounded-(--radius-sm) border border-(--border-subtle) bg-(--bg-surface-subtle) px-[12px] py-3">
           {[
             ['Total Documents', `${documents} Ingested`],
             ['Reclaimable Space', `${reclaimableGb} GB`],
             ['Recycle Bin', `${softDeleted} Soft-deleted`],
           ].map(([label, value]) => (
             <div key={label}>
-              <p className="doc-mono text-[9px] uppercase leading-3 tracking-[0.001em] text-[#7c949a]">{label}</p>
-              <p className="doc-mono mt-2 text-[12px] font-bold leading-3 text-[#10283f]">{value}</p>
+              <p className="font-(family-name:--font-mono) text-[9px] uppercase leading-3 tracking-[0.08em] text-(--text-muted)">{label}</p>
+              <p className="mt-2 font-(family-name:--font-mono) text-[12px] font-bold leading-3 text-(--text-primary)">{value}</p>
             </div>
           ))}
         </div>
@@ -82,7 +90,7 @@ const badge = (on) =>
             {isDept ? 'Department Volume Distribution' : 'File Format Volume Distribution'}
           </h3>
         </div>
-        <div className="inline-flex items-center gap-0.5 rounded-full border border-[#bfe0f3] bg-[#e6f3fb] p-0.5">
+                <div className="inline-flex items-center gap-0.5 rounded-(--radius-pill) border-[1.5px] border-(--border-medium) bg-(--bg-surface-subtle) p-0.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]">
           <button type="button" onClick={() => onModeChange('dept')} className={toggleBtn(isDept)}>
             <span className={iconCircle(isDept)}><Building2 size={10} /></span>
             By Department <span className={badge(isDept)}>7 Depts</span>
@@ -104,7 +112,7 @@ const badge = (on) =>
             {tip.text}
           </span>
         )}
-        <div className="flex h-3 overflow-hidden rounded-full bg-[#e1f0fa]">
+           <div className="flex h-3 overflow-hidden rounded-(--radius-pill) bg-(--border-subtle) shadow-[inset_0_1px_3px_rgba(0,0,0,0.08)]">
           {segments.map((s) => (
             <div
               key={s.key}
@@ -119,7 +127,7 @@ const badge = (on) =>
             />
           ))}
           <div
-            className="h-full flex-1"
+            className="h-full flex-1 bg-(--bg-surface-subtle)"
             onMouseEnter={() => show('FREE', `Free Space: ${freeGb} GB`, freeCenter)}
             onMouseLeave={hide}
           />

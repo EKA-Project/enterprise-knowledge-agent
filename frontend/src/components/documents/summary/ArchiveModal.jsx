@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { Archive, X } from 'lucide-react';
+import Button from '../../common/Button';
+import { CancelButton } from '../../common/ActionButtons';
 
 // Archive / Unarchive confirm dialog (Oct-20 video). `archived` = current state.
 function ArchiveModal({ title, archived, onClose, onConfirm }) {
@@ -44,14 +46,15 @@ function ArchiveModal({ title, archived, onClose, onConfirm }) {
         </div>
 
         <div className="flex justify-end gap-2 bg-(--bg-surface-subtle) px-6 py-3">
-          <button type="button" onClick={onClose}
-            className="h-8 cursor-pointer rounded-full border border-(--border-medium) bg-(--bg-surface) px-4 text-xs font-semibold text-(--text-primary)">
-            Cancel
-          </button>
-          <button type="button" onClick={onConfirm}
-            className="h-8 cursor-pointer rounded-full bg-(--primary) px-4 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)">
+          <CancelButton onClick={onClose} />
+          <Button
+            variant="solid"
+            icon={Archive}
+            title={`${verb} this document`}
+            onClick={onConfirm}
+          >
             Confirm {verb}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

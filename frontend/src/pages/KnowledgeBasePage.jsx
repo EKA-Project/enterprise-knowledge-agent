@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
-import UploadDocumentModal from '../components/upload/UploadDocumentModal.jsx';
+import useUpload from '../hooks/useUpload.js';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
@@ -14,48 +14,56 @@ import { knowledgeStats, knowledgeCategories } from '../components/knowledge/Kno
 import '../styles/knowledge.css';
 import DemoStatesBar from '../components/knowledge/DemoStatesBar';
 import SectionState from '../components/knowledge/SectionState';
+import Button from '../components/common/Button.jsx';
+import PageHero from '../components/common/PageHero.jsx';
+import pageMetadata from '../config/pageMetadata.js';
 
 export default function KnowledgeBasePage() {
   const { activeRole } = useContext(AuthContext);
+  const { openUpload, canUpload } = useUpload();
   const [demoState, setDemoState] = useState('normal');
   const resetDemo = () => setDemoState('normal');
   // Category whose Collection Insights modal is open (null = closed)
   const [insightsCategory, setInsightsCategory] = useState(null);
-  // Ingest modal open/closed (opened by the "Upload document" button)
-  const [ingestOpen, setIngestOpen] = useState(false);
+
+  // Hero text comes from the shared page config
+  const hero = pageMetadata.knowledgeBase;
 
   return (
-    <div className="px-4 py-2">
+    <div className="px-0 py-0">
       {/* Hero section */}
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="kb-eyebrow mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-(--text-secondary)">
-            Browse the collective
-          </p>
-          <h2 className="kb-hero-heading text-[2rem] sm:text-[2.5rem] font-bold leading-tight text-(--text-primary)">
-            Find the thread.
-          </h2>
-          <p className="mt-1 text-sm text-(--text-secondary)">
-            A map of what your team knows, grouped in ways that make sense.
-          </p>
-        </div>
+      <PageHero
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        description={hero.description}
+        className="mb-2"
+        actions={
+          <>
+            {canUpload && (
+              <Button
+                variant="solid"
+                icon={Upload}
+                iconChip
+                title="Upload a new document"
+                onClick={openUpload}
+              >
+                Upload Document
+              </Button>
+            )}
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setIngestOpen(true)}
-            className="cursor-pointer inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-3.5 py-1 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
-          >
-            <Upload size={12} /> Upload document
-          </button>
-          <Link
-            to="/documents"
-            className="cursor-pointer inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-1 text-xs font-semibold text-(--text-primary) shadow-(--shadow-sm)"
-          >
-            <LayoutGrid size={12} /> Browse all
-          </Link>
-        </div>
-      </div>
+            <Link
+              to="/documents"
+              className="group inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) pl-2 pr-4 text-xs font-bold text-(--text-primary) transition-all duration-200 hover:-translate-y-0.5 hover:border-(--border-medium)"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-(--bg-surface-subtle) text-(--text-secondary) transition-all duration-200 group-hover:-translate-y-0.5 group-hover:bg-[color-mix(in_srgb,var(--dept-orange)_14%,transparent)] group-hover:text-(--dept-orange)">
+                <LayoutGrid size={12} />
+              </span>
+              Browse all
+            </Link>
+          </>
+        }
+      />
+
       <KnowledgeStats stats={knowledgeStats} />
 
       {/* Browse by Department */}
@@ -114,9 +122,8 @@ export default function KnowledgeBasePage() {
           onClose={() => setInsightsCategory(null)}
         />
       )}
-      {ingestOpen && <UploadDocumentModal onClose={() => setIngestOpen(false)} />}  {/* <-- ye nayi line */}
+
       <DemoStatesBar value={demoState} onChange={setDemoState} />
     </div>
   );
 }
-

@@ -28,7 +28,7 @@ function CategoryCard({ category, onOpenInsights }) {
             event.stopPropagation(); // don't trigger the card click
             onOpenInsights(category);
           }}
-          className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary) transition-colors hover:border-[#0284c8] hover:bg-[#0284c8] hover:text-white"
+          className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary) transition-colors hover:border-(--primary-hover) hover:bg-(--primary-hover) hover:text-(--primary-contrast)"
         >
           <Zap size={11} className="fill-current text-[#e8801a]" />
           Collection Insights
@@ -38,7 +38,7 @@ function CategoryCard({ category, onOpenInsights }) {
       <h3 className="kb-serif mt-4 text-lg font-bold text-(--text-primary)">{title}</h3>
 
       <div className="mt-2 flex items-center gap-2 text-xs text-(--text-secondary)">
-        <span className="kb-mono rounded-full bg-(--primary-light) px-2.5 py-0.5 text-[10px]">
+        <span className="kb-mono rounded-full border border-(--border-subtle) bg-(--primary-light) px-2.5 py-0.5 text-[10px]">
           {docCount} documents
         </span>
         <span>• {sourceCount} verified sources</span>

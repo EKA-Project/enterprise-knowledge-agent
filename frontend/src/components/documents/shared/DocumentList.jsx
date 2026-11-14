@@ -1,6 +1,7 @@
 import { Bookmark, Pin, Code2, TrendingUp, Shield, Users, Palette, Scale } from 'lucide-react';
 import DataTable from '../../common/DataTable.jsx';
-import { formatStyles, statusMeta } from './DocumentCard.jsx';
+import Badge from '../../common/Badge.jsx';
+import { statusMeta } from './DocumentCard.jsx';
 import DocumentCardMenu from './DocumentCardMenu.jsx';
 
 // Short status text used in the admin / employee list ("● Ready").
@@ -16,7 +17,8 @@ const deptStyle = {
   'Product Strategy & Design': { icon: Palette, cls: 'bg-[#efe6fd] text-[#7b4fc9]' },
   'Legal & Finance': { icon: Scale, cls: 'bg-[#e6efe9] text-[#4b6a58]' },
 };
-
+// Turns onX(doc) into a no-arg callback for the menu; stays undefined when the parent didn't pass it.
+const bindDoc = (fn, doc) => (fn ? () => fn(doc) : undefined);
 // List view of the documents, built on the shared DataTable.
 // Rows and the "Summary →" button open the summary page.
 function DocumentList({
@@ -40,12 +42,7 @@ function DocumentList({
       width: '30%',
       render: (doc) => (
         <div className="flex items-center gap-3">
-          <span
-            className={`doc-mono flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[10px] font-bold ${formatStyles[doc.format] ?? 'bg-(--bg-surface-subtle) text-(--text-primary)'
-              }`}
-          >
-            {doc.format}
-          </span>
+          <Badge format={doc.format} />
           <div className="min-w-0">
             <p className="doc-heading text-[13px] font-bold leading-5 text-(--text-primary)">
               {doc.title}
@@ -107,15 +104,16 @@ function DocumentList({
       render: (doc) => {
         const status = statusMeta[doc.status] ?? {
           label: doc.status,
-          style: 'border border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary)',
+          style: 'border border-(--status-danger) bg-(--status-danger-bg) text-(--status-danger)',
         };
         const label = shortStatus ? `● ${SHORT_LABEL[doc.status] ?? status.label}` : status.label;
         return (
-          <span
-            className={`inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-semibold ${status.style}`}
-          >
-            {label}
-          </span>
+          <Badge
+            text={label}
+            type={status.type ?? 'danger'}
+            size="sm"
+            className={`!whitespace-nowrap !px-2.5 !py-1 !text-[10px] ${status.style}`}
+          />
         );
       },
     },
@@ -137,14 +135,19 @@ function DocumentList({
                 aria-label={doc.isPinned ? 'Unpin document' : 'Pin document'}
                 aria-pressed={Boolean(doc.isPinned)}
                 onClick={() => onToggleFlag?.(doc.id, 'isPinned')}
-                className={`${iconButton} ${doc.isPinned ? 'text-(--primary)' : 'text-(--text-muted) hover:text-(--text-primary)'
+                className={`group cursor-pointer rounded-md p-1 transition-colors ${doc.isPinned ? 'text-[#e5484d]' : 'text-(--text-muted) hover:text-[#e5484d]'
+
                   }`}
               >
-                <Pin size={14} className={doc.isPinned ? 'fill-current' : ''} />
+                <Pin size={14} className={doc.isPinned ? 'fill-current' : 'group-hover:fill-current'} />
+
               </button>
+
+
+
             ) : (
               doc.isPinned && (
-                <span className="p-1 text-(--primary)" aria-label="Pinned by admin">
+                <span className="p-1 text-(--primary)" title="Pinned by admin" aria-label="Pinned by admin">
                   <Pin size={14} className="fill-current" />
                 </span>
               )
@@ -173,17 +176,18 @@ function DocumentList({
 
           {showActions && (
             <DocumentCardMenu
-              doc={document}
+              doc={doc}
               adminMode={adminMode}
               isPinned={Boolean(doc.isPinned)}
+              isArchived={Boolean(doc.isArchived)}
               isBookmarked={Boolean(doc.isBookmarked)}
-              onOpen={() => onOpen?.(doc)}
+              onOpen={bindDoc(onOpen, doc)}
               onToggleBookmark={() => onToggleFlag?.(doc.id, 'isBookmarked')}
               onTogglePin={() => onToggleFlag?.(doc.id, 'isPinned')}
-              onArchive={() => onArchive?.(doc)}
-              onEditMetadata={() => onEditMetadata?.(doc)}
-              onReindex={() => onReindex?.(doc)}
-              onDelete={() => onDelete?.(doc)}
+              onArchive={bindDoc(onArchive, doc)}
+              onEditMetadata={bindDoc(onEditMetadata, doc)}
+              onReindex={bindDoc(onReindex, doc)}
+              onDelete={bindDoc(onDelete, doc)}
             />
           )}
         </div>

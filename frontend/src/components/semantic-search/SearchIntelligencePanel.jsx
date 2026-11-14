@@ -1,44 +1,59 @@
 import { useState } from "react";
-import { Zap } from "lucide-react";
+import { ChartColumn, X, Zap } from "lucide-react";
 
 function Row({ label, value }) {
   return (
-    <div className="flex items-center justify-between border-b border-dashed border-(--border-subtle) py-2 last:border-b-0">
+    <div className="flex items-center justify-between border-b border-dashed border-(--border-medium) py-2 transition-colors duration-200 last:border-b-0">
       <dt className="text-[12px] text-(--text-muted)">{label}</dt>
-      <dd className="font-(family-name:--font-mono) text-[12px] font-semibold text-(--text-primary)">{value}</dd>
+      <dd className="text-[12px] text-(--text-muted)">{value}</dd>
     </div>
   );
 }
 
-export default function SearchIntelligencePanel({ query, stats }) {
+export default function SearchIntelligencePanel({ query, stats, onInspect }) {
   const [inspecting, setInspecting] = useState(false);
   // ↑ Inspect expands extra details inside this card (no separate page needed).
 
   return (
     <section
       aria-label="Search intelligence"
-      className="ssp-rise rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)"
+      className="ssp-rise rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-all duration-200 hover:border-(--accent-highlight) hover:shadow-(--shadow-md)"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="grid size-8 place-items-center rounded-lg border border-(--border-medium) bg-(--bg-app) text-(--primary)">
-            <Zap size={15} aria-hidden="true" />
+          <span className="grid size-9 place-items-center rounded-xl bg-(--status-warning-bg) text-(--status-warning)">
+            <Zap size={17} fill="currentColor" stroke="currentColor" strokeWidth={1.8} aria-hidden="true" />
           </span>
           <div>
             <h3 className="text-[14px] font-bold text-(--text-primary)">Search Intelligence</h3>
-            <p className="font-(family-name:--font-mono) text-[9.5px] uppercase tracking-widest text-(--text-muted)">
+            <p className="font-(family-name:--font-mono) text-[9.5px] uppercase tracking-widest text-(--status-warning)">
               {stats.engine}
             </p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setInspecting((v) => !v)}
-          aria-expanded={inspecting}
-          className="rounded-full border border-(--border-subtle-nav) px-3 py-1 text-[11.5px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
-        >
-          {inspecting ? "Close" : "Inspect"}
-        </button>
+       <button
+  type="button"
+  onClick={() => {
+    setInspecting((v) => !v);
+    onInspect?.();
+  }}
+  aria-expanded={inspecting}
+  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold transition-all duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) ${
+    inspecting
+      ? "border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-muted)"
+      : "border-(--border-medium) bg-(--bg-surface) text-(--text-primary) hover:-translate-y-0.5 hover:border-(--primary) hover:bg-(--primary-light) hover:text-(--primary) hover:shadow-sm"
+  }`}
+>
+  {inspecting ? (
+    <>
+      <X size={13} aria-hidden="true" /> Close
+    </>
+  ) : (
+    <>
+      <ChartColumn size={13} aria-hidden="true" /> Inspect
+    </>
+  )}
+</button>
       </div>
 
       <p className="mt-3 text-[12px] leading-relaxed text-(--text-secondary)">
@@ -54,7 +69,7 @@ export default function SearchIntelligencePanel({ query, stats }) {
       </dl>
 
       {inspecting && (
-        <div className="ssp-pop mt-3 rounded-xl border border-(--border-subtle) bg-(--bg-app) p-3">
+        <div className="ssp-pop mt-3 rounded-xl border border-dashed border-(--border-medium) bg-(--bg-surface-subtle) p-3">
           <p className="font-(family-name:--font-mono) text-[9.5px] uppercase tracking-widest text-(--text-muted)">
             Retrieval settings
           </p>

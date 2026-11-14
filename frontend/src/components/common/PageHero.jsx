@@ -1,35 +1,57 @@
-function PageHero({ eyebrow, title, description, status, actions, bare = false }) {
-  // Default look is a boxed card. `bare` renders the hero straight on the
-  // page background, for pages whose design has no card around the hero.
-  const boxClass = bare
-    ? ''
-    : 'rounded-3xl border border-(--border-medium) bg-(--bg-surface) px-10 py-9 shadow-(--shadow-sm)';
+import React from "react";
 
+function PageHero({
+  eyebrow,
+  title,
+  description,
+  status,
+  actions,
+  className = "",
+}) {
   return (
-    <section className={boxClass}>
-      <div className="flex items-end justify-between gap-8">
-        {/* Main page introduction. */}
-        <div>
-          <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-(--text-eyebrow)">
-            {eyebrow}
-          </p>
+    <section className={`w-full py-4 ${className}`.trim()}>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        {/* Main page introduction sitting directly on the canvas */}
+        <div className="min-w-0 max-w-3xl">
+          {eyebrow && (
+            <p
+              className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-(--text-eyebrow)"
+              style={{ fontFamily: "var(--font-mono, monospace)" }}
+            >
+              {eyebrow}
+            </p>
+          )}
 
-          <h1 className="mt-3 [font-family:var(--font-serif)] text-4xl font-black tracking-tight text-(--text-primary)">
+          <h1
+            className="mt-1.5 text-3xl font-bold tracking-tight text-(--text-primary) sm:text-4xl md:text-[42px] md:leading-[1.12]"
+            style={{ fontFamily: "var(--font-serif, serif)" }}
+          >
             {title}
           </h1>
 
-          <p className="mt-1 text-sm text-(--text-secondary)">{description}</p>
+          {description && (
+            <p className="mt-2 text-sm leading-relaxed text-(--text-secondary) sm:text-[15px]">
+              {description}
+            </p>
+          )}
         </div>
 
-        {/* Page-specific status indicator. */}
-        {status && (
-          <div className="shrink-0 rounded-full border border-(--border-medium) bg-(--primary-light) px-3 py-2 text-[12px] font-medium text-(--text-primary)">
-            {status}
+        {/* Right side: Status indicator pill and/or action buttons */}
+        {(status || actions) && (
+          <div className="flex shrink-0 flex-wrap items-center gap-3 self-start sm:self-end">
+            {status && (
+              <div
+                className="inline-flex items-center gap-2 rounded-full border border-(--border-medium) bg-(--bg-surface-elevated,var(--bg-surface)) px-3.5 py-1.5 text-xs font-medium text-(--text-secondary) transition-colors"
+                style={{ fontFamily: "var(--font-sans, inherit)" }}
+              >
+                {status}
+              </div>
+            )}
+
+            {actions && (
+              <div className="flex items-center gap-2.5">{actions}</div>
+            )}
           </div>
-        )}
-        {/* Free-form right-side content, e.g. buttons or small widgets. */}
-        {actions && (
-          <div className="flex shrink-0 items-center gap-3">{actions}</div>
         )}
       </div>
     </section>

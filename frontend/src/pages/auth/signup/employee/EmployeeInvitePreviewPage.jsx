@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom';
 import AuthBackground from '../../../../components/auth/AuthBackground';
 import BackLink from '../../../../components/common/BackLink';
-import '../../../../styles/auth.css';
+import styles from '../../../../styles/auth.module.css';
 // header section
 function InviteStepIndicator() {
   return (
-    <div className="step-indicator">
-      <div className="step active">
-        <span className="step-num step-num--check">✓</span> Verified
+    <div className={styles['step-indicator']}>
+      <div className={`${styles['step']} ${styles['active']}`}>
+        <span className={`${styles['step-num']} ${styles['step-num--check']}`}>✓</span> Verified
       </div>
-      <span className="step-arrow">→</span>
-      <div className="step">
-        <span className="step-num step-num--current">2</span> Ready
+      <span className={styles['step-arrow']}>→</span>
+      <div className={`${styles['step']} ${styles['step--current']}`}>
+        <span className={`${styles['step-num']} ${styles['step-num--current']}`}>2</span> Ready
       </div>
     </div>
   );
@@ -19,39 +19,39 @@ function InviteStepIndicator() {
  // invitation card section
 function InvitationCard() {
   return (
-    <div className="invite-card">
-      <div className="invite-card-header">
-        <span className="invite-avatar">NS</span>
+    <div className={styles['invite-card']}>
+      <div className={styles['invite-card-header']}>
+        <span className={styles['invite-avatar']}>NS</span>
         <div>
-          <p className="invite-company-name">Northstar Studio</p>
-          <p className="invite-company-domain">northstar.studio</p>
+          <p className={styles['invite-company-name']}>Northstar Studio</p>
+          <p className={styles['invite-company-domain']}>northstar.studio</p>
         </div>
       </div>
 
-      <div className="invite-details-grid">
+      <div className={styles['invite-details-grid']}>
         <div>
-          <p className="invite-label">Invited by</p>
-          <p className="invite-value">Maya Chen</p>
-          <p className="invite-sub">Administrator</p>
+          <p className={styles['invite-label']}>Invited by</p>
+          <p className={styles['invite-value']}>Maya Chen</p>
+          <p className={styles['invite-sub']}>Administrator</p>
         </div>
         <div>
-          <p className="invite-label">Workspace</p>
-          <p className="invite-value">Northstar Studio</p>
-          <p className="invite-sub">Dedicated Neural Vault</p>
+          <p className={styles['invite-label']}>Workspace</p>
+          <p className={styles['invite-value']}>Northstar Studio</p>
+          <p className={styles['invite-sub']}>Dedicated Neural Vault</p>
         </div>
         <div>
-          <p className="invite-label">Department</p>
-          <p className="invite-value">Engineering</p>
+          <p className={styles['invite-label']}>Department</p>
+          <p className={styles['invite-value']}>Engineering</p>
         </div>
         <div>
-          <p className="invite-label">Workspace Role</p>
-          <p className="invite-value">Employee</p>
+          <p className={styles['invite-label']}>Workspace Role</p>
+          <p className={styles['invite-value']}>Employee</p>
         </div>
       </div>
 
-      <div className="invite-status-row">
-        <p className="invite-label">Invitation Status</p>
-        <span className="invite-status-badge">✓ Valid &amp; Verified</span>
+      <div className={styles['invite-status-row']}>
+        <p className={styles['invite-label']}>Invitation Status</p>
+        <span className={styles['invite-status-badge']}>✓ Valid &amp; Verified</span>
       </div>
     </div>
   );
@@ -59,31 +59,31 @@ function InvitationCard() {
 //complete page component
 export default function EmployeeInvitePreviewPage() {
   return (
-    <div className="auth-shell">
+    <div className={styles['auth-shell']}>
       <AuthBackground />
 
-      <div className="auth-form-panel">
-        <div className="auth-card">
+      <div className={styles['auth-form-panel']}>
+        <div className={styles['auth-card']}>
           <InviteStepIndicator />
 
-          <div className="auth-context-row">
+          <div className={styles['auth-context-row']}>
             <BackLink>← Back</BackLink>
           </div>
 
-          <div className="auth-badge">📄 OFFICIAL INVITATION</div>
-          <h2 className="auth-title">You're invited to join EKA</h2>
-          <p className="auth-description">
+          <div className={styles['auth-badge']}>📄 OFFICIAL INVITATION</div>
+          <h2 className={styles['auth-title']}>You're invited to join EKA</h2>
+          <p className={styles['auth-description']}>
             Review your organization and role details before activating your account.
           </p>
 
           <InvitationCard />
 
-          <Link to="/dashboard" className="option-card-btn option-card-btn--teal">
+          <Link to="/dashboard" className={`${styles['option-card-btn']} ${styles['option-card-btn--teal']}`}>
             Accept Invitation
             <span aria-hidden="true">→</span>
           </Link>
 
-          <p className="auth-page-footer">© 2026 EKA Technologies. All rights reserved.</p>
+          <p className={styles['auth-page-footer']}>© 2026 EKA Technologies. All rights reserved.</p>
         </div>
       </div>
     </div>

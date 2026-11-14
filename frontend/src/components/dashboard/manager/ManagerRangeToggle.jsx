@@ -17,7 +17,7 @@ function ManagerRangeToggle({ value, onChange }) {
             type="button"
             aria-pressed={isActive}
             onClick={() => onChange(range)}
-            className={`cursor-pointer rounded-full px-3 py-1 font-mono text-[0.68rem] font-semibold transition-colors ${
+            className={`cursor-pointer rounded-full px-2 py-0.5 font-mono text-[0.62rem] font-semibold transition-colors ${
               isActive
                 ? "bg-(--primary) text-(--primary-contrast) shadow-(--shadow-sm)"
                 : "text-(--text-muted) hover:text-(--text-primary)"

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { documentHealth } from '../shared/DocumentData';
 import Badge from '../../common/Badge.jsx';
@@ -11,6 +12,13 @@ const BADGE_TYPE = {
   Failed: 'danger',
 };
 
+const STATUS_COLOR = {
+  indexed: 'var(--status-success)',
+  processing: 'var(--status-info)',
+  outdated: 'var(--status-warning)',
+  failed: 'var(--status-danger)',
+};
+
 // Ring made of one arc per status, drawn clockwise from 12 o'clock.
 // `activeKey`: that arc stays full, the others fade (hover / selected status).
 function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
@@ -19,8 +27,12 @@ function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
   let offset = 0;
 
   return (
-    <div className="relative h-[120px] w-[120px] shrink-0">
-      <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" aria-hidden="true">
+    <div className="relative h-[99px] w-[99px] shrink-0">
+      <svg
+        viewBox="0 0 100 100"
+        className="h-full w-full -rotate-90"
+        aria-hidden="true"
+      >
         {items.map((item) => {
           const length = (item.count / total) * circumference;
           const circle = (
@@ -30,7 +42,7 @@ function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
               cy="50"
               r={radius}
               fill="none"
-              stroke={item.color}
+              stroke={STATUS_COLOR[item.key]}
               strokeWidth={activeKey === item.key ? 11 : 9}
               opacity={activeKey && activeKey !== item.key ? 0.25 : 1}
               style={{ transition: 'opacity 150ms, stroke-width 150ms' }}
@@ -42,6 +54,7 @@ function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
           return circle;
         })}
       </svg>
+
       <span
         className="absolute inset-0 flex items-center justify-center font-serif text-[26px] font-black"
         style={{ color: centerColor }}
@@ -70,33 +83,40 @@ function DocumentHealthOverview() {
   // otherwise the overall health (indexed share).
   const shown = hovered ?? selected ?? null;
   const centerItem = shown ?? indexed;
-  const badgeText = shown ? `${shown.count} ${shown.label}` : `${percent(indexed.count)}% Healthy`;
+  const badgeText = shown
+    ? `${shown.count} ${shown.label}`
+    : `${percent(indexed.count)}% Healthy`;
   const badgeType = shown ? BADGE_TYPE[shown.label] : 'success';
+
   const subtitle = shown
     ? `📌 ${shown.count} documents (${percent(shown.count)}%) currently ${shown.label.toLowerCase()}`
     : `Real-time ingestion & health telemetry across ${total} total repository files.`;
 
   return (
-    <section className="mb-6 flex flex-col gap-5 rounded-[28px] border border-(--border-subtle) bg-(--bg-surface) px-9 py-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
+    <section className="mt-3 mb-6 flex flex-col gap-2 rounded-3xl border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) lg:flex-row lg:items-center">
       {/* Left: ring + title */}
       <div className="flex items-center gap-7 lg:basis-[556px] lg:shrink-0">
         <HealthDonut
           items={documentHealth}
           total={total}
           centerText={`${percent(centerItem.count)}%`}
-          centerColor={shown ? shown.color : 'var(--text-primary)'}
+          centerColor={
+            shown ? STATUS_COLOR[shown.key] : 'var(--text-primary)'
+          }
           activeKey={shown?.key}
         />
-        <div className="min-w-0 max-w-[400px]">
+
+        <div className="min-w-0 max-w-[300px]">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="font-serif text-[21px] font-bold leading-tight text-(--text-primary)">
               Document Health Overview
             </h2>
             <Badge text={badgeText} type={badgeType} size="sm" />
           </div>
+
           <p
-            className="mt-1.5 text-[13px] leading-5 text-(--text-muted)"
-            style={shown ? { color: shown.color } : undefined}
+            className="mt-1.5 text-[11px] leading-4 text-(--text-muted)"
+            style={shown ? { color: STATUS_COLOR[shown.key] } : undefined}
           >
             {subtitle}
           </p>
@@ -107,7 +127,8 @@ function DocumentHealthOverview() {
       <div className="grid flex-1 grid-cols-2 gap-3.5 lg:grid-cols-4">
         {documentHealth.map((item) => {
           const isActive = activeStatus === item.label;
-          const isHot = isActive || hoveredKey === item.key;
+          const isHighlighted = isActive || hoveredKey === item.key;
+
           return (
             <button
               key={item.key}
@@ -118,20 +139,30 @@ function DocumentHealthOverview() {
               onMouseLeave={() => setHoveredKey(null)}
               onFocus={() => setHoveredKey(item.key)}
               onBlur={() => setHoveredKey(null)}
-              style={{ borderColor: isHot ? item.color : undefined }}
-              className={`min-h-[105px] cursor-pointer rounded-xl border px-[18px] py-[17px] text-left transition-colors ${
-                isHot ? 'bg-white' : 'border-transparent bg-[#e1f0fa]'
+              style={{
+                borderColor: isHighlighted
+                  ? STATUS_COLOR[item.key]
+                  : undefined,
+              }}
+              className={`min-h-[86px] cursor-pointer rounded-[14px] border px-4 py-1.5 text-left transition-colors ${
+                isHighlighted
+                  ? 'bg-(--bg-surface)'
+                  : 'border-transparent bg-(--bg-surface-subtle)'
               }`}
             >
-              <div className="flex items-center justify-between gap-">
+              <div className="flex items-center justify-between gap-2">
                 <span className="flex items-center gap-1.5 text-[10px] font-semibold text-(--text-secondary)">
                   <span
                     className="h-1 w-1 rounded-full"
-                    style={{ backgroundColor: item.color }}
+                    style={{ backgroundColor: STATUS_COLOR[item.key] }}
                   />
                   {item.label}
                 </span>
-                <span className="doc-mono text-[9px]" style={{ color: item.color }}>
+
+                <span
+                  className="doc-mono text-[9px]"
+                  style={{ color: STATUS_COLOR[item.key] }}
+                >
                   {percent(item.count)}%
                 </span>
               </div>
@@ -140,13 +171,13 @@ function DocumentHealthOverview() {
                 {item.count}
               </p>
 
-              {/* Share bar (small shares get a minimum width so they stay visible) */}
-              <div className="mt-2 h-1 rounded-full bg-white/70">
+              {/* Share bar */}
+              <div className="mt-2 h-1 rounded-full bg-(--bg-surface-subtle)">
                 <div
                   className="h-full rounded-full"
                   style={{
                     width: `${Math.max(percent(item.count), 16)}%`,
-                    backgroundColor: item.color,
+                    backgroundColor: STATUS_COLOR[item.key],
                   }}
                 />
               </div>

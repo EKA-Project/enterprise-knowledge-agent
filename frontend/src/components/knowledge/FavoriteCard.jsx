@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { FileText, Pencil } from 'lucide-react';
 import { categoryThemes } from './KnowledgeData.js';
-import { formatStyles } from './CollectionSourceFiles.jsx';
+import Badge from '../common/Badge.jsx';
 
 // TODO: change this one line when the Document Summary route is final
 const docUrl = (docId) => `/documents/${docId}`;
@@ -17,11 +17,6 @@ const chipStyles = {
   rose: 'bg-[#ffeef1] text-[#be123c]',
 };
 
-// Top-right format badge (square tile). Unknown formats fall back to the shared style.
-const badgeStyles = {
-  PDF: 'bg-(--status-danger-bg) text-(--status-danger)',
-  FIG: 'bg-[#f3e7ff] text-[#7e22ce]',
-};
 
 // One ranked card in Library Favorites. Whole card opens the document.
 export default function FavoriteCard({ item, rank, mode }) {
@@ -44,21 +39,17 @@ export default function FavoriteCard({ item, rank, mode }) {
             #{rank}
           </span>
           <span
-            className={`kb-mono truncate rounded-md px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em] ${
-              chipStyles[item.iconTheme] ?? theme.icon
-            }`}
+            className={`kb-mono truncate rounded-md px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em] ${chipStyles[item.iconTheme] ?? theme.icon
+              }`}
           >
             {item.category}
           </span>
         </div>
         {/* Format badge */}
-        <span
-          className={`kb-mono flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[9px] font-bold ${
-            badgeStyles[item.format] ?? formatStyles[item.format]
-          }`}
-        >
-          {item.format}
-        </span>
+              <Badge
+        format={item.format}
+        className="doc-mono !h-8 !w-8 !rounded-1xl !text-[10px]"
+      />
       </div>
 
       <h4 className="kb-serif mt-3 text-[15px] font-bold leading-snug text-(--text-primary)">{item.title}</h4>

@@ -1,8 +1,10 @@
+
 import { useEffect, useRef, useState } from 'react';
 import {
   Pencil,
   RefreshCw,
   Archive,
+  ArchiveRestore,
   Trash2,
 } from 'lucide-react';
 
@@ -11,9 +13,9 @@ const Item = ({ label, onClick, danger, icon: Icon }) => (
   <button
     type="button"
     onClick={onClick}
-    className={`w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg text-xs font-medium hover:bg-[#e0eef7] ${
-      danger ? 'text-red-600' : 'text-(--text-primary)'
-    }`}
+   className={`w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg text-xs font-medium hover:bg-(--bg-surface-subtle) ${
+  danger ? 'text-(--status-error)' : 'text-(--text-primary)'
+}`}
   >
     <Icon size={14} />
     {label}
@@ -21,6 +23,8 @@ const Item = ({ label, onClick, danger, icon: Icon }) => (
 );
 
 export default function SummaryKebabMenu({
+  circleClass = '',
+  archived = false,
   onEdit,
   onReindex,
   onArchive,
@@ -59,18 +63,19 @@ export default function SummaryKebabMenu({
       <button
         type="button"
         aria-label="More actions"
+        aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="w-9 h-9 rounded-full bg-white grid place-items-center hover:bg-[#e1f0fa]"
+        className={`${circleClass} text-(--text-primary)`}
       >
         <span className="flex gap-[3px]" aria-hidden="true">
-          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
-          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
-          <span className="h-[4px] w-[4px] rounded-full bg-(--text-primary)" />
+          <span className="h-[4px] w-[4px] rounded-full bg-current" />
+          <span className="h-[4px] w-[4px] rounded-full bg-current" />
+          <span className="h-[4px] w-[4px] rounded-full bg-current" />
         </span>
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-52 p-1.5 rounded-xl border border-(--border) bg-white shadow-lg z-30">
+       <div className="absolute right-0 mt-2 w-52 p-1.5 rounded-xl border border-(--border) bg-(--bg-surface) shadow-lg z-30">
           <Item
             label="Edit Metadata"
             icon={Pencil}
@@ -84,8 +89,8 @@ export default function SummaryKebabMenu({
           />
 
           <Item
-            label="Archive Document"
-            icon={Archive}
+            label={archived ? 'Unarchive Document' : 'Archive Document'}
+            icon={archived ? ArchiveRestore : Archive}
             onClick={run(onArchive)}
           />
 
