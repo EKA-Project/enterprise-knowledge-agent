@@ -4,11 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import AuthContext from '../context/AuthContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
-
-import {
-  getDocumentSummary,
-  setDocumentArchived,
-} from '../components/documents/summary/summaryService';
+import { getDocumentSummary } from '../components/documents/summary/summaryAdapter';
 
 import { loadDocuments } from '../components/documents/shared/documentResults.js';
 
