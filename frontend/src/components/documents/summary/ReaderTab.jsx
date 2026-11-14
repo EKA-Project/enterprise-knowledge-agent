@@ -5,7 +5,7 @@ import '../../../styles/Document.css';
 const card =
   'rounded-3xl border border-(--border-subtle) bg-(--bg-surface) shadow-(--shadow-sm)';
 const pill =
-  'inline-flex cursor-pointer items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-colors';
+  'inline-flex cursor-pointer items-center gap-[0.45rem] rounded-(--radius-pill) border px-[1rem] py-[0.45rem] font-(family-name:--font-sans) text-[0.82rem] [transition:all_var(--transition-fast)]';
 
 // "Original Document Reader" tab. Data only via props:
 //  doc.readerPages [{ page, title, text }], doc.pdfUrl
@@ -29,27 +29,40 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
   return (
     <div className="min-w-0 space-y-4">
       {/* View mode switch */}
+      {/* View mode switch */}
       <div className={`${card} flex flex-wrap items-center gap-2 p-3`}>
         <button
           type="button"
           onClick={() => setMode('text')}
           className={`${pill} ${mode === 'text'
-            ? 'bg-[#153830] text-white'
-            : 'bg-[#e1f0fa] text-[#3d5a73] hover:bg-[#d4e8f7]'
+              ? 'border-(--primary) bg-(--primary) font-bold text-(--primary-contrast)'
+              : 'border-(--border-medium) bg-(--bg-surface-subtle) font-semibold text-(--text-secondary) hover:border-(--primary) hover:text-(--primary)'
             }`}
         >
-          <FileText size={13} /> Interactive Text Pages
+          <FileText
+            size={13}
+            strokeWidth={mode === 'text' ? 2.2 : 2}
+            className="shrink-0"
+          />
+          Interactive Text Pages
         </button>
+
         <button
           type="button"
           onClick={() => setMode('pdf')}
           className={`${pill} ${mode === 'pdf'
-            ? 'bg-[#153830] text-white'
-            : 'bg-[#e1f0fa] text-[#3d5a73] hover:bg-[#d4e8f7]'
+              ? 'border-(--primary) bg-(--primary) font-bold text-(--primary-contrast)'
+              : 'border-(--border-medium) bg-(--bg-surface-subtle) font-semibold text-(--text-secondary) hover:border-(--primary) hover:text-(--primary)'
             }`}
         >
-          <FileIcon size={13} /> Original PDF Document
+          <FileIcon
+            size={13}
+            strokeWidth={mode === 'pdf' ? 2.2 : 2}
+            className="shrink-0"
+          />
+          Original PDF Document
         </button>
+
         <span className="doc-mono ml-auto text-[9px] uppercase tracking-widest text-(--text-muted)">
           View mode status
         </span>
@@ -82,7 +95,7 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
                     }`}
                 >
                   <span className="block text-xs font-semibold">Page {p.page}</span>
-                 <span className={`block truncate text-[10px] ${p.page === current?.page ? 'text-[#a8e6cf]' : 'text-[#7c949a]'}`}>{p.title}</span>
+                  <span className={`block truncate text-[10px] ${p.page === current?.page ? 'text-[#a8e6cf]' : 'text-[#7c949a]'}`}>{p.title}</span>
                 </button>
               ))}
             </div>

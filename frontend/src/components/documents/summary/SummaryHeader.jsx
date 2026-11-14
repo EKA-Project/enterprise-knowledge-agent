@@ -7,7 +7,7 @@ import '../../../styles/Document.css';
 import { statusMeta, PinnedByAdmin } from '../shared/DocumentCard';
 
 const circle =
-  'flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-(--border-medium) bg-(--bg-surface) transition-colors hover:bg-(--bg-surface-subtle)';
+  'flex h-[36px] w-[36px] shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-(--border-medium) bg-(--bg-surface) shadow-[0_1px_2px_rgba(0,0,0,0.04)] [transition:all_var(--transition-fast)] hover:border-(--border-strong) hover:bg-(--bg-surface-subtle)';
 
 // Top card. Admin gets bookmark / pin / kebab next to the link button.
 function SummaryHeader({
@@ -50,8 +50,8 @@ function SummaryHeader({
               type={status.type}
               size="sm"
               className={`!px-3 !py-1 !text-[11px] ${doc.status === 'Indexed'
-                  ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
-                  : status.style
+                ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
+                : status.style
                 }`}
             />
           )}
@@ -93,7 +93,7 @@ function SummaryHeader({
         <Link
           to="/ask-eka"
           state={{ question: `Tell me about "${doc.title}"` }}
-          className="inline-flex items-center rounded-(--radius-pill) border border-(--primary) bg-(--primary) px-2 py-1 text-(length:--font-size-sm) font-bold text-(--primary-contrast) [transition:background-color_var(--transition-fast)] hover:bg-(--primary-hover)"
+          className="inline-flex items-center gap-[6px] rounded-(--radius-pill) border border-(--primary) bg-(--primary) px-[1.35rem] py-[0.55rem] font-(family-name:--font-sans) text-[0.85rem] font-bold text-(--primary-contrast) [transition:all_var(--transition-fast)] hover:-translate-y-px hover:bg-(--primary-hover)"
         >
           Ask About This Doc →
         </Link>
@@ -103,9 +103,9 @@ function SummaryHeader({
           type="button"
           aria-label="Copy document link"
           onClick={onCopyLink}
-          className={`${circle} text-(--text-secondary)`}
+          className={`${circle} text-(--text-primary)`}
         >
-          <LinkIcon size={14} />
+          <LinkIcon size={16} />
         </button>
 
         {/* Individual Bookmark - All Roles */}
@@ -115,8 +115,8 @@ function SummaryHeader({
           aria-pressed={Boolean(saved)}
           onClick={onToggleSave}
           className={`${circle} ${saved
-              ? 'text-(--action-saved)'
-              : 'text-(--text-secondary)'
+            ? 'text-(--action-saved)'
+            : 'text-(--text-primary)'
             }`}
         >
           <Bookmark
@@ -133,8 +133,8 @@ function SummaryHeader({
             aria-pressed={Boolean(pinned)}
             onClick={onTogglePin}
             className={`${circle} ${pinned
-                ? 'text-(--action-pinned)'
-                : 'text-(--text-secondary)'
+              ? 'text-(--action-pinned)'
+              : 'text-(--text-primary)'
               }`}
           >
             <Pin
@@ -145,7 +145,7 @@ function SummaryHeader({
         ) : (
           pinned && (
             <PinnedByAdmin
-              className={`${circle} !cursor-default`}
+              className={`${circle} !cursor-default [&>svg]:h-4 [&>svg]:w-4`}
             />
           )
         )}

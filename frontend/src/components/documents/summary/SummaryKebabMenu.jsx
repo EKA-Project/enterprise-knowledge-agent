@@ -65,7 +65,7 @@ export default function SummaryKebabMenu({
         aria-label="More actions"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={`${circleClass} !border-0 text-(--text-secondary)`}
+        className={`${circleClass} text-(--text-primary)`}
       >
         <span className="flex gap-[3px]" aria-hidden="true">
           <span className="h-[4px] w-[4px] rounded-full bg-current" />
