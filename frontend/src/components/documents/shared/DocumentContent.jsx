@@ -222,11 +222,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             onChange={(event) => setCategory(event.target.value)}
             className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-1 pl-3 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
-            <option value={ALL_CATEGORIES}>
-              {isManager
-                ? `All Categories (${documentCategories.length})`
-                : 'All Departments'}
-            </option>
+            <option value={ALL_CATEGORIES}>All Departments</option>
 
             <option value={SAVED_FILTER}>⭐ Saved Bookmarks</option>
             <option value={PINNED_FILTER}>📌 Admin Pinned</option>
@@ -273,8 +269,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
             className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'grid'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
               }`}
           >
             <LayoutGrid size={15} />
@@ -286,8 +282,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
             className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'list'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
               }`}
           >
             <List size={14} />

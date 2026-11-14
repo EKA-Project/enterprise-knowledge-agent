@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Link as LinkIcon, Bookmark, Pin } from 'lucide-react';
+import { Link as LinkIcon, Bookmark, Pin, Archive } from 'lucide-react';
 import SummaryKebabMenu from './SummaryKebabMenu';
 import Badge from '../../common/Badge.jsx';
 import '../../../styles/Document.css';
@@ -40,7 +40,8 @@ function SummaryHeader({
           </span>
 
           {archived ? (
-            <span className="rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary)">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary)">
+              <Archive size={14} />
               Archived
             </span>
           ) : (
@@ -48,11 +49,10 @@ function SummaryHeader({
               text={status.label}
               type={status.type}
               size="sm"
-              className={`!px-3 !py-1 !text-[11px] ${
-                doc.status === 'Indexed'
+              className={`!px-3 !py-1 !text-[11px] ${doc.status === 'Indexed'
                   ? '!border-[#bdeedb] !bg-[#edfdf7] !text-[#0f8f63]'
                   : status.style
-              }`}
+                }`}
             />
           )}
 
@@ -114,11 +114,10 @@ function SummaryHeader({
           aria-label={saved ? 'Remove bookmark' : 'Bookmark document'}
           aria-pressed={Boolean(saved)}
           onClick={onToggleSave}
-          className={`${circle} ${
-            saved
+          className={`${circle} ${saved
               ? 'text-(--action-saved)'
               : 'text-(--text-secondary)'
-          }`}
+            }`}
         >
           <Bookmark
             size={14}
@@ -133,11 +132,10 @@ function SummaryHeader({
             aria-label={pinned ? 'Unpin document' : 'Pin document'}
             aria-pressed={Boolean(pinned)}
             onClick={onTogglePin}
-            className={`${circle} ${
-              pinned
+            className={`${circle} ${pinned
                 ? 'text-(--action-pinned)'
                 : 'text-(--text-secondary)'
-            }`}
+              }`}
           >
             <Pin
               size={14}

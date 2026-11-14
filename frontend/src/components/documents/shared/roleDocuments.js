@@ -107,12 +107,12 @@ export function useRoleDocuments() {
             ...d,
             ...(e
               ? {
-                  title: e.title,
-                  category: e.category,
-                  author: e.author,
-                  description: e.executiveSummary,
-                  edited: true,
-                }
+                title: e.title,
+                category: e.category,
+                author: e.author,
+                description: e.executiveSummary,
+                edited: true,
+              }
               : {}),
             isBookmarked:
               bookmarks[activeRole]?.[d.id] ??
@@ -127,6 +127,10 @@ export function useRoleDocuments() {
           };
         })
         .filter((doc) => {
+          if (activeRole === 'Employee') {
+            return Boolean(doc.isPinned) || !doc.isArchived;
+          }
+
           if (!doc.isArchived) return true;
           if (activeRole === 'Admin') return true;
 
