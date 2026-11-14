@@ -169,11 +169,12 @@ function FreeUpCard({
     onSelectedChange(next);
   };
 
-  const chip = (on) =>
-    `doc-mono h-6 cursor-pointer rounded-full px-4 text-[12.5px] font-semibold transition-colors ${on
-      ? 'bg-[#0a7bc4] text-white'
-      : 'text-[#44596a] hover:text-[#10283f]'
-    }`;
+const chip = (on) =>
+  `cursor-pointer whitespace-nowrap rounded-(--radius-pill) px-3 py-[0.3rem] font-(family-name:--font-mono) text-(length:--font-size-sm) font-semibold [transition:all_var(--transition-fast)] ${
+    on
+      ? 'bg-(--primary) text-(--primary-contrast) shadow-(--shadow-sm)'
+      : 'bg-transparent text-(--text-secondary) hover:text-(--text-primary)'
+  }`;
 
   return (
     <section
@@ -347,7 +348,7 @@ function FreeUpCard({
           )}
 
           {(tab === 'large' || tab === 'idle') && (
-            <div className="inline-flex h-6 items-center gap-0.5 rounded-full bg-white/90 p-0">
+            <div className="inline-flex items-center gap-0.5 rounded-(--radius-pill) border border-(--border-medium) bg-(--bg-surface) p-0">
               {(tab === 'large' ? LARGE_CHIPS : IDLE_CHIPS).map((c) => {
                 const isOn =
                   tab === 'large'
