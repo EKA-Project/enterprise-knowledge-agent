@@ -10,13 +10,13 @@ import { sections } from "../data/mock/sections.js";
 import { users } from "../data/mock/users.js";
 import { canReadDocument } from "../utils/canReadDocument.js";
 import { clone } from "./mockHelpers.js";
-
+import { createMockPersistence, startAutoSave } from "./mockPersistCore.js";
 // MOCK-ONLY working copy of every table. Deleted with src/data/mock/ in Phase C.
 //
 // Why a copy: the files in data/mock/ stay pristine, so `npm run validate:mock`
 // always checks the original data. When services start writing (pin, archive,
 // reindex), they change THIS copy, and every service sees the same change. That
-// is how one source of truth works here. A page reload resets it to the seed data.
+// is how one source of truth works here. 
 //
 // Only services import this file; pages never do.
 export const db = {
@@ -31,6 +31,14 @@ export const db = {
   activityEvents: clone(activityEvents),
   findings: clone(findings),
 };
+
+
+// MOCK-ONLY: keep edits across page reloads. Runs before lastDocumentNumber is computed.
+const persistence = createMockPersistence({ db, storage: globalThis.localStorage });
+persistence.hydrate();
+startAutoSave(persistence);
+globalThis.__resetMockData = () => { persistence.reset(); globalThis.location.reload(); };
+
 
 /**
  * The read rule applied to active documents: what this user may see in lists and
