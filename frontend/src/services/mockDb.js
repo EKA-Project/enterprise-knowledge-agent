@@ -17,10 +17,10 @@ import { createMockPersistence } from "./mockPersistence.js";
 // Why a copy: the files in data/mock/ stay pristine, so `npm run validate:mock`
 // always checks the original data. When services start writing (pin, archive,
 // reindex), they change THIS copy, and every service sees the same change. That
-// is how one source of truth works here. A page reload resets it to the seed data.
-//
+// is how one source of truth works here. Changes are saved in localStorage, so a
+// page reload keeps them (see mockPersistence.js).//
 // Only services import this file; pages never do.
-export const seedDb = {
+export const db = {
   departments: clone(departments),
   users: clone(users),
   documents: clone(documents),
@@ -34,8 +34,8 @@ export const seedDb = {
 };
 
 // Starts from the saved copy when one exists and still matches the seed data.
-const persistence = createMockPersistence(seedDb);
-export const db = { ...seedDb, ...persistence.load() };
+const persistence = createMockPersistence(db);
+Object.assign(db,persistence.load());
 persistence.attach(db);
 
 // Dev tool: forget every saved change and go back to the seed data.
