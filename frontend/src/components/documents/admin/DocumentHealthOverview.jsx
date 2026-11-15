@@ -1,8 +1,10 @@
 
 import { useState } from 'react';
-import { documentHealth } from '../shared/DocumentData';
+import { buildHealth } from '../shared/documentUiConstants';
+import { useRoleDocuments } from '../shared/roleDocuments.js';
 import Badge from '../../common/Badge.jsx';
 import { setStatusFilter, useStatusFilter } from '../shared/documentResults.js';
+
 
 // Badge colour per status (maps to the shared Badge types)
 const BADGE_TYPE = {
@@ -68,10 +70,12 @@ function HealthDonut({ items, total, centerText, centerColor, activeKey }) {
 // Hovering a status card previews it on the ring + title; clicking selects it
 // (highlighted card) and filters the document list below to that status.
 function DocumentHealthOverview() {
+  const { items: rows } = useRoleDocuments();
+  const documentHealth = buildHealth(rows);
   const activeStatus = useStatusFilter();
   const [hoveredKey, setHoveredKey] = useState(null);
 
-  const total = documentHealth.reduce((sum, item) => sum + item.count, 0);
+  const total = documentHealth.reduce((sum, item) => sum + item.count, 0) || 1;
   const percent = (count) => Math.round((count / total) * 100);
 
   const indexed = documentHealth.find((item) => item.key === 'indexed');
@@ -143,11 +147,10 @@ function DocumentHealthOverview() {
                   ? STATUS_COLOR[item.key]
                   : undefined,
               }}
-              className={`min-h-[86px] cursor-pointer rounded-[14px] border px-4 py-1.5 text-left transition-colors ${
-                isHighlighted
+              className={`min-h-[86px] cursor-pointer rounded-[14px] border px-4 py-1.5 text-left transition-colors ${isHighlighted
                   ? 'bg-(--bg-surface)'
                   : 'border-transparent bg-(--bg-surface-subtle)'
-              }`}
+                }`}
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="flex items-center gap-1.5 text-[10px] font-semibold text-(--text-secondary)">

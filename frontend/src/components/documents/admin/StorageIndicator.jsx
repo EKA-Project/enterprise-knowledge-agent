@@ -1,5 +1,5 @@
 import { Save, ExternalLink } from 'lucide-react';
-import { documentStorage } from '../shared/DocumentData';
+import { documentStorage } from '../shared/documentUiConstants';
 import { Link } from 'react-router-dom';
 
 // Storage pill beside the header buttons. The whole pill opens Storage Management.

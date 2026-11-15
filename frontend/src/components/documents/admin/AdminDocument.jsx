@@ -7,9 +7,11 @@ import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
 import { useDocumentCountText } from '../shared/documentResults.js';
 import pageMetadata from '../../../config/pageMetadata.js';
-
+import { useRoleDocuments } from '../shared/roleDocuments.js';
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
+  const { items } = useRoleDocuments();
+  useDocumentCountText(items.length)
   const countText = useDocumentCountText(documents.length);
   const { documents: documentMeta } = pageMetadata;
 

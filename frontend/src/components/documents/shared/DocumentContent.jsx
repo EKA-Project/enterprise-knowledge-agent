@@ -2,10 +2,10 @@ import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
-
+import { getDepartments } from '../../../services/departmentService.js';
 import { useToast } from '../../../context/ToastContext.jsx';
 
-import { documentCategories, documentFormats } from './DocumentData';
+import { documentFormats } from './documentUiConstants';
 import {
   ALL_CATEGORIES,
   ALL_FORMATS,
@@ -30,7 +30,7 @@ import {
 
 import EditMetadataModal from '../summary/EditMetadataModal.jsx';
 import ArchiveModal from '../summary/ArchiveModal.jsx';
-import { setDocumentArchived } from '../summary/summaryService';
+
 
 import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
@@ -74,6 +74,19 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [viewMode, setViewMode] = useState('grid');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [documentCategories, setDocumentCategories] = useState([]);
+
+useEffect(() => {
+  let alive = true;
+  getDepartments().then((list) => {
+    if (alive) {
+      setDocumentCategories(list.map((d) => ({ value: d.name, label: d.name })));
+    }
+  });
+  return () => {
+    alive = false;
+  };
+}, []);
 
   // Status picked in the admin Document Health Overview ("" = none).
   const status = useStatusFilter();

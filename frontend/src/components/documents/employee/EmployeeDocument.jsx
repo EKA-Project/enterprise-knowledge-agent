@@ -1,10 +1,11 @@
 import PageHero from '../../common/PageHero.jsx';
 import DocumentContent from '../shared/DocumentContent.jsx';
-import { documents } from '../shared/DocumentData.js';
+import { useRoleDocuments } from '../shared/roleDocuments.js';
 import { useDocumentCountText } from '../shared/documentResults.js';
 
 function EmployeeDocument() {
-  const countText = useDocumentCountText(documents.length);
+  const { items } = useRoleDocuments();
+  const countText = useDocumentCountText(items.length);
 
   return (
     <>
