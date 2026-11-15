@@ -3,7 +3,6 @@
 // Returns null when the document does not exist or the viewer may not read it (the page then
 // shows "Document not found"). Archived documents open for the admin and that department's manager.
 
-import * as legacy from './summaryService'; // only for SAMPLE_PDF, remove with summaryService.js
 import { getDocument, getDocumentInsight, getDocumentSections, getRelatedDocuments } from '../../../services/documentService.js';
 import { getMyBookmarks } from '../../../services/bookmarkService.js';
 import { getDepartments } from '../../../services/departmentService.js';
@@ -34,6 +33,6 @@ export async function getDocumentSummary(id) {
     userNames: new Map(users.map((u) => [u.id, u.name])),
     bookmarkedIds: new Set(bookmarks.map((b) => b.documentId)),
     helpers: { formatFileSize, estimateReadTime },
-    pdfUrl: legacy.SAMPLE_PDF ?? null, // CHECK: the file URL has no service yet
+    pdfUrl: null, 
   });
 }

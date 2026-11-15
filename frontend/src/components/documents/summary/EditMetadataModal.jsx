@@ -1,7 +1,6 @@
-
-import { useState } from 'react';
 import { Pencil, Upload } from 'lucide-react';
-import { documentCategories } from '../shared/DocumentData';
+import { useEffect, useState } from 'react';
+import { getDepartments } from '../../../services/departmentService.js';
 
 import Modal from '../../common/Modal.jsx';
 import Button from '../../common/Button.jsx';
@@ -20,7 +19,14 @@ function EditMetadataModal({ doc, onClose, onSave }) {
     author: doc.author,
     executiveSummary: doc.executiveSummary,
   });
-
+  const [documentCategories, setDocumentCategories] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    getDepartments().then((list) => {
+      if (alive) setDocumentCategories(list.map((d) => ({ value: d.name, label: d.name })));
+    });
+    return () => { alive = false; };
+  }, []);
   const [file, setFile] = useState(null);
   const [saving, setSaving] = useState(false);
 

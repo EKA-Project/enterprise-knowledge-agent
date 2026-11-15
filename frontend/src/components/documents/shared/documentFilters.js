@@ -27,8 +27,11 @@ export function filterDocuments(docs, { search, category, format, status = '' })
     const matchesFormat = format === ALL_FORMATS || doc.format === format;
 
     // Status comes from the Document Health Overview cards (empty = no filter)
-    const matchesStatus = !status || doc.status === status;
-
+    const matchesStatus =
+      !status ||
+      (status === 'Outdated'
+        ? Boolean(doc.isOutdated) && doc.status === 'Indexed'
+        : doc.status === status && !(status === 'Indexed' && doc.isOutdated));
     return matchesSearch && matchesCategory && matchesFormat && matchesStatus;
   });
 }

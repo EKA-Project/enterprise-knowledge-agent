@@ -1,7 +1,6 @@
 import PageHero from '../../common/PageHero.jsx';
 import { IngestDocumentButton } from '../../common/ActionButtons.jsx';
 import DocumentContent from '../shared/DocumentContent.jsx';
-import { documents } from '../shared/DocumentData';
 import StorageIndicator from './StorageIndicator.jsx';
 import DocumentHealthOverview from './DocumentHealthOverview.jsx';
 import useUpload from '../../../hooks/useUpload.js';
@@ -11,8 +10,8 @@ import { useRoleDocuments } from '../shared/roleDocuments.js';
 function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
   const { items } = useRoleDocuments();
-  useDocumentCountText(items.length)
-  const countText = useDocumentCountText(documents.length);
+  
+  const countText = useDocumentCountText(items.length);
   const { documents: documentMeta } = pageMetadata;
 
   return (
