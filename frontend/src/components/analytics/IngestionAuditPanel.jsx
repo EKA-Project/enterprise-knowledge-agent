@@ -5,7 +5,7 @@ const COLS = "grid grid-cols-[1.7fr_1.3fr_0.9fr_1.8fr_0.8fr_2.2fr] items-center 
 const mono = "font-(family-name:--font-mono)";
 
 // IngestionAuditPanel component for displaying ingestion failures and vector health audit
-export default function IngestionAuditPanel({ failures, fixing, scanning, onFixAll, onFix, onNotify, onScan }) {
+export default function IngestionAuditPanel({ failures, fixing, onFixAll, onFix, onNotify }) {
   const [inspectId, setInspectId] = useState(null);
 
   // Healthy state: shown once every failure has been fixed.
@@ -24,18 +24,10 @@ export default function IngestionAuditPanel({ failures, fixing, scanning, onFixA
               </span>
             </h3>
             <p className="mt-0.5 text-[12px] text-(--text-muted)">
-              All 6 department vector partitions are healthy with zero failed chunks. Knowledge grounding is operating at peak integrity.
+              All department vector partitions are healthy with zero failed documents. Knowledge grounding is operating at peak integrity.
             </p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onScan}
-          disabled={scanning}
-          className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-4 py-1.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95"
-        >
-          <Zap size={13} className={scanning ? "animate-pulse" : ""} aria-hidden="true" /> Run Ingestion Integrity Scan
-        </button>
       </section>
     );
   }

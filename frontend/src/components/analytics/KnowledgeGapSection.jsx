@@ -1,13 +1,12 @@
 import { useState } from "react";
 import SegmentedProgressBar from "../charts/KnowledgeGapProgressBar";
-import { GAP_DISTRIBUTION, GAP_QUERIES, GAP_STATS } from "./AnalyticsData";
 
 const mono = "font-(family-name:--font-mono)";
 const serif = "font-(family-name:--font-serif)";
 const COLS = "grid grid-cols-[2.2fr_0.9fr_1.4fr_1.5fr_1.3fr] items-center gap-4";
 
 // KnowledgeGapSection component for displaying knowledge gaps and audit items
-export default function KnowledgeGapSection() {
+export default function KnowledgeGapSection({ gapStats: GAP_STATS, gapDistribution: GAP_DISTRIBUTION, gapQueries: GAP_QUERIES }) {
   const [activeId, setActiveId] = useState(null);
   const [showAll, setShowAll] = useState(false);
 

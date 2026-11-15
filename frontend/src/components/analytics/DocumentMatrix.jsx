@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { DOCUMENT_MATRIX } from "./AnalyticsData";
 
 const mono = "font-(family-name:--font-mono)";
-const COLS = "grid grid-cols-[2.2fr_1.5fr_0.8fr_0.8fr] items-center gap-3";
+const COLS = "grid grid-cols-[2.2fr_1.5fr_0.8fr] items-center gap-3";
 const TYPE_STYLES = {
   PDF: "bg-(--status-failure-bg) text-(--status-failure)",
   MD: "bg-(--primary-light) text-(--accent-chip-text)",
@@ -12,8 +11,8 @@ const TYPE_STYLES = {
   FIG: "bg-[#ede9fe] text-[#6d28d9]",
 };
 // DocumentMatrix component for displaying a matrix of documents with grounding accuracy
-export default function DocumentMatrix() {
-    const navigate = useNavigate();
+export default function DocumentMatrix({ documents: DOCUMENT_MATRIX }) {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [inspectId, setInspectId] = useState(null);
   const rows = expanded ? DOCUMENT_MATRIX : DOCUMENT_MATRIX.slice(0, 4);
@@ -23,7 +22,7 @@ export default function DocumentMatrix() {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="font-(family-name:--font-serif) text-[20px] font-bold text-(--text-primary)">Document Matrix</h3>
-          <p className="mt-0.5 text-[11.5px] text-(--text-muted)">Grounding accuracy.</p>
+          <p className="mt-0.5 text-[11.5px] text-(--text-muted)">Index size and citations.</p>
         </div>
         <span className={`${mono} rounded-md bg-(--primary-light) px-2 py-0.5 text-[10px] font-semibold text-(--accent-chip-text)`}>
           Showing {rows.length} Docs
@@ -35,7 +34,6 @@ export default function DocumentMatrix() {
           <div className={`${COLS} bg-(--bg-surface-subtle) px-4 py-2.5 ${mono} text-[9.5px] uppercase tracking-[0.12em] text-(--text-muted)`}>
             <span>Document</span>
             <span>Category</span>
-            <span>Grounding</span>
             <span className="text-right">Action</span>
           </div>
 
@@ -61,7 +59,6 @@ export default function DocumentMatrix() {
                   </div>
                 </div>
                 <span className={`${mono} w-fit rounded-md bg-(--primary-light) px-2 py-0.5 text-[9px] font-semibold uppercase text-(--accent-chip-text)`}>{d.category}</span>
-                <span className={`${mono} text-[12px] font-bold text-(--text-primary)`}>{d.grounding}</span>
                 <div className="text-right">
                   <button
                     type="button"
@@ -77,7 +74,7 @@ onClick={(event) => {
               </div>
               {inspectId === d.id && (
                 <p className={`${mono} anl-pop mx-4 mb-3 rounded-lg bg-(--bg-surface-subtle) px-3 py-2 text-[10.5px] text-(--text-secondary)`}>
-                  {d.chunks} chunks indexed • cited in {d.cited} answers • grounding {d.grounding}
+                  {d.chunks} chunks indexed • cited in {d.cited} answers
                 </p>
               )}
             </div>
