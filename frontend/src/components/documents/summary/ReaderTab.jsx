@@ -16,8 +16,8 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
   const current = pages.find((p) => p.page === page) ?? pages[0];
 
   const go = (n) => onPageChange(Math.min(Math.max(n, 1), total));
-
   const copyText = async () => {
+    if (!current) return;
     try {
       await navigator.clipboard.writeText(`${current.title}\n\n${current.text}`);
       onToast?.('Copied plain text to clipboard');
@@ -28,15 +28,15 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
 
   return (
     <div className="min-w-0 space-y-4">
-      {/* View mode switch */}
+      
       {/* View mode switch */}
       <div className={`${card} flex flex-wrap items-center gap-2 p-3`}>
         <button
           type="button"
           onClick={() => setMode('text')}
           className={`${pill} ${mode === 'text'
-              ? 'border-(--primary) bg-(--primary) font-bold text-(--primary-contrast)'
-              : 'border-(--border-medium) bg-(--bg-surface-subtle) font-semibold text-(--text-secondary) hover:border-(--primary) hover:text-(--primary)'
+            ? 'border-(--primary) bg-(--primary) font-bold text-(--primary-contrast)'
+            : 'border-(--border-medium) bg-(--bg-surface-subtle) font-semibold text-(--text-secondary) hover:border-(--primary) hover:text-(--primary)'
             }`}
         >
           <FileText
@@ -51,8 +51,8 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
           type="button"
           onClick={() => setMode('pdf')}
           className={`${pill} ${mode === 'pdf'
-              ? 'border-(--primary) bg-(--primary) font-bold text-(--primary-contrast)'
-              : 'border-(--border-medium) bg-(--bg-surface-subtle) font-semibold text-(--text-secondary) hover:border-(--primary) hover:text-(--primary)'
+            ? 'border-(--primary) bg-(--primary) font-bold text-(--primary-contrast)'
+            : 'border-(--border-medium) bg-(--bg-surface-subtle) font-semibold text-(--text-secondary) hover:border-(--primary) hover:text-(--primary)'
             }`}
         >
           <FileIcon
@@ -70,11 +70,17 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
 
       {mode === 'pdf' ? (
         <div className={`${card} overflow-hidden`}>
-          <iframe
-            title={`${doc.title} (PDF)`}
-            src={doc.pdfUrl}
-            className="h-[640px] w-full"
-          />
+          {doc.pdfUrl ? (
+            <iframe
+              title={`${doc.title} (PDF)`}
+              src={doc.pdfUrl}
+              className="h-[640px] w-full"
+            />
+          ) : (
+            <p className="p-8 text-sm text-(--text-secondary)">
+              Original file preview is not available yet.
+            </p>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-[11rem_minmax(0,1fr)]">
@@ -131,7 +137,11 @@ function ReaderTab({ doc, page, onPageChange, onToast }) {
                 Copy Plain Text
               </button>
             </div>
-
+            {!current && (
+              <article className={`${card} p-8 text-sm text-(--text-secondary)`}>
+                No text is available for this document yet.
+              </article>
+            )}
             {/* Page content (raw ### markers are shown as-is, like the video) */}
             {current && (
               <article className={`${card} p-8`}>

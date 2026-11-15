@@ -1,5 +1,3 @@
-// src/components/documents/summary/summaryMapping.js  (NEW FILE)
-//
 // Pure function: turns the service data of ONE document into the object the Summary page and
 // its components already expect (the shape the old getDocumentSummary returned). No imports,
 // so it is easy to test. summaryAdapter.js fetches the data and calls this.
@@ -63,8 +61,8 @@ export function buildSummary({ doc, insight, sections, related, departmentNames,
     readerPages: ordered.map((s) => ({ page: s.index, title: `${s.index}. ${s.title}`, text: s.content })),
 
     telemetry: {
-      vectorChunks: `${doc.chunkCount} chunks`,
-      totalPages: `${doc.pageCount ?? '—'} pages`,
+      vectorChunks: doc.chunkCount == null ? '—' : `${doc.chunkCount} chunks`,
+      totalPages: doc.pageCount == null ? '—' : `${doc.pageCount} pages`,
       encryption: 'AES-256 (KMS)',
       tenantIsolation: 'Active (0 Training)',
       indexLatency: '—', // the services have no latency value yet

@@ -13,7 +13,6 @@ import Modal from "../common/Modal.jsx";
 import Button from "../common/Button.jsx";
 import Mascot from "../mascot/Mascot.jsx";
 import { UPLOAD_MASCOT_STATES } from "./uploadMascotStates.js";
-import { documentCategories } from "../documents/shared/DocumentData.js";
 import UploadDropzone from "./UploadDropzone.jsx";
 import UploadProgress from "./UploadProgress.jsx";
 import useUploadPipeline from "./useUploadPipeline.js";
@@ -142,7 +141,7 @@ function UploadDocumentModal({
   onClose,
   onSubmit = mockSubmit,
   onSuccess,
-  departments = documentCategories,
+  departments = [],
   lockedDepartment = null,
 }) {
   const formId = useId();

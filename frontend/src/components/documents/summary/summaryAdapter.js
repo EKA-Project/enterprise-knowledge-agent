@@ -1,5 +1,3 @@
-// src/components/documents/summary/summaryAdapter.js  (NEW FILE)
-//
 // Drop-in replacement for getDocumentSummary(id) of summaryService.js, backed by the shared
 // services. The Summary page changes ONE import line; the Summary components stay untouched.
 // Returns null when the document does not exist or the viewer may not read it (the page then
