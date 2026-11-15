@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Modal from "../common/Modal.jsx";
 import Badge from "../common/Badge.jsx";
-import Button from "../common/Button.jsx";
+import Button from "./Button.jsx";
+import { DoneButton } from "./ActionButtons.jsx";
 
 const BAR_MAX_HEIGHT = 44; // px, height of the tallest bar
 
@@ -117,9 +118,7 @@ function UserViewModal({ member, department, onClose, canEdit = false, onEdit })
       subtitle={member.email}
       footer={(close) => (
         <div className="flex items-center justify-end gap-2">
-          <Button variant="secondary" onClick={close}>
-            Close
-          </Button>
+          <DoneButton onClick={close} />
           {canEdit && (
             <Button variant="primary" onClick={onEdit}>
               Edit Account Settings →

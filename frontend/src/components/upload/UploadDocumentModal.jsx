@@ -10,14 +10,17 @@ import {
   Upload,
 } from "lucide-react";
 import Modal from "../common/Modal.jsx";
-import Button from "../common/Button.jsx";
 import Mascot from "../mascot/Mascot.jsx";
 import { UPLOAD_MASCOT_STATES } from "./uploadMascotStates.js";
 import { documentCategories } from "../documents/shared/DocumentData.js";
 import UploadDropzone from "./UploadDropzone.jsx";
 import UploadProgress from "./UploadProgress.jsx";
 import useUploadPipeline from "./useUploadPipeline.js";
-
+import {
+  StartVectorIngestionButton,
+  CancelButton,
+  DoneButton,
+} from "../common/ActionButtons.jsx";
 /* ==========================================================================
    Constants and small helpers
    ========================================================================== */
@@ -310,24 +313,15 @@ function UploadDocumentModal({
           <div className="ml-auto flex items-center gap-2">
             {finished ? (
               <>
-                <Button variant="solid" size="sm" icon={Check} onClick={close}>
-                  Done
-                </Button>
+                <DoneButton icon={Check} onClick={close} />
                 <CloseAfter close={close} ms={CLOSE_DELAY_MS} />
               </>
             ) : (
               <>
-                <Button
-                  variant="soft"
-                  size="sm"
-                  onClick={close}
-                  disabled={busy}
-                >
-                  Cancel
-                </Button>
+              <CancelButton onClick={close} disabled={busy} />
                 {/* type="submit" + form=... submits the form even though the
                     footer lives outside it */}
-                <Button
+                <StartVectorIngestionButton
                   type="submit"
                   form={formId}
                   variant="solid"
@@ -338,7 +332,7 @@ function UploadDocumentModal({
                   aria-describedby={hintId}
                 >
                   {submitLabel}
-                </Button>
+                </StartVectorIngestionButton>
               </>
             )}
           </div>

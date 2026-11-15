@@ -133,6 +133,11 @@
   --status-verified-bg: rgba(16, 185, 129, 0.1);
   --status-verified-border: rgba(16, 185, 129, 0.25);
 
+  /* Danger Callout Boxes & Scope Notices */
+  --status-danger-border: #fecdd3; /* Soft danger border (replaces #ffbfc6) */
+  --status-danger-subtle: #fff1f2; /* Soft danger background (replaces #FFF5F5) */
+  --status-danger-text: #9f1239; /* Readable deep crimson for warning text */
+
   /* Semantic Search Relevance & Match Badges */
   --match-score-bg: #e6f4ea;
   --match-score-text: #137333;
@@ -349,12 +354,22 @@
   }
 }
 
-
 /* Row icon hover: a short, small side-to-side shake. Used by RowIconButtons.jsx. */
 @keyframes row-icon-shake {
-  0%, 100% { transform: translateX(0) rotate(0deg); }
-  20%      { transform: translateX(-1.5px) rotate(-6deg); }
-  40%      { transform: translateX(1.5px) rotate(6deg); }
-  60%      { transform: translateX(-1px) rotate(-3deg); }
-  80%      { transform: translateX(1px) rotate(3deg); }
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-1.5px) rotate(-6deg);
+  }
+  40% {
+    transform: translateX(1.5px) rotate(6deg);
+  }
+  60% {
+    transform: translateX(-1px) rotate(-3deg);
+  }
+  80% {
+    transform: translateX(1px) rotate(3deg);
+  }
 }
