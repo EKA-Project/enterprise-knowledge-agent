@@ -14,7 +14,6 @@ export const documentFormats = [
 const HEALTH_META = [
   { key: 'indexed', label: 'Indexed', color: 'var(--status-success)' },
   { key: 'processing', label: 'Processing', color: 'var(--status-info)' },
-  { key: 'outdated', label: 'Outdated', color: 'var(--status-warning)' },
   { key: 'failed', label: 'Failed', color: 'var(--status-danger)' },
 ];
 
@@ -24,12 +23,7 @@ const isOutdated = (r) => Boolean(r.isOutdated); // TODO: friend ka field/rule a
 export function buildHealth(rows = []) {
   return HEALTH_META.map((m) => ({
     ...m,
-    count: rows.filter((r) => {
-      const s = String(r.status).toLowerCase();
-      if (m.key === 'outdated') return isOutdated(r) && s === 'indexed';
-      if (m.key === 'indexed') return s === 'indexed' && !isOutdated(r);
-      return s === m.key;
-    }).length,
+    count: rows.filter((r) => String(r.status).toLowerCase() === m.key).length,
   }));
 }
 

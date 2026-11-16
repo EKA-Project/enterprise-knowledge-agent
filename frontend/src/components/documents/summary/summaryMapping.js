@@ -14,7 +14,27 @@ function readTimeText(estimateReadTime, wordCount) {
   return result ? `${result} min read` : '—';
 }
 
-export function buildSummary({ doc, insight, sections, related, departmentNames, userNames, bookmarkedIds, helpers, pdfUrl }) {
+function latencyText(ingestion) {
+  const done = (ingestion?.attempts ?? []).filter(
+    (a) => a.status === 'succeeded' && a.startedAt && a.finishedAt,
+  );
+  if (done.length === 0) return '—';
+  const latest = done.reduce((a, b) =>
+    Date.parse(b.finishedAt) > Date.parse(a.finishedAt) ? b : a,
+  );
+  const ms = Date.parse(latest.finishedAt) - Date.parse(latest.startedAt);
+  if (!(ms >= 0)) return '—';
+  const sec = Math.round(ms / 1000);
+  if (sec < 1) return '<1 sec';
+  if (sec < 60) return `${sec} sec`;
+  const min = Math.round(sec / 60);
+  if (min < 60) return `${min} min`;
+  const hr = Math.floor(min / 60);
+  const rem = min % 60;
+  return rem ? `${hr} hr ${rem} min` : `${hr} hr`;
+}
+
+export function buildSummary({ doc, insight, sections, related,ingestion, departmentNames, userNames, bookmarkedIds, helpers, pdfUrl }) {
   // Same small shape the old list rows and "sister documents" used
   const row = (d) => ({
     id: d.id,
@@ -65,7 +85,7 @@ export function buildSummary({ doc, insight, sections, related, departmentNames,
       totalPages: doc.pageCount == null ? '—' : `${doc.pageCount} pages`,
       encryption: 'AES-256 (KMS)',
       tenantIsolation: 'Active (0 Training)',
-      indexLatency: '—', // the services have no latency value yet
+      indexLatency: latencyText(ingestion),
     },
 
     connectedArticles: [],
