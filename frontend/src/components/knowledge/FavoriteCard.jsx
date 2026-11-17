@@ -3,7 +3,7 @@ import { FileText, Pencil } from 'lucide-react';
 import Badge from '../common/Badge.jsx';
 
 // TODO: change this one line when the Document Summary route is final
-const docUrl = (docId) => /documents/summary?id=${docId}; // EKA-EDIT
+const docUrl = (docId) => `/documents/summary?id=${docId}`; // EKA-EDIT
 
 
 // Category chip colours measured from the reference video
@@ -65,7 +65,8 @@ export default function FavoriteCard({ item, rank, mode }) {
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-(--border-subtle) pt-3">
           <span className="kb-mono inline-flex items-center gap-1 text-[9px] text-(--text-muted)">
             <FileText size={10} />
-            {item.area}{item.readTime ? • ${item.readTime} min read : ''} •{' '}
+            {/* EKA-EDIT: readTime can be null */}
+            {item.area}{item.readTime ? ` • ${item.readTime} min read` : ''} •{' '}
             {mode === 'referenced' ? `Cited ${item.cited}` : `Viewed ${item.viewed}`} times this month
           </span>
           <div className="flex items-center gap-3 text-[11px] font-medium">

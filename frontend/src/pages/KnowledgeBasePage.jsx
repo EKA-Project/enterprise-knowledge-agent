@@ -67,7 +67,7 @@ export default function KnowledgeBasePage() {
         }
       />
 
-      stats={stats} 
+        <KnowledgeStats stats={stats} />
 
       {/* Browse by Department */}
       <section className="mt-8">
