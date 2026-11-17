@@ -13,7 +13,6 @@ import { initAppearance } from "./appearance/appearance";
 // Variables first so base & layout can use CSS custom properties
 import "./styles/variables.css";
 import "./styles/base.css";
-import "./styles/layout.css";
 import "./styles/eye-comfort.css";
 
 initAppearance();
