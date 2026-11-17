@@ -30,6 +30,8 @@ export const db = {
   related: clone(related),
   activityEvents: clone(activityEvents),
   findings: clone(findings),
+  // EKA-EDIT: new mock-only table, one row per document edit (feeds Knowledge Base "Recently Updated"). Saved by mockPersistCore automatically.
+  amendments: [],
 };
 
 

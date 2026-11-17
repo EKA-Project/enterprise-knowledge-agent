@@ -1,10 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { FileText, Pencil } from 'lucide-react';
-import { categoryThemes } from './KnowledgeData.js';
 import Badge from '../common/Badge.jsx';
 
 // TODO: change this one line when the Document Summary route is final
-const docUrl = (docId) => `/documents/${docId}`;
+const docUrl = (docId) => /documents/summary?id=${docId}; // EKA-EDIT
 
 
 // Category chip colours measured from the reference video
@@ -21,7 +20,6 @@ const chipStyles = {
 // One ranked card in Library Favorites. Whole card opens the document.
 export default function FavoriteCard({ item, rank, mode }) {
   const navigate = useNavigate();
-  const theme = categoryThemes[item.iconTheme];
   const url = docUrl(item.docId);
   const stop = (event) => event.stopPropagation();
   const question = `Tell me about "${item.title}"`;
@@ -38,18 +36,16 @@ export default function FavoriteCard({ item, rank, mode }) {
           <span className="kb-mono flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-(--bg-surface) text-[9px] font-semibold text-(--primary)">
             #{rank}
           </span>
-          <span
-            className={`kb-mono truncate rounded-md px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em] ${chipStyles[item.iconTheme] ?? theme.icon
-              }`}
-          >
+          {/* EKA-EDIT: inline department colours */}
+          <span style={{ color: item.theme.color, background: item.theme.softBg }} className="kb-mono truncate rounded-md px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em]">
             {item.category}
           </span>
         </div>
         {/* Format badge */}
-              <Badge
-        format={item.format}
-        className="doc-mono !h-8 !w-8 !rounded-1xl !text-[10px]"
-      />
+        <Badge
+          format={item.format}
+          className="doc-mono !h-8 !w-8 !rounded-1xl !text-[10px]"
+        />
       </div>
 
       <h4 className="kb-serif mt-3 text-[15px] font-bold leading-snug text-(--text-primary)">{item.title}</h4>
@@ -69,7 +65,7 @@ export default function FavoriteCard({ item, rank, mode }) {
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-(--border-subtle) pt-3">
           <span className="kb-mono inline-flex items-center gap-1 text-[9px] text-(--text-muted)">
             <FileText size={10} />
-            {item.area} • {item.readTime} min read •{' '}
+            {item.area}{item.readTime ? • ${item.readTime} min read : ''} •{' '}
             {mode === 'referenced' ? `Cited ${item.cited}` : `Viewed ${item.viewed}`} times this month
           </span>
           <div className="flex items-center gap-3 text-[11px] font-medium">

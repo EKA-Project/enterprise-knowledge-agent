@@ -32,8 +32,9 @@ function CollectionSourceFiles({ files }) {
             <ul className="space-y-2.5">
                 {visibleFiles.map((file) => (
                     <li
+                    // EKA-EDIT: real Summary route
                         key={file.id}
-                        onClick={() => navigate(`/documents/${file.id}`)}
+                        onClick={() => navigate(`/documents/summary?id=${file.id}`)}
                         className="cursor-pointer rounded-2xl border border-(--border-subtle) bg-(--bg-surface) p-4 transition-colors hover:border-(--accent-highlight)"
                     >
                         <div className="flex items-start gap-3">
@@ -58,7 +59,8 @@ function CollectionSourceFiles({ files }) {
 
                             {/* Opens the Document Summary page */}
                             <Link
-                                to={`/documents/${file.id}`}
+                            // EKA-EDIT: real Summary route
+                                to={`/documents/summary?id=${file.id}`}
                                 onClick={(event) => event.stopPropagation()}
                                 aria-label={`Open ${file.title}`}
                                 className="mt-1 cursor-pointer text-(--text-muted) hover:text-(--primary)"

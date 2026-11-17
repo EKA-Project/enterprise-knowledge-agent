@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Zap } from 'lucide-react';
-import { categoryThemes } from './KnowledgeData.js';
+// EKA-EDIT: data now comes from getCollection (one request builds the whole modal)
+import { getCollection } from '../../services/departmentService.js';
+import { getDepartmentTheme } from '../../config/departmentTheme.js';
+import { formatFileSize } from '../../utils/formatFileSize.js';
+import { formatRelativeTime } from '../../utils/formatRelativeTime.js'; // CHECK: export name
 import CollectionSourceFiles from './CollectionSourceFiles.jsx';
 import CollectionKeywords from './CollectionKeywords.jsx';
 import CollectionPrompts from './CollectionPrompts.jsx';
@@ -12,20 +16,34 @@ const CLOSE_MS = 200;
 // Collection Insights modal — opened from the "Collection Insights" pill on a
 // category card. Header and footer stay fixed; only the middle part scrolls.
 function CollectionInsightsModal({ category, onClose }) {
-  const {
-    title,
-    docCount,
-    iconTheme,
-    insights,
-    sourceFiles,
-    keywords,
-    prompts,
-    documentCategory,
-  } = category;
-  const theme = categoryThemes[iconTheme];
+  // EKA-EDIT: fetch the collection and map it to the shapes the child lists already expect
+  const { id, title, colorKey, iconKey } = category;
+  const theme = getDepartmentTheme(colorKey, iconKey);
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    getCollection(id, { limit: 50 }).then((r) => alive && setData(r));
+    return () => { alive = false; };
+  }, [id]);
+
+  const sourceFiles = data?.documents.items.map(({ document: d, uploader, topTakeaways }) => ({
+    id: d.id, title: d.title, format: String(d.format).toUpperCase(),
+    size: formatFileSize(d.sizeBytes), chunks: d.chunkCount,
+    author: d.authorName ?? uploader?.name ?? '—',
+    description: d.description, notes: topTakeaways,
+  }));
+  const keywords = data?.keywords.map((k) => ({ term: k.term, score: Number(k.weight.toFixed(2)) }));
+  const prompts = data?.samplePrompts;
+  const insights = data && {
+    domainLead: data.lead?.name,
+    updatedLabel: data.insight?.generatedAt ? `Updated ${formatRelativeTime(data.insight.generatedAt)}` : '',
+    overview: data.overview,
+  };
+  const docCount = data?.activeDocumentCount ?? category.documentCount;
+  const documentCategory = title;
 
 
-    // Play the fade-out first, then tell the parent to unmount the modal
+  // Play the fade-out first, then tell the parent to unmount the modal
   const [closing, setClosing] = useState(false);
   const closingRef = useRef(false);
   const closeTimer = useRef(null);
@@ -49,7 +67,7 @@ function CollectionInsightsModal({ category, onClose }) {
     return () => window.removeEventListener('keydown', handleKey);
   }, [handleClose]);
 
-  
+
   return (
     <div
       data-closing={closing}
@@ -66,7 +84,8 @@ function CollectionInsightsModal({ category, onClose }) {
       >
         {/* Header (fixed) */}
         <header className="flex shrink-0 items-start gap-3 border-b border-(--border-subtle) px-5 py-4">
-          <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}>
+          {/* EKA-EDIT: inline department colours */}
+          <span style={{ color: theme.color, background: theme.softBg }} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
             <Zap size={16} />
           </span>
 
@@ -100,8 +119,8 @@ function CollectionInsightsModal({ category, onClose }) {
 
         {/* Scrollable body */}
         <div className="kb-scroll min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-5">
-          
-  {/* Collection overview */}
+
+          {/* Collection overview */}
           <section className="rounded-2xl border-l-[3px] border-l-(--accent-highlight) bg-(--bg-surface-subtle) p-4">
             <div className="flex items-center justify-between">
               <span className="kb-mono text-[10px] uppercase tracking-[0.12em] text-(--text-secondary)">

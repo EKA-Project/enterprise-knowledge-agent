@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { FileText } from 'lucide-react';
-import { libraryFavorites } from './KnowledgeData.js';
 import FavoriteCard from './FavoriteCard.jsx';
 import SectionState, { SkeletonCards } from './SectionState.jsx';
 
@@ -10,17 +9,16 @@ const modes = [
 ];
 
 // Library Favorites: top document per department. state = normal | loading | empty | error
-export default function LibraryFavorites({ state = 'normal', onReset }) {
+// EKA-EDIT: items come from the page (pinned documents)
+export default function LibraryFavorites({ items: favorites = [], state = 'normal', onReset }) {
   const [mode, setMode] = useState('referenced');
 
   // "Most Referenced" keeps the design order; "Most Viewed" sorts by view count.
-  const items = useMemo(
-    () =>
-      mode === 'viewed'
-        ? [...libraryFavorites].sort((a, b) => b.viewed - a.viewed)
-        : libraryFavorites,
-    [mode],
-  );
+// EKA-EDIT: sort by real counts
+const items = useMemo(
+  () => [...favorites].sort((a, b) => (mode === 'viewed' ? b.viewed - a.viewed : b.cited - a.cited)),
+  [mode, favorites],
+);
 
   let body;
   if (state === 'loading') {

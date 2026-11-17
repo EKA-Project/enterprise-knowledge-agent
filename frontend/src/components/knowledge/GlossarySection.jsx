@@ -1,5 +1,5 @@
 import { BookOpen, Search, Plus } from 'lucide-react';
-import { glossaryTerms } from './KnowledgeData.js';
+
 import GlossaryCard from './GlossaryCard.jsx';
 import AddGlossaryTermModal from './AddGlossaryTermModal.jsx';
 import SectionState, { SkeletonCards } from './SectionState.jsx';

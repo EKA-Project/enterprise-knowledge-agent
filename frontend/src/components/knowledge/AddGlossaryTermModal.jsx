@@ -1,8 +1,8 @@
-
-import { useState } from 'react';
 import { BookOpen, Zap } from 'lucide-react';
 import Modal from '../common/Modal.jsx';
-import { knowledgeCategories } from './KnowledgeData.js';
+// EKA-EDIT: departments now come from the service (replaces the KnowledgeData import)
+import { useEffect, useState } from 'react';
+import { getDepartments } from '../../services/departmentService.js';
 
 const inputClass =
   'w-full rounded-xl border border-(--border-subtle) bg-(--bg-surface) px-3 py-2 text-xs text-(--text-primary) outline-none placeholder:text-(--text-muted) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)]';
@@ -22,7 +22,13 @@ export default function AddGlossaryTermModal({
   );
   const [expansion, setExpansion] = useState(item?.expansion ?? '');
   const [definition, setDefinition] = useState(item?.definition ?? '');
-
+  // EKA-EDIT: department options for the Category select
+  const [departments, setDepartments] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    getDepartments().then((list) => alive && setDepartments(list));
+    return () => { alive = false; };
+  }, []);
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -104,9 +110,13 @@ export default function AddGlossaryTermModal({
               onChange={(event) => setCategory(event.target.value)}
               className={`${inputClass} cursor-pointer`}
             >
-              {knowledgeCategories.map((c) => (
-                <option key={c.id} value={c.title}>
-                  {c.title}
+              <option value="" disabled>
+                Select department
+              </option>
+
+              {departments.map((d) => (
+                <option key={d.id} value={d.name}>
+                  {d.name}
                 </option>
               ))}
             </select>

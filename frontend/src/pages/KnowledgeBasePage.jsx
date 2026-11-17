@@ -10,16 +10,19 @@ import AuthContext from '../context/AuthContext.jsx';
 import LibraryFavorites from '../components/knowledge/LibraryFavorites';
 import RecentlyUpdated from '../components/knowledge/RecentlyUpdated';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
-import { knowledgeStats, knowledgeCategories } from '../components/knowledge/KnowledgeData.js';
+
 import '../styles/knowledge.css';
 import DemoStatesBar from '../components/knowledge/DemoStatesBar';
 import SectionState from '../components/knowledge/SectionState';
 import Button from '../components/common/Button.jsx';
 import PageHero from '../components/common/PageHero.jsx';
 import pageMetadata from '../config/pageMetadata.js';
-
+// EKA-EDIT: replaces the KnowledgeData import (line 13)
+import useKnowledgeData from '../components/knowledge/useKnowledgeData.js';
 export default function KnowledgeBasePage() {
   const { activeRole } = useContext(AuthContext);
+  // EKA-EDIT: all data from services
+  const { stats, categories, favorites, recent } = useKnowledgeData();
   const { openUpload, canUpload } = useUpload();
   const [demoState, setDemoState] = useState('normal');
   const resetDemo = () => setDemoState('normal');
@@ -64,7 +67,7 @@ export default function KnowledgeBasePage() {
         }
       />
 
-      <KnowledgeStats stats={knowledgeStats} />
+      stats={stats} 
 
       {/* Browse by Department */}
       <section className="mt-8">
@@ -78,7 +81,7 @@ export default function KnowledgeBasePage() {
             </h2>
           </div>
           <span className="kb-mono text-[11px] text-(--text-muted)">
-            {knowledgeCategories.length} Collections Indexed
+            {categories.length} Collections Indexed
           </span>
         </div>
         {demoState === 'empty' ? (
@@ -99,7 +102,7 @@ export default function KnowledgeBasePage() {
           />
         ) : (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {knowledgeCategories.map((category) => (
+            {categories.map((category) => (
               <CategoryCard
                 key={category.id}
                 category={category}
@@ -111,9 +114,8 @@ export default function KnowledgeBasePage() {
       </section>
 
       <GlossarySection canManage={activeRole === 'Admin'} state={demoState} onReset={resetDemo} />
-      <LibraryFavorites state={demoState} onReset={resetDemo} />
-      <RecentlyUpdated state={demoState} onReset={resetDemo} />
-
+      <LibraryFavorites items={favorites} state={demoState} onReset={resetDemo} />
+      <RecentlyUpdated items={recent} state={demoState} onReset={resetDemo} />
       {/* Bottom guidance banner from the approved Knowledge Base reference. */}
       <AskQuestionBanner />
       {insightsCategory && (

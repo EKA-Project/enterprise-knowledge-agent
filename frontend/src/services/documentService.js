@@ -5,6 +5,8 @@ import { db, getInsightRow, getReadableActiveDocuments, nextDocumentId } from ".
 import { clone, delay, nowIso, paginate, ServiceError } from "./mockHelpers.js";
 import { startIngestionAttempt } from "./mockIngestion.js";
 import { getMockCurrentUser } from "./mockSession.js";
+// EKA-EDIT: amendment log (import goes at the top of the file with the other imports)
+import { recordAmendment } from "./amendmentService.js";
 
 // Mock "API" for documents. Shapes: data-architecture.md sections 4.3 to 4.7 and
 // 10.1. Reads come first, writes at the end of the file.
@@ -77,7 +79,7 @@ export async function getDocument(id) {
 /**
  * GET /documents/{id}/insight
  * Returns the AI insight for a readable document.
- */ 
+ */
 /**@returns {import('../types').Insight|null}*/
 export async function getDocumentInsight(id) {
   await delay();
@@ -237,6 +239,12 @@ export async function updateDocument(id, changes) {
   }
 
   Object.assign(doc, next, { updatedAt: nowIso() });
+  // EKA-EDIT: log which fields were really changed in this edit
+  recordAmendment({
+    documentId: id,
+    userId: getMockCurrentUser().id,
+    changedFields: Object.keys(next),
+  });
   return clone(doc);
 }
 
