@@ -46,7 +46,7 @@ export function getUserStats(users) {
     live: users.filter((u) => u.status === STATUS_LABELS.active).length,
     admins: users.filter((u) => u.role === ROLE_LABELS.admin).length,
     managers: users.filter((u) => u.role === ROLE_LABELS.manager).length,
-    pending: 0, // there is no "invited" state in the data model
+    terminated: users.filter((u) => u.status === STATUS_LABELS.inactive).length, // there is no "invited" state in the data model
   };
 }
 
