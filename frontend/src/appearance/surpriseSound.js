@@ -2,11 +2,14 @@
 // Synthesized "Surprise Me" sound: a quick tumbling dice rattle that
 // resolves into an ascending chime. No audio files needed.
 
+import { getOutputGain, isSoundOn } from "../mascot/mascotSound.js";
+
 // Last tone starts at 0.30s and lasts 0.18s; close the context shortly after
 // so rapid clicks don't pile up open AudioContexts (browsers cap these).
 const CLOSE_AFTER_MS = 700;
 
 export function playSurpriseMeSound() {
+  if (!isSoundOn()) return; // sound is off (the default) or turned off by the user
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
@@ -15,6 +18,11 @@ export function playSurpriseMeSound() {
     if (ctx.state === "suspended") {
       ctx.resume();
     }
+
+    // One volume knob for every tone, set from the shared volume setting
+    const master = ctx.createGain();
+    master.gain.value = getOutputGain();
+    master.connect(ctx.destination);
 
     // Schedules one oscillator tone `offset` seconds from now
     const playTone = (freq, type, duration, offset, gainLevel = 0.15) => {
@@ -25,10 +33,13 @@ export function playSurpriseMeSound() {
       osc.frequency.setValueAtTime(freq, ctx.currentTime + offset);
 
       gain.gain.setValueAtTime(gainLevel, ctx.currentTime + offset);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + offset + duration);
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        ctx.currentTime + offset + duration,
+      );
 
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(master);
 
       osc.start(ctx.currentTime + offset);
       osc.stop(ctx.currentTime + offset + duration);

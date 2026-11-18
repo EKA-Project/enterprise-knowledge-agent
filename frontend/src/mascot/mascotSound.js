@@ -35,6 +35,10 @@ const listeners = new Set();
 export const isSoundOn = () => soundOn;
 export const getVolume = () => volume;
 
+// Final loudness (0 to MAX_GAIN). Anything that builds its own audio context
+// (like the Surprise Me sound) uses this so the whole app shares one mapping.
+export const getOutputGain = () => volume * MAX_GAIN;
+
 export function setSoundOn(value) {
   soundOn = value;
   try {
@@ -64,7 +68,7 @@ function getContext() {
     if (!AudioContextClass) return null; // very old browser: stay silent
     ctx = new AudioContextClass();
     master = ctx.createGain();
-    master.gain.value = volume * MAX_GAIN;
+    master.gain.value = getOutputGain();
     master.connect(ctx.destination);
   }
   if (ctx.state === "suspended") {
@@ -91,7 +95,7 @@ export function setVolume(value) {
   // A short ramp instead of a jump avoids clicks while the slider is dragged.
   // If audio hasn't started yet, getContext() uses `volume` when it does.
   if (ctx && master) {
-    master.gain.setTargetAtTime(next * MAX_GAIN, ctx.currentTime, 0.015);
+    master.gain.setTargetAtTime(getOutputGain(), ctx.currentTime, 0.015);
   }
   listeners.forEach((notify) => notify());
 }

@@ -12,6 +12,7 @@ import {
 // updates all of them.
 function useMascotSound() {
   const soundOn = useSyncExternalStore(subscribeSound, isSoundOn);
+  const volume = useSyncExternalStore(subscribeSound, getVolume);
 
   const toggleSound = () => {
     const next = !isSoundOn();
@@ -19,7 +20,7 @@ function useMascotSound() {
     if (next) playMascotSound("happy"); // little chime to confirm the sound is back
   };
 
-  return { soundOn, toggleSound };
+  return { soundOn, toggleSound, volume, setVolume };
 }
 
 export default useMascotSound;
