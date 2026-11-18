@@ -1,11 +1,13 @@
-import { useSyncExternalStore } from "react";
 import {
+  getVolume,
   isSoundOn,
   playMascotSound,
   setSoundOn,
+  setVolume,
   subscribeSound,
 } from "../../mascot/mascotSound.js";
-// const { soundOn, toggleSound } = useMascotSound();
+// const { soundOn, toggleSound, volume, setVolume } = useMascotSound();
+// volume is a number from 0 to 1.
 // Every mascot on the page shares one setting, so toggling it in one place
 // updates all of them.
 function useMascotSound() {
