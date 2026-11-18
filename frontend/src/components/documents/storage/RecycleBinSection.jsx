@@ -2,6 +2,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { AlertCircle, ChevronDown } from 'lucide-react';
 import { DeptPill } from './StorageBits';
+// EKA-EDIT: derived values via utils
+import { formatFileSize } from '../../../utils/formatFileSize.js';
+import { getPurgeDate } from '../../../config/storageConfig.js';
 import Badge from '../../common/Badge.jsx';
 import DataTable from '../../common/DataTable.jsx';
 import AnimatedBin, {
@@ -12,7 +15,8 @@ import '../../../styles/Document.css';
 
 // Collapsed by default. Sizes measured on the 1920px frame
 // (card 1521 wide, header 111 tall, table head 52).
-function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
+// EKA-EDIT: items = archived documents, departmentsById for the pill
+function RecycleBinSection({ items, departmentsById, onRestore, onPurge, onEmpty }) {
   const [open, setOpen] = useState(false);
   const empty = items.length === 0;
 
@@ -36,7 +40,7 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
       key: 'type',
       header: 'Type',
       width: '9%',
-      render: (f) => <Badge format={f.type} />,
+      render: (f) => <Badge format={f.format.toUpperCase()} />,
     },
     {
       key: 'name',
@@ -45,10 +49,10 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
       render: (f) => (
         <div className="min-w-0">
           <p className="max-w-[330px] truncate text-[14px] font-semibold text-[#10283f]">
-            {f.name}
+            {f.title}
           </p>
           <p className="doc-mono max-w-[330px] truncate text-[11px] text-[#7c949a]">
-            {f.file}
+            {f.fileName}
           </p>
         </div>
       ),
@@ -57,25 +61,29 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
       key: 'dept',
       header: 'Department',
       width: '17%',
-      render: (f) => <DeptPill name={f.dept} />,
+      // EKA-EDIT: Department column
+      render: (f) => <DeptPill department={departmentsById.get(f.departmentId)} />,
+
     },
     {
-      key: 'sizeMb',
+      key: 'sizeBytes',
       header: 'Size',
       width: '12%',
       render: (f) => (
-        <span className="doc-mono text-[13px] font-bold text-[#10283f]">
-          {f.sizeMb.toFixed(1)} MB
-        </span>
+        <span className="doc-mono text-[13px] font-bold text-[#10283f]">{formatFileSize(f.sizeBytes)}</span>
       ),
     },
     {
+      // EKA-EDIT: Deleted Date column, shows archive date and auto-purge date
       key: 'deleted',
       header: 'Deleted Date',
       width: '17%',
       render: (f) => (
         <span className="doc-mono text-[12px] text-[#7c949a]">
-          {f.deleted}
+          {new Date(f.archivedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          <span className="block text-[10px]">
+            Purges {getPurgeDate(f.archivedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </span>
         </span>
       ),
     },
@@ -96,9 +104,8 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
   return (
     <section className="overflow-hidden rounded-[24px] border border-[#f6d5d9] bg-(--bg-surface) shadow-(--shadow-sm)">
       <div
-        className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[12px] ${
-          open ? 'border-b border-[#f3e4e6]' : ''
-        }`}
+        className={`flex flex-wrap items-center justify-between gap-4 px-9 py-[12px] ${open ? 'border-b border-[#f3e4e6]' : ''
+          }`}
       >
         <div className="flex items-center gap-[14px]">
           <span className="bin-group relative flex h-[55px] w-[55px] shrink-0 items-center justify-center rounded-2xl border border-[#f6d5d9] bg-[#ffe9ee] text-[#e5484d]">
@@ -132,9 +139,8 @@ function RecycleBinSection({ items, onRestore, onPurge, onEmpty }) {
           View deleted files
           <ChevronDown
             size={15}
-            className={`transition-transform duration-200 ${
-              open ? 'rotate-180' : ''
-            }`}
+            className={`transition-transform duration-200 ${open ? 'rotate-180' : ''
+              }`}
           />
         </button>
       </div>

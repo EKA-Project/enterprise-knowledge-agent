@@ -21,3 +21,7 @@ export const FORMAT_META = {
   csv: { label: 'CSV Data Tables', color: '#0c82c0' },
   txt: { label: 'Text Transcripts', color: '#d87708' },
 };
+
+// EKA-EDIT: "purges on" date = archivedAt + retention days (derived, blueprint rule 6)
+export const getPurgeDate = (archivedAt) =>
+  new Date(Date.parse(archivedAt) + RECYCLE_BIN_RETENTION_DAYS * 86400000);
