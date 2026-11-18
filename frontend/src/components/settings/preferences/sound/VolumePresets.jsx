@@ -30,7 +30,7 @@ export default function VolumePresets({ percent, disabled, onSelect }) {
               onClick={() => onSelect(value)}
               className={`rounded-full border px-3 py-1 text-[11px] font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) disabled:cursor-not-allowed disabled:opacity-50 ${
                 active
-                  ? "border-(--primary) bg-(--primary-light) text-(--primary)"
+                  ? "border-(--primary) bg-(--primary-light) text-(--primary) ring-1 ring-(--primary)"
                   : "border-(--border-medium) bg-(--bg-surface) text-(--text-secondary) hover:border-(--primary)"
               }`}
             >

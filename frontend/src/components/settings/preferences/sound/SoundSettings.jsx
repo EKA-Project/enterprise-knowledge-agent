@@ -34,7 +34,7 @@ export default function SoundSettings() {
               {soundOn ? "On" : "Off"}
             </span>
           </div>
-          <p className="mt-1 text-[12px] text-(--text-muted)">
+          <p className="mt-1 text-[12px] text-(--text-secondary)">
             Plays your mascot&apos;s reactions and the Surprise Me roll. Nothing
             makes noise unless you turn this on.
           </p>

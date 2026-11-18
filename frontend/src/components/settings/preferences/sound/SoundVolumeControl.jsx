@@ -18,7 +18,11 @@ const ADJUST_KEYS = [
 ];
 
 // onVolumeChange receives a number from 0 to 1 (the scale the sound store uses).
-export default function SoundVolumeControl({ disabled, volume, onVolumeChange }) {
+export default function SoundVolumeControl({
+  disabled,
+  volume,
+  onVolumeChange,
+}) {
   const percent = Math.round(volume * 100);
   const isMuted = percent === 0;
   const lastAudible = useRef(UNMUTE_FALLBACK); // level to return to on Unmute
@@ -80,11 +84,15 @@ export default function SoundVolumeControl({ disabled, volume, onVolumeChange })
       <div className={`relative mt-4 h-5 ${disabled ? "opacity-50" : ""}`}>
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full bg-(--border-medium)"
+          className="absolute inset-x-0 top-1/2 h-2.5 -translate-y-1/2 overflow-hidden rounded-full border border-(--border-medium) bg-(--bg-surface)"
         >
           <div
             className="h-full rounded-full bg-(--primary)"
-            style={{ width: `${percent}%` }}
+            // The thumb is 20px wide and its center travels from 10px to
+            // (width - 10px), so shift the fill to end under the thumb's center.
+            style={{
+              width: `calc(${percent}% + ${(0.5 - percent / 100) * 20}px)`,
+            }}
           />
         </div>
         <input
