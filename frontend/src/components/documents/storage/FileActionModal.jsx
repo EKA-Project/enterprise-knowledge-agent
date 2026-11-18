@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { TypeTile } from './StorageBits';
 import '../../../styles/Document.css';
+// EKA-EDIT: top
+import { formatFileSize } from '../../../utils/formatFileSize.js';
 
 // Two-tone flame (red outer, orange inner) for the purge modal
 function FlameIcon({ size = 16 }) {
