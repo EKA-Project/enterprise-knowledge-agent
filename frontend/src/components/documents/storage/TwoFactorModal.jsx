@@ -1,55 +1,59 @@
 import { useEffect, useRef, useState } from 'react';
 import { RefreshCw, Shield, Smartphone, X } from 'lucide-react';
 import { TypeTile } from './StorageBits';
+// EKA-EDIT: challenge/verify through twoFactorService (blueprint-external, backend later)
+import { createChallenge, verifyChallenge } from '../../../services/twoFactorService.js';
+import { formatFileSize } from '../../../utils/formatFileSize.js';
 import '../../../styles/Document.css';
 import { CancelButton } from '../../common/ActionButtons.jsx';
 
-const rand = () => 10 + Math.floor(Math.random() * 90);
-const makeCodes = () => {
-  const code = rand();
-  const set = new Set([code]);
-  while (set.size < 3) set.add(rand());
-  return { code, options: [...set].sort(() => Math.random() - 0.5) };
-};
+
 
 // Admin 2FA number matching: tap the same number that is shown above.
 // Sizes measured on the real-size screenshot (modal 610 wide, ~788 tall).
-function TwoFactorModal({ file, onClose, onVerified }) {
-  const [{ code, options }, setCodes] = useState(makeCodes);
+// EKA-EDIT: onVerified now receives the verificationToken
+// EKA-EDIT: departmentName passed by the page
+function TwoFactorModal({ file, departmentName, onClose, onVerified }) {
+  const [challenge, setChallenge] = useState(null); // { challengeId, code, options }
   const [status, setStatus] = useState('waiting'); // waiting | ok | wrong
   const [picked, setPicked] = useState(null);
   const timer = useRef(null);
+  const { code = '', options = [] } = challenge ?? {};
+
+  const load = async () => {
+    setStatus('waiting');
+    setPicked(null);
+    setChallenge(await createChallenge());
+  };
 
   useEffect(() => {
+    load();
     const onKey = (e) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
       clearTimeout(timer.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onClose]);
 
-  const pick = (n) => {
-    if (status === 'ok') return;
+  const pick = async (n) => {
+    if (status === 'ok' || !challenge) return;
     setPicked(n);
-    if (n === code) {
+    try {
+      const { verificationToken } = await verifyChallenge(challenge.challengeId, n);
       setStatus('ok');
-      timer.current = setTimeout(onVerified, 1000);
-    } else {
+      timer.current = setTimeout(() => onVerified(verificationToken), 1000);
+    } catch {
       setStatus('wrong');
     }
   };
-  const resend = () => {
-    setCodes(makeCodes());
-    setStatus('waiting');
-    setPicked(null);
-  };
-
+  const resend = load;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#10192b]/45 p-4 backdrop-blur-sm" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-                className="[zoom:0.8] w-full max-w-[610px] rounded-[30px] border-t-[3px] border-t-[#e5484d] bg-white px-[30px] pb-[30px] pt-[32px] shadow-2xl"
+        className="[zoom:0.8] w-full max-w-[610px] rounded-[30px] border-t-[3px] border-t-[#e5484d] bg-white px-[30px] pb-[30px] pt-[32px] shadow-2xl"
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
@@ -79,11 +83,13 @@ function TwoFactorModal({ file, onClose, onVerified }) {
 
         {/* File card (550 x 85) */}
         <div className="mt-[62px] flex h-[85px] items-center gap-3.5 rounded-2xl border border-[#b9d6ec] bg-[#e1f0fa] px-[19px]">
-          <TypeTile type={file.type} />
+          {/* EKA-EDIT: document fields; department name comes from the page via departmentName */}
+          <TypeTile format={file.format} />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[16px] font-bold leading-6 text-[#10283f]">{file.name}</p>
+            <p className="truncate text-[16px] font-bold leading-6 text-[#10283f]">{file.title}</p>
             <p className="doc-mono truncate text-[12px] text-[#7c949a]">
-              {file.file} • {file.sizeMb.toFixed(1)} MB • {file.dept}
+              {file.fileName} • {formatFileSize(file.sizeBytes)}
+              {departmentName ? ` • ${departmentName}` : ''}
             </p>
           </div>
           <span className="doc-mono inline-flex h-6 shrink-0 items-center rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-3 text-[11px] font-bold uppercase tracking-[0.06em] text-[#d92d2d]">
@@ -102,11 +108,10 @@ function TwoFactorModal({ file, onClose, onVerified }) {
           </div>
 
           <p
-            className={`mt-3.5 flex items-center justify-center gap-2.5 text-[13px] leading-5 ${
-              status === 'ok' ? 'text-[#0f8f63]' : status === 'wrong' ? 'text-[#d9373f]' : 'text-[#7c9bb5]'
-            }`}
+            className={`mt-3.5 flex items-center justify-center gap-2.5 text-[13px] leading-5 ${status === 'ok' ? 'text-[#0f8f63]' : status === 'wrong' ? 'text-[#d9373f]' : 'text-[#7c9bb5]'
+              }`}
           >
-           <span className={`h-2 w-2 rounded-full ${status === 'waiting' ? 'animate-[dot-blink_1.6s_ease-in-out_infinite] bg-[#17b97f]' : 'bg-current'}`} />
+            <span className={`h-2 w-2 rounded-full ${status === 'waiting' ? 'animate-[dot-blink_1.6s_ease-in-out_infinite] bg-[#17b97f]' : 'bg-current'}`} />
             {status === 'ok'
               ? '2FA Approved via EKA Authenticator'
               : status === 'wrong'
@@ -129,13 +134,12 @@ function TwoFactorModal({ file, onClose, onVerified }) {
                   key={n}
                   type="button"
                   onClick={() => pick(n)}
-                  className={`doc-mono h-[49px] cursor-pointer rounded-[10px] border text-[18px] font-bold transition-all duration-200 ${
-                    picked === n
-                      ? n === code
-                        ? 'border-[#17b97f] bg-[#17b97f] text-white shadow-[0_6px_14px_rgba(23,185,127,0.35)]'
-                        : 'border-[#e5484d] bg-[#e5484d] text-white shadow-[0_6px_14px_rgba(229,72,77,0.3)]'
-                      : 'border-[#b9d6ec] bg-[#dcebf8] text-[#10283f] hover:-translate-y-px hover:bg-[#cfe3f4]'
-                  }`}
+                  className={`doc-mono h-[49px] cursor-pointer rounded-[10px] border text-[18px] font-bold transition-all duration-200 ${picked === n
+                    ? n === code
+                      ? 'border-[#17b97f] bg-[#17b97f] text-white shadow-[0_6px_14px_rgba(23,185,127,0.35)]'
+                      : 'border-[#e5484d] bg-[#e5484d] text-white shadow-[0_6px_14px_rgba(229,72,77,0.3)]'
+                    : 'border-[#b9d6ec] bg-[#dcebf8] text-[#10283f] hover:-translate-y-px hover:bg-[#cfe3f4]'
+                    }`}
                 >
                   {n}
                 </button>
@@ -156,7 +160,7 @@ function TwoFactorModal({ file, onClose, onVerified }) {
           >
             <RefreshCw size={15} /> Send new number
           </button>
-<CancelButton onClick={onClose} />
+          <CancelButton onClick={onClose} />
         </div>
       </div>
     </div>
