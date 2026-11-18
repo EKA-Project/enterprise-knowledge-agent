@@ -13,3 +13,11 @@ export const DEFAULT_IDLE_DAYS = 90;
 
 // Existing UI text already says 30 days
 export const RECYCLE_BIN_RETENTION_DAYS = 30;
+// EKA-EDIT: format label + color are UI-only (blueprint rule 5). Keys = documents.format enum.
+export const FORMAT_META = {
+  pdf: { label: 'PDF Documents', color: '#ee4544' },
+  docx: { label: 'Word Documents', color: '#2563eb' },
+  md: { label: 'Markdown Specs', color: '#08966a' },
+  csv: { label: 'CSV Data Tables', color: '#0c82c0' },
+  txt: { label: 'Text Transcripts', color: '#d87708' },
+};
