@@ -72,7 +72,7 @@ export default function SoundVolumeControl({
             type="button"
             onClick={toggleMute}
             disabled={disabled}
-            className="rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary) transition hover:border-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-(--border-medium)"
+            className="rounded-full border border-(--border-medium) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary) shadow-(--shadow-sm) transition duration-200 hover:-translate-y-0.5 hover:border-(--primary) hover:shadow-[0_4px_12px_var(--primary-glow)] active:translate-y-0 active:shadow-(--shadow-sm) motion-reduce:transition-none motion-reduce:hover:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus) disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:border-(--border-medium) disabled:hover:shadow-none"
           >
             {isMuted ? "Unmute" : "Mute"}
           </button>
