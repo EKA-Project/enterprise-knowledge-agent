@@ -1,15 +1,16 @@
 // EKA-EDIT: new file. Loads everything the Storage page needs through services only.
 // summary + departments + Recycle Bin load together. Every write refreshes them,
 // and `version` changes so the Free up space list reloads too.
+// EKA-EDIT: file lives in components/documents/storage/, so services are ../../../
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getDepartments } from "../services/departmentService.js";
+import { getDepartments } from "../../../services/departmentService.js";
 import {
   archiveDocuments,
   getRecycleBin,
   getStorageSummary,
   purgeDocuments,
   restoreDocument,
-} from "../services/storageService.js";
+} from "../../../services/storageService.js";
 
 export function useStorageData() {
   const [data, setData] = useState({ summary: null, departments: [], bin: [], binTotal: 0 });
