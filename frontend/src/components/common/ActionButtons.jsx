@@ -155,27 +155,46 @@ export function IngestionLibraryButton(props) {
 /* ==========================================================================
    SECTION 2: Storage & Retention Actions
    ========================================================================== */
-
 /**
- * Export Storage / Audit CSV (Light Pill with Dark Chip Inversion on Hover)
+ * Master Export Action Button (Light Pill with Dark Chip Inversion on Hover)
+ * Dynamically accepts label text, title, and toast message.
+ *
+ * Usage:
+ *   <ExportAuditButton onClick={handleExport} toast="Report exported">
+ *     Export Report
+ *   </ExportAuditButton>
+ *
  * Where to use:
  *   - Storage Overview Header (components/documents/admin/StorageIndicator.jsx)
- *   - Analytics Export Toolbar (components/analytics/IngestionAuditPanel.jsx)
+ *   - Analytics header (components/analytics/)
+ *   - Organization directory header
  */
-export function ExportAuditButton(props) {
+export function ExportAuditButton({
+  children = "Export Storage Audit",
+  title = "Export storage audit report (CSV)",
+  toast = null,
+  onToast,
+  onClick,
+  ...props
+}) {
+  const handleClick = (e) => {
+    if (onClick) onClick(e);
+    if (toast && onToast) onToast(toast);
+  };
+
   return (
     <Button
       variant="darkHover"
       icon={DippingDownloadIcon}
       iconChip
-      title="Export storage audit report (CSV)"
+      title={title}
+      onClick={handleClick}
       {...props}
     >
-      Export Storage Audit
+      {children}
     </Button>
   );
 }
-
 /**
  * Restore Document (Emerald Green Hover with 360° Rewind Spin)
  * Where to use:

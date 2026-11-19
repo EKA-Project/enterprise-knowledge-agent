@@ -6,6 +6,7 @@ import PageHero from "../components/common/PageHero";
 import Button from "../components/common/Button";
 import Tooltip from "../components/common/Tooltip";
 import useToast from "../hooks/useToast.js";
+import { ExportAuditButton } from "../components/common/ActionButtons";
 import OrganizationTabs from "../components/organization/OrganizationTabs";
 import DepartmentManagementTab from "../components/organization/Department/DepartmentManagementTab.jsx";
 import DepartmentCreateModal from "../components/organization/Department/DepartmentCreateModal.jsx";
@@ -200,9 +201,9 @@ export default function OrganizationPage() {
               <OrganizationTabs value={tab} onChange={changeTab} />
               {tab === "departments" ? (
                 <>
-                  <Button variant="light" size="sm" icon={Download} onClick={exportStructureCsv}>
+                  <ExportAuditButton onClick={exportStructureCsv} title="Export department structure (CSV)">
                     Export Structure CSV
-                  </Button>
+                  </ExportAuditButton>
                   <Button variant="solid" size="sm" icon={Plus} iconChip onClick={() => setModal({ type: "create" })}>
                     Create Department
                   </Button>
@@ -210,9 +211,9 @@ export default function OrganizationPage() {
               ) : (
                 <>
                   <Tooltip label="Export Directory to CSV format">
-                    <Button variant="light" size="sm" icon={Download} onClick={exportUsersCsv}>
+                    <ExportAuditButton onClick={exportUsersCsv} title="">
                       Export Directory CSV
-                    </Button>
+                    </ExportAuditButton>
                   </Tooltip>
                   <Button variant="solid" size="sm" icon={Plus} iconChip onClick={() => setModal({ type: "invite" })}>
                     Invite New Member

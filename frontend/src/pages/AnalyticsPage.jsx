@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/analytics.css";
 import PageHero from "../components/common/PageHero";
+import { ExportAuditButton } from "../components/common/ActionButtons";
 import HealthMetricsRow from "../components/analytics/HealthMetricsRow";
 import IngestionAuditPanel from "../components/analytics/IngestionAuditPanel";
 import ContradictionCard from "../components/analytics/ContradictionCard";
@@ -136,13 +137,9 @@ export default function AnalyticsPage() {
                   </button>
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={exportReport}
-                className="rounded-full bg-(--text-primary) px-2 py-0.5 text-[12px] font-bold text-(--primary-contrast) transition hover:bg-(--primary) active:scale-95"
-              >
-                Export Report ↗
-              </button>
+              <ExportAuditButton onClick={exportReport} title="Export analytics report (CSV)">
+                Export Report
+              </ExportAuditButton>
             </>
           }
         />

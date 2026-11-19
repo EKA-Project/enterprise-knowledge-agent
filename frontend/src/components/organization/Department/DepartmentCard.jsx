@@ -1,4 +1,5 @@
-import { SquarePen, Trash2 } from "lucide-react";
+import { SquarePen} from "lucide-react";
+import TrashLidIcon from "../../icons/TrashLidIcon";
 import { getInitials } from "../OrganizationData.js";
 import { getDepartmentTheme } from "../../../config/departmentTheme.js";
 // Tailwind class for the monospace font used in badges and labels
@@ -10,11 +11,11 @@ const { Icon, color, softBg, border } = getDepartmentTheme(dept.colorKey, dept.i
   return (
     <article
       style={{ animationDelay: `${delay}ms` }}
-      className="org-rise group flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
+      className="org-rise group/card flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
         <div className="flex items-start gap-4">
           <span
             style={{ color, background: softBg, borderColor: border }}
-            className="grid size-12 shrink-0 place-items-center rounded-xl border transition duration-300 group-hover:scale-110 group-hover:shadow-(--shadow-md)">
+            className="grid size-12 shrink-0 place-items-center rounded-xl border transition duration-300 group-hover/card:scale-110 group-hover/card:shadow-(--shadow-md)">
             <Icon size={20} aria-hidden="true" />
           </span>
         <div className="min-w-0 flex-1">
@@ -38,14 +39,14 @@ const { Icon, color, softBg, border } = getDepartmentTheme(dept.colorKey, dept.i
 >
   <SquarePen size={17} />
 </button>
-          <button
+<button
   type="button"
   onClick={() => onDelete(dept.id)}
   aria-label={`Delete ${dept.name}`}
   title="Delete department"
-  className="grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--status-danger-bg) hover:text-(--status-danger) active:scale-95"
+  className="group bin-group grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--status-danger-bg) hover:text-(--status-danger) active:scale-95"
 >
-  <Trash2 size={17} />
+  <TrashLidIcon size={17} />
 </button>
         </div>
       </div>
@@ -63,7 +64,7 @@ const { Icon, color, softBg, border } = getDepartmentTheme(dept.colorKey, dept.i
             <div className="min-w-0 flex-1">
               <p className="flex flex-wrap items-center gap-1.5 text-[13.5px] font-bold text-(--text-primary)">
                 <span className="truncate">{lead.name}</span>
-                <span className="inline-flex items-center gap-1 rounded-md border border-[#fde68a] bg-[#fef9c3] px-1.5 py-0.5 text-[9.5px] font-bold text-[#b45309]">
+                <span className="inline-flex items-center gap-1 rounded-md border border-(--status-warning) bg-(--status-warning-bg) px-1.5 py-0.5 text-[9.5px] font-bold text-[#b45309]">
                   <span aria-hidden="true">👔</span> Lead
                 </span>
               </p>
