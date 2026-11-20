@@ -8,8 +8,10 @@ import {
   RotateCw,
   Flame,
   UserX,
-  Database ,
+  Database,
   X,
+  Archive,
+  ArchiveRestore,
 } from "lucide-react";
 import Button from "./Button";
 import '../../styles/Document.css';
@@ -421,5 +423,38 @@ export function StartVectorIngestionButton(props) {
     >
       Start Vector Ingestion
     </Button>
+  );
+}
+
+// Action buttons (spec: .doc-summary-action-btn)
+const sideBtnBase =
+  'group inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-pill) border-[1.5px] px-3 py-1.5 text-[11px] font-semibold active:translate-y-0';
+
+const sideIcon =
+  'transition-transform duration-[350ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+const archiveBtn =
+  `${sideBtnBase} border-[rgba(217,119,6,0.32)] bg-[var(--bg-surface-elevated,var(--bg-surface))] text-(--text-secondary) [transition:all_0.28s_cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[2.5px] hover:scale-[1.02] hover:border-[#d97706] hover:bg-[linear-gradient(135deg,rgba(254,243,199,0.95),rgba(253,230,138,0.7))] hover:text-[#92400e] hover:shadow-[0_6px_18px_rgba(217,119,6,0.22),0_0_0_2px_rgba(245,158,11,0.16)] active:scale-[0.96] active:shadow-[0_2px_6px_rgba(217,119,6,0.12)]`;
+
+const unarchiveBtn =
+  `${sideBtnBase} border-[#10b981] bg-[#f0fdf4] text-[#047857] [transition:all_0.28s_cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[2.5px] hover:scale-[1.02] hover:border-[#059669] hover:bg-[linear-gradient(135deg,#10b981_0%,#059669_100%)] hover:text-white hover:shadow-[0_6px_18px_rgba(16,185,129,0.28),0_0_0_2px_rgba(16,185,129,0.2)] active:scale-[0.96]`;
+
+export function ArchiveButton({ archived, onClick }) {
+  const Icon = archived ? ArchiveRestore : Archive;
+  const rotation = archived
+    ? 'group-hover:rotate-[8deg]'
+    : 'group-hover:-rotate-[8deg]';
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={archived ? unarchiveBtn : archiveBtn}
+    >
+      <Icon
+        size={12}
+        className={`${sideIcon} group-hover:-translate-y-0.5 ${rotation} group-hover:scale-[1.22]`}
+      />
+      {archived ? 'Unarchive' : 'Archive'}
+    </button>
   );
 }

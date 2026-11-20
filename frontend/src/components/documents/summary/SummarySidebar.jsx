@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Zap, RefreshCw, Archive, ArchiveRestore, Link2, ArrowRight } from 'lucide-react';
+import { Zap, RefreshCw, Link2, ArrowRight } from 'lucide-react';
 import '../../../styles/Document.css';
 import Badge from '../../common/Badge.jsx';
-
+import { ArchiveButton } from '../../common/ActionButtons.jsx';
 // Format badge colours come from the theme's --doc-* variables.
 const docBadge = {
   PDF: 'border-(--doc-pdf-border) bg-(--doc-pdf-bg) text-(--doc-pdf-color)',
@@ -84,32 +84,15 @@ function SummarySidebar({
               <RefreshCw size={12} className={`${sideIcon} group-hover:rotate-180`} /> Re-index Chunks
             </button>
 
-            <button
-              type="button"
-              onClick={onToggleArchive}
-              className={archived ? unarchiveBtn : archiveBtn}
-            >
-              {archived ? (
-                <ArchiveRestore
-                  size={12}
-                  className={`${sideIcon} group-hover:-translate-y-0.5 group-hover:rotate-[8deg] group-hover:scale-[1.22]`}
-                />
-              ) : (
-                <Archive
-                  size={12}
-                  className={`${sideIcon} group-hover:-translate-y-0.5 group-hover:-rotate-[8deg] group-hover:scale-[1.22]`}
-                />
-              )}
-              {archived ? 'Unarchive' : 'Archive'}
-            </button>
+            <ArchiveButton archived={archived} onClick={onToggleArchive} />
           </div>
         )}
       </section>
 
-           <section className={card}>
-<h2 className="font-(family-name:--font-serif) text-lg font-extrabold text-(--text-primary)">
-  <span aria-hidden="true">💡</span> Suggested Questions
-</h2>
+      <section className={card}>
+        <h2 className="font-(family-name:--font-serif) text-lg font-extrabold text-(--text-primary)">
+          <span aria-hidden="true">💡</span> Suggested Questions
+        </h2>
         <div className="mt-3 space-y-2">
           {questions.map((q) => (
             <Link
@@ -138,9 +121,8 @@ function SummarySidebar({
                 className="flex w-full cursor-pointer items-center gap-3 rounded-(--radius-md) border border-(--border-subtle) bg-(--bg-surface-subtle) px-3 py-2 text-left [transition:background-color_var(--transition-fast),border-color_var(--transition-fast)] hover:border-(--border-medium) hover:bg-(--bg-surface)"
               >
                 <span
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-(--radius-sm) border font-(family-name:--font-mono) text-[8px] font-bold ${
-                    docBadge[d.format] ?? 'border-(--border-subtle) bg-(--bg-surface) text-(--text-primary)'
-                  }`}
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-(--radius-sm) border font-(family-name:--font-mono) text-[8px] font-bold ${docBadge[d.format] ?? 'border-(--border-subtle) bg-(--bg-surface) text-(--text-primary)'
+                    }`}
                 >
                   {d.format}
                 </span>
