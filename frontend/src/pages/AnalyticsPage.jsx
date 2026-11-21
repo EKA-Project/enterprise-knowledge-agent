@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/analytics.css";
+import pageMetadata from "../config/pageMetadata";
 import PageHero from "../components/common/PageHero";
 import { ExportAuditButton } from "../components/common/ActionButtons";
 import HealthMetricsRow from "../components/analytics/HealthMetricsRow";
@@ -26,7 +27,7 @@ export default function AnalyticsPage() {
   const [range, setRange] = useState("30d");
   const [fixing, setFixing] = useState(false);
   const [upload, setUpload] = useState(null); // null = closed, otherwise { title, category }
-
+  const meta = pageMetadata.analytics.admin;
   // Everything comes from the services. useApi fetches again when the role or the
   // range changes, and reload() re-reads after a write.
   const { data, loading, error, reload } = useApi(async () => {
@@ -117,9 +118,9 @@ export default function AnalyticsPage() {
     <div className="analytics-page mx-auto w-full max-w-6xl space-y-6">
             <div className="anl-rise">
         <PageHero
-          eyebrow="Enterprise knowledge telemetry"
-          title="Knowledge Analytics."
-          description="Comprehensive audit metrics, grounding accuracy telemetry, cross-document discrepancy detection, and ungrounded query gap analysis."
+          eyebrow={meta.eyebrow}
+          title={meta.title}
+          description={meta.description}
           actions={
             <>
               <div role="group" aria-label="Time range" className="inline-flex rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5">

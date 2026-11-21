@@ -14,6 +14,7 @@ import {
 import "../styles/settings.css";
 import AuthContext from "../context/AuthContext.jsx";
 import useSettings from "../hooks/useSettings";
+import pageMetadata from "../config/pageMetadata";
 import PageHero from "../components/common/PageHero";
 import useToast from "../hooks/useToast";
 import ProfileSettings from "../components/settings/ProfileSettings";
@@ -72,6 +73,8 @@ export default function SettingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [settings, update] = useSettings();
   const notify = useToast();
+  const meta = pageMetadata.settings;
+
 
   // The other panels still call toast(message, tone). Forward it to the shared toast system.
   const toast = useCallback(
@@ -104,9 +107,9 @@ export default function SettingsPage() {
   return (
     <div className="-mt-3 settings-page mx-auto w-full max-w-350 space-y-4">
       <PageHero
-        eyebrow="Workspace & account"
-        title="Make EKA Yours."
-        description="Manage your personal preferences, security, and workspace experience."
+        eyebrow={meta.eyebrow}
+        title={meta.title}
+        description={meta.description}
       />
 
       <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[250px_minmax(0,1fr)]">

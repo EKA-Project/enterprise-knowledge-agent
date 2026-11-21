@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useChat from '../hooks/useChat';
 import useToast from '../hooks/useToast.js';
-import PageHero from "../components/common/PageHero";
+import pageMetadata from "../config/pageMetadata";
 import ChatMessageList from '../components/chat/ChatMessageList';
 import ChatInputBox from '../components/chat/ChatInputBox';
 import ChatSidebar from '../components/chat/ChatSidebar';
@@ -17,71 +17,72 @@ const HistoryClock = ({ size }) => (
   />
 );
 // ===================== header (page-specific, stays local) =====================
-function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread,  onToggleDeepResearch }) {
+function AskEkaHeader({ historyOpen, onToggleHistory, onNewThread, onToggleDeepResearch }) {
+  const meta = pageMetadata.chat;
+    const pill = 'flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-95';
+
   const badge = `${MONO} inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[10.5px] font-semibold text-[var(--text-secondary)]`;
-  const pill = 'flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] font-semibold transition-all duration-200 hover:-translate-y-0.5 active:scale-95';
-
   return (
-<header className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-3 pl-1.5 pr-1.5 pt-1.5">
+      <header className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-3 pl-1.5 pr-1.5 pt-1.5">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-2">
-       <button
-  type="button"
-  onClick={onToggleHistory}
-  aria-label="Toggle history"
-  aria-pressed={historyOpen}
-  className={`group grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-lg border bg-[var(--bg-surface)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--bg-surface)] hover:text-[var(--primary)] hover:shadow-[var(--shadow-md)] active:translate-y-0 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)] ${
-    historyOpen
-      ? 'border-[var(--primary)] text-[var(--primary)]'
-      : 'border-[var(--border-medium)] text-[var(--text-secondary)]'
-  }`}
->
-  <PanelIcon size={17} className="transition-transform duration-200 ease-out group-hover:scale-110" />
-</button>
+          <button
+            type="button"
+            onClick={onToggleHistory}
+            aria-label="Toggle history"
+            aria-pressed={historyOpen}
+            className={`group grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-lg border bg-[var(--bg-surface)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--bg-surface)] hover:text-[var(--primary)] hover:shadow-[var(--shadow-md)] active:translate-y-0 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-focus)] ${
+              historyOpen
+              ? 'border-[var(--primary)] text-[var(--primary)]'
+              : 'border-[var(--border-medium)] text-[var(--text-secondary)]'
+              }`}
+            >
+            <PanelIcon size={17} className="transition-transform duration-200 ease-out group-hover:scale-110" />
+          </button>
+          <h1 className={`${SERIF} m-0 text-[24px] font-bold leading-tight text-[var(--text-primary)]`}>
+            {meta.title}
+          </h1>
 
-        <h1 className={`${SERIF} m-0 text-[24px] font-bold leading-tight text-[var(--text-primary)]`}>Talk to your organization.</h1>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={badge}>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={badge}>
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--status-verified)]" />
-            24 docs (148k vectors)
-          </span>
-          <span className={badge}>
-            <ShieldCheckIcon size={12} />
-            100% Tenant-Grounded
-          </span>
+              24 docs (148k vectors)
+            </span>
+            <span className={badge}>
+              <ShieldCheckIcon size={12} />
+              {meta.status}
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div className="flex shrink-0 items-center gap-2.5">
+        <div className="flex shrink-0 items-center gap-2.5">
+        <Link
+          to="/ask-eka/history"
+          className={`${pill} group border-[var(--border-medium)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--primary-deep)] hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--primary-deep)] hover:shadow-[var(--shadow-md)]`}
+        >
+        <span className="grid size-5 place-items-center rounded-full bg-[var(--primary-light)] text-[var(--primary)]">
+          <ClockIcon
+            size={12}
+            className="transition-transform duration-300 ease-out group-hover:-rotate-[45deg]"
+          />
+        </span>
+        Chat History
+      </Link>
 
-<Link
-  to="/ask-eka/history"
-  className={`${pill} group border-[var(--border-medium)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--primary-deep)] hover:bg-[var(--bg-surface-subtle)] hover:text-[var(--primary-deep)] hover:shadow-[var(--shadow-md)]`}
->
-  <span className="grid size-5 place-items-center rounded-full bg-[var(--primary-light)] text-[var(--primary)]">
-    <ClockIcon
-      size={12}
-      className="transition-transform duration-300 ease-out group-hover:-rotate-[45deg]"
-    />
-  </span>
-  Chat History
-</Link>
-
-<button
-  type="button"
-  onClick={onNewThread}
-  className="group inline-flex h-7 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-(--accent-secondary) bg-(--accent-secondary) pl-[3px] pr-3 text-[11.5px] font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-(--primary-deep) hover:bg-(--primary-deep) hover:shadow-(--shadow-md) active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
->
-  <span className="flex size-[22px] items-center justify-center rounded-full bg-white/20 text-white transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white/30">
-    <PlusIcon
-      size={12}
-      className="transition-transform duration-500 ease-in-out group-hover:rotate-90"
-    />
-  </span>
-  New Thread
-</button>
-      </div>
-    </header>
+      <button
+        type="button"
+        onClick={onNewThread}
+        className="group inline-flex h-7 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-(--accent-secondary) bg-(--accent-secondary) pl-[3px] pr-3 text-[11.5px] font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-(--primary-deep) hover:bg-(--primary-deep) hover:shadow-(--shadow-md) active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+      <span className="flex size-[22px] items-center justify-center rounded-full bg-white/20 text-white transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white/30">
+        <PlusIcon
+          size={12}
+          className="transition-transform duration-500 ease-in-out group-hover:rotate-90"
+        />
+      </span>
+      New Thread
+    </button>
+    </div>
+  </header>
   );
 }
 
@@ -141,7 +142,6 @@ export default function AskEkaPage() {
   const [inputValue, setInputValue] = useState(''); // the typed text
   const [historyOpen, setHistoryOpen] = useState(false);
   const [activeSource, setActiveSource] = useState(null); // citation shown in SourcePanel
-
   // "Resume Thread" from the history page arrives with { conversationId } in router state.
   useEffect(() => {
     const id = location.state?.conversationId;

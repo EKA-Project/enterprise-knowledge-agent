@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Download, Plus } from "lucide-react";
 import "../styles/organization.css";
+import pageMetadata from "../config/pageMetadata";
 import PageHero from "../components/common/PageHero";
 import Button from "../components/common/Button";
 import Tooltip from "../components/common/Tooltip";
@@ -23,18 +24,9 @@ import useApi from "../hooks/useApi.js";
 import { getDepartments, assignManager, updateDepartment, createDepartment, deleteDepartment } from "../services/departmentService.js";
 import { getUsers, createUser, updateUser, deactivateUser, reactivateUser } from "../services/userService.js";
 const HEADERS = {
-  departments: {
-    eyebrow: "Organization structure & units",
-    title: "Department Management",
-    description: "Configure enterprise departments, designated Lead Managers, and scoped document ingestion authority.",
-  },
-  directory: {
-    eyebrow: "Organization directory",
-    title: "User Management",
-    description: "Manage team roles and account statuses.",
-  },
+  departments: pageMetadata.organizationDepartments,
+  directory: pageMetadata.organizationDirectory.admin,
 };
-
 function download(text, filename) {
   const url = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
   const link = document.createElement("a");

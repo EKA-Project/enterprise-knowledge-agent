@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import useToast from "../hooks/useToast.js";
 import "../styles/semantic-search.css";
+import pageMetadata from "../config/pageMetadata";
 import PageHero from "../components/common/PageHero";
 import SemanticSearchControls from "../components/semantic-search/SemanticSearchControls";
 import GroundedAnswerCard from "../components/semantic-search/GroundedAnswerCard";
@@ -65,6 +66,7 @@ export default function SemanticSearchPage() {
   const regenTimer = useRef(null);
   const pageTopRef = useRef(null);
   const [scrollTick, setScrollTick] = useState(0);
+  const meta = pageMetadata.semanticSearch;
 
 useEffect(() => {
   if (scrollTick === 0) return;
@@ -156,16 +158,10 @@ const handleTryTip = (example) => {
 <div ref={pageTopRef} className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
       <div className="ssp-rise">
         <PageHero
-          eyebrow={
-            <>
-              Knowledge discovery
-              <span className="ml-2.5 rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 text-[9.5px] font-bold tracking-wider text-(--badge-text)">
-                EKA Vector Agent
-              </span>
-            </>
-          }
-          title="Search by meaning, not just words."
-          description="Find company guidelines, policies, and runbooks using everyday natural language concepts and plain English phrases."
+          eyebrow={meta.eyebrow}
+          title={meta.title}
+          description={meta.description}
+          status={meta.status}
         />
       </div>
       {/* Sticky: stays pinned while results scroll, like the video */}
