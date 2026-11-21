@@ -1,24 +1,15 @@
-import { useMemo, useState } from 'react';
+import { useMemo} from 'react';
 import { FileText } from 'lucide-react';
 import FavoriteCard from './FavoriteCard.jsx';
 import SectionState, { SkeletonCards } from './SectionState.jsx';
 
-const modes = [
-  { id: 'referenced', label: 'Most Referenced' },
-  { id: 'viewed', label: 'Most Viewed' },
-];
 
 // Library Favorites: top document per department. state = normal | loading | empty | error
 // EKA-EDIT: items come from the page (pinned documents)
 export default function LibraryFavorites({ items: favorites = [], state = 'normal', onReset }) {
-  const [mode, setMode] = useState('referenced');
+  
 
-  // "Most Referenced" keeps the design order; "Most Viewed" sorts by view count.
-// EKA-EDIT: sort by real counts
-const items = useMemo(
-  () => [...favorites].sort((a, b) => (mode === 'viewed' ? b.viewed - a.viewed : b.cited - a.cited)),
-  [mode, favorites],
-);
+const items = useMemo(() => [...favorites].sort((a, b) => b.cited - a.cited), [favorites]);
 
   let body;
   if (state === 'loading') {
@@ -50,7 +41,7 @@ const items = useMemo(
     body = (
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         {items.map((item, index) => (
-          <FavoriteCard key={item.id} item={item} rank={index + 1} mode={mode} />
+          <FavoriteCard key={item.id} item={item} rank={index + 1} />
         ))}
       </div>
     );
@@ -76,24 +67,7 @@ const items = useMemo(
             </p>
           </div>
         </div>
-
-        <div className="flex rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) p-0.5">
-          {modes.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              aria-pressed={mode === m.id}
-              onClick={() => setMode(m.id)}
-              className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-semibold transition-colors ${
-                mode === m.id
-                  ? 'bg-(--primary) text-(--primary-contrast)'
-                  : 'text-(--text-secondary) hover:text-(--text-primary)'
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+        <span className="kb-mono text-[10px] text-(--text-muted)">Most Referenced</span>
       </div>
 
       {body}

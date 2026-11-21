@@ -6,19 +6,8 @@ import Badge from '../common/Badge.jsx';
 const docUrl = (docId) => `/documents/summary?id=${docId}`; // EKA-EDIT
 
 
-// Category chip colours measured from the reference video
-// (they sit on a light-blue card, so they differ a little from the dept-card tokens).
-const chipStyles = {
-  lavender: 'bg-[#ede7fc] text-[#6d28d9]',
-  mint: 'bg-[#dbf9e5] text-[#15803d]',
-  teal: 'bg-[#ccf9fc] text-[#0e7490]',
-  gold: 'bg-[#fcf9e7] text-[#b45309]',
-  rose: 'bg-[#ffeef1] text-[#be123c]',
-};
-
-
 // One ranked card in Library Favorites. Whole card opens the document.
-export default function FavoriteCard({ item, rank, mode }) {
+export default function FavoriteCard({ item, rank}) {
   const navigate = useNavigate();
   const url = docUrl(item.docId);
   const stop = (event) => event.stopPropagation();
@@ -66,8 +55,7 @@ export default function FavoriteCard({ item, rank, mode }) {
           <span className="kb-mono inline-flex items-center gap-1 text-[9px] text-(--text-muted)">
             <FileText size={10} />
             {/* EKA-EDIT: readTime can be null */}
-            {item.area}{item.readTime ? ` • ${item.readTime} min read` : ''} •{' '}
-            {mode === 'referenced' ? `Cited ${item.cited}` : `Viewed ${item.viewed}`} times this month
+            {item.area}{item.readTime ? ` • ${item.readTime} min read` : ''} • Cited {item.cited} times this month
           </span>
           <div className="flex items-center gap-3 text-[11px] font-medium">
             <Link
