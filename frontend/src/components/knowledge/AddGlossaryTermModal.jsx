@@ -3,6 +3,8 @@ import Modal from '../common/Modal.jsx';
 // EKA-EDIT: departments now come from the service (replaces the KnowledgeData import)
 import { useEffect, useState } from 'react';
 import { getDepartments } from '../../services/departmentService.js';
+import Button from '../common/Button.jsx';
+import { CancelButton } from '../common/ActionButtons.jsx';
 
 const inputClass =
   'w-full rounded-xl border border-(--border-subtle) bg-(--bg-surface) px-3 py-2 text-xs text-(--text-primary) outline-none placeholder:text-(--text-muted) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)]';
@@ -51,21 +53,16 @@ export default function AddGlossaryTermModal({
       size="md"
       footer={(close) => (
         <div className="flex w-full items-center">
-          <button
-            type="button"
-            onClick={close}
-            className="cursor-pointer rounded-full border border-(--border-medium) bg-(--bg-surface) px-4 py-1.5 text-xs font-semibold text-(--text-primary)"
-          >
-            Cancel
-          </button>
+          <CancelButton type="button" onClick={close} />
 
-          <button
+          <Button
             type="submit"
             form="glossary-term-form"
-            className="ml-auto cursor-pointer rounded-full bg-(--primary) px-4 py-1.5 text-xs font-semibold text-(--primary-contrast) hover:bg-(--primary-hover)"
+            variant="solid"
+            className="ml-auto"
           >
             {mode === 'edit' ? 'Update Term →' : 'Save Term →'}
-          </button>
+          </Button>
         </div>
       )}
     >
@@ -85,7 +82,7 @@ export default function AddGlossaryTermModal({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <label className={labelClass}>
-              Term / Name <span className="text-(--status-danger)">*</span>
+              Term  <span className="text-(--status-danger)">*</span>
             </label>
 
             <input
@@ -100,7 +97,7 @@ export default function AddGlossaryTermModal({
 
           <div>
             <label className={labelClass}>
-              Category / Department{' '}
+               Department{' '}
               <span className="text-(--status-danger)">*</span>
             </label>
 
@@ -130,7 +127,7 @@ export default function AddGlossaryTermModal({
 
         {/* Expansion */}
         <div>
-          <label className={labelClass}>Full Form / Expansion</label>
+          <label className={labelClass}>Full Form </label>
 
           <input
             type="text"
@@ -144,7 +141,7 @@ export default function AddGlossaryTermModal({
         {/* Definition */}
         <div>
           <label className={labelClass}>
-            Definition / Explanation{' '}
+            Definition {' '}
             <span className="text-(--status-danger)">*</span>
           </label>
 

@@ -4,7 +4,7 @@ import { getDepartments } from '../../../services/departmentService.js';
 
 import Modal from '../../common/Modal.jsx';
 import Button from '../../common/Button.jsx';
-
+import { CancelButton } from '../../common/ActionButtons.jsx';
 const field =
   'mt-1.5 w-full rounded-lg border border-(--border-medium) bg-(--bg-surface) px-3 py-2 text-xs text-(--text-primary) outline-none focus:border-(--primary)';
 
@@ -52,28 +52,20 @@ function EditMetadataModal({ doc, onClose, onSave }) {
       onClose={onClose}
       size="md"
       spacing="compact"
-      footer={
+      footer={(close) => (
         <div className="flex items-center justify-end gap-2">
-          <Button
-            type="button"
-            variant="light"
-            size="sm"
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
+          <CancelButton type="button" onClick={close} />
 
           <Button
             type="submit"
             form="edit-document-metadata-form"
             variant="solid"
-            size="sm"
             disabled={saving}
           >
             {saving ? 'Saving…' : 'Save Changes & Re-index ✓'}
           </Button>
         </div>
-      }
+      )}
     >
       <form
         id="edit-document-metadata-form"
