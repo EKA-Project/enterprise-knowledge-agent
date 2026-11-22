@@ -11,7 +11,7 @@ export const users = [
 
   // Managers: one per department (see departments.managerId)
   { id: "usr_002", employeeCode: "NSM-002", name: "Priya Nair", email: "priya@northstar.studio", role: "manager", departmentId: "dept_hr", status: "active", createdAt: "2026-01-12T09:00:00Z", updatedAt: "2026-01-12T09:00:00Z" },
-  { id: "usr_003", employeeCode: "NSM-003", name: "Rachel Green", email: "rachel@northstar.studio", role: "manager", departmentId: "dept_eng", status: "active", createdAt: "2026-01-12T09:00:00Z", updatedAt: "2026-01-12T09:00:00Z" },
+  { id: "usr_003", employeeCode: "NSM-003", name: "Aryaan Raza", email: "aryaan@northstar.studio", role: "manager", departmentId: "dept_eng", status: "active", createdAt: "2026-01-12T09:00:00Z", updatedAt: "2026-01-12T09:00:00Z" },
   { id: "usr_004", employeeCode: "NSM-004", name: "Marcus Chen", email: "marcus@northstar.studio", role: "manager", departmentId: "dept_prod", status: "active", createdAt: "2026-01-12T09:00:00Z", updatedAt: "2026-01-12T09:00:00Z" },
   { id: "usr_006", employeeCode: "NSM-006", name: "Sofia Alvarez", email: "sofia@northstar.studio", role: "manager", departmentId: "dept_sec", status: "active", createdAt: "2026-01-14T09:00:00Z", updatedAt: "2026-01-14T09:00:00Z" },
   { id: "usr_007", employeeCode: "NSM-007", name: "Jordan Blake", email: "jordan@northstar.studio", role: "manager", departmentId: "dept_gtm", status: "active", createdAt: "2026-01-14T09:00:00Z", updatedAt: "2026-01-14T09:00:00Z" },
@@ -28,6 +28,11 @@ export const users = [
   { id: "usr_015", employeeCode: "NSE-015", name: "Omar Haddad", email: "omar@northstar.studio", role: "employee", departmentId: "dept_sec", status: "active", createdAt: "2026-03-09T09:00:00Z", updatedAt: "2026-03-09T09:00:00Z" },
   {id: "usr_016", employeeCode: "NSE-016", name: "Clara Dubois", email: "clara@northstar.studio", role: "employee", departmentId: "dept_gtm", status: "active", createdAt: "2026-03-16T09:00:00Z", updatedAt: "2026-03-16T09:00:00Z" },
   { id: "usr_017", employeeCode: "NSE-017", name: "Ravi Menon", email: "ravi@northstar.studio", role: "employee", departmentId: "dept_legal", status: "active", createdAt: "2026-03-16T09:00:00Z", updatedAt: "2026-03-16T09:00:00Z" },
+  { id: "usr_019", employeeCode: "NSE-019", name: "Liam O'Connor", email: "liam@northstar.studio", role: "employee", departmentId: "dept_eng", status: "active", createdAt: "2026-03-23T09:00:00Z", updatedAt: "2026-03-23T09:00:00Z" },
+  { id: "usr_020", employeeCode: "NSE-020", name: "Vikram Shah", email: "vikram@northstar.studio", role: "employee", departmentId: "dept_eng", status: "active", createdAt: "2026-03-23T09:00:00Z", updatedAt: "2026-03-23T09:00:00Z" },
+  { id: "usr_021", employeeCode: "NSE-021", name: "Tariq Al-Hassan", email: "tariq@northstar.studio", role: "employee", departmentId: "dept_eng", status: "active", createdAt: "2026-03-30T09:00:00Z", updatedAt: "2026-03-30T09:00:00Z" },
+  { id: "usr_022", employeeCode: "NSE-022", name: "Noah Becker", email: "noah@northstar.studio", role: "employee", departmentId: "dept_eng", status: "active", createdAt: "2026-03-30T09:00:00Z", updatedAt: "2026-03-30T09:00:00Z" },
+  { id: "usr_023", employeeCode: "NSE-023", name: "Ananya Iyer", email: "ananya@northstar.studio", role: "employee", departmentId: "dept_eng", status: "active", createdAt: "2026-04-06T09:00:00Z", updatedAt: "2026-04-06T09:00:00Z" },
 
   // Inactive: the row stays because documents reference uploadedById, but the
   // person is not counted in memberCount
