@@ -1,8 +1,8 @@
-import { RadioCard, RadioGroup } from "../settings/SettingsPanel";
-import { MASCOTS, getMascotPreview } from "../../mascot/mascotRegistry";
-import { useMascot } from "../../hooks/useMascot";
-import { playMascotSelectSound } from "../../mascot/mascotSound";
-import useToast from "../../hooks/useToast"; // match the import style from check 0
+import { RadioCard, RadioGroup } from "../../SettingsPanel";
+import { MASCOTS, getMascotPreview } from "../../../../mascot/mascotRegistry";
+import { useMascot } from "../../../../hooks/useMascot";
+import { playMascotSelectSound } from "../../../../mascot/mascotSound";
+import useToast from "../../../../hooks/useToast"; // match the import style from check 0
 
 export default function MascotPicker() {
   const { mascotId, setMascotId } = useMascot();
