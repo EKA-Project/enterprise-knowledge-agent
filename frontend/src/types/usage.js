@@ -9,4 +9,15 @@
  * @property {string} lastActiveAt    ISO timestamp
  */
 
+/**
+ * One row of GET /departments/{id}/usage: an active member's usage plus values
+ * the API calculates for them.
+ * @typedef {Object} DepartmentMemberUsage
+ * @property {string} userId
+ * @property {number[]} dailyQueries     60 values, oldest first, last = today
+ * @property {number} searches           Knowledge searches in the last 30 days
+ * @property {string|null} lastActiveAt  ISO timestamp, null if never active
+ * @property {number} documentsUploaded  Non-archived documents this member uploaded
+ */
+
 export {};

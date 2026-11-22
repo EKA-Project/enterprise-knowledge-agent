@@ -5,6 +5,7 @@ import { documents } from "../data/mock/documents.js";
 import { findings } from "../data/mock/findings.js";
 import { ingestion } from "../data/mock/ingestion.js";
 import { insights } from "../data/mock/insights.js";
+import { memberUsage } from "../data/mock/memberUsage.js";
 import { related } from "../data/mock/related.js";
 import { sections } from "../data/mock/sections.js";
 import { users } from "../data/mock/users.js";
@@ -30,6 +31,7 @@ export const db = {
   related: clone(related),
   activityEvents: clone(activityEvents),
   findings: clone(findings),
+  memberUsage: clone(memberUsage),
 };
 
 /**
@@ -39,7 +41,9 @@ export const db = {
  * @returns {import('../types').Document[]}
  */
 export function getReadableActiveDocuments(user) {
-  return db.documents.filter((doc) => !doc.archivedAt && canReadDocument(user, doc));
+  return db.documents.filter(
+    (doc) => !doc.archivedAt && canReadDocument(user, doc),
+  );
 }
 
 /** The insight row of a document, or undefined (a document may have none yet). */
@@ -51,7 +55,8 @@ export function getInsightRow(documentId) {
 // A counter, not "highest id + 1", so a deleted id is never handed out again;
 // real UUIDs are never reused either. Ids are opaque to the frontend.
 let lastDocumentNumber = db.documents.reduce(
-  (highest, doc) => Math.max(highest, Number(/^doc_(\d+)$/.exec(doc.id)?.[1] ?? 0)),
+  (highest, doc) =>
+    Math.max(highest, Number(/^doc_(\d+)$/.exec(doc.id)?.[1] ?? 0)),
   0,
 );
 
