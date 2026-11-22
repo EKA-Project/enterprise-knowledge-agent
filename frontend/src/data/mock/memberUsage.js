@@ -10,6 +10,7 @@
 // adds the other departments.
 
 // lastActiveAt is relative to "now" so the roster never says "3 weeks ago".
+/** @param {number} hours */
 const hoursAgo = (hours) => new Date(Date.now() - hours * 3_600_000).toISOString();
 
 /** @type {import('../../types/usage.js').MemberUsage[]} */
