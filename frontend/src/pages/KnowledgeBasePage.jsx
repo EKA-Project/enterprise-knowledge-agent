@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
-import CollectionInsightsModal from '../components/knowledge/CollectionInsightsModal.jsx';
+import CollectionInsightsModal from '../components/knowledge/collectionInsight/CollectionInsightsModal.jsx';
 import useUpload from '../hooks/useUpload.js';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
-import GlossarySection from '../components/knowledge/GlossarySection';
+import GlossarySection from '../components/knowledge/glossary/GlossarySection';
 import AuthContext from '../context/AuthContext.jsx';
-import LibraryFavorites from '../components/knowledge/LibraryFavorites';
+import LibraryFavorites from '../components/knowledge/libraryCard/LibraryFavorites.jsx';
 import RecentlyUpdated from '../components/knowledge/RecentlyUpdated';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 

@@ -1,7 +1,7 @@
 import { useMemo} from 'react';
 import { FileText } from 'lucide-react';
 import FavoriteCard from './FavoriteCard.jsx';
-import SectionState, { SkeletonCards } from './SectionState.jsx';
+import SectionState, { SkeletonCards } from '../SectionState.jsx';
 
 
 // Library Favorites: top document per department. state = normal | loading | empty | error

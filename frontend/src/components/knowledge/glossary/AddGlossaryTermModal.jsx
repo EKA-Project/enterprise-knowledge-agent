@@ -1,10 +1,10 @@
 import { BookOpen, Zap } from 'lucide-react';
-import Modal from '../common/Modal.jsx';
+import Modal from '../../common/Modal.jsx';
 // EKA-EDIT: departments now come from the service (replaces the KnowledgeData import)
 import { useEffect, useState } from 'react';
-import { getDepartments } from '../../services/departmentService.js';
-import Button from '../common/Button.jsx';
-import { CancelButton } from '../common/ActionButtons.jsx';
+import { getDepartments } from '../../../services/departmentService.js';
+import Button from '../../common/Button.jsx';
+import { CancelButton } from '../../common/ActionButtons.jsx';
 
 const inputClass =
   'w-full rounded-xl border border-(--border-subtle) bg-(--bg-surface) px-3 py-2 text-xs text-(--text-primary) outline-none placeholder:text-(--text-muted) focus:border-(--border-focus) focus:shadow-[0_0_0_3px_var(--primary-glow)]';

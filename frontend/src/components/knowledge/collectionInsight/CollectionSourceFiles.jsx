@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import Badge from '../common/Badge.jsx';
-import Pagination from '../common/Pagination.jsx';
+import Badge from "../../common/Badge.jsx";
+import Pagination from "../../common/Pagination.jsx";
 
 const PAGE_SIZE = 3;
 

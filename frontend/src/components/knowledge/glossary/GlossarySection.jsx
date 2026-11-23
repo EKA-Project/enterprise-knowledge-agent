@@ -2,11 +2,11 @@ import { BookOpen, Search, Plus } from 'lucide-react';
 
 import GlossaryCard from './GlossaryCard.jsx';
 import AddGlossaryTermModal from './AddGlossaryTermModal.jsx';
-import SectionState, { SkeletonCards } from './SectionState.jsx';
-import Button from '../common/Button.jsx';
-import Pagination from '../common/Pagination.jsx';
+import SectionState, { SkeletonCards } from '../SectionState.jsx';
+import Button from '../../common/Button.jsx';
+import Pagination from '../../common/Pagination.jsx';
 import { useEffect, useMemo, useState } from 'react';
-import { getGlossaryTerms, saveGlossaryTerm } from '../../services/glossaryService.js';
+import { getGlossaryTerms, saveGlossaryTerm } from '../../../services/glossaryService.js';
 const PAGE_SIZE = 4;
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 

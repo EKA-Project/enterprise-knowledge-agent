@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Zap } from 'lucide-react';
 // EKA-EDIT: data now comes from getCollection (one request builds the whole modal)
-import { getCollection } from '../../services/departmentService.js';
-import { getDepartmentTheme } from '../../config/departmentTheme.js';
-import { formatFileSize } from '../../utils/formatFileSize.js';
-import { formatRelativeTime } from '../../utils/formatRelativeTime.js'; // CHECK: export name
-import Modal from '../common/Modal.jsx';
+import { getCollection } from '../../../services/departmentService.js';
+import { getDepartmentTheme } from '../../../config/departmentTheme.js';
+import { formatFileSize } from '../../../utils/formatFileSize.js';
+import { formatRelativeTime } from '../../../utils/formatRelativeTime.js'; // CHECK: export name
+import Modal from '../../common/Modal.jsx';
 import CollectionSourceFiles from './CollectionSourceFiles.jsx';
 import CollectionKeywords from './CollectionKeywords.jsx';
 import CollectionPrompts from './CollectionPrompts.jsx';

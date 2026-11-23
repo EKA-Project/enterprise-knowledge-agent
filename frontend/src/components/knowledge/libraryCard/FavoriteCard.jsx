@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { FileText, Pencil } from 'lucide-react';
-import Badge from '../common/Badge.jsx';
+import Badge from '../../common/Badge.jsx';
 
 // TODO: change this one line when the Document Summary route is final
 const docUrl = (docId) => `/documents/summary?id=${docId}`; // EKA-EDIT
