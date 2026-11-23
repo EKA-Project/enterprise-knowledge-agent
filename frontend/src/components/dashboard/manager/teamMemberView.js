@@ -28,6 +28,18 @@ export function sumLastDays(dailyQueries, days) {
   return dailyQueries.slice(-days).reduce((total, count) => total + count, 0);
 }
 
+/**
+ * Total queries in the `days` days BEFORE the most recent `days` days: the
+ * "previous period" that growth is measured against.
+ * @param {number[]} dailyQueries  Oldest first; the last value is today
+ * @param {number} days
+ */
+export function sumPreviousDays(dailyQueries, days) {
+  return dailyQueries
+    .slice(-2 * days, -days)
+    .reduce((total, count) => total + count, 0);
+}
+
 // Four weekly totals, oldest first (the last one is the current week), for the
 // "Personal Query Velocity" bars in the modal.
 function toWeeklyQueries(dailyQueries) {

@@ -20,11 +20,7 @@ import ManagerDepartmentDocuments from "./ManagerDepartmentDocuments.jsx";
 import ManagerRangeToggle, { DEFAULT_RANGE } from "./ManagerRangeToggle.jsx";
 import useDepartmentKpis from "../../../hooks/useDepartmentKpis.js";
 import useManagerTeam from "../../../hooks/useManagerTeam.js";
-import {
-  departmentKpis,
-  memberQueries,
-  teamMembers,
-} from "./managerDashboardData.js";
+import { sumLastDays, sumPreviousDays } from "./teamMemberView.js";
 
 // RAG health = share of department documents that are successfully indexed.
 const RAG_HEALTHY_AT = 90;
@@ -54,6 +50,7 @@ function getRagIconColor(percent) {
 
 // Colours belong to the row position (1st to 5th), not to a person.
 const USAGE_TOP_N = 5;
+const QUERY_PERIOD_DAYS = 30; // the "Department Queries" card counts the last 30 days
 const RANK_COLORS = ["#0284c7", "#2563eb", "#4f46e5", "#0891b2", "#0d9488"];
 
 const getInitials = (name) =>
@@ -64,12 +61,12 @@ const getInitials = (name) =>
     .join("")
     .toUpperCase();
 
-// Builds the chart data for "Queries by Team Member".
-// 30 days uses the roster total; 7 and 14 days come from memberQueries.
-function buildUsageByMember(range) {
-  const rows = teamMembers.map((member) => ({
+// Builds the chart data for "Queries by Team Member". Every number is summed
+// from the members' daily counts for the chosen range (7, 14 or 30 days).
+function buildUsageByMember(members, range) {
+  const rows = members.map((member) => ({
     member,
-    count: range === 30 ? member.queries : memberQueries[range][member.id],
+    count: sumLastDays(member.dailyQueries, range),
   }));
 
   const total = rows.reduce((sum, row) => sum + row.count, 0);
@@ -81,13 +78,18 @@ function buildUsageByMember(range) {
   return {
     title: "📊 Queries by Team Member",
     subtext: "See how actively each team member is using EKA.",
-    badge: `Top user: ${top.member.name.split(" ")[0]} · ${top.count} queries`,
+    // No activity in the range: say so instead of naming a "top user" at 0
+    badge:
+      top && top.count > 0
+        ? `Top user: ${top.member.name.split(" ")[0]} · ${top.count} queries`
+        : "No activity in this period",
     unit: "queries",
     items: ranked.map(({ member, count }, index) => ({
       id: member.id,
       label: member.name,
       count,
-      percent: Math.round((count / total) * 100),
+      // Share of the whole department's queries, not just the top five
+      percent: total === 0 ? 0 : Math.round((count / total) * 100),
       initials: getInitials(member.name),
       color: RANK_COLORS[index],
     })),
@@ -139,8 +141,27 @@ function ManagerOverview() {
   ) : (
     "—"
   );
-  const usage = useMemo(() => buildUsageByMember(range), [range]);
-  const totalQueries = teamMembers.reduce((sum, m) => sum + m.queries, 0);
+  const usage = useMemo(
+    () => buildUsageByMember(members, range),
+    [members, range],
+  );
+
+  // Last 30 days, and the growth vs the 30 days before that (null = no earlier
+  // data to compare with, so no percentage is shown rather than an invented one)
+  const totalQueries = members.reduce(
+    (sum, m) => sum + sumLastDays(m.dailyQueries, QUERY_PERIOD_DAYS),
+    0,
+  );
+  const previousQueries = members.reduce(
+    (sum, m) => sum + sumPreviousDays(m.dailyQueries, QUERY_PERIOD_DAYS),
+    0,
+  );
+  const queriesGrowth =
+    previousQueries === 0
+      ? null
+      : Math.round(
+          ((totalQueries - previousQueries) / previousQueries) * 1000,
+        ) / 10;
 
   // UI-only for now; real re-indexing comes with the backend.
   const handleRetry = () => {
@@ -276,8 +297,16 @@ function ManagerOverview() {
           value={totalQueries}
           icon={MessageSquare}
           iconColor="purple"
-          supportingText={`+${departmentKpis.queriesGrowth}% growth`}
-          supportingType="positive"
+          supportingText={
+            queriesGrowth === null
+              ? undefined
+              : `${queriesGrowth >= 0 ? "+" : ""}${queriesGrowth}% vs previous 30 days`
+          }
+          supportingType={
+            queriesGrowth !== null && queriesGrowth >= 0
+              ? "positive"
+              : undefined
+          }
         />
       </section>
       {/* Query velocity chart */}
