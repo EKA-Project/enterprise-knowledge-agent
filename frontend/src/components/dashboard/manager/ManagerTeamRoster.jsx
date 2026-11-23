@@ -1,5 +1,5 @@
 import { Copy, KeyRound } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TableContainer from "../../common/TableContainer";
 import DataTable from "../../common/DataTable";
 import Pagination from "../../common/Pagination";
@@ -8,6 +8,7 @@ import { ViewButton, RemoveButton } from "../../common/RowIconButtons";
 import UserViewModal from "../../common/UserViewModal";
 import InviteMemberModal from "../../common/InviteMemberModal";
 import RemoveMemberModal from "../../common/RemoveMemberModal";
+import { toMemberView } from "./teamMemberView.js";
 
 /* ==========================================================================
    ManagerTeamRoster
@@ -54,7 +55,13 @@ function ManagerTeamRoster({
     }
   }
 
-  const pageRows = teamMembers.slice(
+  // Real users merged with their usage -> the shape the table and modals display
+  const members = useMemo(
+    () => teamMembers.map((member) => toMemberView(member, department)),
+    [teamMembers, department],
+  );
+
+  const pageRows = members.slice(
     (page - 1) * ROSTER_PAGE_SIZE,
     page * ROSTER_PAGE_SIZE,
   );
@@ -64,7 +71,7 @@ function ManagerTeamRoster({
     {
       key: "member",
       header: "Member",
-      width: "30%",
+      width: "34%",
       render: (row) => (
         <div className="flex items-center gap-2">
           <div
@@ -115,25 +122,9 @@ function ManagerTeamRoster({
       ),
     },
     {
-      key: "status",
-      header: "Status",
-      width: "13%",
-      render: (row) => (
-        <span
-          className={`inline-flex items-center rounded-full border px-1.5 text-[0.55rem] font-semibold leading-4 ${
-            row.status === "Active"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-amber-200 bg-amber-50 text-amber-700"
-          }`}
-        >
-          {row.status}
-        </span>
-      ),
-    },
-    {
       key: "queries",
       header: "Queries",
-      width: "15%",
+      width: "20%",
       render: (row) => (
         <div>
           <p className="whitespace-nowrap text-[0.72rem] leading-tight text-(--text-muted)">
@@ -151,7 +142,7 @@ function ManagerTeamRoster({
     {
       key: "actions",
       header: "Actions",
-      width: "20%",
+      width: "24%",
       align: "center",
       render: (row) => (
         <div className="flex items-center justify-center gap-1">

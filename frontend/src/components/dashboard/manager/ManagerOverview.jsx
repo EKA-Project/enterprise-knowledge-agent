@@ -19,10 +19,9 @@ import ManagerTeamRoster from "./ManagerTeamRoster.jsx";
 import ManagerDepartmentDocuments from "./ManagerDepartmentDocuments.jsx";
 import ManagerRangeToggle, { DEFAULT_RANGE } from "./ManagerRangeToggle.jsx";
 import useDepartmentKpis from "../../../hooks/useDepartmentKpis.js";
+import useManagerTeam from "../../../hooks/useManagerTeam.js";
 import {
-  department,
   departmentKpis,
-  manager,
   memberQueries,
   teamMembers,
 } from "./managerDashboardData.js";
@@ -107,6 +106,16 @@ function ManagerOverview() {
   const [range, setRange] = useState(DEFAULT_RANGE);
 
   const {
+    data: team,
+    loading: teamLoading,
+    error: teamError,
+    reload: reloadTeam,
+  } = useManagerTeam();
+  const user = team?.user;
+  const department = team?.department;
+  const members = team?.members ?? [];
+
+  const {
     data: kpis,
     loading: kpisLoading,
     error: kpisError,
@@ -145,12 +154,42 @@ function ManagerOverview() {
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  if (teamLoading) {
+    return (
+      <p className="py-16 text-center text-sm text-(--text-muted)">
+        Loading your department…
+      </p>
+    );
+  }
+
+  // No department means this account is not a department lead (e.g. the admin)
+  if (teamError || !department) {
+    return (
+      <div className="rounded-xl border border-(--border-subtle) bg-(--bg-surface) p-8 text-center">
+        <p className="text-sm font-semibold text-(--text-primary)">
+          {teamError
+            ? "Could not load your department."
+            : "No department is linked to this account."}
+        </p>
+        {teamError && (
+          <button
+            type="button"
+            onClick={reloadTeam}
+            className="mt-3 cursor-pointer text-xs font-semibold text-(--primary) hover:underline"
+          >
+            Try again
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Hero */}
       <PageHero
         eyebrow="Department Lead Hub"
-        title={`${getGreeting()}, ${manager.firstName}.`}
+        title={`${getGreeting()}, ${user.name.split(" ")[0]}.`}
         description={`Here is the knowledge telemetry, ingestion health, and team management workspace for ${department.name}.`}
         status={
           <span className="inline-flex items-center gap-2">
@@ -184,7 +223,7 @@ function ManagerOverview() {
 
         <MetricCard
           label="Department Team"
-          value={teamMembers.length}
+          value={members.length}
           icon={Users}
           iconColor="orange"
           action={
@@ -263,8 +302,8 @@ function ManagerOverview() {
         <div id="team-roster" className="relative scroll-mt-6">
           <div className="xl:absolute xl:inset-0">
             <ManagerTeamRoster
-              teamMembers={teamMembers}
-              currentUserId={manager.id}
+              teamMembers={members}
+              currentUserId={user.id}
               department={department}
             />
           </div>
