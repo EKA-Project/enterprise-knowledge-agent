@@ -5,10 +5,10 @@ import useUpload from '../hooks/useUpload.js';
 import { Upload, LayoutGrid } from 'lucide-react';
 import KnowledgeStats from '../components/knowledge/KnowledgeStats.jsx';
 import CategoryCard from '../components/knowledge/CategoryCard.jsx';
-import GlossarySection from '../components/knowledge/glossary/GlossarySection';
+import GlossarySection from '../components/knowledge/glossary/GlossarySection.jsx';
 import AuthContext from '../context/AuthContext.jsx';
 import LibraryFavorites from '../components/knowledge/libraryCard/LibraryFavorites.jsx';
-import RecentlyUpdated from '../components/knowledge/RecentlyUpdated';
+import RecentlyUpdated from '../components/knowledge/RecentlyUpdated.jsx';
 import AskQuestionBanner from '../components/knowledge/AskQuestionBanner.jsx';
 
 import '../styles/knowledge.css';
