@@ -12,7 +12,7 @@ export const bookmarks = [
   { userId: "usr_005", documentId: "doc_009", createdAt: "2026-10-03T10:00:00Z" },
   { userId: "usr_005", documentId: "doc_014", createdAt: "2026-10-01T10:00:00Z" },
   { userId: "usr_005", documentId: "doc_003", createdAt: "2026-09-10T10:00:00Z" },
-  // Rachel Green (ENG manager)
+  // Aryaan Raza (ENG manager)
   { userId: "usr_003", documentId: "doc_001", createdAt: "2026-10-13T09:00:00Z" },
   { userId: "usr_003", documentId: "doc_021", createdAt: "2026-10-02T09:00:00Z" },
   // Priya Nair (HR manager)

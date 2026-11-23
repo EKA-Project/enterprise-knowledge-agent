@@ -20,4 +20,10 @@
  * @property {number} documentsUploaded  Non-archived documents this member uploaded
  */
 
+/**
+ * A department member as the manager overview uses them: the user record plus
+ * their usage, merged by useManagerTeam.
+ * @typedef {import('./users.js').User & DepartmentMemberUsage} TeamMember
+ */
+
 export {};
