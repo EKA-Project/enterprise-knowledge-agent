@@ -12,6 +12,9 @@ import {
   X,
   Archive,
   ArchiveRestore,
+  Check,
+  Plus,
+  Save
 } from "lucide-react";
 import Button from "./Button";
 import '../../styles/Document.css';
@@ -72,7 +75,31 @@ const SpinXIcon = ({ size, className = "" }) => (
     className={`transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-90 group-hover:scale-110 ${className}`}
   />
 );
+// Micro-animation: Check pops and springs on hover
+const PopCheckIcon = ({ size, className = "" }) => (
+  <Check
+    size={size}
+    strokeWidth={2.5}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-120 group-hover:rotate-6 ${className}`}
+  />
+);
+// Save disk lifts and springs on hover
+const AnimatedSaveIcon = ({ size, className = "" }) => (
+  <Save
+    size={size}
+    strokeWidth={2.2}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-115 group-hover:-translate-y-0.5 ${className}`}
+  />
+);
 
+// Micro-animation: Plus springs and scales up on hover
+const ScalePlusIcon = ({ size, className = "" }) => (
+  <Plus
+    size={size}
+    strokeWidth={2.5}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-125 ${className}`}
+  />
+);
 /* ==========================================================================
    SECTION 1: Core Primary Actions (Most Frequently Used Across App)
    ========================================================================== */
@@ -326,7 +353,7 @@ export function CancelButton(props) {
 export function RemoveFromTeamButton(props) {
   return (
     <Button
-      variant="dangerSoft"
+      variant="danger"
       icon={WarningUserXIcon}
       iconChip
       title="Remove this member from the team"
@@ -412,16 +439,88 @@ export function SurpriseMeButton({ isSurprising = false, rollCount = 0, ...props
  *   - Ingestion / Document Upload Modal submit CTA (components/modals/UploadDocumentModal.jsx)
  *   - Pipeline Re-index trigger
  */
-export function StartVectorIngestionButton(props) {
+export function StartVectorIngestionButton({
+  children = "Start Vector Ingestion",
+  icon = AnimatedDatabaseIcon,
+  ...props
+}) {
   return (
     <Button
       variant="solid"
-      icon={AnimatedDatabaseIcon}
+      icon={icon}
       iconChip
       title="Start vectorizing and embedding document into semantic store"
       {...props}
     >
-      Start Vector Ingestion
+      {children}
+    </Button>
+  );
+}
+/**
+ * Done Action (Light Pill with Animated Checkmark)
+ * Where to use: Read-only modals (Employee View, Document Preview, Activity Logs)
+ */
+export function DoneButton(props) {
+  return (
+    <Button
+      variant="light"
+      icon={PopCheckIcon}
+      title="Finish viewing"
+      {...props}
+    >
+      Done
+    </Button>
+  );
+}
+
+/**
+ * Universal Save / Confirm Action Button (Solid Primary Pill)
+ * 
+ * Usage:
+ *   <SaveButton />                         // Default: "Save"
+ *   <SaveButton>Add Term</SaveButton>       // Custom: "Add Term" (for Glossary)
+ *   <SaveButton>Save Changes</SaveButton>   // Custom: "Save Changes" (for Edit forms)
+ */
+export function SaveButton({ children = "Save", title, ...props }) {
+  return (
+    <Button
+      variant="solid"
+      icon={AnimatedSaveIcon}
+      iconChip
+      title={title ?? children}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+}
+
+/**
+ * Universal Add / Create Action Button (Solid Primary Pill)
+ * Single unified button for all '+' creation actions across the app.
+ * 
+ * Usage:
+ *   <AddItemButton>New Thread</AddItemButton>        // Chat (replaces NewThreadButton)
+ *   <AddItemButton>Add Term</AddItemButton>          // Glossary
+ *   <AddItemButton>Create Department</AddItemButton> // User Management
+ *   <AddItemButton>Add Category</AddItemButton>      // Knowledge Base
+ *   <AddItemButton />                                // Default: "Add Item"
+ */
+export function AddItemButton({
+  children = "Add Item",
+  title,
+  variant = "solid",
+  ...props
+}) {
+  return (
+    <Button
+      variant={variant}
+      icon={ScalePlusIcon}
+      iconChip
+      title={title ?? children}
+      {...props}
+    >
+      {children}
     </Button>
   );
 }
