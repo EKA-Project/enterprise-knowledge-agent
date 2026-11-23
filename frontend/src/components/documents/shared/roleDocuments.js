@@ -10,13 +10,15 @@
 // already builds such a row, use it in toRow() instead of the code below.
 //
 // NOT TESTED against your app: written from the files you sent. Items marked CHECK need a look.
-
+// EKA-EDIT: admin loads archived documents too
+import { getMockCurrentUser } from '../../../services/mockSession.js'; // CHECK: export name
 import { useContext, useEffect, useSyncExternalStore } from 'react';
 import AuthContext from '../../../context/AuthContext.jsx';
 import {
   getDocuments,
   getDocument,
   setPinned,
+  getArchivedDocuments, // EKA-EDIT: admin loads archived rows
   archiveDocument as archiveDocumentApi,
   unarchiveDocument,
   deleteDocument as deleteDocumentApi,
@@ -89,11 +91,14 @@ function toRow(doc, { departmentNames, userNames, bookmarkedIds }) {
 export async function refreshDocuments() {
   const mine = ++requestId; // a newer request wins, so a slow old one never overwrites it
   try {
-    const [page, bookmarks, departments, users] = await Promise.all([
+    // EKA-EDIT: only the admin loads archived rows (manager/employee never get them)
+    const isAdmin = getMockCurrentUser().role === 'admin'; // CHECK: role value
+    const [page, bookmarks, departments, users, archived] = await Promise.all([
       getDocuments({ limit: LIST_LIMIT }),
       getMyBookmarks(),
       getDepartments(),
       getUsers(),
+      isAdmin ? getArchivedDocuments({ limit: LIST_LIMIT }) : Promise.resolve({ items: [] }),
     ]);
     if (mine !== requestId) return;
     const lookups = {
@@ -101,7 +106,7 @@ export async function refreshDocuments() {
       userNames: new Map(users.map((u) => [u.id, u.name])),
       bookmarkedIds: new Set(bookmarks.map((b) => b.documentId)),
     };
-    setState({ items: page.items.map((doc) => toRow(doc, lookups)), loading: false, error: null });
+    setState({ items: [...page.items, ...archived.items].map((doc) => toRow(doc, lookups)), loading: false, error: null });
   } catch (error) {
     if (mine === requestId) setState({ loading: false, error });
   }
