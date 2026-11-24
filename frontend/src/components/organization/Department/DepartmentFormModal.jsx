@@ -92,7 +92,7 @@ const hexOf = (key) =>
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="sm" icon={null} onClick={close} />
+            <CancelButton onClick={close} />
             <Button
               variant="solid"
               size="sm"

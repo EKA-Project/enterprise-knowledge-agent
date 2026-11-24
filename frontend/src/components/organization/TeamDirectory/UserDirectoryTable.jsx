@@ -1,6 +1,6 @@
-import Tooltip from "../../common/Tooltip";
+import { ViewButton, EditButton, RemoveButton, ReindexButton } from "../../common/RowIconButtons";
 import DepartmentIcon from "./DepartmentIcon";
-import { Crown, Globe, Star, User, UserX } from "lucide-react";
+import { Crown, Globe, Star, User } from "lucide-react";
 import { getInitials, ROLE_LABELS } from "../OrganizationData";
 import Pagination from "../../common/Pagination";
 const mono = "font-(family-name:--font-mono)";
@@ -115,42 +115,25 @@ export default function UserDirectoryTable({
         <span className={`w-fit rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold ${STATUS_STYLES[u.status] ?? ""}`}>{u.status}</span>
         <span className={`${mono} text-[11.5px] text-(--text-muted)`}>{u.joined}</span>
 
-        <div className="flex items-center justify-end gap-4 text-[12.5px] font-bold">
-          <Tooltip label="View Details & Activity">
-            <button type="button" onClick={() => onView(u.id)} className="text-(--primary) transition hover:text-(--primary-hover) hover:underline">
-              View
-            </button>
-          </Tooltip>
-          {onEdit && (
-            <button type="button" onClick={() => onEdit(u.id)} className="text-(--text-secondary) transition hover:text-(--primary) hover:underline">
-              Edit
-            </button>
-          )}
+        <div className="flex items-center justify-end gap-1">
+          <ViewButton label="View details & activity" onClick={() => onView(u.id)} />
+          {onEdit && <EditButton label={`Edit ${u.name}`} onClick={() => onEdit(u.id)} />}
           {terminated
-            ? onReactivate && (
-              <button
-                type="button"
-                onClick={() => onReactivate(u.id)}
-                className="rounded-full border border-(--status-verified-border) bg-(--status-success-bg) px-2.5 py-0.5 text-[11px] text-(--status-success) transition duration-200 hover:-translate-y-0.5 hover:bg-(--status-success) hover:text-white active:scale-95"
-              >
-                Re-activate
-              </button>
-            )
-          : onTerminate && (
-            <Tooltip label="Terminate">
-              <button
-                type="button"
-                aria-label={`Terminate ${u.name}`}
-                onClick={() => onTerminate(u.id)}
-                className="grid size-7 place-items-center rounded-md border border-(--status-danger)/30 bg-(--status-danger-bg) text-(--status-danger) transition hover:bg-(--status-danger) hover:text-white active:scale-95"
-              >
-              <UserX size={14} aria-hidden="true" />
-              </button>
-            </Tooltip>
-          )}
-        </div>
-      </li>
-    );
+                        ? onReactivate && (
+                <button
+                  type="button"
+                  onClick={() => onReactivate(u.id)}
+                  className="ml-1 rounded-full border border-(--status-verified-border) bg-(--status-success-bg) px-2.5 py-0.5 text-[11px] font-bold text-(--status-success) transition duration-200 hover:-translate-y-0.5 hover:bg-(--status-success) hover:text-white active:scale-95"
+                >
+                  Re-activate
+                </button>
+              )
+            : onTerminate && (
+                <RemoveButton label={`Terminate ${u.name}`} onClick={() => onTerminate(u.id)} />
+              )}
+          </div>
+        </li>
+        );
   })}
             </ul>
           )}
