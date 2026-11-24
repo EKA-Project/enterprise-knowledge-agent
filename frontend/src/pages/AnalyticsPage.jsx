@@ -110,7 +110,7 @@ export default function AnalyticsPage() {
     return <p className="p-6 text-(--text-muted)">Analytics is available to administrators and department managers.</p>;
   }
   const {
-    failures, contradictions, alertCount, scannedChunks, totalCitations, knowledgeMass, monthlyConflicts,
+    failures, contradictions, alertCount, metrics, scannedChunks, totalCitations, knowledgeMass, monthlyConflicts,
     gapStats, gapQueries, gapDistribution, matrixRows, usageStats,
   } = view;
 // Render the AnalyticsPage component with various sections and modals for knowledge analytics
@@ -177,7 +177,7 @@ export default function AnalyticsPage() {
         </p>
       </div>
 
-      <HealthMetricsRow alertCount={alertCount} />
+      <HealthMetricsRow metrics={metrics} alertCount={alertCount} />
       <IngestionAuditPanel
         failures={failures}
         fixing={fixing}

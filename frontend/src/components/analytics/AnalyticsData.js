@@ -41,7 +41,9 @@ const CLAIM_WORDS = { lead: "states", middle: "while", verb: "states" };
 const GAP_ACTION_LABEL = "+ Ingest Source";
 const TONE_CLASSES = { failure: "text-(--status-failure)", warning: "text-(--status-warning)", neutral: "text-(--text-primary)" };
 const MONTH_FORMAT = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" });
-
+const FRESH_DAYS = 90; // a document counts as fresh when it was updated within this many days
+const DAY_MS = 24 * 60 * 60 * 1000;
+const percent = (part, whole) => (whole > 0 ? `${Math.round((part / whole) * 100)}%` : "—");
 /**
  * One call builds everything the Analytics cards show.
  * Input: what AnalyticsPage loads from the services.
@@ -161,6 +163,21 @@ export function toAnalyticsView({ departments, users, documents, findings, summa
       cited: citedByDocument.get(doc.id) ?? 0,
     }))
     .sort((a, b) => b.cited - a.cited || a.name.localeCompare(b.name));
+    
+  // ---- Health cards: three ratios computed from what the page already loads ----
+  const unansweredTotal = summary.gaps.unanswered + summary.gaps.lowSimilarity;
+  const freshSince = Date.now() - FRESH_DAYS * DAY_MS;
+  const staleCount = documents.filter((doc) => new Date(doc.updatedAt).getTime() < freshSince).length;
+  const readyDocuments = documents.filter((doc) => doc.status === "ready");
+  const citedReady = readyDocuments.filter((doc) => (citedByDocument.get(doc.id) ?? 0) > 0).length;
+  const metrics = {
+    accuracy: percent(totalCitations, totalCitations + unansweredTotal),
+    accuracyNote: `${totalCitations} cited • ${unansweredTotal} unanswered`,
+    freshness: percent(documents.length - staleCount, documents.length),
+    freshnessNote: `${staleCount} older than ${FRESH_DAYS} days`,
+    utilization: percent(citedReady, readyDocuments.length),
+    utilizationNote: `${citedReady} of ${readyDocuments.length} documents cited`,
+  };
 
 const usageStats = [
   {
@@ -174,7 +191,7 @@ const usageStats = [
 ];
 
   return {
-    failures, contradictions, alertCount, scannedChunks: summary.scannedChunks,
+    failures, contradictions, alertCount, metrics, scannedChunks: summary.scannedChunks,
     totalCitations, knowledgeMass, monthlyConflicts,
     gapStats, gapQueries, gapDistribution, matrixRows, usageStats,
   };
