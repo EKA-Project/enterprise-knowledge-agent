@@ -11,7 +11,7 @@ const ROLE_STORAGE_KEY = "eka-role";
 // Role label saved by the switcher -> the mock user who plays that role.
 // All three are in Engineering, which has the richest data.
 const USER_ID_BY_ROLE = {
-  Admin: "usr_001", // Maya Narang
+  Admin: "usr_001", // Raza
  Manager: "usr_003", // Aryaan Raza, Engineering & DevOps
   Employee: "usr_005", // Alex Morgan, Engineering & DevOps
 };

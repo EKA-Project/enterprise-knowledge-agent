@@ -9,7 +9,7 @@ import { ROLE_ACCESS } from "./settingsConfig";
 
 export default function ProfileSettings({ role = "Admin", toast }) {
   const access = ROLE_ACCESS[role] ?? ROLE_ACCESS.Admin;
-  const [form, setForm] = useState({ name: "Maya Narang", email: "maya@northstar.studio", bio: "Lead Product Designer" });
+  const [form, setForm] = useState({ name: "Raza", email: "raza@northstar.studio", bio: "Lead Product Designer" });
   const [photo, setPhoto] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const fileRef = useRef(null);
