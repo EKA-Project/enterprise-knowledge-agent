@@ -654,6 +654,14 @@ function checkMemberUsage() {
       `memberUsage: ${row.userId} lastActiveAt must be a past date after the user was created`,
     );
   }
+
+  // The admin dashboard adds up everyone, so every active user needs a row
+  for (const user of users) {
+    check(
+      user.status !== "active" || ids.includes(user.id),
+      `memberUsage: active user ${user.id} has no usage row`,
+    );
+  }
 }
 
 // ── run everything and report ───────────────────────────────────────

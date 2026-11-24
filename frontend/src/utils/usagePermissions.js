@@ -11,3 +11,13 @@ export function canViewDepartmentUsage(user, departmentId) {
   if (user.role === "admin") return true;
   return user.role === "manager" && user.departmentId === departmentId;
 }
+
+/**
+ * Organization-wide usage (every department and the admin) is admin-only.
+ * Managers use the department version above.
+ * @param {import('../types').User} user
+ * @returns {boolean}
+ */
+export function canViewOrganizationUsage(user) {
+  return user.role === "admin";
+}
