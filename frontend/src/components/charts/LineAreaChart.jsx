@@ -277,25 +277,25 @@ function LineAreaChart({ data, headerAction, showArea = true }) {
         {/* Tooltip */}
         {activePoint && (
           <div
-            className="pointer-events-none absolute z-20 rounded-lg bg-[#111827] px-2 py-1 text-left shadow-[0_12px_24px_rgba(0,0,0,0.5)]"
+            className="pointer-events-none absolute z-20 whitespace-nowrap rounded-[10px] border border-white/10 bg-[#131b24] px-3.5 py-2 text-left shadow-[0_12px_28px_rgba(0,0,0,0.35)]"
             style={{
               left: `${(activePoint.x / VIEW_W) * 100}%`,
-              top: activePoint.y > 60 ? activePoint.y - 62 : activePoint.y + 14,
+              top: activePoint.y > 60 ? activePoint.y - 68 : activePoint.y + 16,
               transform:
                 activePoint.x / VIEW_W > 0.75
                   ? "translateX(-105%)"
                   : "translateX(8%)",
             }}
           >
-            <div className="font-sans text-[0.72rem] font-semibold text-[#9ca3af]">
+            <div className="font-serif text-[0.75rem] font-semibold leading-tight text-[#94a3b8]">
               {activePoint.date}
             </div>
 
             <div
-              className="mt-0.5 font-mono text-[0.8rem] font-bold tracking-tight"
+              className="mt-1 font-mono text-[0.82rem] font-bold leading-tight tracking-tight"
               style={{ color: CHART_ACCENT_COLOR }}
             >
-              {unit} : {activePoint.value}
+              {activePoint.value} {unit} resolved
             </div>
           </div>
         )}
