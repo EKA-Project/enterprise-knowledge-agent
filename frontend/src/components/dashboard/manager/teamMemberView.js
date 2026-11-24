@@ -29,6 +29,19 @@ export function sumLastDays(dailyQueries, days) {
 }
 
 /**
+ * The whole department's queries per day: every member's daily count added up.
+ * Same order as the inputs (oldest first, the last value is today).
+ * @param {{dailyQueries: number[]}[]} members
+ * @returns {number[]}
+ */
+export function sumDailyQueries(members) {
+  const days = members[0]?.dailyQueries.length ?? 0;
+  return Array.from({ length: days }, (_, day) =>
+    members.reduce((total, member) => total + (member.dailyQueries[day] ?? 0), 0),
+  );
+}
+
+/**
  * Total queries in the `days` days BEFORE the most recent `days` days: the
  * "previous period" that growth is measured against.
  * @param {number[]} dailyQueries  Oldest first; the last value is today

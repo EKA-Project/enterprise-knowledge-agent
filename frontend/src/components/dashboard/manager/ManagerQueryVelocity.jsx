@@ -1,71 +1,45 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import LineAreaChart from "../../charts/LineAreaChart.jsx";
-import { queryVelocity, teamMembers } from "./managerDashboardData.js";
+import ManagerRangeToggle from "./ManagerRangeToggle.jsx";
+import {
+  sumDailyQueries,
+  sumLastDays,
+  sumPreviousDays,
+} from "./teamMemberView.js";
 
-const RANGES = [7, 14, 30];
-const DEFAULT_RANGE = 14;
-
-const sum = (numbers) => numbers.reduce((total, n) => total + n, 0);
-
-function RangeToggle({ value, onChange }) {
-  return (
-    <div
-      role="group"
-      aria-label="Chart date range"
-      className="inline-flex items-center rounded-full border border-(--border-subtle) bg-(--bg-surface-subtle) p-1"
-    >
-      {RANGES.map((range) => {
-        const isActive = range === value;
-
-        return (
-          <button
-            key={range}
-            type="button"
-            aria-pressed={isActive}
-            onClick={() => onChange(range)}
-            className={`cursor-pointer rounded-full px-2 py-0.5 font-mono text-[0.58rem] font-semibold transition-colors ${
-              isActive
-                ? "bg-(--primary) text-(--primary-contrast) shadow-(--shadow-sm)"
-                : "text-(--text-muted) hover:text-(--text-primary)"
-            }`}
-          >
-            {range} Days
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function ManagerQueryVelocity() {
-  const [range, setRange] = useState(DEFAULT_RANGE);
-
+// Department query volume per day. The range is owned by ManagerOverview, so
+// this chart and "Queries by Team Member" always show the same period.
+function ManagerQueryVelocity({ members, range, onRangeChange }) {
   const chartData = useMemo(() => {
-    const values = queryVelocity.slice(-range);
+    const daily = sumDailyQueries(members);
+    const values = daily.slice(-range);
 
-    // Growth = most recent half of the window vs the half before it.
-    const half = Math.floor(values.length / 2);
-    const earlier = sum(values.slice(0, half));
-    const recent = sum(values.slice(-half));
-    const change = earlier === 0 ? 0 : ((recent - earlier) / earlier) * 100;
-    const isUp = change >= 0;
+    // Growth = this period vs the period of the same length right before it.
+    // null means there is no earlier data, so no percentage is invented.
+    const total = sumLastDays(daily, range);
+    const previous = sumPreviousDays(daily, range);
+    const change = previous === 0 ? null : ((total - previous) / previous) * 100;
+    const isUp = change === null || change >= 0;
 
     return {
       title: "Department Intelligence & Query Velocity",
       trend: isUp ? "up" : "down",
-      badgeIcon: isUp ? "↗" : "↘",
-      badgeText: `${isUp ? "+" : ""}${change.toFixed(1)}% Growth`,
+      badgeIcon: change === null ? "" : isUp ? "↗" : "↘",
+      badgeText:
+        change === null
+          ? "No earlier data"
+          : `${isUp ? "+" : ""}${change.toFixed(1)}% Growth`,
       legendLabel: "Queries / Day",
       unit: "queries",
-      subtext: `Department query volume over last ${range} days • ${sum(values)} inquiries resolved across ${teamMembers.length} team members`,
+      subtext: `Department query volume over last ${range} days • ${total} inquiries resolved across ${members.length} team members`,
       values,
     };
-  }, [range]);
+  }, [members, range]);
 
   return (
     <LineAreaChart
       data={chartData}
-      headerAction={<RangeToggle value={range} onChange={setRange} />}
+      headerAction={<ManagerRangeToggle value={range} onChange={onRangeChange} />}
     />
   );
 }

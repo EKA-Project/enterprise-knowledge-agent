@@ -115,7 +115,9 @@ function ManagerOverview() {
   } = useManagerTeam();
   const user = team?.user;
   const department = team?.department;
-  const members = team?.members ?? [];
+  // Memoised: a bare `?? []` is a new array every render, which would re-run
+  // the useMemo calls below while the team is still loading
+  const members = useMemo(() => team?.members ?? [], [team]);
 
   const {
     data: kpis,
@@ -303,14 +305,16 @@ function ManagerOverview() {
               : `${queriesGrowth >= 0 ? "+" : ""}${queriesGrowth}% vs previous 30 days`
           }
           supportingType={
-            queriesGrowth !== null && queriesGrowth >= 0
-              ? "positive"
-              : undefined
+            queriesGrowth !== null && queriesGrowth >= 0 ? "positive" : "muted"
           }
         />
       </section>
       {/* Query velocity chart */}
-      <ManagerQueryVelocity range={range} onRangeChange={setRange} />
+      <ManagerQueryVelocity
+        members={members}
+        range={range}
+        onRangeChange={setRange}
+      />
       {/* Two-column area: pinned docs + usage (left), team roster (right) */}
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         {/* self-start: the left column keeps its natural height. It sets the row height,
