@@ -1,5 +1,5 @@
 import UserManagementTab from "./UserManagementTab.jsx";
-import UserInviteModal from "./UserInviteModal.jsx";
+import InviteMemberModal from "../../common/InviteMemberModal.jsx";
 import UserViewModal from "./UserViewModal.jsx";
 import UserEditModal from "./UserEditModal.jsx";
 import UserTerminateModal from "./UserTerminateModal";
@@ -26,7 +26,7 @@ export default function TeamDirectoryPage({
       await createUser({
         name: data.name,
         email: data.email,
-        role: data.role.toLowerCase(),
+        role: "employee",
         departmentId: deptIdByName(data.department),
       });
       finish(`📨 ${data.name} added to ${data.department}`);
@@ -76,11 +76,10 @@ export default function TeamDirectoryPage({
       />
 
       {modal?.type === "invite" && (
-        <UserInviteModal
+          <InviteMemberModal
           departmentNames={departmentNames}
-          existingEmails={users.map((u) => u.email.toLowerCase())}
           onClose={closeModal}
-          onSubmit={handleInvite}
+          onInvite={handleInvite}
         />
       )}
       {modal?.type === "view" && activeUser && (
