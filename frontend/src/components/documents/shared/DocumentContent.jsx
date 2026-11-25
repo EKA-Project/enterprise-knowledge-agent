@@ -13,6 +13,7 @@ import {
   PINNED_FILTER,
   filterDocuments,
   paginate,
+  ARCHIVED_FILTER,
 } from './documentFilters';
 import {
   setDocumentResults,
@@ -76,17 +77,17 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [pageSize, setPageSize] = useState(10);
   const [documentCategories, setDocumentCategories] = useState([]);
 
-useEffect(() => {
-  let alive = true;
-  getDepartments().then((list) => {
-    if (alive) {
-      setDocumentCategories(list.map((d) => ({ value: d.name, label: d.name })));
-    }
-  });
-  return () => {
-    alive = false;
-  };
-}, []);
+  useEffect(() => {
+    let alive = true;
+    getDepartments().then((list) => {
+      if (alive) {
+        setDocumentCategories(list.map((d) => ({ value: d.name, label: d.name })));
+      }
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // Status picked in the admin Document Health Overview ("" = none).
   const status = useStatusFilter();
@@ -101,27 +102,21 @@ useEffect(() => {
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
-  // Confirm archive or restore. The list updates first; it is rolled back if the call fails.
+  // EKA-EDIT: single call to the real function, no optimistic double call
   const confirmArchive = async () => {
     if (activeRole !== 'Admin' || !adminMode || !archiveTarget) return;
 
     const doc = archiveTarget;
     const next = !doc.isArchived;
-
     setArchiveTarget(null);
-    setDocumentArchivedFlag(doc.id, next);
 
-    try {
-      await setDocumentArchived(doc.id, next);
-
+    const ok = await setDocumentArchivedFlag(doc.id, next, { error });
+    if (ok) {
       info(
         next
           ? `📦 Document "${doc.title}" archived`
           : `Document "${doc.title}" restored to active repository`,
       );
-    } catch {
-      setDocumentArchivedFlag(doc.id, !next);
-      error(`Could not update "${doc.title}". Please try again.`);
     }
   };
 
@@ -159,10 +154,11 @@ useEffect(() => {
     setStatusFilter('');
   };
 
-  // Text shown in the "Filtered by" chip.
+  // EKA-EDIT: the archived option is not in the departments list
   const categoryLabel =
-    documentCategories.find((cat) => cat.value === category)?.label ??
-    category;
+    category === ARCHIVED_FILTER
+      ? 'Archived'
+      : documentCategories.find((cat) => cat.value === category)?.label ?? category;
 
   const isCategoryFiltered = category !== ALL_CATEGORIES;
 
@@ -235,9 +231,12 @@ useEffect(() => {
             onChange={(event) => setCategory(event.target.value)}
             className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-1 pl-3 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
-            <option value={ALL_CATEGORIES}>All Departments</option>
 
+            <option value={ALL_CATEGORIES}>All Departments</option>
+            {/* EKA-EDIT: archived view, admin only */}
+            {activeRole === 'Admin' && <option value={ARCHIVED_FILTER}>Archived</option>}
             <option value={SAVED_FILTER}>⭐ Saved Bookmarks</option>
+
             <option value={PINNED_FILTER}>📌 Admin Pinned</option>
 
             {documentCategories.map((cat) => (

@@ -11,7 +11,8 @@ function AdminDocument() {
   const { openUpload, canUpload } = useUpload(); // opens the global upload modal
   const { items } = useRoleDocuments();
   
-  const countText = useDocumentCountText(items.length);
+  // EKA-EDIT: archived rows are not part of the active count
+const countText = useDocumentCountText(items.filter((d) => !d.isArchived).length);
   const { documents: documentMeta } = pageMetadata;
 
   return (

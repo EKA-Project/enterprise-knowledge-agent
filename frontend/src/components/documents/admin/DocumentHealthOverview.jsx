@@ -12,6 +12,7 @@ const BADGE_TYPE = {
   Processing: 'info',
   Outdated: 'warning',
   Failed: 'danger',
+  Archived: 'info',
 };
 
 const STATUS_COLOR = {
@@ -19,6 +20,7 @@ const STATUS_COLOR = {
   processing: 'var(--status-info)',
   outdated: 'var(--status-warning)',
   failed: 'var(--status-danger)',
+  archived: 'var(--text-muted)',
 };
 
 // Ring made of one arc per status, drawn clockwise from 12 o'clock.
