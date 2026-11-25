@@ -6,7 +6,8 @@ import DocumentCardMenu from './DocumentCardMenu.jsx';
 
 // Short status text used in the admin / employee list ("● Ready").
 // The manager list (shortStatus = false) keeps the full "✓ Indexed & Ready".
-const SHORT_LABEL = { Indexed: 'Ready' };
+// EKA-EDIT: short Failed label so the badge does not overlap the pin icon
+const SHORT_LABEL = { Indexed: 'Ready', Failed: 'Failed' };
 
 // Department icon tile (icon + colours) per category
 const deptStyle = {
