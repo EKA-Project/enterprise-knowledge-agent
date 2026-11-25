@@ -8,8 +8,13 @@ import {
   RotateCw,
   Flame,
   UserX,
-  Database ,
+  Database,
   X,
+  Archive,
+  ArchiveRestore,
+  Check,
+  Plus,
+  Save
 } from "lucide-react";
 import Button from "./Button";
 import '../../styles/Document.css';
@@ -70,7 +75,31 @@ const SpinXIcon = ({ size, className = "" }) => (
     className={`transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-90 group-hover:scale-110 ${className}`}
   />
 );
+// Micro-animation: Check pops and springs on hover
+const PopCheckIcon = ({ size, className = "" }) => (
+  <Check
+    size={size}
+    strokeWidth={2.5}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-120 group-hover:rotate-6 ${className}`}
+  />
+);
+// Save disk lifts and springs on hover
+const AnimatedSaveIcon = ({ size, className = "" }) => (
+  <Save
+    size={size}
+    strokeWidth={2.2}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-115 group-hover:-translate-y-0.5 ${className}`}
+  />
+);
 
+// Micro-animation: Plus springs and scales up on hover
+const ScalePlusIcon = ({ size, className = "" }) => (
+  <Plus
+    size={size}
+    strokeWidth={2.5}
+    className={`transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-125 ${className}`}
+  />
+);
 /* ==========================================================================
    SECTION 1: Core Primary Actions (Most Frequently Used Across App)
    ========================================================================== */
@@ -343,7 +372,7 @@ export function CancelButton(props) {
 export function RemoveFromTeamButton(props) {
   return (
     <Button
-      variant="dangerSoft"
+      variant="danger"
       icon={WarningUserXIcon}
       iconChip
       title="Remove this member from the team"
@@ -429,16 +458,121 @@ export function SurpriseMeButton({ isSurprising = false, rollCount = 0, ...props
  *   - Ingestion / Document Upload Modal submit CTA (components/modals/UploadDocumentModal.jsx)
  *   - Pipeline Re-index trigger
  */
-export function StartVectorIngestionButton(props) {
+export function StartVectorIngestionButton({
+  children = "Start Vector Ingestion",
+  icon = AnimatedDatabaseIcon,
+  ...props
+}) {
   return (
     <Button
       variant="solid"
-      icon={AnimatedDatabaseIcon}
+      icon={icon}
       iconChip
       title="Start vectorizing and embedding document into semantic store"
       {...props}
     >
-      Start Vector Ingestion
+      {children}
     </Button>
+  );
+}
+/**
+ * Done Action (Light Pill with Animated Checkmark)
+ * Where to use: Read-only modals (Employee View, Document Preview, Activity Logs)
+ */
+export function DoneButton(props) {
+  return (
+    <Button
+      variant="light"
+      icon={PopCheckIcon}
+      title="Finish viewing"
+      {...props}
+    >
+      Done
+    </Button>
+  );
+}
+
+/**
+ * Universal Save / Confirm Action Button (Solid Primary Pill)
+ * 
+ * Usage:
+ *   <SaveButton />                         // Default: "Save"
+ *   <SaveButton>Add Term</SaveButton>       // Custom: "Add Term" (for Glossary)
+ *   <SaveButton>Save Changes</SaveButton>   // Custom: "Save Changes" (for Edit forms)
+ */
+export function SaveButton({ children = "Save", title, ...props }) {
+  return (
+    <Button
+      variant="solid"
+      icon={AnimatedSaveIcon}
+      iconChip
+      title={title ?? children}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+}
+
+/**
+ * Universal Add / Create Action Button (Solid Primary Pill)
+ * Single unified button for all '+' creation actions across the app.
+ * 
+ * Usage:
+ *   <AddItemButton>New Thread</AddItemButton>        // Chat (replaces NewThreadButton)
+ *   <AddItemButton>Add Term</AddItemButton>          // Glossary
+ *   <AddItemButton>Create Department</AddItemButton> // User Management
+ *   <AddItemButton>Add Category</AddItemButton>      // Knowledge Base
+ *   <AddItemButton />                                // Default: "Add Item"
+ */
+export function AddItemButton({
+  children = "Add Item",
+  title,
+  variant = "solid",
+  ...props
+}) {
+  return (
+    <Button
+      variant={variant}
+      icon={ScalePlusIcon}
+      iconChip
+      title={title ?? children}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+}
+
+// Action buttons (spec: .doc-summary-action-btn)
+const sideBtnBase =
+  'group inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-pill) border-[1.5px] px-3 py-1.5 text-[11px] font-semibold active:translate-y-0';
+
+const sideIcon =
+  'transition-transform duration-[350ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+const archiveBtn =
+  `${sideBtnBase} border-[rgba(217,119,6,0.32)] bg-[var(--bg-surface-elevated,var(--bg-surface))] text-(--text-secondary) [transition:all_0.28s_cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[2.5px] hover:scale-[1.02] hover:border-[#d97706] hover:bg-[linear-gradient(135deg,rgba(254,243,199,0.95),rgba(253,230,138,0.7))] hover:text-[#92400e] hover:shadow-[0_6px_18px_rgba(217,119,6,0.22),0_0_0_2px_rgba(245,158,11,0.16)] active:scale-[0.96] active:shadow-[0_2px_6px_rgba(217,119,6,0.12)]`;
+
+const unarchiveBtn =
+  `${sideBtnBase} border-[#10b981] bg-[#f0fdf4] text-[#047857] [transition:all_0.28s_cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[2.5px] hover:scale-[1.02] hover:border-[#059669] hover:bg-[linear-gradient(135deg,#10b981_0%,#059669_100%)] hover:text-white hover:shadow-[0_6px_18px_rgba(16,185,129,0.28),0_0_0_2px_rgba(16,185,129,0.2)] active:scale-[0.96]`;
+
+export function ArchiveButton({ archived, onClick }) {
+  const Icon = archived ? ArchiveRestore : Archive;
+  const rotation = archived
+    ? 'group-hover:rotate-[8deg]'
+    : 'group-hover:-rotate-[8deg]';
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={archived ? unarchiveBtn : archiveBtn}
+    >
+      <Icon
+        size={12}
+        className={`${sideIcon} group-hover:-translate-y-0.5 ${rotation} group-hover:scale-[1.22]`}
+      />
+      {archived ? 'Unarchive' : 'Archive'}
+    </button>
   );
 }

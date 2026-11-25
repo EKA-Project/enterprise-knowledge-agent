@@ -27,8 +27,7 @@ export function filterDocuments(docs, { search, category, format, status = '' })
     const matchesFormat = format === ALL_FORMATS || doc.format === format;
 
     // Status comes from the Document Health Overview cards (empty = no filter)
-    const matchesStatus = !status || doc.status === status;
-
+const matchesStatus = !status || doc.status === status;
     return matchesSearch && matchesCategory && matchesFormat && matchesStatus;
   });
 }

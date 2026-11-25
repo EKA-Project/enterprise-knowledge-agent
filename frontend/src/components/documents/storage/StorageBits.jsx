@@ -1,17 +1,8 @@
-
-import {
-  Code2,
-  FileText,
-  Landmark,
-  Palette,
-  ShieldCheck,
-  TrendingUp,
-  Users,
-} from 'lucide-react';
-
+import { getDepartmentTheme } from '../../../config/departmentTheme.js';
 import Badge from '../../common/Badge.jsx';
 import '../../../styles/Document.css';
 
+// EKA-EDIT: TypeTile takes the raw enum `format` ('pdf') and upper-cases it for Badge.
 const TYPE = {
   PDF: 'bg-[#fde2e1] text-[#d9373f]',
   DOCX: 'bg-[#e3ecfc] text-[#3b6fd4]',
@@ -20,70 +11,50 @@ const TYPE = {
   TXT: 'bg-[#eef1f4] text-[#6b7f8f]',
 };
 
-export function TypeTile({ type }) {
+export function TypeTile({ format }) {
+  const label = String(format ?? '').toUpperCase();
+
   return (
     <Badge
-      format={type}
-      className={`doc-mono !inline-flex !h-[29px] !w-[41px] !rounded-lg !border-0 !text-[10px] ${TYPE[type] ?? ''
-        }`}
+      format={label}
+      className={`doc-mono !inline-flex !h-[29px] !w-[41px] !rounded-lg !border-0 !text-[10px] ${TYPE[label] ?? ''}`}
     />
   );
 }
 
-const DEPT = {
-  'Security & Compliance': [
-    ShieldCheck,
-    'border-[#f6c9c8] bg-[#fff0ef] text-[#d9373f]',
-  ],
-  'Engineering & DevOps': [
-    Code2,
-    'border-[#c9def6] bg-[#eaf3fd] text-[#1f66c4]',
-  ],
-  'Sales & Go-To-Market': [
-    TrendingUp,
-    'border-[#f7d9b4] bg-[#fff3e4] text-[#c76a0b]',
-  ],
-  'General Knowledge': [
-    Landmark,
-    'border-[#dccaf5] bg-[#f4ecfd] text-[#7e3fd0]',
-  ],
-  'Legal & Finance': [
-    FileText,
-    'border-[#bfe3f3] bg-[#e6f5fb] text-[#1b79a8]',
-  ],
-  'People & HR Operations': [
-    Users,
-    'border-[#bfe9d4] bg-[#e8f8f0] text-[#0f8f63]',
-  ],
-  'Product Strategy & Design': [
-    Palette,
-    'border-[#e6c9f2] bg-[#f8ebfc] text-[#a43fc9]',
-  ],
-};
-
-export function DeptPill({ name }) {
-  const [Icon, cls] = DEPT[name] ?? DEPT['General Knowledge'];
+// EKA-EDIT: colors/icons now come from departmentTheme (keys), not a hardcoded name map.
+// `department` = { name, colorKey, iconKey } looked up by departmentId.
+export function DeptPill({ department }) {
+  const { Icon, color, softBg, border } = getDepartmentTheme(
+    department?.colorKey,
+    department?.iconKey,
+  );
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-semibold ${cls}`}
+      style={{ color, backgroundColor: softBg, borderColor: border }}
+      className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-semibold"
     >
       <Icon size={10} />
-      {name}
+      {department?.name ?? 'Unknown'}
     </span>
   );
 }
 
+// EKA-EDIT: StatusPill takes the stored enum; the label is a UI map (blueprint rule 5).
 const STATUS = {
-  Ready: {
+  ready: {
+    label: 'Ready',
     type: 'success',
     cls: 'border-[#c4ecd9] bg-[#e8f8f0] text-[#0f8f63]',
   },
-  Outdated: {
-    type: 'warning',
-    cls: 'border-[#f7dfa8] bg-[#fff5dc] text-[#c27a00]',
+  processing: {
+    label: 'Processing',
+    type: 'info',
+    cls: 'border-[#c9def6] bg-[#eaf3fd] text-[#1f66c4]',
   },
-  Failed: {
+  failed: {
+    label: 'Failed',
     type: 'danger',
     cls: 'border-[#f6c4c3] bg-[#ffe9e8] text-[#d9373f]',
   },
@@ -96,13 +67,12 @@ export function StatusPill({ status }) {
     <Badge
       type={meta?.type ?? 'info'}
       size="sm"
-      className={`doc-mono !gap-1.5 !px-2.5 !py-1 !text-[10px] !font-bold ${meta?.cls ?? ''
-        }`}
+      className={`doc-mono !gap-1.5 !px-2.5 !py-1 !text-[10px] !font-bold ${meta?.cls ?? ''}`}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
-      {status}
+      {meta?.label ?? status}
 
-      {status === 'Failed' && (
+      {status === 'failed' && (
         <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-current text-[8px]">
           ?
         </span>
@@ -111,7 +81,8 @@ export function StatusPill({ status }) {
   );
 }
 
-export function DeptIcon({ name, size = 14 }) {
-  const [Icon] = DEPT[name] ?? DEPT['General Knowledge'];
-  return <Icon size={size} />;
+// EKA-EDIT: DeptIcon takes the department object too.
+export function DeptIcon({ department, size = 14, className }) {
+  const { Icon } = getDepartmentTheme(department?.colorKey, department?.iconKey);
+  return <Icon size={size} className={className} />;
 }

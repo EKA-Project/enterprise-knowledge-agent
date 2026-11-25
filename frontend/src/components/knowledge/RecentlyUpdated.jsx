@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Clock, ArrowRight } from 'lucide-react';
-import { recentUpdates, categoryThemes } from './KnowledgeData.js';
 import Badge from '../common/Badge.jsx';
 import SectionState, { SkeletonRows } from './SectionState.jsx';
 
 // TODO: change this one line when the Document Summary route/ids are final
-const docUrl = (docId) => `/documents/${docId}`;
+const docUrl = (docId) => `/documents/summary?id=${docId}`;
 
 // Recently Updated: latest document revisions. state = normal | loading | empty | error
-export default function RecentlyUpdated({ state = 'normal', onReset }) {
-  const isEmpty = state === 'empty' || recentUpdates.length === 0;
+export default function RecentlyUpdated({ items: recent = [], state = 'normal', onReset }) {
+  const isEmpty = state === 'empty' || recent.length === 0;
 
   let body;
   if (state === 'loading') {
@@ -40,7 +39,7 @@ export default function RecentlyUpdated({ state = 'normal', onReset }) {
   } else {
     body = (
       <ul className="mt-4 space-y-2">
-        {recentUpdates.map((item) => (
+        {recent.map((item) => (
           <li key={item.id}>
             <Link
               to={docUrl(item.docId)}
@@ -49,7 +48,8 @@ export default function RecentlyUpdated({ state = 'normal', onReset }) {
             >
               <Badge format={item.format} />
               <span className="kb-serif min-w-0 text-[13px] font-bold text-(--text-primary)">{item.title}</span>
-              <span className={`kb-mono rounded-md px-1.5 py-0.5 text-[9px] font-semibold ${categoryThemes[item.iconTheme].icon}`}>
+              {/* EKA-EDIT: inline department colours */}
+<span style={{ color: item.theme.color, background: item.theme.softBg }} className="kb-mono rounded-md px-1.5 py-0.5 text-[9px] font-semibold">
                 {item.category}
               </span>
 

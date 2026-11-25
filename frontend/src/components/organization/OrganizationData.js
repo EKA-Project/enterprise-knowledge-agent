@@ -64,8 +64,8 @@ export function getTelemetry(user) {
 // Builds the CSV text used by the Export Directory CSV button.
 export function buildUsersCsv(users) {
   const rows = [
-    ["Name", "Email", "Department", "Role", "Status", "Last active"],
-    ...users.map((u) => [u.name, u.email, u.department, u.role, u.status, u.lastActive]),
+    ["Name", "Email", "Department", "Role", "Status", "Joined"],
+    ...users.map((u) => [u.name, u.email, u.department, u.role, u.status, u.joined]),
   ];
   return rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
 }

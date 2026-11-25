@@ -10,15 +10,14 @@ import { sections } from "../data/mock/sections.js";
 import { users } from "../data/mock/users.js";
 import { canReadDocument } from "../utils/canReadDocument.js";
 import { clone } from "./mockHelpers.js";
-import { createMockPersistence } from "./mockPersistence.js";
-
+import { createMockPersistence, startAutoSave } from "./mockPersistCore.js";
 // MOCK-ONLY working copy of every table. Deleted with src/data/mock/ in Phase C.
 //
 // Why a copy: the files in data/mock/ stay pristine, so `npm run validate:mock`
 // always checks the original data. When services start writing (pin, archive,
 // reindex), they change THIS copy, and every service sees the same change. That
-// is how one source of truth works here. Changes are saved in localStorage, so a
-// page reload keeps them (see mockPersistence.js).//
+// is how one source of truth works here. 
+//
 // Only services import this file; pages never do.
 export const db = {
   departments: clone(departments),
@@ -31,18 +30,24 @@ export const db = {
   related: clone(related),
   activityEvents: clone(activityEvents),
   findings: clone(findings),
+  // EKA-EDIT: new mock-only table, one row per document edit (feeds Knowledge Base "Recently Updated"). Saved by mockPersistCore automatically.
+  amendments: [],
 };
 
-// Starts from the saved copy when one exists and still matches the seed data.
-const persistence = createMockPersistence(db);
-Object.assign(db,persistence.load());
-persistence.attach(db);
+// MOCK-ONLY: keep edits across page reloads. Runs before lastDocumentNumber is computed.
+// Turn it off on your machine in .env.local: VITE_MOCK_PERSIST=false
+const persistence = createMockPersistence({ db, storage: globalThis.localStorage });
+if (import.meta.env?.VITE_MOCK_PERSIST !== "false") {
+  persistence.hydrate();
+  startAutoSave(persistence);
+}
 
 // Dev tool: forget every saved change and go back to the seed data.
 export function resetMockDb() {
   persistence.reset();
   window.location.reload();
 }
+globalThis.__resetMockData = resetMockDb;
 
 /**
  * The read rule applied to active documents: what this user may see in lists and

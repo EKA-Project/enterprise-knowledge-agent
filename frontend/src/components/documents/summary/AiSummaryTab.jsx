@@ -12,7 +12,7 @@ const eyebrow =
 function AiSummaryTab({ doc, onReadPage, onSearchTag }) {
   return (
     <div className="space-y-6">
-      <section className={`${card} border-l-[3px] border-l-[#1f718e]`}>
+      <section className={`${card} border-l-[3px] border-l-(--primary)`}>
         <p className={eyebrow}>AI Executive Synthesis</p>
         <h2 className="doc-heading mt-2 text-xl font-bold text-(--text-primary)">
           Executive TL;DR Summary
@@ -91,7 +91,7 @@ function AiSummaryTab({ doc, onReadPage, onSearchTag }) {
                 <button
                   type="button"
                   onClick={() => onReadPage(s.page)}
-                  className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-full bg-(--bg-surface) px-3 py-1 text-[11px] font-medium text-(--text-primary) shadow-(--shadow-sm) transition-colors hover:bg-(--bg-surface-subtle)"
+                  className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-full border-[1.5px] border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-medium text-(--text-primary) shadow-(--shadow-sm) transition-colors hover:bg-(--bg-surface-subtle)"
                 >
                   Read Full Page {s.page} <ChevronRight size={11} />
                 </button>

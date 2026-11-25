@@ -1,8 +1,10 @@
 import { Droplet, Trash2 } from 'lucide-react';
 import '../../../styles/Document.css';
+// EKA-EDIT
+import { formatFileSize } from '../../../utils/formatFileSize.js';
 
 // Floating bar, centred over the content area (not the whole window), like the video.
-function BulkActionBar({ count, reclaimMb, onRecycle, onPurge, onDisarm }) {
+function BulkActionBar({ count, reclaimBytes, onRecycle, onPurge, onDisarm }) {
   if (count === 0) return null;
 
   return (
@@ -14,7 +16,7 @@ function BulkActionBar({ count, reclaimMb, onRecycle, onPurge, onDisarm }) {
           </span>
         </div>
         <span className="doc-mono px-1 text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-[#33c6c9]">
-          ▲ {reclaimMb.toFixed(1)} MB<br />reclaimable
+          ▲ {formatFileSize(reclaimBytes)}<br />reclaimable
         </span>
         <button
           type="button"

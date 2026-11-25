@@ -1,31 +1,32 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { categoryThemes } from './KnowledgeData.js';
+// EKA-EDIT: theme now comes from the department's colorKey/iconKey, not KnowledgeData
+import { getDepartmentTheme } from '../../config/departmentTheme.js';
 import { Zap, MessageSquare } from 'lucide-react';
 
-
-
 function CategoryCard({ category, onOpenInsights }) {
-  const { icon: Icon, iconTheme, title, docCount, sourceCount, documentCategory } = category;
-  const theme = categoryThemes[iconTheme];
+  const { title, documentCount, memberCount, colorKey, iconKey } = category;
+  const { Icon, color, softBg } = getDepartmentTheme(colorKey, iconKey);
   const navigate = useNavigate();
 
-  // Documents page, pre-filtered by this category
-  const browseUrl = `/documents?category=${encodeURIComponent(documentCategory)}`;
+  // Documents page, pre-filtered by department name
+  const browseUrl = `/documents?category=${encodeURIComponent(title)}`;
 
   return (
     <article
       onClick={() => navigate(browseUrl)}
-      className={`cursor-pointer rounded-3xl border border-t-2 border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md) ${theme.accent}`}
+      // EKA-EDIT: top accent colour is inline now
+      style={{ borderTopColor: color }}
+      className="cursor-pointer rounded-3xl border border-t-2 border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md)"
     >
-      {/* Icon + insights pill */}
       <div className="flex items-start justify-between">
-        <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${theme.icon}`}>
+        {/* EKA-EDIT: icon chip colours inline */}
+        <span style={{ color, background: softBg }} className="flex h-10 w-10 items-center justify-center rounded-xl">
           <Icon size={18} />
         </span>
         <button
           type="button"
           onClick={(event) => {
-            event.stopPropagation(); // don't trigger the card click
+            event.stopPropagation();
             onOpenInsights(category);
           }}
           className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary) transition-colors hover:border-(--primary-hover) hover:bg-(--primary-hover) hover:text-(--primary-contrast)"
@@ -39,13 +40,13 @@ function CategoryCard({ category, onOpenInsights }) {
 
       <div className="mt-2 flex items-center gap-2 text-xs text-(--text-secondary)">
         <span className="kb-mono rounded-full border border-(--border-subtle) bg-(--primary-light) px-2.5 py-0.5 text-[10px]">
-          {docCount} documents
+          {documentCount} documents
         </span>
-        <span>• {sourceCount} verified sources</span>
+        {/* EKA-EDIT: "verified sources" removed (blueprint), members count instead */}
+        <span>• {memberCount} members</span>
       </div>
 
       <div className="mt-5 flex items-center justify-between border-t border-(--border-subtle) pt-4">
-        {/* Opens Documents pre-filtered by this category */}
         <Link
           to={browseUrl}
           onClick={(event) => event.stopPropagation()}
@@ -57,7 +58,7 @@ function CategoryCard({ category, onOpenInsights }) {
           type="button"
           aria-label={`Ask EKA about ${title}`}
           onClick={(event) => event.stopPropagation()}
-          className="flex h-8 w-8  cursor-pointer items-center justify-center rounded-full bg-(--primary-light) text-(--primary)"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-(--primary-light) text-(--primary)"
         >
           <MessageSquare size={14} />
         </button>

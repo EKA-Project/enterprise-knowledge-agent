@@ -10,7 +10,7 @@ const ENABLED = import.meta.env?.VITE_MOCK_PERSIST !== "false";
 // Computed from the seed data itself, so editing data/mock/ discards an older
 // saved copy instead of hiding the new seed data.
 function fingerprint(value) {
-  const text = JSON.stringify(value);
+  const text = JSON.stringify(value);x
   let hash = 0;
   for (let i = 0; i < text.length; i += 1) hash = (hash * 31 + text.charCodeAt(i)) | 0;
   return String(hash);

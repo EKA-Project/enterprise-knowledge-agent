@@ -119,7 +119,7 @@ export default function UserDirectoryTable({
           <ViewButton label="View details & activity" onClick={() => onView(u.id)} />
           {onEdit && <EditButton label={`Edit ${u.name}`} onClick={() => onEdit(u.id)} />}
           {terminated
-                        ? onReactivate && (
+              ? onReactivate && (
                 <button
                   type="button"
                   onClick={() => onReactivate(u.id)}

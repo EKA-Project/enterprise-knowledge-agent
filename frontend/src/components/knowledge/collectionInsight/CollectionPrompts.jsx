@@ -10,9 +10,11 @@ export default function CollectionPrompts({ prompts = [] }) {
       </h3>
       <div className="flex flex-col items-start gap-2">
         {prompts.map((p) => (
+          // EKA-EDIT: Ask EKA reads the prefilled question from router state, not from ?q=
           <Link
             key={p}
-            to={`/ask-eka?q=${encodeURIComponent(p)}`}
+            to="/ask-eka"
+            state={{ question: p }}
             className="group inline-flex max-w-full cursor-pointer items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3.5 py-2 text-left text-xs font-semibold text-(--text-primary) transition-colors hover:border-(--accent-highlight)"
           >
             <MessageSquare size={14} className="shrink-0 text-(--cat-lavender)" />

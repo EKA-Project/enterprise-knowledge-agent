@@ -7,6 +7,7 @@ import { Select } from "../common/Input";
 import Checkbox from "../common/Checkbox";
 import { LANGUAGES } from "./settingsConfig";
 import MascotPicker from "../mascot/MascotPicker";
+import SoundSettings from "./preferences/sound/SoundSettings";
 
 const answerStyles = [
   [
@@ -35,6 +36,12 @@ export default function PreferencesSettings({ settings, update }) {
         <MascotPicker />
       </SubSection>
 
+      <SubSection
+        title="Sound"
+        description="Sound effects are off by default. Turn them on and set a volume that suits your workspace."
+      >
+        <SoundSettings />
+      </SubSection>
       <SubSection
         title="Answer Style"
         description="Choose how EKA presents its answers to your questions."

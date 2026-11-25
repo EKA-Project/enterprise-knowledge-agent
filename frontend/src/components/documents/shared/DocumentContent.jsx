@@ -1,10 +1,11 @@
 import { Search, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from '../../../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
-
+import { getDepartments } from '../../../services/departmentService.js';
 import { useToast } from '../../../context/ToastContext.jsx';
 
-import { documentCategories, documentFormats } from './DocumentData';
+import { documentFormats } from './documentUiConstants';
 import {
   ALL_CATEGORIES,
   ALL_FORMATS,
@@ -29,7 +30,7 @@ import {
 
 import EditMetadataModal from '../summary/EditMetadataModal.jsx';
 import ArchiveModal from '../summary/ArchiveModal.jsx';
-import { setDocumentArchived } from '../summary/summaryService';
+
 
 import DocumentCard from './DocumentCard.jsx';
 import DocumentList from './DocumentList.jsx';
@@ -64,7 +65,7 @@ function FilterChip({ label, value, clearLabel, onClear }) {
 function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const isManager = variant === 'manager';
   const navigate = useNavigate();
-
+  const { activeRole } = useContext(AuthContext);
   const { info, success, error } = useToast();
 
   const [search, setSearch] = useState('');
@@ -73,6 +74,19 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
   const [viewMode, setViewMode] = useState('grid');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [documentCategories, setDocumentCategories] = useState([]);
+
+useEffect(() => {
+  let alive = true;
+  getDepartments().then((list) => {
+    if (alive) {
+      setDocumentCategories(list.map((d) => ({ value: d.name, label: d.name })));
+    }
+  });
+  return () => {
+    alive = false;
+  };
+}, []);
 
   // Status picked in the admin Document Health Overview ("" = none).
   const status = useStatusFilter();
@@ -89,6 +103,8 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
 
   // Confirm archive or restore. The list updates first; it is rolled back if the call fails.
   const confirmArchive = async () => {
+    if (activeRole !== 'Admin' || !adminMode || !archiveTarget) return;
+
     const doc = archiveTarget;
     const next = !doc.isArchived;
 
@@ -219,11 +235,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             onChange={(event) => setCategory(event.target.value)}
             className="cursor-pointer appearance-none rounded-full border border-(--border-subtle) bg-(--bg-surface) py-1 pl-3 pr-10 text-sm font-semibold text-(--text-primary) outline-none"
           >
-            <option value={ALL_CATEGORIES}>
-              {isManager
-                ? `All Categories (${documentCategories.length})`
-                : 'All Departments'}
-            </option>
+            <option value={ALL_CATEGORIES}>All Departments</option>
 
             <option value={SAVED_FILTER}>⭐ Saved Bookmarks</option>
             <option value={PINNED_FILTER}>📌 Admin Pinned</option>
@@ -269,11 +281,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="Grid view"
             aria-pressed={viewMode === 'grid'}
             onClick={() => setViewMode('grid')}
-            className={`cursor-pointer rounded-lg p-1 transition-colors ${
-              viewMode === 'grid'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'grid'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
+              }`}
           >
             <LayoutGrid size={15} />
           </button>
@@ -283,11 +294,10 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             aria-label="List view"
             aria-pressed={viewMode === 'list'}
             onClick={() => setViewMode('list')}
-            className={`cursor-pointer rounded-lg p-1 transition-colors ${
-              viewMode === 'list'
-                ? 'bg-(--primary) text-(--primary-contrast)'
-                : 'text-(--text-muted) hover:text-(--text-primary)'
-            }`}
+            className={`cursor-pointer rounded-lg p-1 transition-colors ${viewMode === 'list'
+              ? 'bg-(--primary) text-(--primary-contrast)'
+              : 'text-(--text-muted) hover:text-(--text-primary)'
+              }`}
           >
             <List size={14} />
           </button>
@@ -318,7 +328,7 @@ function DocumentsContent({ adminMode = false, variant = 'default' }) {
             <DocumentList
               documents={pageItems}
               adminMode={adminMode}
-              shortStatus={!isManager}
+              shortStatus={true}
               onToggleFlag={handleToggleFlag}
               onOpen={openSummary}
               onArchive={adminMode ? setArchiveTarget : undefined}

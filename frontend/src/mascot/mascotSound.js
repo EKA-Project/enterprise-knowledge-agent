@@ -1,25 +1,43 @@
 // Mascot sound effects: tiny 8-bit sounds generated with the Web Audio API
 // (no audio files). Ported from the original EKA mascot.js.
 
-const STORAGE_KEY = "eka_mascot_sound"; // same key as the original build; "false" = muted
-const MASTER_VOLUME = 0.8; // overall loudness. The original played at 1.0; lower this if it's still too loud
+const STORAGE_KEY = "eka_mascot_sound"; // same key as the original build; "true" = on
+const VOLUME_KEY = "eka_mascot_volume"; // slider position, stored as 0 to 1
+const MAX_GAIN = 0.8; // loudness at slider 100% (was MASTER_VOLUME); lower it if 100% is still too loud
+const DEFAULT_VOLUME = 0.5; // slider position until the user moves it
 
 /* ==========================================================================
    On/off setting (remembered, shared by every mascot on the page)
    ========================================================================== */
 
+// Off by default (enterprise app): sound plays only after the user turns it on.
 function readSetting() {
   try {
-    return localStorage.getItem(STORAGE_KEY) !== "false"; // on unless explicitly muted
+    return localStorage.getItem(STORAGE_KEY) === "true";
   } catch {
-    return true; // storage blocked: default to on
+    return false; // storage blocked: stay silent
+  }
+}
+
+function readVolume() {
+  try {
+    const saved = parseFloat(localStorage.getItem(VOLUME_KEY));
+    return saved >= 0 && saved <= 1 ? saved : DEFAULT_VOLUME; // missing or invalid -> default
+  } catch {
+    return DEFAULT_VOLUME;
   }
 }
 
 let soundOn = readSetting();
+let volume = readVolume();
 const listeners = new Set();
 
 export const isSoundOn = () => soundOn;
+export const getVolume = () => volume;
+
+// Final loudness (0 to MAX_GAIN). Anything that builds its own audio context
+// (like the Surprise Me sound) uses this so the whole app shares one mapping.
+export const getOutputGain = () => volume * MAX_GAIN;
 
 export function setSoundOn(value) {
   soundOn = value;
@@ -50,7 +68,7 @@ function getContext() {
     if (!AudioContextClass) return null; // very old browser: stay silent
     ctx = new AudioContextClass();
     master = ctx.createGain();
-    master.gain.value = MASTER_VOLUME;
+    master.gain.value = getOutputGain();
     master.connect(ctx.destination);
   }
   if (ctx.state === "suspended") {
@@ -58,6 +76,28 @@ function getContext() {
     return null; // not running yet: skip this sound rather than play it late
   }
   return ctx;
+}
+
+/* ==========================================================================
+   Volume (remembered, applies to every sound immediately)
+   ========================================================================== */
+
+// value = 0 to 1. Saved, then applied to the master knob if audio has started.
+export function setVolume(value) {
+  const next = Math.min(1, Math.max(0, Number(value)));
+  if (Number.isNaN(next)) return; // ignore bad input
+  volume = next;
+  try {
+    localStorage.setItem(VOLUME_KEY, String(next));
+  } catch {
+    /* ignore: the setting just won't be remembered */
+  }
+  // A short ramp instead of a jump avoids clicks while the slider is dragged.
+  // If audio hasn't started yet, getContext() uses `volume` when it does.
+  if (ctx && master) {
+    master.gain.setTargetAtTime(getOutputGain(), ctx.currentTime, 0.015);
+  }
+  listeners.forEach((notify) => notify());
 }
 
 /* ==========================================================================
@@ -262,8 +302,6 @@ export function playMascotSound(name) {
     console.warn("[mascot-sound]", error); // a sound problem must never break the UI
   }
 }
-
-
 
 /* ==========================================================================
    Per-mascot "chosen" sounds

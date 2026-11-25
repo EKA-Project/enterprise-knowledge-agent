@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react';
 import { BookOpen, Search, Plus } from 'lucide-react';
-import { glossaryTerms } from './KnowledgeData.js';
+
 import GlossaryCard from './GlossaryCard.jsx';
 import AddGlossaryTermModal from './AddGlossaryTermModal.jsx';
-import SectionState, { SkeletonCards } from './SectionState.jsx';
-import Button from '../common/Button.jsx';
-import Pagination from '../common/Pagination.jsx';
-
+import SectionState, { SkeletonCards } from '../SectionState.jsx';
+import Button from '../../common/Button.jsx';
+import Pagination from '../../common/Pagination.jsx';
+import { useEffect, useMemo, useState } from 'react';
+import { getGlossaryTerms, saveGlossaryTerm } from '../../../services/glossaryService.js';
 const PAGE_SIZE = 4;
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -14,7 +14,12 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 // canManage -> "+ Add term" and card edit icons (admin only).
 // state = normal | loading | empty | error (demo states); onReset returns to normal.
 export default function GlossarySection({ canManage = false, state = 'normal', onReset }) {
-  const [terms, setTerms] = useState(glossaryTerms); // local copy so new terms can be added
+const [terms, setTerms] = useState([]);
+useEffect(() => {
+  let alive = true;
+  getGlossaryTerms().then((list) => alive && setTerms(list));
+  return () => { alive = false; };
+}, []);
   const [addOpen, setAddOpen] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState(null);
   const [query, setQuery] = useState('');
@@ -52,23 +57,14 @@ export default function GlossarySection({ canManage = false, state = 'normal', o
   };
 
   // Add a new term, keep the list alphabetical, and reset filters so it is visible
-  const handleSave = (savedTerm) => {
-    setTerms((prev) =>
-      [
-        ...prev.filter((t) => t.id !== savedTerm.id),
-        savedTerm,
-      ].sort((a, b) =>
-        a.term.localeCompare(b.term, undefined, {
-          sensitivity: 'base',
-        }),
-      ),
-    );
-
-    setQuery('');
-    changeLetter('All');
-    setAddOpen(false);
-    setSelectedTerm(null);
-  };
+const handleSave = async (savedTerm) => {
+  await saveGlossaryTerm(savedTerm);
+  setTerms(await getGlossaryTerms());
+  setQuery('');
+  changeLetter('All');
+  setAddOpen(false);
+  setSelectedTerm(null);
+};
 
   const showAllTerms = () => {
     setQuery('');

@@ -1,29 +1,34 @@
-
-import { departments, formats } from './StorageData';
+// EKA-EDIT: StorageData removed. Items come from buildAllocation (same source as CapacityCard).
 import { DeptIcon } from './StorageBits';
+import { buildAllocation } from './storageAllocation.js';
+import { formatFileSize } from '../../../utils/formatFileSize.js';
 import '../../../styles/Document.css';
 
 const FORMAT_TILE = {
-  PDF: 'bg-(--status-danger-bg) text-(--status-danger)',
-  DOCX: 'bg-(--status-info-bg) text-(--status-info)',
-  CSV: 'bg-(--status-success-bg) text-(--status-success)',
-  MD: 'bg-(--primary-light) text-(--primary)',
-  TXT: 'bg-(--bg-surface-subtle) text-(--text-secondary)',
+  pdf: 'bg-(--status-danger-bg) text-(--status-danger)',
+  docx: 'bg-(--status-info-bg) text-(--status-info)',
+  csv: 'bg-(--status-success-bg) text-(--status-success)',
+  md: 'bg-(--primary-light) text-(--primary)',
+  txt: 'bg-(--bg-surface-subtle) text-(--text-secondary)',
 };
 
 // Department / format cards under the capacity card. Click = filter the Free up space table.
-function AllocationCards({ mode, active, hoveredKey, usedGb, documents, onSelect, onHover }) {
+// EKA-EDIT: props are summary + departmentsById. Card key = departmentId or format enum.
+function AllocationCards({ summary, departmentsById, mode, active, hoveredKey, onSelect, onHover }) {
   const isDept = mode === 'dept';
+  const documents = summary?.documentCount ?? 0;
+
   const all = {
     key: 'ALL',
     tag: isDept ? 'All Departments' : 'All Formats',
     count: `${documents} total`,
     name: isDept ? 'All Enterprise Departments' : 'All Indexed Formats',
-    gb: Number(usedGb),
+    sizeBytes: summary?.usedBytes ?? 0,
     share: 100,
     color: 'var(--primary)',
+    softBg: 'var(--primary-light)',
   };
-  const cards = [all, ...(isDept ? departments : formats)];
+  const cards = [all, ...buildAllocation(summary, departmentsById, mode)];
 
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -55,11 +60,12 @@ function AllocationCards({ mode, active, hoveredKey, usedGb, documents, onSelect
                   {c.tag}
                 </span>
               ) : isDept ? (
+                // EKA-EDIT: softBg replaces `${color}1f` (color is a CSS var now)
                 <span
                   className="flex h-6 w-6 items-center justify-center rounded"
-                  style={{ color: c.color, backgroundColor: `${c.color}1f` }}
+                  style={{ color: c.color, backgroundColor: c.softBg }}
                 >
-                  <DeptIcon name={c.key} size={10} />
+                  <DeptIcon department={c.department} size={10} />
                 </span>
               ) : (
                 <span className={`doc-mono inline-flex h-7 items-center rounded-md px-3 text-[11px] font-bold uppercase ${FORMAT_TILE[c.key] ?? 'bg-(--bg-surface-subtle) text-(--text-secondary)'}`}>
@@ -68,27 +74,25 @@ function AllocationCards({ mode, active, hoveredKey, usedGb, documents, onSelect
               )}
 
               <span className="doc-mono rounded-md bg-(--bg-surface-subtle) px-2 py-0.5 text-[9px] text-(--text-muted)">
-                {isAll ? c.count : isDept ? `${c.docs} ${c.docs === 1 ? 'doc' : 'docs'}` : `${c.files} files`}
+                {isAll
+                  ? c.count
+                  : isDept
+                    ? `${c.count} ${c.count === 1 ? 'doc' : 'docs'}`
+                    : `${c.count} ${c.count === 1 ? 'file' : 'files'}`}
               </span>
             </div>
 
-            <p className="mt-3 text-[10px] font-semibold text-(--text-primary)">
-              {isAll || isDept ? c.name ?? c.key : c.label}
-            </p>
+            <p className="mt-3 text-[10px] font-semibold text-(--text-primary)">{c.name}</p>
 
             <div className="mt-1 flex items-end justify-between">
+              {/* EKA-EDIT: size via formatFileSize ("2.4 MB"), one span */}
               <span className="doc-mono text-[20px] font-black leading-9 text-(--text-primary)">
-                {c.gb.toFixed(1)}
-                <span className="ml-1 text-[11px] font-black text-(--text-muted)">GB</span>
+                {formatFileSize(c.sizeBytes)}
               </span>
 
               <span
                 className="doc-mono mb-1 rounded-md px-2 py-0.5 text-[9px] font-black"
-                style={
-                  isAll
-                    ? { color: 'var(--primary)', backgroundColor: 'var(--primary-light)' }
-                    : { color: c.color, backgroundColor: `${c.color}1f` }
-                }
+                style={{ color: c.color, backgroundColor: c.softBg }}
               >
                 {c.share}%
               </span>
