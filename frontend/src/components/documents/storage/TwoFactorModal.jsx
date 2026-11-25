@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { RefreshCw, Shield, Smartphone, X } from 'lucide-react';
+import { RefreshCw, Shield, Smartphone } from 'lucide-react';
 import { TypeTile } from './StorageBits';
 // EKA-EDIT: challenge/verify through twoFactorService (blueprint-external, backend later)
 import { createChallenge, verifyChallenge } from '../../../services/twoFactorService.js';
 import { formatFileSize } from '../../../utils/formatFileSize.js';
 import '../../../styles/Document.css';
+import Modal from '../../common/Modal.jsx';
 import { CancelButton } from '../../common/ActionButtons.jsx';
-
-
 
 // Admin 2FA number matching: tap the same number that is shown above.
 // Sizes measured on the real-size screenshot (modal 610 wide, ~788 tall).
+// Body/footer content keeps those measured px sizes through [zoom:0.8] (125% display scaling).
 // EKA-EDIT: onVerified now receives the verificationToken
 // EKA-EDIT: departmentName passed by the page
 function TwoFactorModal({ file, departmentName, onClose, onVerified }) {
@@ -26,16 +26,11 @@ function TwoFactorModal({ file, departmentName, onClose, onVerified }) {
     setChallenge(await createChallenge());
   };
 
+  // Esc / click-outside are handled by the common Modal
   useEffect(() => {
     load();
-    const onKey = (e) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', onKey);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      clearTimeout(timer.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onClose]);
+    return () => clearTimeout(timer.current);
+  }, []);
 
   const pick = async (n) => {
     if (status === 'ok' || !challenge) return;
@@ -49,40 +44,44 @@ function TwoFactorModal({ file, departmentName, onClose, onVerified }) {
     }
   };
   const resend = load;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#10192b]/45 p-4 backdrop-blur-sm" onClick={onClose}>
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="[zoom:0.8] w-full max-w-[610px] rounded-[30px] border-t-[3px] border-t-[#e5484d] bg-white px-[30px] pb-[30px] pt-[32px] shadow-2xl"
-      >
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <span className="flex h-[55px] w-[55px] shrink-0 items-center justify-center rounded-2xl border border-[#f6c4c3] bg-[#ffe2e1] text-[#e5484d]">
-              <Smartphone size={22} />
-            </span>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="doc-mono inline-flex h-[22px] items-center rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-[11px] text-[11px] font-bold uppercase tracking-[0.06em] text-[#d92d2d]">
-                  Admin 2FA
-                </span>
-                <span className="doc-mono text-[11px] font-bold uppercase tracking-[0.1em] text-[#6f8aa3]">Two-factor authentication</span>
-              </div>
-              <h3 className="doc-heading text-[24px] font-black leading-8 text-[#10283f]">Verify via Mobile App</h3>
-            </div>
-          </div>
+    <Modal
+      size="md"
+      onClose={onClose}
+      headerClassName="bg-(--bg-surface) border-t-[3px] border-t-[#e5484d]"
+      icon={
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#f6c4c3] bg-[#ffe2e1] text-[#e5484d]">
+          <Smartphone size={18} />
+        </span>
+      }
+      eyebrow={
+        <>
+          <span className="doc-mono inline-flex h-[18px] items-center rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-[9px] text-[9px] font-bold uppercase tracking-[0.06em] text-[#d92d2d]">
+            Admin 2FA
+          </span>
+          <span className="doc-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#6f8aa3]">
+            Two-factor authentication
+          </span>
+        </>
+      }
+      title={<span className="doc-heading font-black">Verify via Mobile App</span>}
+      footer={(close) => (
+        <div className="flex items-center justify-between">
           <button
             type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="group flex h-[42px] w-[42px] shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#b9d6ec] bg-[#e1f0fa] text-[#1b5f8a] transition-colors hover:border-[#f6c4c3] hover:bg-[#ffe2e1] hover:text-[#d9373f]"
+            onClick={resend}
+            className="inline-flex cursor-pointer items-center gap-2 pl-3 text-[11px] font-semibold text-[#6f8aa3] transition-colors hover:text-[#10283f]"
           >
-            <X size={15} className="transition-transform duration-200 group-hover:rotate-90" />
+            <RefreshCw size={12} /> Send new number
           </button>
+          <CancelButton type="button" onClick={close} />
         </div>
-
+      )}
+    >
+      <div className="[zoom:0.8]">
         {/* File card (550 x 85) */}
-        <div className="mt-[62px] flex h-[85px] items-center gap-3.5 rounded-2xl border border-[#b9d6ec] bg-[#e1f0fa] px-[19px]">
+        <div className="flex h-[85px] items-center gap-3.5 rounded-2xl border border-[#b9d6ec] bg-[#e1f0fa] px-[19px]">
           {/* EKA-EDIT: document fields; department name comes from the page via departmentName */}
           <TypeTile format={file.format} />
           <div className="min-w-0 flex-1">
@@ -150,20 +149,8 @@ function TwoFactorModal({ file, departmentName, onClose, onVerified }) {
             )}
           </div>
         </div>
-
-        {/* Footer: divider 45px below the auth box */}
-        <div className="mt-[45px] flex items-center justify-between border-t border-[#d6e6f2] pt-[15px]">
-          <button
-            type="button"
-            onClick={resend}
-            className="inline-flex cursor-pointer items-center gap-2 pl-3 text-[14px] font-semibold text-[#6f8aa3] transition-colors hover:text-[#10283f]"
-          >
-            <RefreshCw size={15} /> Send new number
-          </button>
-          <CancelButton onClick={onClose} />
-        </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 
