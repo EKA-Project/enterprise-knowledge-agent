@@ -7,12 +7,18 @@ export const ALL_FORMATS = 'All Formats';
 
 // Special "categories" that filter by a flag instead of a category name.
 export const SAVED_FILTER = 'Saved Bookmarks';
+// EKA-EDIT: admin-only archived view (dropdown option + health card both use it)
+export const ARCHIVED_FILTER = 'Archived Documents';
 export const PINNED_FILTER = 'Admin Pinned';
 
 export function filterDocuments(docs, { search, category, format, status = '' }) {
   const text = search.toLowerCase().trim();
+  // EKA-EDIT: archived rows show ONLY in the archived view; normal views hide them
+  const wantsArchived = status === 'Archived' || category === ARCHIVED_FILTER;
 
   return docs.filter((doc) => {
+    if (wantsArchived !== Boolean(doc.isArchived)) return false;
+
     const matchesSearch =
       !text ||
       doc.title.toLowerCase().includes(text) ||
@@ -22,12 +28,12 @@ export function filterDocuments(docs, { search, category, format, status = '' })
     let matchesCategory = true;
     if (category === SAVED_FILTER) matchesCategory = Boolean(doc.isBookmarked);
     else if (category === PINNED_FILTER) matchesCategory = Boolean(doc.isPinned);
-    else if (category !== ALL_CATEGORIES) matchesCategory = doc.category === category;
+    else if (category !== ALL_CATEGORIES && category !== ARCHIVED_FILTER)
+      matchesCategory = doc.category === category;
 
     const matchesFormat = format === ALL_FORMATS || doc.format === format;
+    const matchesStatus = !status || status === 'Archived' || doc.status === status;
 
-    // Status comes from the Document Health Overview cards (empty = no filter)
-const matchesStatus = !status || doc.status === status;
     return matchesSearch && matchesCategory && matchesFormat && matchesStatus;
   });
 }

@@ -15,17 +15,22 @@ const HEALTH_META = [
   { key: 'indexed', label: 'Indexed', color: 'var(--status-success)' },
   { key: 'processing', label: 'Processing', color: 'var(--status-info)' },
   { key: 'failed', label: 'Failed', color: 'var(--status-danger)' },
+  // EKA-EDIT: Archived card takes the free 4th slot
+  { key: 'archived', label: 'Archived', color: 'var(--text-muted)' },
 ];
 
 // rows = documents list; row.status is 'Indexed' | 'Processing' | 'Failed'
 const isOutdated = (r) => Boolean(r.isOutdated); // TODO: friend ka field/rule aate hi yahan badlo
 
+// EKA-EDIT: archived rows are counted only in the Archived card
 export function buildHealth(rows = []) {
   return HEALTH_META.map((m) => ({
     ...m,
-    count: rows.filter((r) => String(r.status).toLowerCase() === m.key).length,
+    count:
+      m.key === 'archived'
+        ? rows.filter((r) => r.isArchived).length
+        : rows.filter((r) => !r.isArchived && String(r.status).toLowerCase() === m.key).length,
   }));
 }
-
-// Static until friend's storageService exists (Pending #7)
+// EKA-EDIT: static until storageService exists (Storage chat)
 export const documentStorage = { usedGb: 14.2, totalGb: 50 };
