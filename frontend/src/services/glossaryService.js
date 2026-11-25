@@ -1,4 +1,4 @@
-import { glossaryTerms as seed } from '../data/mock/knowledgeExtras.js';
+import { glossaryTerms as seed } from '../data/mock/glossary.js';
 
 const KEY = 'eka-glossary';
 
