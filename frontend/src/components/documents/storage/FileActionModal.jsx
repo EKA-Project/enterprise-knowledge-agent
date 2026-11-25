@@ -3,12 +3,9 @@ import { Trash2 } from 'lucide-react';
 import { TypeTile } from './StorageBits';
 import '../../../styles/Document.css';
 // EKA-EDIT: top
-<<<<<<< HEAD
-=======
 import { formatFileSize } from '../../../utils/formatFileSize.js';
 import Modal from '../../common/Modal.jsx';
 import { CancelButton } from '../../common/ActionButtons.jsx';
->>>>>>> main
 
 // Two-tone flame (red outer, orange inner) for the purge modal
 function FlameIcon({ size = 16 }) {
