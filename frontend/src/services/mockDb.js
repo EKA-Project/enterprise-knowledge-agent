@@ -36,11 +36,19 @@ export const db = {
 
 
 // MOCK-ONLY: keep edits across page reloads. Runs before lastDocumentNumber is computed.
+// Turn it off on your machine in .env.local: VITE_MOCK_PERSIST=false
 const persistence = createMockPersistence({ db, storage: globalThis.localStorage });
-persistence.hydrate();
-startAutoSave(persistence);
-globalThis.__resetMockData = () => { persistence.reset(); globalThis.location.reload(); };
+if (import.meta.env?.VITE_MOCK_PERSIST !== "false") {
+  persistence.hydrate();
+  startAutoSave(persistence);
+}
 
+// Dev tool: forget every saved change and go back to the seed data.
+export function resetMockDb() {
+  persistence.reset();
+  window.location.reload();
+}
+globalThis.__resetMockData = resetMockDb;
 
 /**
  * The read rule applied to active documents: what this user may see in lists and
