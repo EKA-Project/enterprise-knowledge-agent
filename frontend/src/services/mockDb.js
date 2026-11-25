@@ -34,7 +34,6 @@ export const db = {
   amendments: [],
 };
 
-
 // MOCK-ONLY: keep edits across page reloads. Runs before lastDocumentNumber is computed.
 // Turn it off on your machine in .env.local: VITE_MOCK_PERSIST=false
 const persistence = createMockPersistence({ db, storage: globalThis.localStorage });
@@ -76,4 +75,16 @@ let lastDocumentNumber = db.documents.reduce(
 export function nextDocumentId() {
   lastDocumentNumber += 1;
   return `doc_${String(lastDocumentNumber).padStart(3, "0")}`;
+}
+
+// New mock users get usr_019, usr_020, ... (the seed ends at usr_018). Counts up
+// from the highest id in the db, so an id is never reused.
+let lastUserNumber = db.users.reduce(
+  (highest, user) => Math.max(highest, Number(/^usr_(\d+)$/.exec(user.id)?.[1] ?? 0)),
+  0,
+);
+
+export function nextUserId() {
+  lastUserNumber += 1;
+  return `usr_${String(lastUserNumber).padStart(3, "0")}`;
 }

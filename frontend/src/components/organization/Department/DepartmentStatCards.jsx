@@ -5,10 +5,10 @@ const mono = "font-(family-name:--font-mono)";
 // All four numbers are calculated from the departments list, so they update live.
 export default function DepartmentStatCards({ departments }) {
   const total = departments.length;
-  const leads = departments.filter((d) => d.leadId).length;
+  const leads = departments.filter((d) => d.managerId).length;
   const coverage = total ? Math.round((leads / total) * 100) : 0;
-  const docs = departments.reduce((sum, d) => sum + d.docs, 0);
-  const people = departments.reduce((sum, d) => sum + d.members, 0);
+  const docs = departments.reduce((sum, d) => sum + d.documentCount, 0);
+  const people = departments.reduce((sum, d) => sum + d.memberCount, 0);
 
   const cards = [
     { label: "Total departments", value: total, note: `${total} Active Unit${total === 1 ? "" : "s"}`, noteTone: "text-(--status-verified)", Icon: Briefcase, tile: "bg-[#ffedd5] border-[#fed7aa] text-[#ea580c]" },

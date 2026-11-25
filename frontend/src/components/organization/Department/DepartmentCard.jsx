@@ -1,33 +1,23 @@
-import { Briefcase, Code, FileText, Layers, SquarePen, ShieldCheck, Trash2, TrendingUp, Users } from "lucide-react";
-import { getInitials } from "./OrganizationData";
+import { SquarePen} from "lucide-react";
+import TrashLidIcon from "../../icons/TrashLidIcon";
+import { getInitials } from "../OrganizationData.js";
+import { getDepartmentTheme } from "../../../config/departmentTheme.js";
 // Tailwind class for the monospace font used in badges and labels
-const ICONS = { code: Code, users: Users, layers: Layers, shield: ShieldCheck, trend: TrendingUp, file: FileText, briefcase: Briefcase };
-// Tailwind classes for the department tone colors (background, border, text)
-const TONES = {
-  teal: "bg-[#dcf4ee] border-[#bfe8dd] text-[#0f8f7a]",
-  green: "bg-[#dcfce7] border-[#bbf7d0] text-[#15803d]",
-  purple: "bg-[#f3e8ff] border-[#e4ccff] text-[#7e22ce]",
-  red: "bg-[#fee2e2] border-[#fecaca] text-[#dc2626]",
-  amber: "bg-[#fef3c7] border-[#fde68a] text-[#d97706]",
-  indigo: "bg-[#e0e7ff] border-[#c7d2fe] text-[#4f46e5]",
-};
-// Tailwind class for the icon buttons in the top-right corner of the card  
-const iconBtn =
-  "grid size-8 place-items-center rounded-lg text-(--text-muted) transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-110 hover:shadow-(--shadow-sm) active:scale-90 focus-visible:outline-2 focus-visible:outline-(--border-focus)";
 
   // DepartmentCard
 export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete, onReassign, onViewDocs }) {
-  const Icon = ICONS[dept.icon] ?? Briefcase;
+const { Icon, color, softBg, border } = getDepartmentTheme(dept.colorKey, dept.iconKey);
 // Tailwind class for the monospace font used in badges and labels
   return (
     <article
       style={{ animationDelay: `${delay}ms` }}
-      className="org-rise group flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
+      className="org-rise group/card flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
         <div className="flex items-start gap-4">
           <span
-            className={`grid size-12 shrink-0 place-items-center rounded-xl border text-[20px] transition duration-300 group-hover:scale-110 group-hover:shadow-(--shadow-md) ${TONES[dept.tone] ?? TONES.indigo}`}>
-            {dept.emoji ? <span aria-hidden="true">{dept.emoji}</span> : <Icon size={20} aria-hidden="true" />}
-        </span>
+            style={{ color, background: softBg, borderColor: border }}
+            className="grid size-12 shrink-0 place-items-center rounded-xl border transition duration-300 group-hover/card:scale-110 group-hover/card:shadow-(--shadow-md)">
+            <Icon size={20} aria-hidden="true" />
+          </span>
         <div className="min-w-0 flex-1">
       <h3
   title={dept.name}
@@ -49,14 +39,14 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
 >
   <SquarePen size={17} />
 </button>
-          <button
+<button
   type="button"
   onClick={() => onDelete(dept.id)}
   aria-label={`Delete ${dept.name}`}
   title="Delete department"
-  className="grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--status-danger-bg) hover:text-(--status-danger) active:scale-95"
+  className="group bin-group grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--status-danger-bg) hover:text-(--status-danger) active:scale-95"
 >
-  <Trash2 size={17} />
+  <TrashLidIcon size={17} />
 </button>
         </div>
       </div>
@@ -74,7 +64,7 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
             <div className="min-w-0 flex-1">
               <p className="flex flex-wrap items-center gap-1.5 text-[13.5px] font-bold text-(--text-primary)">
                 <span className="truncate">{lead.name}</span>
-                <span className="inline-flex items-center gap-1 rounded-md border border-[#fde68a] bg-[#fef9c3] px-1.5 py-0.5 text-[9.5px] font-bold text-[#b45309]">
+                <span className="inline-flex items-center gap-1 rounded-md border border-(--status-warning) bg-(--status-warning-bg) px-1.5 py-0.5 text-[9.5px] font-bold text-[#b45309]">
                   <span aria-hidden="true">👔</span> Lead
                 </span>
               </p>
@@ -95,8 +85,8 @@ export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete
       <div className="mt-auto pt-8">
           <div className="flex items-center justify-between gap-3 border-t border-(--border-subtle) pt-5 text-[12px] text-(--text-muted)">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span><span aria-hidden="true">👥</span> <b className="text-(--text-primary)">{dept.members}</b> members</span>
-            <span><span aria-hidden="true">📄</span> <b className="text-(--text-primary)">{dept.docs}</b> scoped docs</span>
+            <span><span aria-hidden="true">👥</span> <b className="text-(--text-primary)">{dept.memberCount}</b> members</span>
+            <span><span aria-hidden="true">📄</span> <b className="text-(--text-primary)">{dept.documentCount}</b> scoped docs</span>
           </div>
           <button
             type="button"

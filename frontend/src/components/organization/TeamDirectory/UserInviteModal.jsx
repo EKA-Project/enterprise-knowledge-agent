@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import Modal from "../common/Modal";
-import Button from "../common/Button";
-import { CancelButton } from "../common/ActionButtons";
-import { DEPT_SHORT_LABELS, USER_ROLES } from "./OrganizationData";
+import Modal from "../../common/Modal";
+import Button from "../../common/Button";
+import { CancelButton } from "../../common/ActionButtons";
+import { USER_ROLES } from "../OrganizationData";
 
 const label = "block text-[13.5px] font-semibold text-(--text-primary)";
 const field =
@@ -13,7 +13,6 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
   const [email, setEmail] = useState("");
   const [department, setDepartment] = useState(departmentNames[0] ?? "");
   const [role, setRole] = useState("Employee");
-  const [access, setAccess] = useState("Basic");
   const [errors, setErrors] = useState({});
   const closeRef = useRef(() => {});
 
@@ -26,9 +25,9 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
     setErrors(next);
     if (Object.keys(next).length) return;
 
-    onSubmit({ name: name.trim(), email: email.trim(), department, role, access });
-    closeRef.current();
-  };
+      onSubmit({ name: name.trim(), email: email.trim(), department, role });
+      closeRef.current();
+    };
 
   const Error = ({ text }) => (text ? <span role="alert" className="mt-1 block text-[12px] font-medium text-(--status-failure)">{text}</span> : null);
 
@@ -65,7 +64,7 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
           <label className="block">
             <span className={label}>Department</span>
             <select value={department} onChange={(e) => setDepartment(e.target.value)} className={field}>
-              {departmentNames.map((n) => <option key={n} value={n}>{DEPT_SHORT_LABELS[n] ?? n}</option>)}
+              {departmentNames.map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
           <label className="block">
@@ -75,13 +74,6 @@ export default function UserInviteModal({ departmentNames, existingEmails, onClo
             </select>
           </label>
         </div>
-
-        <label className="block">
-          <span className={label}>Access Level</span>
-          <select value={access} onChange={(e) => setAccess(e.target.value)} className={field}>
-            {ACCESS_LEVELS.map((a) => <option key={a}>{a}</option>)}
-          </select>
-        </label>
       </form>
     </Modal>
   );

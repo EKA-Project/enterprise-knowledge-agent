@@ -3,8 +3,16 @@
 
 // Fake network wait. Pages must already handle loading states, because the real
 // API is never instant.
-export const delay = (ms = 150) => new Promise((resolve) => setTimeout(resolve, ms));
+// mockPersistence registers a saver here, so every service call saves the db first.
+let beforeCall = () => {};
+export const onServiceCall = (fn) => {
+  beforeCall = fn;
+};
 
+export const delay = (ms = 150) => {
+  beforeCall();
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 // Services return COPIES of the mock rows. Without this, a page that edits what
 // it received would silently change the "database" for every other page.
 export const clone = (value) => structuredClone(value);

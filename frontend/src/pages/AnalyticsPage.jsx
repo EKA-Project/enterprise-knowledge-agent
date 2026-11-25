@@ -1,42 +1,53 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RefreshCw, Shield, Zap } from "lucide-react";
 import "../styles/analytics.css";
+import pageMetadata from "../config/pageMetadata";
 import PageHero from "../components/common/PageHero";
+import { ExportAuditButton } from "../components/common/ActionButtons";
 import HealthMetricsRow from "../components/analytics/HealthMetricsRow";
 import IngestionAuditPanel from "../components/analytics/IngestionAuditPanel";
 import ContradictionCard from "../components/analytics/ContradictionCard";
 import AuditDistributionSection from "../components/analytics/AuditDistributionSection";
 import KnowledgeGapSection from "../components/analytics/KnowledgeGapSection";
-import SentimentCard from "../components/analytics/SentimentCard";
 import DocumentMatrix from "../components/analytics/DocumentMatrix";
 import UsageSummary from "../components/analytics/UsageSummary";
 import useToast from "../hooks/useToast.js";
 import {
-  INGEST_CATEGORIES, INITIAL_CONTRADICTIONS, INITIAL_FAILURES, METRICS_BY_RANGE,
-  RANGE_OPTIONS, buildReportCsv,
+  INGEST_CATEGORIES, RANGE_OPTIONS, buildReportCsv, toAnalyticsView,
 } from "../components/analytics/AnalyticsData";
+import useApi from "../hooks/useApi.js";
+import { getDepartments } from "../services/departmentService.js";
+import { getCurrentUser, getUsers } from "../services/userService.js";
+import { getDocuments, getIngestion, reindexDocument } from "../services/documentService.js";
+import { canViewAnalytics, getAnalyticsSummary, getFindings, resolveFinding } from "../services/analyticsService.js";
 
 // AnalyticsPage component for displaying knowledge analytics, ingestion failures, contradictions, and usage summary
 export default function AnalyticsPage() {
   const navigate = useNavigate();
   const [range, setRange] = useState("30d");
-  const [failures, setFailures] = useState(INITIAL_FAILURES);
   const [fixing, setFixing] = useState(false);
-  const [scanning, setScanning] = useState(false);
-  const [contradictions, setContradictions] = useState(() =>
-    INITIAL_CONTRADICTIONS.map((c) => ({ ...c, resolved: false })),
-  );
   const [upload, setUpload] = useState(null); // null = closed, otherwise { title, category }
-  const timers = useRef([]);
+  const meta = pageMetadata.analytics.admin;
+  // Everything comes from the services. useApi fetches again when the role or the
+  // range changes, and reload() re-reads after a write.
+  const { data, loading, error, reload } = useApi(async () => {
+    const user = await getCurrentUser();
+    if (!canViewAnalytics(user)) return { noAccess: true };
 
-  useEffect(() => {
-    const pending = timers.current;
-    return () => pending.forEach(clearTimeout);
-  }, []);
-  // ↑ Clears waiting timers if the page is closed.
-
-  const later = (fn, ms) => timers.current.push(setTimeout(fn, ms));
+    const { total } = await getDocuments({ limit: 1 }); // getDocuments pages its results
+    const [departments, users, documentList, findings, summary] = await Promise.all([
+      getDepartments(),
+      getUsers(),
+      getDocuments({ limit: Math.max(total, 1) }),
+      getFindings(),
+      getAnalyticsSummary(range),
+    ]);
+    const documents = documentList.items;
+    const failedDocuments = documents.filter((doc) => doc.status === "failed");
+    const ingestions = await Promise.all(failedDocuments.map((doc) => getIngestion(doc.id)));
+    return { departments, users, documents, findings, summary, failedDocuments, ingestions };
+  }, [range]);
+  const view = useMemo(() => (data && !data.noAccess ? toAnalyticsView(data) : null), [data]);
 
    const toast = useToast();
   const pushToast = useCallback(
@@ -46,45 +57,37 @@ export default function AnalyticsPage() {
     },
     [toast],
   );
-  const metrics = METRICS_BY_RANGE[range];
-  const alertCount = contradictions.filter((c) => !c.resolved).length;
 
   // ---- Ingestion failures ----
-  const fixFailures = (ids) => {
+  const fixFailures = async (ids) => {
     if (fixing) return;
     const n = ids.length;
     setFixing(true);
-    pushToast(`[Admin Batch Fix] Re-indexing ${n} failed vector embedding${n === 1 ? "" : "s"} across all departments…`);
-    later(() => {
-      setFailures((prev) => prev.filter((f) => !ids.includes(f.id)));
+    pushToast(`[Admin Batch Fix] Re-indexing ${n} failed document${n === 1 ? "" : "s"}…`);
+    try {
+      await Promise.all(ids.map((id) => reindexDocument(id)));
+      reload();
+      pushToast(`[Admin Batch Success] ${n} document${n === 1 ? "" : "s"} sent for re-indexing`, "success");
+    } catch (e) {
+      pushToast(e.message, "error"); // 403 when the role may not change this document
+    } finally {
       setFixing(false);
-      pushToast(`[Admin Batch Success] All ${n} department document${n === 1 ? "" : "s"} successfully vectorized!`, "success");
-    }, 1800);
-  };
-
-  const runScan = () => {
-    if (scanning) return;
-    setScanning(true);
-    pushToast("Audit scan started for 148,920 chunks…");
-    later(() => {
-      setScanning(false);
-      pushToast("Audit scan finished (demo data)", "success");
-    }, 2200);
+    }
   };
 
   // ---- Contradictions ----
-  const resolveOne = (id) => {
-    setContradictions((prev) => prev.map((c) => (c.id === id ? { ...c, resolved: true } : c)));
-    pushToast("Conflicting snippet resolved", "success");
+  const resolveOne = async (id) => {
+    try {
+      await resolveFinding(id, "superseded_document");
+      reload();
+      pushToast("Older document deprecated and finding resolved", "success");
+    } catch (e) {
+      pushToast(e.message, "error");
+    }
   };
-  const resolveAll = () => {
-    setContradictions((prev) => prev.map((c) => ({ ...c, resolved: true })));
-    pushToast("Reconciled conflicting documents", "success");
-  };
-
   // ---- Export (real CSV download, no backend) ----
   const exportReport = () => {
-    const csv = buildReportCsv({ range, metrics, alertCount });
+    const csv = buildReportCsv({ range, alertCount, totalCitations, scannedChunks, usageStats });
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
@@ -101,14 +104,23 @@ export default function AnalyticsPage() {
     setUpload(null);
     pushToast(`Vector ingestion queued for “${title}” (demo, no file sent)`, "success");
   };
+    if (loading) return <p className="p-6 text-(--text-muted)">Loading analytics…</p>;
+  if (error) return <p className="p-6 text-(--status-danger)">Could not load: {error.message}</p>;
+  if (data.noAccess) {
+    return <p className="p-6 text-(--text-muted)">Analytics is available to administrators and department managers.</p>;
+  }
+  const {
+    failures, contradictions, alertCount, metrics, scannedChunks, totalCitations, knowledgeMass, monthlyConflicts,
+    gapStats, gapQueries, gapDistribution, matrixRows, usageStats,
+  } = view;
 // Render the AnalyticsPage component with various sections and modals for knowledge analytics
   return (
     <div className="analytics-page mx-auto w-full max-w-6xl space-y-6">
             <div className="anl-rise">
         <PageHero
-          eyebrow="Enterprise knowledge telemetry"
-          title="Knowledge Analytics."
-          description="Comprehensive audit metrics, grounding accuracy telemetry, cross-document discrepancy detection, and ungrounded query gap analysis."
+          eyebrow={meta.eyebrow}
+          title={meta.title}
+          description={meta.description}
           actions={
             <>
               <div role="group" aria-label="Time range" className="inline-flex rounded-full border border-(--border-subtle-nav) bg-(--bg-surface-subtle) p-0.5">
@@ -126,26 +138,9 @@ export default function AnalyticsPage() {
                   </button>
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={runScan}
-                disabled={scanning}
-                className="inline-flex items-center gap-1.5 rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-2 py-0.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95"
-              >
-                {scanning ? (
-                  <RefreshCw size={12} className="animate-spin" aria-hidden="true" />
-                ) : (
-                  <Zap size={12} className="fill-(--status-warning) text-(--status-warning)" strokeWidth={1.5} aria-hidden="true" />
-                )}
-                Run Audit
-              </button>
-              <button
-                type="button"
-                onClick={exportReport}
-                className="rounded-full bg-(--text-primary) px-2 py-0.5 text-[12px] font-bold text-(--primary-contrast) transition hover:bg-(--primary) active:scale-95"
-              >
-                Export Report ↗
-              </button>
+              <ExportAuditButton onClick={exportReport} title="Export analytics report (CSV)">
+                Export Report
+              </ExportAuditButton>
             </>
           }
         />
@@ -183,30 +178,20 @@ export default function AnalyticsPage() {
       </div>
 
       <HealthMetricsRow metrics={metrics} alertCount={alertCount} />
-
       <IngestionAuditPanel
         failures={failures}
         fixing={fixing}
-        scanning={scanning}
         onFixAll={() => fixFailures(failures.map((f) => f.id))}
         onFix={fixFailures}
         onNotify={(f) => pushToast(`Notification sent to ${f.manager} (demo)`)}
-        onScan={runScan}
       />
 
-      <ContradictionCard items={contradictions} onResolve={resolveOne} onAutoResolve={resolveAll} />
+      <ContradictionCard items={contradictions} scannedChunks={scannedChunks} onResolve={resolveOne} />
+      <AuditDistributionSection monthlyConflicts={monthlyConflicts} knowledgeMass={knowledgeMass} totalCitations={totalCitations} />
+      <KnowledgeGapSection onIngest={openUpload} gapStats={gapStats} gapDistribution={gapDistribution} gapQueries={gapQueries} />
+      <DocumentMatrix documents={matrixRows}/>
 
-      <AuditDistributionSection />
-
-      <KnowledgeGapSection onIngest={openUpload} />
-
-      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[2fr_3fr]">
-        <SentimentCard />
-        <DocumentMatrix />
-      </div>
-
-      <UsageSummary onViewUsage={() => navigate("/organization")} />
-
+      <UsageSummary usageStats={usageStats} onViewUsage={() => navigate("/organization")} />
       {upload && (
         <DocumentUploadModal
           initialTitle={upload.title}

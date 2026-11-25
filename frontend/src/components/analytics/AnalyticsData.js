@@ -1,3 +1,7 @@
+import { getDepartmentTheme } from "../../config/departmentTheme.js";
+import { formatFileSize } from "../../utils/formatFileSize.js";
+import { formatRelativeTime } from "../../utils/formatRelativeTime.js";
+
 // Mock data for the Analytics page. Replace with API data later.
 
 export const RANGE_OPTIONS = [
@@ -6,12 +10,6 @@ export const RANGE_OPTIONS = [
   { id: "90d", label: "90 Days" },
 ];
 
-export const METRICS_BY_RANGE = {
-  "7d": { accuracy: "99.9%", freshness: "95.1%", freshnessNote: "+0.8% this week", utilization: "88.9%" },
-  "30d": { accuracy: "99.8%", freshness: "94.2%", freshnessNote: "+3.1% this quarter", utilization: "88.4%" },
-  "90d": { accuracy: "99.6%", freshness: "92.7%", freshnessNote: "+6.4% vs prior", utilization: "86.9%" },
-};
-
 export const INGEST_CATEGORIES = [
   "Engineering & DevOps",
   "People & HR Operations",
@@ -19,151 +17,182 @@ export const INGEST_CATEGORIES = [
   "Product & Strategy",
   "Legal & Compliance",
 ];
-
-export const INITIAL_FAILURES = [
-  {
-    id: "fail-1",
-    fileName: "Kubernetes Cluster Auto-Healing Runbook.pdf",
-    fileType: "PDF",
-    size: "2.4 MB",
-    failedAgo: "10 mins ago",
-    department: "Engineering & DevOps",
-    manager: "Elena Rostova",
-    uploader: "Alex Morgan",
-    cause: "Embedding Generation Rate Limit (OpenAI HTTP 429)",
-    step: "Step 2/3: Semantic Vector Embeddings",
-    log: [
-      "chunker    214 chunks created",
-      "embedder   request 2/3 rejected (HTTP 429)",
-      "embedder   retry budget exhausted",
-    ],
-  },
-];
-
-export const INITIAL_CONTRADICTIONS = [
-  {
-    id: "c1",
-    title: "Conflicting Remote Work Wellness Stipend Amount",
-    severity: "High",
-    sourceA: "2025 Employee Handbook",
-    lead: "lists the annual home office stipend as",
-    valueA: "$1,000 USD",
-    middle: "whereas the newly ingested",
-    sourceB: "2026 Global Remote Work Policy",
-    verb: "designates",
-    valueB: "$1,500 USD",
-    affects: "2026 Global Remote Work Policy.pdf",
-    action: "Deprecate 2025 Snippet",
-  },
-  {
-    id: "c2",
-    title: "Kubernetes Multi-Region Failover DNS TTL Mismatch",
-    severity: "Medium",
-    sourceA: "Microservices Architecture Guide",
-    lead: "states failover TTL is",
-    valueA: "120 seconds",
-    middle: "while the",
-    sourceB: "Corporate Governance & Compliance Policy",
-    verb: "specifies",
-    valueB: "45 seconds",
-    affects: "Corporate Governance & Compliance Policy.pdf",
-    action: "Sync with Elena Rostova",
-  },
-];
-
-export const QUALITY_STATS = [
-  { label: "Quality index", value: "98.6%" },
-  { label: "Grounding rate", value: "99.2%" },
-  { label: "Total citations", value: "4,820" },
-];
-
-export const MONTHLY_CONFLICTS = [
-  { label: "Jul", value: 18 },
-  { label: "Aug", value: 22 },
-  { label: "Sep", value: 28 },
-  { label: "Oct", value: 25 },
-  { label: "Nov", value: 31 },
-  { label: "Dec", value: 36 },
-];
-
-export const TOTAL_CITATIONS = 4820;
-
-export const KNOWLEDGE_MASS = [
-  { id: "hr", label: "HR & Remote", value: 38, color: "#1f6b4a" },
-  { id: "sec", label: "Security & SOC2", value: 28, color: "#2e8b57" },
-  { id: "eng", label: "Engineering SRE", value: 20, color: "#7fbf9f" },
-  { id: "prod", label: "Product & Sales", value: 14, color: "#bfe0cd" },
-];
-
-export const GAP_STATS = [
-  { label: "Unanswered queries", value: 4, note: "No source found", tone: "text-(--status-failure)" },
-  { label: "Low-confidence queries", value: 12, note: "<70% confidence", tone: "text-(--status-warning)" },
-  { label: "Missing knowledge topics", value: 3, note: "Recurring gaps", tone: "text-(--text-primary)" },
-];
-
-export const GAP_DISTRIBUTION = [
-  { id: "security", label: "Security", value: 8, color: "#166534" },
-  { id: "engineering", label: "Engineering", value: 5, color: "#16a34a" },
-  { id: "hr", label: "HR Ops", value: 4, color: "#d97706" },
-  { id: "legal", label: "Legal", value: 2, color: "#dc2626" },
-];
-
-export const GAP_QUERIES = [
-  {
-    id: "g1", query: "Salesforce CRM Webhook Pipeline Sync",
-    sub: "Unanswered — Zero matching source documents", volume: 48,
-    status: "24% (Unanswered)", tone: "failure", cluster: "Engineering & DevOps", action: "+ Ingest Source RFC",
-  },
-  {
-    id: "g2", query: "Singapore APAC Work-From-Anywhere Tax Residency",
-    sub: "Low Confidence — Missing APAC guidelines", volume: 32,
-    status: "18% (Low Conf)", tone: "warning", cluster: "People & HR Operations", action: "+ Ingest APAC Guide",
-  },
-  {
-    id: "g3", query: "SOC 2 Key Rotation Break-Glass Procedure",
-    sub: "Low Confidence — Missing KMS runbook", volume: 19,
-    status: "57% (Missing Topic)", tone: "warning", cluster: "Security & Compliance", action: "+ Draft Article",
-  },
-  {
-    id: "g4", query: "GDPR Data Subject Request Turnaround",
-    sub: "Unanswered — No retention policy found", volume: 14,
-    status: "21% (Unanswered)", tone: "failure", cluster: "Legal & Compliance", action: "+ Ingest Policy",
-  },
-];
-
-export const SENTIMENT = [
-  { id: "helpful", label: "Helpful", emoji: "👍", count: 4048, pct: 84, color: "#16a34a" },
-  { id: "refined", label: "Refined", emoji: "✏️", count: 530, pct: 11, color: "#2563eb" },
-  { id: "disliked", label: "Disliked", emoji: "👎", count: 242, pct: 5, color: "#d97706" },
-];
-
-export const DOCUMENT_MATRIX = [
-  { id: "d1", type: "PDF", name: "Corporate Governance & Compliance Policy", owner: "Legal Operations Committee", category: "People & HR Operations", grounding: "99.4%", chunks: 312, cited: 128 },
-  { id: "d2", type: "MD", name: "Kubernetes Microservices Architecture Guide", owner: "Marcus Chen (Staff Architect)", category: "Engineering & DevOps", grounding: "99.4%", chunks: 268, cited: 97 },
-  { id: "d3", type: "PDF", name: "2026 Global Remote Work Policy", owner: "Sophia Sterling (VP People & Culture)", category: "People & HR Operations", grounding: "99.4%", chunks: 154, cited: 211 },
-  { id: "d4", type: "DOCX", name: "Employee Benefits, Health Insurance & Equity Playbook", owner: "David Vance (Head of Total Rewards)", category: "People & HR Operations", grounding: "99.4%", chunks: 340, cited: 176 },
-  { id: "d5", type: "PDF", name: "Customer Interview Synthesis Report", owner: "Maya Narang (Lead Designer)", category: "Product & Strategy", grounding: "99.2%", chunks: 121, cited: 64 },
-  { id: "d6", type: "FIG", name: "Brand Voice & Visual Guidelines", owner: "Maya Narang (Lead Designer)", category: "Product & Brand", grounding: "99.1%", chunks: 88, cited: 52 },
-];
-
-export const USAGE_STATS = [
-  { label: "Total queries", value: "14,950" },
-  { label: "Active users", value: "42" },
-  { label: "Documents accessed", value: "1,284" },
-  { label: "Avg queries / user", value: "114.7" },
-];
-
 // Builds the CSV text used by the Export Report button.
-export function buildReportCsv({ range, metrics, alertCount }) {
+export function buildReportCsv({ range, alertCount, totalCitations, scannedChunks, usageStats }) {
   const rows = [
     ["Metric", "Value"],
     ["Range", range],
-    ["Grounding accuracy", metrics.accuracy],
-    ["Knowledge freshness", metrics.freshness],
     ["Contradictions flagged", alertCount],
-    ["Knowledge utilization", metrics.utilization],
-    ["Quality index", "98.6%"],
-    ["Total citations", TOTAL_CITATIONS],
+    ["Total citations", totalCitations],
+    ["Scanned chunks", scannedChunks],
+    ...usageStats.map((s) => [s.label, s.value]),
   ];
   return rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+}
+
+// ===================  FROM SERVICE DATA TO WHAT THE CARDS READ  ===================
+// The cards keep reading the field names they always did. Wording comes from these
+// maps, keyed by the stored values, never typed into rows.
+
+const NO_NAME = "Unassigned";
+const INGESTION_STEPS = { extraction: "Text Extraction", chunking: "Chunking", embedding: "Vector Embeddings", indexing: "Indexing" };
+const SEVERITY_LABELS = { low: "Low", medium: "Medium", high: "High" };
+const CLAIM_WORDS = { lead: "states", middle: "while", verb: "states" };
+const GAP_ACTION_LABEL = "+ Ingest Source";
+const TONE_CLASSES = { failure: "text-(--status-failure)", warning: "text-(--status-warning)", neutral: "text-(--text-primary)" };
+const MONTH_FORMAT = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" });
+const FRESH_DAYS = 90; // a document counts as fresh when it was updated within this many days
+const DAY_MS = 24 * 60 * 60 * 1000;
+const percent = (part, whole) => (whole > 0 ? `${Math.round((part / whole) * 100)}%` : "—");
+/**
+ * One call builds everything the Analytics cards show.
+ * Input: what AnalyticsPage loads from the services.
+ */
+export function toAnalyticsView({ departments, users, documents, findings, summary, failedDocuments, ingestions }) {
+  const departmentById = new Map(departments.map((d) => [d.id, d]));
+  const userById = new Map(users.map((u) => [u.id, u]));
+  const documentById = new Map(documents.map((d) => [d.id, d]));
+  const titleOf = (id) => documentById.get(id)?.title ?? id;
+  const uploadedAtOf = (id) => documentById.get(id)?.uploadedAt ?? "";
+  const managerOf = (departmentId) =>
+    userById.get(departmentById.get(departmentId)?.managerId)?.name ?? NO_NAME;
+
+  // ---- Ingestion failures: documents with status "failed" plus their ingestion row ----
+  const stepNames = Object.keys(INGESTION_STEPS);
+  const failures = failedDocuments.map((doc, i) => {
+    const run = ingestions[i];
+    const stepIndex = stepNames.indexOf(run?.step);
+    return {
+      id: doc.id,
+      fileName: doc.fileName,
+      fileType: doc.format.toUpperCase(),
+      size: formatFileSize(doc.sizeBytes),
+      failedAgo: formatRelativeTime(run?.finishedAt) ?? "recently",
+      department: departmentById.get(doc.departmentId)?.name ?? "",
+      manager: managerOf(doc.departmentId),
+      uploader: userById.get(doc.uploadedById)?.name ?? "",
+      cause: run?.errorMessage ?? "",
+      step: stepIndex < 0 ? "" : `Step ${stepIndex + 1}/${stepNames.length}: ${INGESTION_STEPS[run.step]}`,
+      log: (run?.attempts ?? []).map(
+        (a) => `attempt ${a.attempt}  ${a.step}  ${a.status}${a.errorMessage ? ` (${a.errorMessage})` : ""}`,
+      ),
+    };
+  });
+
+  // ---- Contradictions: the older document's quote first, the newer one second ----
+  const contradictions = findings
+    .filter((f) => f.kind === "contradiction")
+    .map((f) => {
+      const claims = [...f.evidence.claims].sort((a, b) => uploadedAtOf(a.documentId).localeCompare(uploadedAtOf(b.documentId)));
+      const older = claims[0];
+      const newer = claims[claims.length - 1];
+      return {
+        id: f.id,
+        title: f.title,
+        severity: SEVERITY_LABELS[f.severity],
+        sourceA: titleOf(older.documentId),
+        lead: CLAIM_WORDS.lead,
+        valueA: older.quote,
+        middle: CLAIM_WORDS.middle,
+        sourceB: titleOf(newer.documentId),
+        verb: CLAIM_WORDS.verb,
+        valueB: newer.quote,
+        affects: documentById.get(newer.documentId)?.fileName ?? titleOf(newer.documentId),
+        action: `Deprecate “${titleOf(older.documentId)}”`,
+        manager: managerOf(f.departmentId),
+        resolved: f.status !== "open",
+      };
+    });
+  const alertCount = contradictions.filter((c) => !c.resolved).length;
+
+  // ---- Knowledge gaps: open gap findings (topics and counts, never raw questions) ----
+  const openGaps = findings.filter((f) => f.kind === "knowledge_gap" && f.status === "open");
+  const gapQueries = openGaps.map((f) => ({
+    id: f.id,
+    query: f.evidence.topic,
+    sub: f.title,
+    volume: f.evidence.questionCount,
+    status: `${f.evidence.askerCount} ${f.evidence.askerCount === 1 ? "asker" : "askers"}`,
+    tone: "failure",
+    cluster: departmentById.get(f.departmentId)?.name ?? "",
+    action: GAP_ACTION_LABEL,
+  }));
+  const gapStats = [
+    { label: "Unanswered queries", value: summary.gaps.unanswered, note: "No source found", tone: TONE_CLASSES.failure },
+    { label: "Low-confidence queries", value: summary.gaps.lowSimilarity, note: "Low similarity", tone: TONE_CLASSES.warning },
+    { label: "Missing knowledge topics", value: openGaps.length, note: "Recurring gaps", tone: TONE_CLASSES.neutral },
+  ];
+  const gapDistribution = departments
+    .map((d) => ({
+      id: d.id,
+      label: d.name,
+      value: openGaps.filter((f) => f.departmentId === d.id).length,
+      color: getDepartmentTheme(d.colorKey, d.iconKey).color,
+    }))
+    .filter((g) => g.value > 0);
+
+  // ---- Citations by department, and the audit-conflicts bars ----
+  const totalCitations = summary.citations.total;
+  const knowledgeMass = summary.citations.byDepartment
+    .filter((c) => c.count > 0)
+    .map((c) => {
+      const department = departmentById.get(c.departmentId);
+      return {
+        id: c.departmentId,
+        label: department?.name ?? c.departmentId,
+        count: c.count,
+        value: Math.round((c.count / totalCitations) * 100),
+        color: getDepartmentTheme(department?.colorKey, department?.iconKey).color,
+      };
+    });
+  const monthlyConflicts = summary.conflictsByMonth.map((m) => ({
+    label: MONTH_FORMAT.format(new Date(`${m.month}-01T00:00:00Z`)),
+    value: m.count,
+  }));
+
+  // ---- Document matrix: most cited first ----
+  const citedByDocument = new Map(summary.citations.byDocument.map((c) => [c.documentId, c.count]));
+  const matrixRows = documents
+    .map((doc) => ({
+      id: doc.id,
+      type: doc.format.toUpperCase(),
+      name: doc.title,
+      owner: doc.authorName ?? userById.get(doc.uploadedById)?.name ?? "",
+      category: departmentById.get(doc.departmentId)?.name ?? "",
+      chunks: doc.chunkCount,
+      cited: citedByDocument.get(doc.id) ?? 0,
+    }))
+    .sort((a, b) => b.cited - a.cited || a.name.localeCompare(b.name));
+    
+  // ---- Health cards: three ratios computed from what the page already loads ----
+  const unansweredTotal = summary.gaps.unanswered + summary.gaps.lowSimilarity;
+  const freshSince = Date.now() - FRESH_DAYS * DAY_MS;
+  const staleCount = documents.filter((doc) => new Date(doc.updatedAt).getTime() < freshSince).length;
+  const readyDocuments = documents.filter((doc) => doc.status === "ready");
+  const citedReady = readyDocuments.filter((doc) => (citedByDocument.get(doc.id) ?? 0) > 0).length;
+  const metrics = {
+    accuracy: percent(totalCitations, totalCitations + unansweredTotal),
+    accuracyNote: `${totalCitations} cited • ${unansweredTotal} unanswered`,
+    freshness: percent(documents.length - staleCount, documents.length),
+    freshnessNote: `${staleCount} older than ${FRESH_DAYS} days`,
+    utilization: percent(citedReady, readyDocuments.length),
+    utilizationNote: `${citedReady} of ${readyDocuments.length} documents cited`,
+  };
+
+const usageStats = [
+  {
+    label: "Active Members",
+    value: summary.usage.activeMembers.toLocaleString(),
+  },
+  {
+    label: "Documents Cited",
+    value: summary.usage.documentsCited.toLocaleString(),
+  },
+];
+
+  return {
+    failures, contradictions, alertCount, metrics, scannedChunks: summary.scannedChunks,
+    totalCitations, knowledgeMass, monthlyConflicts,
+    gapStats, gapQueries, gapDistribution, matrixRows, usageStats,
+  };
 }

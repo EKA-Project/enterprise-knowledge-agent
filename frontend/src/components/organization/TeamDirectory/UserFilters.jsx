@@ -1,6 +1,5 @@
 import { Search } from "lucide-react";
-import {  USER_ROLES, USER_STATUSES } from "./OrganizationData";
-
+import { ROLE_LABELS, USER_STATUSES } from "../OrganizationData";
 const select =
   "cursor-pointer rounded-xl border border-(--badge-border) bg-(--accent-chip) px-3 py-1.5 text-[12.5px] font-semibold text-(--text-primary) outline-none transition hover:border-(--primary) focus:border-(--primary) focus:shadow-[0_0_0_3px_var(--primary-glow)]";
 
@@ -24,7 +23,7 @@ export default function UserFilters({ filters, onChange, departmentNames }) {
       </select>
       <select aria-label="Role" value={filters.role} onChange={(e) => onChange({ role: e.target.value })} className={select}>
         <option value="all">All Roles</option>
-        {USER_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+        {Object.values(ROLE_LABELS).map((r) => <option key={r} value={r}>{r}</option>)}
       </select>
       
       <select aria-label="Status" value={filters.status} onChange={(e) => onChange({ status: e.target.value })} className={select}>

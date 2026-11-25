@@ -12,7 +12,9 @@ import PageHero from '../components/common/PageHero';
 import useToast from '../hooks/useToast.js';
 import ThreadTabs from '../components/chat/ThreadTabs';
 import HistoryEmptyState from '../components/chat/HistoryEmptyState';
-import { ArchiveIcon, ArrowRightIcon, MessageIcon, PlusIcon, SearchIcon, TrashIcon } from '../components/chat/ChatIcons';
+import { ArchiveIcon, ArrowRightIcon, MessageIcon, PlusIcon, SearchIcon } from '../components/chat/ChatIcons';
+import TrashLidIcon from '../components/icons/TrashLidIcon';
+import { DeleteActionButton } from '../components/common/ActionButtons';  
 import { MONO, SERIF, formatUpdated } from '../components/chat/ChatUtils';
 import '../styles/chat.css'; // hard animations live here
 
@@ -25,9 +27,9 @@ function ThreadCard({ conversation, index, onResume, onArchive, onDelete }) {
   return (
     <article
       style={{ animationDelay: `${index * 60}ms` }}
-      className="chat-rise group flex items-center gap-3.5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-3 transition-all duration-200 [box-shadow:var(--shadow-sm)] hover:-translate-y-0.5 hover:border-[var(--primary)] hover:[box-shadow:var(--shadow-md)]"
+      className="chat-rise group/thread flex items-center gap-3.5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-3 transition-all duration-200 [box-shadow:var(--shadow-sm)] hover:-translate-y-0.5 hover:border-[var(--primary)] hover:[box-shadow:var(--shadow-md)]"
     >
-      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--primary-light)] text-[var(--primary)] transition-transform duration-200 group-hover:scale-105">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--primary-light)] text-[var(--primary)] transition-transform duration-200 group-hover/thread:scale-105">
         {archived ? <span className="text-[17px]" aria-hidden="true">📦</span> : <MessageIcon size={17} />}
       </div>
 
@@ -59,9 +61,9 @@ function ThreadCard({ conversation, index, onResume, onArchive, onDelete }) {
         onClick={() => onDelete(conversation.id)}
         aria-label={`Delete ${title}`}
         title="Delete"
-        className="grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)] transition-all duration-200 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)] active:scale-95"
+        className="group bin-group grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)] transition-all duration-200 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)] active:scale-95"
       >
-        <TrashIcon size={14} />
+        <TrashLidIcon size={14} />
       </button>
     </article>
   );
@@ -159,13 +161,12 @@ export default function ChatHistoryPage() {
           actions={
             <>
               {tabItems.length > 0 && (
-                <button
-                  type="button"
+                <DeleteActionButton
                   onClick={handleClear}
-                  className="flex cursor-pointer items-center gap-1.5 rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--primary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--status-failure-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)] active:scale-95"
+                  title={isArchived ? "Delete all archived chat history" : "Delete all active chat history"}
                 >
-                  <TrashIcon size={13} /> {isArchived ? "Clear Archive" : "Delete Active History"}
-                </button>
+                {isArchived ? "Clear Archive" : "Delete Active History"}
+                </DeleteActionButton>
               )}
               <button
                 type="button"

@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import Modal from "../common/Modal";
-import Button from "../common/Button";
-import { CancelButton } from "../common/ActionButtons";
-import {  getInitials } from "./OrganizationData";
+import Modal from "../../common/Modal";
+import Button from "../../common/Button";
+import { CancelButton } from "../../common/ActionButtons";
+import {STATUS_LABELS, getInitials} from "../OrganizationData";
 
 const label = "text-[13.5px] font-semibold text-(--text-primary)";
 const hint = "text-[11px] text-(--text-muted)";
@@ -14,25 +14,22 @@ const ROLE_OPTIONS = [
   ["Manager", "Manager (Dept Lead)"],
   ["Admin", "Administrator (Full Organizational)"],
 ];
-const STATUS_OPTIONS = [
-  ["Active", "Active (Access Enabled)"],
-  ["Suspended", "Suspended (Temporary Freeze)"],
-  ["Terminated", "Terminated (Access Revoked)"],
-];
+   const STATUS_OPTIONS = [
+     [STATUS_LABELS.active, "Active (Access Enabled)"],
+     [STATUS_LABELS.inactive, "Terminated (Access Revoked)"],
+  ];
 
 export default function UserEditModal({ user, departmentNames, onClose, onSubmit }) {
   const [department, setDepartment] = useState(user.department);
   const [role, setRole] = useState(user.role);
-  const [access, setAccess] = useState(user.access);
   const [status, setStatus] = useState(user.status);
   const closeRef = useRef(() => {});
 
   // A member who has not signed in yet keeps an "Invited" option until their status is changed.
-  const statusOptions = user.status === "Invited" ? [["Invited", "Invited (Awaiting setup)"], ...STATUS_OPTIONS] : STATUS_OPTIONS;
-
+  const statusOptions = STATUS_OPTIONS;
   const submit = (e) => {
     e.preventDefault();
-    onSubmit({ department, role, access, status });
+    onSubmit({ department, role, status });
     closeRef.current();
   };
 
@@ -47,7 +44,7 @@ export default function UserEditModal({ user, departmentNames, onClose, onSubmit
         closeRef.current = close;
         return (
           <div className="flex justify-end gap-3">
-            <CancelButton size="sm" icon={null} onClick={close} />
+            <CancelButton onClick={close} />
             <Button variant="solid" size="sm" type="submit" form="edit-user-form">Save Changes</Button>
           </div>
         );
@@ -81,15 +78,6 @@ export default function UserEditModal({ user, departmentNames, onClose, onSubmit
           </select>
         </label>
 
-        <label className="block">
-          <span className="flex items-baseline justify-between">
-            <span className={label}>Access Level</span>
-            <span className={hint}>(Basic, Restricted, Admin)</span>
-          </span>
-          <select value={access} onChange={(e) => setAccess(e.target.value)} className={field}>
-            {ACCESS_LEVELS.map((a) => <option key={a}>{a}</option>)}
-          </select>
-        </label>
 
         <label className="block">
           <span className={label}>Account Status</span>

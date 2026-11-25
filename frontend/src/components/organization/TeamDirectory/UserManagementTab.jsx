@@ -3,7 +3,7 @@ import UserStatCards from "./UserStatCards";
 import UserFilters from "./UserFilters";
 import UserDirectoryTable from "./UserDirectoryTable";
 
-const EMPTY_FILTERS = { query: "", dept: "all", role: "all", access: "all", status: "all" };
+const EMPTY_FILTERS = { query: "", dept: "all", role: "all", status: "all" };
 
 export default function UserManagementTab({ users, departments, onView, onEdit, onTerminate, onReactivate }) {
   const [filters, setFilters] = useState(EMPTY_FILTERS);
@@ -17,7 +17,6 @@ export default function UserManagementTab({ users, departments, onView, onEdit, 
         (!q || `${u.name} ${u.email} ${u.department}`.toLowerCase().includes(q)) &&
         (filters.dept === "all" || u.department === filters.dept) &&
         (filters.role === "all" || u.role === filters.role) &&
-        (filters.access === "all" || u.access === filters.access) &&
         (filters.status === "all" || u.status === filters.status),
     );
   }, [users, filters]);
@@ -27,8 +26,7 @@ export default function UserManagementTab({ users, departments, onView, onEdit, 
   const rows = filtered.slice((safePage - 1) * perPage, safePage * perPage);
 
   const deptByName = useMemo(() => Object.fromEntries(departments.map((d) => [d.name, d])), [departments]);
-  const getDept = (name) => deptByName[name] ?? { icon: "briefcase", tone: "indigo" };
-
+  const getDept = (name) => deptByName[name] ?? { iconKey: "briefcase", colorKey: "slate" };
   const changeFilters = (patch) => {
     setFilters((prev) => ({ ...prev, ...patch }));
     setPage(1);

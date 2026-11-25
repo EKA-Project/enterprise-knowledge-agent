@@ -3,8 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 const mono = "font-(family-name:--font-mono)";
 
 // ContradictionCard component for displaying cross-document contradictions
-export default function ContradictionCard({ items, onResolve, onAutoResolve }) {
-  const allResolved = items.every((i) => i.resolved);
+export default function ContradictionCard({ items, scannedChunks, onResolve, onSync }) {
 
   return (
     <section
@@ -16,20 +15,12 @@ export default function ContradictionCard({ items, onResolve, onAutoResolve }) {
             <span className={`${mono} rounded-md bg-(--status-warning-bg) px-2 py-0.5 text-[10px] font-bold text-(--status-warning)`}>
               ⚠ Automated Audit Alert
             </span>
-            <span className={`${mono} text-[10px] text-(--text-muted)`}>Scanned 148,920 vector chunks</span>
+            <span className={`${mono} text-[10px] text-(--text-muted)`}>Scanned {scannedChunks.toLocaleString()} vector chunks</span>
           </div>
           <h3 className="mt-2 font-(family-name:--font-serif) text-[22px] font-bold text-(--text-primary)">
             Cross-Document Contradiction Detector
           </h3>
         </div>
-        <button
-          type="button"
-          onClick={onAutoResolve}
-          disabled={allResolved}
-          className="rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-2 py-0.5 text-[12px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95 disabled:opacity-50"
-        >
-          {allResolved ? "All Resolved ✓" : "Auto-Resolve Discrepancies"}
-        </button>
       </div>
 
       <ul className="mt-4 space-y-3">
@@ -68,14 +59,25 @@ export default function ContradictionCard({ items, onResolve, onAutoResolve }) {
               <p className="text-[12px] text-(--text-muted)">
                 Affects: <span className="font-semibold text-(--text-primary) underline underline-offset-2">{c.affects}</span>
               </p>
-              <button
-                type="button"
-                onClick={() => onResolve(c.id)}
-                disabled={c.resolved}
-                className="rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95 disabled:opacity-50"
-              >
-                {c.resolved ? "Resolved ✓" : `${c.action} →`}
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                {!c.resolved && (
+                  <button
+                    type="button"
+                    onClick={() => onSync(c)}
+                    className="rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95"
+                  >
+                    Sync with {c.manager.split(" ")[0]}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => onResolve(c.id)}
+                  disabled={c.resolved}
+                  className="rounded-full border border-(--border-subtle-nav) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--text-primary) transition hover:border-(--primary) hover:text-(--primary) active:scale-95 disabled:opacity-50"
+                >
+                  {c.resolved ? "Resolved ✓" : `${c.action} →`}
+                </button>
+              </div>
             </div>
           </li>
         ))}
