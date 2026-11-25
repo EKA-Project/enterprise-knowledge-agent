@@ -27,7 +27,7 @@ function FileActionModal({ variant, files, onClose, onConfirm }) {
   const purge = variant === 'purge';
   const [text, setText] = useState('');
   const n = files.length;
-  const total = files.reduce((s, f) => s + f.sizeMb, 0);
+  const total = files.reduce((s, f) => s + f.sizeBytes, 0);
   const ok = !purge || text === 'DELETE';
 
   useEffect(() => {
@@ -102,20 +102,20 @@ function FileActionModal({ variant, files, onClose, onConfirm }) {
         <div className="mt-[22px] flex items-center justify-between">
           <span className="doc-mono text-[12px] uppercase tracking-[0.12em] text-[#7c949a]">{purge ? 'Purge targets' : 'Selected documents'}</span>
           <span className={`doc-mono text-[14px] font-bold ${purge ? 'text-[#d9373f]' : 'text-[#10283f]'}`}>
-            +{total.toFixed(1)} MB storage {purge ? 'permanently purged' : 'reclaimed'}
+            +{formatFileSize(total)} storage {purge ? 'permanently purged' : 'reclaimed'}
           </span>
         </div>
         <div className="mt-6 max-h-[220px] space-y-2 overflow-y-auto rounded-2xl border border-[#cfe3f3] bg-[#e4f1fb] p-3">
           {files.map((f) => (
             <div key={f.id} className="flex h-[45px] items-center gap-3 rounded-xl bg-white pl-[13px] pr-[11px]">
-              <TypeTile type={f.type} />
-              <span className="min-w-0 flex-1 truncate text-[15px] font-medium text-[#10283f]">{f.name}</span>
+              <TypeTile format={f.format} />
+              <span className="min-w-0 flex-1 truncate text-[15px] font-medium text-[#10283f]">{f.title}</span>
               <span
                 className={`doc-mono inline-flex h-6 items-center rounded-md border px-3 text-[13px] font-bold ${
                   purge ? 'border-[#f6c4c3] bg-[#fff0ef] text-[#d9373f]' : 'border-[#c9def6] bg-[#eaf3fd] text-[#1b79a8]'
                 }`}
               >
-                {f.sizeMb.toFixed(1)} MB
+                {formatFileSize(f.sizeBytes)}
               </span>
             </div>
           ))}
