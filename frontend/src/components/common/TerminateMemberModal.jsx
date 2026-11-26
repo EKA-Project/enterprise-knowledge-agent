@@ -3,6 +3,7 @@ import { UserX } from "lucide-react";
 import Modal from "./Modal.jsx";
 import Badge from "./Badge.jsx";
 import Button from "./Button.jsx";
+import { CancelButton } from "./ActionButtons.jsx";
 
 function getInitials(name) {
   return name
@@ -28,6 +29,7 @@ function TerminateMemberModal({ member, department, onClose, onConfirm }) {
   return (
     <Modal
       size="md"
+      spacing="compact"
       onClose={onClose}
       icon={
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-(--status-failure-bg) text-(--status-failure)">
@@ -42,24 +44,22 @@ function TerminateMemberModal({ member, department, onClose, onConfirm }) {
         </>
       }
       footer={(close) => (
-        <div className="flex items-center justify-end gap-3">
-          <Button variant="secondary" onClick={close}>
-            Cancel
-          </Button>
-          <button
-            type="button"
-            disabled={!canConfirm}
-            onClick={() => {
-              onConfirm?.(member);
-              close();
-            }}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-[10px] bg-(--status-danger) px-4 py-2 font-semibold text-white transition-colors enabled:hover:bg-[#b91c1c] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            Terminate Account
-          </button>
-        </div>
+      <div className="flex items-center justify-end gap-2.5">
+        <CancelButton onClick={close} />
+        <Button
+          variant="danger"
+          size="sm"
+          disabled={!canConfirm}
+          onClick={() => {
+            onConfirm?.(member);
+            close();
+          }}
+        >
+        Terminate Account
+        </Button>
+      </div>
       )}
-    >
+      >
       <div className="space-y-4">
         {/* Member card */}
         <div className="flex items-center gap-3.5 rounded-2xl border border-(--border-subtle) bg-(--primary-light) px-4 py-3.5">

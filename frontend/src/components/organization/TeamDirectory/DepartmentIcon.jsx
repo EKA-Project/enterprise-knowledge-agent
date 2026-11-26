@@ -6,7 +6,7 @@ export default function DepartmentIcon({ colorKey, iconKey }) {
   return (
     <span
       style={{ color, background: softBg, borderColor: border }}
-      className="grid size-6 shrink-0 place-items-center rounded-md border"
+      className="grid size-6 shrink-0 place-items-center rounded-[8px] border"
     >
       <Icon size={13} aria-hidden="true" />
     </span>

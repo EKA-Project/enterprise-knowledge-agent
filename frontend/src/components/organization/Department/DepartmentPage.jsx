@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import DepartmentManagementTab from "./DepartmentManagementTab.jsx";
-import DepartmentCreateModal from "./DepartmentCreateModal.jsx";
-import DepartmentEditModal from "./DepartmentEditModal.jsx";
+import DepartmentFormModal from "./DepartmentFormModal";
 import DepartmentAssignLeadModal from "./DepartmentAssignLeadModal.jsx";
 import DepartmentDeleteModal from "./DepartmentDeleteModal.jsx";
 import {
@@ -78,9 +77,16 @@ export default function DepartmentPage({
         onViewDocs={(dept) => navigate("/documents", { state: { department: dept.name } })}
       />
 
-      {modal?.type === "create" && <DepartmentCreateModal onClose={closeModal} onSubmit={handleCreate} />}
+      {modal?.type === "create" && (
+        <DepartmentFormModal mode="create" onClose={closeModal} onSubmit={handleCreate} />
+      )}
       {modal?.type === "edit" && activeDept && (
-        <DepartmentEditModal initial={activeDept} onClose={closeModal} onSubmit={(data) => handleEdit(activeDept.id, data)} />
+        <DepartmentFormModal
+          mode="edit"
+          initial={activeDept}
+          onClose={closeModal}
+          onSubmit={(data) => handleEdit(activeDept.id, data)}
+        />
       )}
       {modal?.type === "assign" && activeDept && (
         <DepartmentAssignLeadModal

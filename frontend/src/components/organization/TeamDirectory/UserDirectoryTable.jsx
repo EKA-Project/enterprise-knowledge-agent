@@ -7,14 +7,14 @@ const mono = "font-(family-name:--font-mono)";
 const COLS = "grid grid-cols-[2.2fr_2.3fr_1fr_1fr_1.2fr_1.5fr] items-center gap-4";
 
 const ROLE_STYLES = {
-  Manager: "border-(--status-warning)/30 bg-(--status-warning-bg) text-(--status-warning)",
-  Admin: "border-(--status-danger)/30 bg-(--status-danger-bg) text-(--status-danger)",
-  Employee: "border-(--status-success)/30 bg-(--status-success-bg) text-(--status-success)",
+  Manager: "border-(--status-warning)/20 bg-(--status-warning-bg) text-(--status-warning)",
+  Admin: "border-(--status-danger)/20 bg-(--status-danger-bg) text-(--status-danger)",
+  Employee: "border-(--status-success)/20 bg-(--status-success-bg) text-(--status-success)",
 };
 const ROLE_ICONS = { Admin: Crown, Manager: Star, Employee: User };
 const STATUS_STYLES = {
-  Active: "border-(--status-success)/30 bg-(--status-success-bg) text-(--status-success)",
-  Terminated: "border-(--status-error)/30 bg-(--status-error-bg) text-(--status-error)",
+  Active: "border-(--status-info) bg-transparent text-(--status-success)",
+  Terminated: "border-(--status-error) bg-transparent text-(--status-error)",
 };
 const FADE = { Terminated: "opacity-50" };
 
@@ -87,22 +87,22 @@ export default function UserDirectoryTable({
 
             <div className="flex min-w-0 items-center gap-2">
               {isAdmin ? (
-              <>
-              <span className="grid size-6 shrink-0 place-items-center rounded-md border border-(--border-medium) bg-(--primary-light) text-(--primary)">
-                <Globe size={13} aria-hidden="true" />
-              </span>
-              <span className="truncate text-[13px] font-semibold text-(--text-primary)">Organization-wide</span>
-              <span className={`${mono} shrink-0 rounded border border-(--border-medium) bg-(--bg-surface-subtle) px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-(--text-secondary)`}>
-                GLOBAL
-              </span>
-            </>
+              <div className="flex min-w-0 items-center gap-2 rounded-[12px] border border-(--status-info)/25 bg-(--status-info)/10 py-1 pl-1 pr-2.5">
+                <span className="grid size-6 shrink-0 place-items-center rounded-[12px] bg-(--status-info)/15 text-(--status-info)">
+                  <Globe size={13} aria-hidden="true" />
+                </span>
+                <span className="truncate text-[13px] font-semibold text-(--text-primary)">Organization-wide</span>
+                <span className={`${mono} shrink-0 rounded-full border border-(--status-info)/25 bg-(--status-info)/15 px-2 py-0.5 text-[9px] font-bold tracking-wider text-(--status-info)`}>
+                  GLOBAL
+                </span>
+              </div>
             ) : (
             <>
             <DepartmentIcon colorKey={dept.colorKey} iconKey={dept.iconKey} />
             <span className="truncate text-[13px] font-semibold text-(--text-primary)">{u.department}</span>
               {u.leadOf && (
-                <span className="inline-flex shrink-0 items-center gap-1 rounded border border-(--status-warning)/30 bg-(--status-warning-bg) px-1.5 py-0.5 text-[9.5px] font-bold text-(--status-warning)">
-                  <Star size={9} aria-hidden="true" /> Lead
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-(--status-warning)/30 bg-(--status-warning-bg) px-2 py-0.5 text-[9.5px] font-bold text-(--status-warning)">
+                  <Star size={9} fill="currentColor" aria-hidden="true" /> Lead
                 </span>
               )}
             </>
@@ -110,7 +110,7 @@ export default function UserDirectoryTable({
         </div>
 
         <span className={`${mono} inline-flex w-fit items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${ROLE_STYLES[u.role] ?? ROLE_STYLES.Employee}`}>
-          <RoleIcon size={10} aria-hidden="true" /> {u.role}
+          <RoleIcon size={10} fill={u.role === "Manager" ? "currentColor" : "none"} aria-hidden="true" /> {u.role}
         </span>
         <span className={`w-fit rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold ${STATUS_STYLES[u.status] ?? ""}`}>{u.status}</span>
         <span className={`${mono} text-[11.5px] text-(--text-muted)`}>{u.joined}</span>

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Check, Pencil, Plus } from "lucide-react";
+import { Building2, Check, Pencil } from "lucide-react";
 import Modal from "../../common/Modal.jsx";
 import Button from "../../common/Button.jsx";
 import { CancelButton } from "../../common/ActionButtons.jsx";
@@ -75,7 +75,7 @@ const hexOf = (key) =>
     <Modal
       icon={
         <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-surface) text-(--primary) shadow-sm">
-          {editing ? <Pencil size={18} /> : <Plus size={18} />}
+          {editing ? <Pencil size={18} /> : <Building2 size={18} />}
         </div>
       }
       title={editing ? "Edit Department" : "Create New Department"}
@@ -85,7 +85,8 @@ const hexOf = (key) =>
           : "Establish an organizational unit for scoped documents."
       }
     
-      size="md"
+      size="lg"
+      spacing="compact"
       closeOnClickOutside={false}
       onClose={onClose}
       footer={(close) => {
@@ -106,7 +107,7 @@ const hexOf = (key) =>
         );
       }}
     >
-      <form id="department-form" onSubmit={submit} className="space-y-4">
+      <form id="department-form" onSubmit={submit} className="space-y-3">
         <Section number={1} title="Department Identity">
           <div className="grid gap-3 sm:grid-cols-[1fr_9rem]">
             <label className="block">
@@ -181,7 +182,7 @@ const hexOf = (key) =>
                   aria-checked={selected}
                   title={k}
                   onClick={() => setIconKey(k)}
-                  className={`flex cursor-pointer flex-col items-center gap-1 rounded-lg border px-1 py-2 text-[9px] font-semibold transition hover:-translate-y-0.5 ${
+                  className={`flex cursor-pointer flex-col items-center gap-0.5 rounded-lg border px-1 py-1.5 text-[9px] font-semibold transition hover:-translate-y-0.5 ${
                     selected
                       ? "border-(--primary) bg-(--primary-light) text-(--primary)"
                       : "border-(--border-subtle) bg-(--bg-surface) text-(--text-muted) hover:border-(--primary) hover:text-(--primary)"
@@ -199,8 +200,10 @@ const hexOf = (key) =>
           </p>
 
           {/* Accent colour swatches */}
-          <p className={`${label} mt-4`}>Department Accent Color</p>
-          <div role="radiogroup" aria-label="Department accent color" className="mt-2 flex flex-wrap gap-2">
+          <p className={`${label} mt-3`}>Department Accent Color</p>
+          <div role="radiogroup"
+            aria-label="Department accent color"
+            className="mt-2 grid grid-cols-6 gap-1.5 sm:grid-cols-11">
             {colorKeys.map((k) => {
               const selected = k === colorKey;
               return (
