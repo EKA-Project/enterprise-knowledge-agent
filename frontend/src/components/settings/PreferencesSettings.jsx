@@ -6,7 +6,7 @@ import SettingsPanel, {
 import { Select } from "../common/Input";
 import Checkbox from "../common/Checkbox";
 import { LANGUAGES } from "./settingsConfig";
-import MascotPicker from "../mascot/MascotPicker";
+import MascotPicker from "./preferences/mascot/MascotPicker";
 import SoundSettings from "./preferences/sound/SoundSettings";
 
 const answerStyles = [
