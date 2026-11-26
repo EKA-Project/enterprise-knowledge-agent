@@ -1,9 +1,9 @@
 import UserManagementTab from "./UserManagementTab.jsx";
 import InviteMemberModal from "../../common/InviteMemberModal.jsx";
-import UserViewModal from "./UserViewModal.jsx";
 import UserEditModal from "./UserEditModal.jsx";
-import UserTerminateModal from "./UserTerminateModal";
-import { STATUS_LABELS } from "../OrganizationData";
+import CommonUserViewModal from "../../common/UserViewModal";
+import TerminateMemberModal from "../../common/TerminateMemberModal";
+import { STATUS_LABELS, getTelemetry } from "../OrganizationData";
 import { createUser, updateUser, deactivateUser, reactivateUser } from "../../../services/userService.js";
 
 export default function TeamDirectoryPage({
@@ -18,7 +18,22 @@ export default function TeamDirectoryPage({
   const activeUser = modal?.user;
   const departmentNames = departments.map((d) => d.name);
   const deptIdByName = (name) => departments.find((d) => d.name === name)?.id;
-
+  const toViewMember = (user) => {
+  const t = getTelemetry(user);
+  return {
+    name: user.name,
+    email: user.email,
+    status: user.status,
+    title: user.role,
+    accessLevel: user.access,
+    joinedDate: user.joined,
+    lastActive: user.lastActive,
+    queries: t.total,
+    docs: t.docs,
+    searches: t.searches,
+    weeklyQueries: t.weeks,
+   };
+  };
   const openUserModal = (type, id) => setModal({ type, user: users.find((u) => u.id === id) });
 
   const handleInvite = async (data) => {
@@ -83,7 +98,13 @@ export default function TeamDirectoryPage({
         />
       )}
       {modal?.type === "view" && activeUser && (
-        <UserViewModal user={activeUser} onClose={closeModal} onEdit={() => setModal({ type: "user-edit", user: activeUser })} />
+      <CommonUserViewModal
+        member={toViewMember(activeUser)}
+        department={activeUser.department}
+        canEdit
+        onClose={closeModal}
+        onEdit={() => setModal({ type: "user-edit", user: activeUser })}
+      />
       )}
       {modal?.type === "user-edit" && activeUser && (
         <UserEditModal
@@ -94,8 +115,18 @@ export default function TeamDirectoryPage({
         />
       )}
       {modal?.type === "terminate" && activeUser && (
-        <UserTerminateModal user={activeUser} onClose={closeModal} onConfirm={() => handleTerminate(activeUser)} />
-      )}
+      <TerminateMemberModal
+        member={{
+        name: activeUser.name,
+        email: activeUser.email,
+        title: activeUser.title ?? activeUser.role,
+        status: activeUser.status,
+        }}
+        department={activeUser.department}
+        onClose={closeModal}
+        onConfirm={() => handleTerminate(activeUser)}
+      />
+    )}
     </>
   );
 }
