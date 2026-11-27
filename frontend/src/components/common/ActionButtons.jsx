@@ -8,13 +8,16 @@ import {
   RotateCw,
   Flame,
   UserX,
-  Database ,
+  Database,
   X,
+  Archive,
+  ArchiveRestore,
   Check,
   Plus,
   Save
 } from "lucide-react";
 import Button from "./Button";
+import '../../styles/Document.css';
 import DiceIcon from "../icons/DiceIcon";
 import TrashLidIcon from "../icons/TrashLidIcon";
 
@@ -181,27 +184,46 @@ export function IngestionLibraryButton(props) {
 /* ==========================================================================
    SECTION 2: Storage & Retention Actions
    ========================================================================== */
-
 /**
- * Export Storage / Audit CSV (Light Pill with Dark Chip Inversion on Hover)
+ * Master Export Action Button (Light Pill with Dark Chip Inversion on Hover)
+ * Dynamically accepts label text, title, and toast message.
+ *
+ * Usage:
+ *   <ExportAuditButton onClick={handleExport} toast="Report exported">
+ *     Export Report
+ *   </ExportAuditButton>
+ *
  * Where to use:
  *   - Storage Overview Header (components/documents/admin/StorageIndicator.jsx)
- *   - Analytics Export Toolbar (components/analytics/IngestionAuditPanel.jsx)
+ *   - Analytics header (components/analytics/)
+ *   - Organization directory header
  */
-export function ExportAuditButton(props) {
+export function ExportAuditButton({
+  children = "Export Storage Audit",
+  title = "Export storage audit report (CSV)",
+  toast = null,
+  onToast,
+  onClick,
+  ...props
+}) {
+  const handleClick = (e) => {
+    if (onClick) onClick(e);
+    if (toast && onToast) onToast(toast);
+  };
+
   return (
     <Button
       variant="darkHover"
       icon={DippingDownloadIcon}
       iconChip
-      title="Export storage audit report (CSV)"
+      title={title}
+      onClick={handleClick}
       {...props}
     >
-      Export Storage Audit
+      {children}
     </Button>
   );
 }
-
 /**
  * Restore Document (Emerald Green Hover with 360° Rewind Spin)
  * Where to use:
@@ -361,6 +383,57 @@ export function RemoveFromTeamButton(props) {
   );
 }
 
+
+/**
+ * Animated trash can (lid lifts from its left hinge, icon tilts).
+ * size?: number (px, default 24)
+ * spark?: boolean (fixed "+" beside the icon, does NOT move with the lid)
+ * open?: boolean (force the lid open, e.g. right after a delete)
+ * Hover: put the class "bin-group" on any parent (the card, button or circle)
+ * and the lid lifts while that parent is hovered.
+ */
+export default function AnimatedBin({ size = 24, spark = false, open = false, className = '' }) {
+  return (
+    <span
+      className={`relative inline-flex shrink-0 ${open ? 'bin-open' : ''} ${className}`}
+      style={{ width: size, height: size }}
+    >
+      <svg
+        className="bin-svg overflow-visible"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <g className="bin-lid">
+          <path d="M3 6h18" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </g>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+        <path d="M10 11v6M14 11v6" />
+      </svg>
+
+      {spark && (
+        <svg
+          className="absolute"
+          style={{ left: size * 0.75, top: -size * 0.125, width: size / 4, height: size / 4 }}
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        >
+          <path d="M6.5 1.5v4M4.5 3.5h4" />
+          <circle cx="3" cy="5.5" r="0.7" fill="currentColor" stroke="none" />
+        </svg>
+      )}
+    </span>
+  );
+}
 /**
  * Randomize Atmosphere Action (Surface Pill with Rolling Dice)
  * Where to use: Appearance Studio & Topbar Theme Randomizer
@@ -468,5 +541,38 @@ export function AddItemButton({
     >
       {children}
     </Button>
+  );
+}
+
+// Action buttons (spec: .doc-summary-action-btn)
+const sideBtnBase =
+  'group inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-pill) border-[1.5px] px-3 py-1.5 text-[11px] font-semibold active:translate-y-0';
+
+const sideIcon =
+  'transition-transform duration-[350ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]';
+const archiveBtn =
+  `${sideBtnBase} border-[rgba(217,119,6,0.32)] bg-[var(--bg-surface-elevated,var(--bg-surface))] text-(--text-secondary) [transition:all_0.28s_cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[2.5px] hover:scale-[1.02] hover:border-[#d97706] hover:bg-[linear-gradient(135deg,rgba(254,243,199,0.95),rgba(253,230,138,0.7))] hover:text-[#92400e] hover:shadow-[0_6px_18px_rgba(217,119,6,0.22),0_0_0_2px_rgba(245,158,11,0.16)] active:scale-[0.96] active:shadow-[0_2px_6px_rgba(217,119,6,0.12)]`;
+
+const unarchiveBtn =
+  `${sideBtnBase} border-[#10b981] bg-[#f0fdf4] text-[#047857] [transition:all_0.28s_cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[2.5px] hover:scale-[1.02] hover:border-[#059669] hover:bg-[linear-gradient(135deg,#10b981_0%,#059669_100%)] hover:text-white hover:shadow-[0_6px_18px_rgba(16,185,129,0.28),0_0_0_2px_rgba(16,185,129,0.2)] active:scale-[0.96]`;
+
+export function ArchiveButton({ archived, onClick }) {
+  const Icon = archived ? ArchiveRestore : Archive;
+  const rotation = archived
+    ? 'group-hover:rotate-[8deg]'
+    : 'group-hover:-rotate-[8deg]';
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={archived ? unarchiveBtn : archiveBtn}
+    >
+      <Icon
+        size={12}
+        className={`${sideIcon} group-hover:-translate-y-0.5 ${rotation} group-hover:scale-[1.22]`}
+      />
+      {archived ? 'Unarchive' : 'Archive'}
+    </button>
   );
 }

@@ -33,15 +33,17 @@ function Field({ label, hint, htmlFor, children }) {
  * onClose: () => void
  * onInvite: ({ name, email, department }) => void
  */
-function InviteMemberModal({ department, onClose, onInvite }) {
+function InviteMemberModal({ department, departmentNames, onClose, onInvite }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
+  const isAdmin = Boolean(departmentNames);
+  const [selectedDepartment, setSelectedDepartment] = useState(departmentNames?.[0] ?? "");
+  const targetDepartment = isAdmin ? selectedDepartment : department;
   const isValid = name.trim() !== "" && EMAIL_PATTERN.test(email.trim());
 
   const handleSend = (close) => {
     if (!isValid) return;
-    onInvite?.({ name: name.trim(), email: email.trim(), department });
+    onInvite?.({ name: name.trim(), email: email.trim(), department: targetDepartment });
     close();
   };
 
@@ -60,7 +62,7 @@ function InviteMemberModal({ department, onClose, onInvite }) {
       subtitle={
         <span className="text-[0.7rem] font-thin">
           Add a new employee to the{" "}
-          <strong className="font-black">{department}</strong> team
+          <strong className="font-black">{targetDepartment}</strong> team
         </span>
       }
       footer={(close) => (
@@ -118,6 +120,20 @@ function InviteMemberModal({ department, onClose, onInvite }) {
           />
         </Field>
 
+          {isAdmin ? (
+          <Field label="Department" hint="Choose where they join" htmlFor="invite-department">
+            <select
+              id="invite-department"
+              value={selectedDepartment}
+              onChange={(e) => setSelectedDepartment(e.target.value)}
+              className={INPUT_CLASS}
+            >
+              {departmentNames.map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </Field>
+        ) : (
         <div>
           <Field
             label="Assigned Department"
@@ -147,6 +163,7 @@ function InviteMemberModal({ department, onClose, onInvite }) {
             non-changeable.
           </p>
         </div>
+        )}
 
         {/* Access notice */}
         <div className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-[#e8fff7] px-3 py-2.5 text-xs text-(--text-secondary)">
@@ -161,7 +178,7 @@ function InviteMemberModal({ department, onClose, onInvite }) {
             </strong>{" "}
             New members join as Employees with standard permissions for{" "}
             <strong className="font-bold text-(--text-primary)">
-              {department}
+            {targetDepartment}
             </strong>{" "}
             runbooks and resources.
           </p>

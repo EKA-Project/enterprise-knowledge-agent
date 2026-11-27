@@ -1,10 +1,9 @@
-import { USAGE_STATS } from "./AnalyticsData";
 
 const mono = "font-(family-name:--font-mono)";
 
 // UsageSummary component for displaying a summary of usage metrics
-export default function UsageSummary({ onViewUsage }) {
-  return (
+export default function UsageSummary({ usageStats: USAGE_STATS, onViewUsage }) {
+    return (
     <section className="anl-rise rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>

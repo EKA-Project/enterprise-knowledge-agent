@@ -1,9 +1,8 @@
 import { CheckCircle2, Clock, AlertTriangle, Star } from "lucide-react";
-
-export default function HealthMetricsRow({ metrics, alertCount }) {
+export default function HealthMetricsRow({metrics, alertCount }) {
   const cards = [
     {
-      label: "Grounding accuracy", value: metrics.accuracy, note: "Zero Hallucinations",
+      label: "Answer coverage", value: metrics.accuracy, note: metrics.accuracyNote,
       noteTone: "text-(--status-success)", Icon: CheckCircle2, tile: "bg-(--status-success-bg) text-(--status-success)",
     },
     {
@@ -17,7 +16,7 @@ export default function HealthMetricsRow({ metrics, alertCount }) {
       Icon: AlertTriangle, tile: "bg-[#ffedd5] text-[#c2410c]",
     },
     {
-      label: "Knowledge utilization", value: metrics.utilization, note: "Active in RAG",
+      label: "Knowledge utilization", value: metrics.utilization, note: metrics.utilizationNote,
       noteTone: "text-(--status-success)", Icon: Star, tile: "bg-[#f3e8ff] text-[#7e22ce]",
     },
   ];

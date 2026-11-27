@@ -2,7 +2,8 @@ import { useState } from "react";
 import AppRoutes from "./routes/AppRoutes.jsx";
 import SplashScreen from "./components/splash/SplashScreen.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
-
+import { UploadProvider } from "./context/UploadContext.jsx";
+import { ToastProvider } from "./context/ToastContext.jsx";
 /*
   App is the root component of EKA.
 
@@ -19,25 +20,20 @@ function App() {
   */
   const [showSplash, setShowSplash] = useState(true);
 
-  return (
-
-    < AuthProvider>
-          {/*
-        Show only one top-level experience at a time.
-
-        This prevents the splash screen and the main application
-        from being rendered together and creating unwanted page
-        height / scrolling.
-      */}
-
-
-
-    {showSplash?(
-        <SplashScreen onComplete = {() => setShowSplash(false)} />
-      ) : (
-  <AppRoutes/>
-)}
-      </AuthProvider>
+    return (
+    <AuthProvider>
+      <ToastProvider>
+        <UploadProvider>
+          {showSplash ? (
+            <SplashScreen
+              onComplete={() => setShowSplash(false)}
+            />
+          ) : (
+            <AppRoutes />
+          )}
+        </UploadProvider>
+      </ToastProvider>
+    </AuthProvider>
   );
 }
 

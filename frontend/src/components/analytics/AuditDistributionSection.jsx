@@ -1,21 +1,19 @@
 import { useState } from "react";
 import BarChart from "../charts/AuditConflictBarChart";
 import DonutChart from "../charts/AnalyticsDonutChart";
-import { KNOWLEDGE_MASS, MONTHLY_CONFLICTS, QUALITY_STATS, TOTAL_CITATIONS } from "./AnalyticsData";
 
 const mono = "font-(family-name:--font-mono)";
 const serif = "font-(family-name:--font-serif)";
 
 //audit distribution section with bar chart and donut chart for analytics page
-export default function AuditDistributionSection() {
+export default function AuditDistributionSection({ monthlyConflicts: MONTHLY_CONFLICTS, knowledgeMass: KNOWLEDGE_MASS, totalCitations: TOTAL_CITATIONS }) {
   const [barIndex, setBarIndex] = useState(null);
   const [sectorId, setSectorId] = useState(null);
 
   const total = MONTHLY_CONFLICTS.reduce((sum, m) => sum + m.value, 0);
   const bar = barIndex === null ? null : MONTHLY_CONFLICTS[barIndex];
   const sector = KNOWLEDGE_MASS.find((s) => s.id === sectorId);
-  const sectorCitations = sector ? Math.round((sector.value / 100) * TOTAL_CITATIONS) : 0;
-
+  const sectorCitations = sector ? sector.count : 0;
   return (
     <section className="anl-rise rounded-2xl border border-(--border-medium) bg-(--bg-surface) p-5 shadow-(--shadow-sm)">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -28,30 +26,21 @@ export default function AuditDistributionSection() {
             Side-by-side annual audit conflict resolution trends alongside organization-wide knowledge citation breakdown.
           </p>
         </div>
-        <div className="flex gap-2">
-          {QUALITY_STATS.map((s) => (
-            <div key={s.label} className="rounded-xl bg-(--bg-surface-subtle) px-3.5 py-2">
-              <p className={`${mono} text-[8.5px] uppercase tracking-[0.12em] text-(--text-muted)`}>{s.label}</p>
-              <p className={`${mono} text-[14px] font-bold text-(--text-primary)`}>{s.value}</p>
-            </div>
-          ))}
-        </div>
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-(--border-subtle) p-4">
           <div className="flex items-center justify-between">
             <p className={`${mono} text-[9.5px] uppercase tracking-[0.12em] text-(--text-muted)`}>Audit conflicts telemetry</p>
-            <span className={`${mono} rounded-md bg-(--status-success-bg) px-2 py-0.5 text-[9.5px] font-bold text-(--status-success)`}>98.2% Auto-Resolved</span>
           </div>
           <h4 className={`${serif} mt-2 text-[18px] font-bold text-(--text-primary)`}>Audit conflicts &amp; resolution</h4>
           <p className="mb-4 mt-0.5 min-h-4 text-[11.5px] text-(--text-muted)">
             {bar ? (
               <span className="anl-fade font-semibold text-(--primary)">
-                📅 {bar.label}: {bar.value} Discrepancies Flagged &amp; Reconciled
+                📅 {bar.label}: {bar.value} Discrepancies Flagged
               </span>
             ) : (
-              `Annual discrepancy resolution velocity (${total} total items)`
+              `Discrepancies flagged per month (${total} total items)`
             )}
           </p>
           <BarChart data={MONTHLY_CONFLICTS} activeIndex={barIndex} onHover={setBarIndex} />
@@ -68,7 +57,7 @@ export default function AuditDistributionSection() {
             <span className={`${serif} text-[38px] font-bold leading-none text-(--text-primary)`}>{KNOWLEDGE_MASS.length}</span>
             <span className={`${serif} text-[22px] text-(--text-primary)`}>Sectors</span>
             <span className={`${mono} text-[10.5px] text-(--text-muted)`}>
-              {sector ? `(${sector.label}: ${sectorCitations.toLocaleString()} Citations)` : "(Verified Document Sources)"}
+              {sector ? `(${sector.label}: ${sectorCitations.toLocaleString()} Citations)` : "(Cited Document Sources)"}
             </span>
           </p>
           
@@ -77,7 +66,7 @@ export default function AuditDistributionSection() {
               <div>
                 <p className={`${serif} text-[18px] font-bold leading-none text-(--text-primary)`}>{sector ? `${sector.value}%` : "100%"}</p>
                 <p className={`${mono} mt-1 max-w-[60px] text-[7.5px] uppercase leading-tight text-(--text-muted)`}>
-                  {sector ? sector.label : "Verified Sources"}
+                  {sector ? sector.label : "Cited Sources"}
                 </p>
               </div>
             </DonutChart>
@@ -102,11 +91,6 @@ export default function AuditDistributionSection() {
                 </li>
               ))}
             </ul>
-          </div>
-
-          <div className={`${mono} mt-4 flex justify-between border-t border-(--status-verified-border) pt-2.5 text-[9.5px] text-(--text-muted)`}>
-            <span>Grounding Ratio: 99.2%</span>
-            <span>100% Index Coverage</span>
           </div>
         </div>
       </div>

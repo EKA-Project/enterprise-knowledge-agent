@@ -3,7 +3,7 @@ import AuthContext from '../context/AuthContext.jsx';
 import AdminDocument from '../components/documents/admin/AdminDocument.jsx';
 import ManagerDocument from '../components/documents/manager/ManagerDocument.jsx';
 import EmployeeDocument from '../components/documents/employee/EmployeeDocument.jsx';
-import '../styles/document.css';
+import '../styles/Document.css';
 
 
 export default function DocumentsPage() {
@@ -18,7 +18,7 @@ export default function DocumentsPage() {
     const DocumentsComponent =
         roleComponents[activeRole] || EmployeeDocument;
     return (
-        <div className="px-4 py-0">
+        <div className="px-0 py-0">
             <DocumentsComponent />
         </div>
     );

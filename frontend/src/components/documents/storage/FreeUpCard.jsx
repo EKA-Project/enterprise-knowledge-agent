@@ -1,0 +1,426 @@
+// EKA-EDIT: server-style FreeUpCard. Data via storageService (getSuggestions / getSuggestionCounts). No StorageData.
+import { Fragment, useEffect, useState } from 'react';
+import { AlertTriangle, Archive, ClipboardList, Copy, History, Lock, RotateCcw, Search, Zap } from 'lucide-react';
+
+import { DeptPill, StatusPill } from './StorageBits';
+import CustomThresholdModal from './CustomThresholdModal';
+import Pagination from '../../common/Pagination.jsx';
+import Badge from '../../common/Badge.jsx';
+import { formatFileSize } from '../../../utils/formatFileSize.js';
+import { formatRelativeTime } from '../../../utils/formatRelativeTime.js';
+import { getSuggestions, getSuggestionCounts } from '../../../services/storageService.js';
+import {
+  LARGE_FILE_CHIPS_MB, DEFAULT_LARGE_MB, IDLE_CHIPS_DAYS, DEFAULT_IDLE_DAYS,
+} from '../../../config/storageConfig.js';
+import '../../../styles/Document.css';
+
+const MB = 1024 * 1024;
+
+// EKA-EDIT: tab key -> service kind ('idle' tab = kind 'stale')
+const TABS = [
+  { key: 'large', kind: 'large', label: 'Large files', icon: Archive, on: 'scale-[1.08] bg-[#0284c7] text-white', off: 'bg-[rgba(2,132,199,0.09)] text-[#0284c7]' },
+  { key: 'idle', kind: 'stale', label: 'Not opened recently', icon: History, on: 'scale-[1.08] bg-[#d97706] text-white', off: 'bg-[rgba(217,119,6,0.09)] text-[#d97706]' },
+  { key: 'failed', kind: 'failed', label: 'Failed ingestions', icon: AlertTriangle, on: 'scale-[1.08] bg-[#dc2626] text-white', off: 'bg-[rgba(220,38,38,0.09)] text-[#dc2626]' },
+  { key: 'dupes', kind: 'duplicates', label: 'Duplicates', icon: Copy, on: 'scale-[1.08] bg-[#6366f1] text-white', off: 'bg-[rgba(99,102,241,0.09)] text-[#6366f1]' },
+];
+
+const PER_PAGE = [5, 10, 15, 20];
+
+// EKA-EDIT: sort keys match storageService SORTERS
+const SORTS = [
+  ['size-desc', 'Sort: Size (Largest)'],
+  ['size-asc', 'Sort: Size (Smallest)'],
+  ['name-asc', 'Sort: File Name (A-Z)'],
+  ['name-desc', 'Sort: File Name (Z-A)'],
+  ['opened-asc', 'Sort: Last Opened (Oldest first)'],
+];
+
+const TH = 'doc-mono px-3 text-[11px] font-normal uppercase tracking-[0.12em] text-[#7c949a]';
+
+// EKA-EDIT: props. `filter` = { mode, key } (key = departmentId | format enum | 'ALL').
+// `selected` = Map(id -> document). `version` changes after every write, so the list reloads.
+function FreeUpCard({
+  departmentsById, filter, onClearFilter, selected, onSelectedChange, onSweep, onToast, glow, version,
+}) {
+  const [tab, setTab] = useState('large');
+  const [largeMin, setLargeMin] = useState(DEFAULT_LARGE_MB);
+  const [customVal, setCustomVal] = useState(null);
+  const [idleMin, setIdleMin] = useState(DEFAULT_IDLE_DAYS);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [sort, setSort] = useState('size-desc');
+  const [perPage, setPerPage] = useState(10);
+  const [page, setPage] = useState(0);
+  const [result, setResult] = useState({ items: [], total: 0, reclaimableBytes: 0 });
+  const [counts, setCounts] = useState({ large: 0, stale: 0, failed: 0, duplicates: 0 });
+  const [loading, setLoading] = useState(true);
+
+  const kind = TABS.find((t) => t.key === tab).kind;
+
+  // EKA-EDIT: scope sent to the service
+  const scope = {
+    departmentId: filter.mode === 'dept' && filter.key !== 'ALL' ? filter.key : undefined,
+    format: filter.mode === 'format' && filter.key !== 'ALL' ? filter.key : undefined,
+    q: query,
+    days: idleMin,
+    minSizeBytes: largeMin * MB,
+  };
+
+  useEffect(() => setPage(0), [filter.key, filter.mode, tab, largeMin, idleMin, query, sort, perPage]);
+
+  useEffect(() => {
+    let live = true;
+    setLoading(true);
+    Promise.all([
+      getSuggestions({ ...scope, kind, sortBy: sort, limit: perPage, offset: page * perPage }),
+      getSuggestionCounts(scope),
+    ])
+      .then(([r, c]) => {
+        if (!live) return;
+        setResult(r);
+        setCounts(c);
+      })
+      .catch((e) => live && onToast(e.message))
+      .finally(() => live && setLoading(false));
+    return () => { live = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter.key, filter.mode, kind, largeMin, idleMin, query, sort, perPage, page, version]);
+
+  const rows = result.items;
+  const count = result.total;
+  const reclaimBytes = result.reclaimableBytes;
+
+  const lead =
+    tab === 'large' ? `occupying > ${largeMin} MB`
+      : tab === 'idle' ? `inactive > ${idleMin} days`
+        : tab === 'failed' ? 'with pipeline failures'
+          : 'with duplicate copies';
+
+  const pages = Math.max(1, Math.ceil(count / perPage));
+  const safePage = Math.min(page, pages - 1);
+  const selectable = rows.filter((f) => !f.isProtected);
+  const allOnPage = selectable.length > 0 && selectable.every((f) => selected.has(f.id));
+
+  const toggleOne = (doc) => {
+    const next = new Map(selected);
+    next.has(doc.id) ? next.delete(doc.id) : next.set(doc.id, doc);
+    onSelectedChange(next);
+  };
+  const toggleAll = () => {
+    const next = new Map(selected);
+    selectable.forEach((f) => (allOnPage ? next.delete(f.id) : next.set(f.id, f)));
+    onSelectedChange(next);
+  };
+
+  const chip = (on) =>
+    `cursor-pointer whitespace-nowrap rounded-(--radius-pill) px-3 py-[0.3rem] font-(family-name:--font-mono) text-(length:--font-size-sm) font-semibold [transition:all_var(--transition-fast)] ${
+      on ? 'bg-(--primary) text-(--primary-contrast) shadow-(--shadow-sm)' : 'bg-transparent text-(--text-secondary) hover:text-(--text-primary)'
+    }`;
+
+  const filterLabel =
+    filter.mode === 'dept'
+      ? departmentsById.get(filter.key)?.name ?? filter.key
+      : filter.key.toUpperCase();
+
+  // EKA-EDIT: duplicate groups are derived from contentHash of the visible rows
+  const groupSize = (hash) => rows.filter((r) => r.contentHash === hash);
+
+  return (
+    <section
+      id="free-up-card"
+      className={`overflow-hidden rounded-[23px] border-t-[3px] border-t-[#1796a8] border-x border-b border-x-(--border-subtle) border-b-(--border-subtle) bg-(--bg-surface) px-7 pb-8 pt-[24px] shadow-(--shadow-sm) transition-shadow duration-500 ${glow ? 'shadow-[0_0_0_5px_rgba(246,185,100,0.45)]' : ''}`}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start gap-5">
+            <button
+              type="button"
+              onClick={onSweep}
+              className="relative flex h-[50px] w-[50px] shrink-0 cursor-pointer items-center justify-center overflow-visible rounded-2xl bg-[#e1f0fa]"
+            >
+              <span className="animate-[broom-sweep_1.5s_ease-in-out_infinite] text-[27px]">🧹</span>
+              <span className="pointer-events-none absolute left-[5px] top-[27px] animate-[dust-1_1.2s_ease-out_infinite] font-mono text-[11px] font-black text-[#1b79a8]">01</span>
+              <span className="pointer-events-none absolute left-[12px] top-[32px] animate-[dust-2_1.2s_ease-out_infinite] font-mono text-[13px] font-black text-[#e8801a]">0</span>
+              <span className="pointer-events-none absolute left-[18px] top-[25px] animate-[dust-3_1.3s_ease-out_infinite] font-mono text-[11px] font-black text-[#1b79a8]">1</span>
+              <span className="pointer-events-none absolute left-[8px] top-[39px] animate-[dust-2_1.4s_ease-out_infinite] font-mono text-[10px] font-black text-[#8ba9bc]">10</span>
+              <span className="pointer-events-none absolute left-[23px] top-[35px] animate-[dust-1_1.5s_ease-out_infinite] font-mono text-[12px] font-black text-[#e8801a]">01</span>
+              <span className="pointer-events-none absolute left-[15px] top-[42px] animate-[dust-3_1.5s_ease-out_infinite] font-mono text-[10px] font-black text-[#1b79a8]">11</span>
+              <span className="pointer-events-none absolute left-[27px] top-[29px] animate-[dust-2_1.5s_ease-out_infinite] font-mono text-[11px] font-black text-[#e8801a]">0</span>
+              <span className="pointer-events-none absolute left-[20px] top-[43px] animate-[dust-1_1.5s_ease-out_infinite] font-mono text-[9px] font-black text-[#8ba9bc]">1</span>
+              <span className="pointer-events-none absolute right-[5px] top-[5px] animate-[dust-sparkle_1.5s_ease-in-out_infinite] text-[11px]">✨</span>
+            </button>
+
+            <div className="min-w-0">
+              <div className="flex items-center gap-3">
+                <h2 className="doc-heading text-[30px] font-black leading-[38px] text-[#10283f]">Free up space</h2>
+                <span className="doc-mono inline-flex h-[22px] items-center gap-1.5 rounded-full bg-[#e1f0fa] px-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#1b79a8]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#1b79a8]" />
+                  Suggestions
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-1 text-[14px] text-[#7c949a]">
+            Targeted reclamation suggestions modeled after intelligent storage analytics to trim orphaned vectors and bloated PDFs.
+          </p>
+        </div>
+
+        <Badge type="success" size="sm" className="doc-mono h-7 shrink-0 gap-2">
+          <Zap size={10} className="fill-current text-[#e8801a]" />
+          {formatFileSize(reclaimBytes)} Reclaimable
+        </Badge>
+      </div>
+
+      {/* Tabs */}
+      <div className="mt-5 flex flex-wrap gap-2 border-b border-(--border-subtle)">
+        {TABS.map((t) => {
+          const isOn = tab === t.key;
+          const Icon = t.icon;
+          return (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => setTab(t.key)}
+              className={`group -mb-px flex cursor-pointer items-center gap-3 rounded-t-[8px] border-b-2 px-3 pb-2 pt-1.5 text-[13px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
+                isOn
+                  ? 'border-(--primary) bg-[rgba(2,132,199,0.03)] font-bold text-(--primary)'
+                  : 'border-transparent font-semibold text-(--text-secondary) hover:bg-[rgba(0,0,0,0.02)] hover:text-(--text-primary)'
+              }`}
+            >
+              <span className={`flex h-[22px] w-[22px] items-center justify-center rounded-[7px] [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${isOn ? t.on : t.off}`}>
+                <Icon size={13} className="transition-transform duration-200 group-hover:-translate-y-px" />
+              </span>
+              {t.label}
+              <span
+                className={`doc-mono flex h-[22px] min-w-[20px] items-center justify-center rounded-(--radius-pill) border px-2.5 text-[12px] font-bold [transition:all_0.22s_cubic-bezier(0.16,1,0.3,1)] ${
+                  isOn
+                    ? 'border-transparent bg-(--primary) text-white shadow-[0_1px_4px_rgba(2,132,199,0.3)]'
+                    : 'border-(--border-subtle) bg-(--bg-surface-subtle) text-(--text-secondary) group-hover:border-(--border-medium) group-hover:text-(--text-primary)'
+                }`}
+              >
+                {counts[t.kind]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Summary + Filters */}
+      <div className="mt-5 rounded-[18px] bg-(--primary-light) px-[15px] py-[11px]">
+        <p className="text-[13px] text-[#44596a]">
+          {count === 0 ? (
+            '0 files matching current cleanup parameters'
+          ) : (
+            <>
+              Showing{' '}
+              <span className="doc-mono font-semibold text-[#10283f]">{count} {count === 1 ? 'file' : 'files'}</span>{' '}
+              {lead} •{' '}
+              <span className="doc-mono font-bold text-[#0f9d6b]">{formatFileSize(reclaimBytes)}</span> can be freed
+            </>
+          )}
+        </p>
+
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
+          {filter.key !== 'ALL' && (
+            <div className="inline-flex h-6 items-center gap-3 rounded-full bg-white px-4 text-[12px]">
+              <span className="doc-mono font-semibold text-[#1b79a8]">
+                {filter.mode === 'dept' ? 'Department' : 'Format'}: {filterLabel}
+              </span>
+              <button type="button" onClick={onClearFilter} className="inline-flex cursor-pointer items-center gap-1 font-bold text-[#0a7bc4] underline">
+                <RotateCcw size={11} /> View All
+              </button>
+            </div>
+          )}
+
+          {(tab === 'large' || tab === 'idle') && (
+            <div className="inline-flex items-center gap-0.5 rounded-(--radius-pill) border border-(--border-medium) bg-(--bg-surface) p-0">
+              {(tab === 'large' ? LARGE_FILE_CHIPS_MB : IDLE_CHIPS_DAYS).map((c) => {
+                const isOn = tab === 'large' ? largeMin === c && customVal === null : idleMin === c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => {
+                      if (tab === 'large') { setLargeMin(c); setCustomVal(null); } else setIdleMin(c);
+                    }}
+                    className={chip(isOn)}
+                  >
+                    &gt; {c} {tab === 'large' ? 'MB' : 'days'}
+                  </button>
+                );
+              })}
+              {tab === 'large' && (
+                <button type="button" onClick={() => setCustomOpen(true)} className={chip(customVal !== null)}>
+                  {customVal !== null ? `> ${customVal} MB` : 'Custom ›'}
+                </button>
+              )}
+            </div>
+          )}
+
+          <div className="relative">
+            <Search size={12} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7c949a]" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Filter files..."
+              className="h-6 w-[236px] rounded-full bg-white pl-10 pr-4 text-[12px] text-[#10283f] outline-none placeholder:text-[#9db0bd]"
+            />
+          </div>
+
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="doc-mono h-6 w-[250px] cursor-pointer rounded-full bg-white px-2 text-[12px] text-[#10283f] outline-none"
+          >
+            {SORTS.map(([v, l]) => (<option key={v} value={v}>{l}</option>))}
+          </select>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="mt-5 overflow-x-auto rounded-[14px] border border-(--border-subtle) bg-(--bg-surface)">
+        <table className="w-full min-w-[980px] text-left">
+          <thead className="bg-(--table-header-bg)">
+            <tr className="h-[48px]">
+              <th className="w-11 px-4">
+                <input
+                  type="checkbox"
+                  checked={allOnPage}
+                  onChange={toggleAll}
+                  disabled={selectable.length === 0}
+                  className="h-[16px] w-[16px] cursor-pointer accent-(--primary)"
+                />
+              </th>
+              <th className={TH}>Type</th>
+              <th className={TH}>Document Name</th>
+              <th className={TH}>Department / Category</th>
+              <th className={TH}>Size</th>
+              <th className={TH}>Last Opened</th>
+              <th className={TH}>Last Cited</th>
+              <th className={TH}>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={8} className="py-14 text-center text-[15px] text-(--text-muted)">
+                  {loading ? 'Loading…' : 'Nothing to clean up here.'}
+                </td>
+              </tr>
+            )}
+
+            {rows.map((f, i) => {
+              const isFirstOfGroup = tab === 'dupes' && f.contentHash !== rows[i - 1]?.contentHash;
+              const grp = groupSize(f.contentHash);
+
+              return (
+                <Fragment key={f.id}>
+                  {isFirstOfGroup && (
+                    <tr>
+                      <td colSpan={8} className="px-3 pb-1 pt-3">
+                        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-(--border-medium) border-l-[3px] border-l-(--primary) bg-(--primary-light) px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-(--primary-light) text-(--primary)">
+                              <ClipboardList size={15} />
+                            </span>
+                            <div>
+                              {/* EKA-EDIT: title = first document of the group (decision D) */}
+                              <p className="text-[14px] font-semibold text-(--text-primary)">Duplicate Group: {f.title}</p>
+                              <p className="doc-mono text-[10.5px] text-(--text-muted)">Identical file content (same hash)</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge type="info" size="sm" className="doc-mono" text={`${grp.length} Copies Detected`} />
+                            <Badge
+                              type="success"
+                              size="sm"
+                              className="doc-mono"
+                              text={`+${formatFileSize(grp.filter((r) => !r.isProtected).reduce((s, r) => s + r.sizeBytes, 0))} Reclaimable`}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+
+                  <tr className={`border-t border-(--border-subtle) ${selected.has(f.id) ? 'bg-(--primary-light)' : 'bg-(--bg-surface) hover:bg-(--bg-surface-subtle)'}`}>
+                    <td className="px-4 py-[20px]">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(f.id)}
+                        disabled={f.isProtected}
+                        onChange={() => toggleOne(f)}
+                        className="h-[18px] w-[18px] cursor-pointer accent-(--primary) disabled:cursor-not-allowed disabled:opacity-30"
+                      />
+                    </td>
+
+                    <td className="px-1"><Badge format={f.format.toUpperCase()} /></td>
+
+                    <td className="px-1">
+                      <div className="flex items-center gap-3">
+                        <div className="min-w-0">
+                          <p className="max-w-[330px] truncate text-[12.5px] font-semibold text-(--text-primary)">{f.title}</p>
+                          <p className="doc-mono max-w-[310px] truncate text-[10px] text-(--text-muted)">{f.fileName}</p>
+                        </div>
+                        {f.isProtected && (
+                          <span className="group/p relative shrink-0">
+                            <Badge type="info" size="sm" className="doc-mono gap-1">
+                              <Lock size={10} />
+                              Protected
+                            </Badge>
+                            <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden w-max max-w-[190px] -translate-x-1/2 rounded-lg bg-(--text-secondary) px-3 py-1.5 text-center text-[11px] leading-4 text-white group-hover/p:block">
+                              {f.protectedReason}
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    <td className="px-7"><DeptPill department={departmentsById.get(f.departmentId)} /></td>
+
+                    <td className="doc-mono px-3 text-[12px] font-black text-(--text-primary)">{formatFileSize(f.sizeBytes)}</td>
+
+                    {/* EKA-EDIT: relative time derived; null = never */}
+                    <td className="doc-mono px-3 text-[10px] text-(--text-muted)">{formatRelativeTime(f.lastOpenedAt) ?? 'Never opened'}</td>
+                    <td className="doc-mono px-3 text-[10px] text-(--text-muted)">{formatRelativeTime(f.lastCitedAt) ?? 'Never cited'}</td>
+
+                    <td className="px-3"><StatusPill status={f.status} /></td>
+                  </tr>
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <Pagination
+        page={safePage + 1}
+        pageSize={perPage}
+        total={count}
+        onPageChange={(nextPage) => setPage(nextPage - 1)}
+        itemLabel="files"
+        showPageNumbers
+        pageSizeOptions={PER_PAGE}
+        onPageSizeChange={(size) => { setPerPage(size); setPage(0); }}
+      />
+
+      {customOpen && (
+        <CustomThresholdModal
+          initial={customVal ?? largeMin}
+          onClose={() => setCustomOpen(false)}
+          onApply={(mb) => {
+            setLargeMin(mb);
+            setCustomVal(mb);
+            setCustomOpen(false);
+            onToast(`Filtering files occupying > ${mb} MB`);
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+export default FreeUpCard;

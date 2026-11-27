@@ -11,13 +11,13 @@ import { sections } from "../data/mock/sections.js";
 import { users } from "../data/mock/users.js";
 import { canReadDocument } from "../utils/canReadDocument.js";
 import { clone } from "./mockHelpers.js";
-
+import { createMockPersistence, startAutoSave } from "./mockPersistCore.js";
 // MOCK-ONLY working copy of every table. Deleted with src/data/mock/ in Phase C.
 //
 // Why a copy: the files in data/mock/ stay pristine, so `npm run validate:mock`
 // always checks the original data. When services start writing (pin, archive,
 // reindex), they change THIS copy, and every service sees the same change. That
-// is how one source of truth works here. A page reload resets it to the seed data.
+// is how one source of truth works here. 
 //
 // Only services import this file; pages never do.
 export const db = {
@@ -31,8 +31,24 @@ export const db = {
   related: clone(related),
   activityEvents: clone(activityEvents),
   findings: clone(findings),
-  memberUsage: clone(memberUsage),
+  // EKA-EDIT: new mock-only table, one row per document edit (feeds Knowledge Base "Recently Updated"). Saved by mockPersistCore automatically.
+  amendments: [],
 };
+
+// MOCK-ONLY: keep edits across page reloads. Runs before lastDocumentNumber is computed.
+// Turn it off on your machine in .env.local: VITE_MOCK_PERSIST=false
+const persistence = createMockPersistence({ db, storage: globalThis.localStorage });
+if (import.meta.env?.VITE_MOCK_PERSIST !== "false") {
+  persistence.hydrate();
+  startAutoSave(persistence);
+}
+
+// Dev tool: forget every saved change and go back to the seed data.
+export function resetMockDb() {
+  persistence.reset();
+  window.location.reload();
+}
+globalThis.__resetMockData = resetMockDb;
 
 /**
  * The read rule applied to active documents: what this user may see in lists and
@@ -63,4 +79,16 @@ let lastDocumentNumber = db.documents.reduce(
 export function nextDocumentId() {
   lastDocumentNumber += 1;
   return `doc_${String(lastDocumentNumber).padStart(3, "0")}`;
+}
+
+// New mock users get usr_019, usr_020, ... (the seed ends at usr_018). Counts up
+// from the highest id in the db, so an id is never reused.
+let lastUserNumber = db.users.reduce(
+  (highest, user) => Math.max(highest, Number(/^usr_(\d+)$/.exec(user.id)?.[1] ?? 0)),
+  0,
+);
+
+export function nextUserId() {
+  lastUserNumber += 1;
+  return `usr_${String(lastUserNumber).padStart(3, "0")}`;
 }

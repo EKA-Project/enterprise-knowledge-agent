@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import useToast from "../hooks/useToast.js";
 import "../styles/semantic-search.css";
+import pageMetadata from "../config/pageMetadata";
 import PageHero from "../components/common/PageHero";
 import SemanticSearchControls from "../components/semantic-search/SemanticSearchControls";
 import GroundedAnswerCard from "../components/semantic-search/GroundedAnswerCard";
@@ -65,12 +66,13 @@ export default function SemanticSearchPage() {
   const regenTimer = useRef(null);
   const pageTopRef = useRef(null);
   const [scrollTick, setScrollTick] = useState(0);
+  const meta = pageMetadata.semanticSearch;
 
-useEffect(() => {
-  if (scrollTick === 0) return;
-  const parent = getScrollParent(pageTopRef.current);
-  parent.scrollTo({ top: 0, behavior: "smooth" });
-}, [scrollTick]);
+  useEffect(() => {
+    if (scrollTick === 0) return;
+    const parent = getScrollParent(pageTopRef.current);
+    parent.scrollTo({ top: 0, behavior: "smooth" });
+  }, [scrollTick]);
 
   useEffect(() => {
     try {
@@ -117,7 +119,16 @@ useEffect(() => {
       [{ id: `${Date.now()}`, query: q, at: Date.now() }, ...prev.filter((r) => r.query.toLowerCase() !== q.toLowerCase())].slice(0, MAX_RECENT),
     );
   };
-
+  // EKA-EDIT: if the page opens with ?q=term, fill the box and run that search once
+  const [searchParams] = useSearchParams();
+  const urlQuery = searchParams.get("q");
+  useEffect(() => {
+    if (urlQuery && urlQuery.trim()) {
+      setInputValue(urlQuery);
+      runSearch(urlQuery);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlQuery]);
   const copyText = async (text, okMessage) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -126,10 +137,10 @@ useEffect(() => {
       showToast("Copy is not available in this browser");
     }
   };
-const handleTryTip = (example) => {
-  runSearch(example);
-  setScrollTick((t) => t + 1);
-};
+  const handleTryTip = (example) => {
+    runSearch(example);
+    setScrollTick((t) => t + 1);
+  };
 
   const handleFeedback = (kind) =>
     showToast(kind === "up" ? "Marked as helpful. Thank you for your feedback!" : "Marked as not helpful. Thanks for letting us know.");
@@ -153,39 +164,33 @@ const handleTryTip = (example) => {
   const closeCitation = useCallback(() => setCitationResult(null), []);
 
   return (
-<div ref={pageTopRef} className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
+    <div ref={pageTopRef} className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
       <div className="ssp-rise">
         <PageHero
-          eyebrow={
-            <>
-              Knowledge discovery
-              <span className="ml-2.5 rounded-md border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 text-[9.5px] font-bold tracking-wider text-(--badge-text)">
-                EKA Vector Agent
-              </span>
-            </>
-          }
-          title="Search by meaning, not just words."
-          description="Find company guidelines, policies, and runbooks using everyday natural language concepts and plain English phrases."
+          eyebrow={meta.eyebrow}
+          title={meta.title}
+          description={meta.description}
+          status={meta.status}
         />
       </div>
       {/* Sticky: stays pinned while results scroll, like the video */}
-        <SemanticSearchControls
-          inputRef={inputRef}
-          value={inputValue}
-          onChange={setInputValue}
-          onSubmit={() => runSearch(inputValue)}
-          onClear={() => setInputValue("")}
-          modes={SEARCH_MODES}
-          mode={mode}
-          onModeChange={changeMode}
-          sources={SOURCE_FILTERS}
-          source={source}
-          onSourceChange={setSource}
-          suggestionLabel={isHybrid ? "Hybrid RAG prompts" : "Suggested intent concepts"}
-          suggestions={isHybrid ? HYBRID_PROMPTS : SUGGESTED_CONCEPTS}
-          onPickSuggestion={runSearch}
-          onExpand={() => goFollowUp(`Expand on: ${activeQuery}`)}
-        />
+      <SemanticSearchControls
+        inputRef={inputRef}
+        value={inputValue}
+        onChange={setInputValue}
+        onSubmit={() => runSearch(inputValue)}
+        onClear={() => setInputValue("")}
+        modes={SEARCH_MODES}
+        mode={mode}
+        onModeChange={changeMode}
+        sources={SOURCE_FILTERS}
+        source={source}
+        onSourceChange={setSource}
+        suggestionLabel={isHybrid ? "Hybrid RAG prompts" : "Suggested intent concepts"}
+        suggestions={isHybrid ? HYBRID_PROMPTS : SUGGESTED_CONCEPTS}
+        onPickSuggestion={runSearch}
+        onExpand={() => goFollowUp(`Expand on: ${activeQuery}`)}
+      />
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section aria-label="Search results" className="flex flex-col gap-5">
@@ -218,7 +223,7 @@ const handleTryTip = (example) => {
                 type="button"
                 onClick={() => goFollowUp(activeQuery)}
                 className="mt-5 rounded-full bg-(--sidebar-bg) px-5 py-2 text-[12.5px] font-bold text-(--sidebar-text) transition hover:opacity-90 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"
-                >
+              >
                 Ask EKA Generative AI →
               </button>
             </div>
@@ -274,10 +279,10 @@ const handleTryTip = (example) => {
             onClear={() => setRecent([])}
           />
           <BetterSearchesPanel
-  tips={BETTER_SEARCH_TIPS}
-  onTry={handleTryTip}
-  onCopy={(text) => copyText(text, "Example copied to clipboard")}
-/>
+            tips={BETTER_SEARCH_TIPS}
+            onTry={handleTryTip}
+            onCopy={(text) => copyText(text, "Example copied to clipboard")}
+          />
         </aside>
       </div>
 
