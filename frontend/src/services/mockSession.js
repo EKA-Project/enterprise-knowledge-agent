@@ -12,7 +12,7 @@ const ROLE_STORAGE_KEY = "eka-role";
 // All three are in Engineering, which has the richest data.
 const USER_ID_BY_ROLE = {
   Admin: "usr_001", // Maya Narang
-  Manager: "usr_003", // Rachel Green, Engineering & DevOps
+ Manager: "usr_003", // Aryaan Raza, Engineering & DevOps
   Employee: "usr_005", // Alex Morgan, Engineering & DevOps
 };
 

@@ -13,6 +13,7 @@ import { bookmarks } from "../src/data/mock/bookmarks.js";
 import { related } from "../src/data/mock/related.js";
 import { activityEvents } from "../src/data/mock/activityEvents.js";
 import { findings } from "../src/data/mock/findings.js";
+import { memberUsage } from "../src/data/mock/memberUsage.js";
 import { canReadDocument } from "../src/utils/canReadDocument.js";
 import { sharedKeywords } from "../src/utils/sharedKeywords.js";
 
@@ -77,7 +78,10 @@ function checkUsersAndDepartments() {
   );
 
   const employeeCodes = users.map((u) => u.employeeCode);
-  check(new Set(employeeCodes).size === employeeCodes.length, "users: employeeCode must be unique");
+  check(
+    new Set(employeeCodes).size === employeeCodes.length,
+    "users: employeeCode must be unique",
+  );
 
   for (const u of users) {
     check(!("jobTitle" in u), `${u.id}: users have a role only, no job title`);
@@ -612,6 +616,46 @@ function checkEventsAndFindings() {
   }
 }
 
+// ── 8. member usage (mock-only: no blueprint table) ─────────────────
+const USAGE_DAYS = 60; // two 30-day periods, so the growth % compares real data
+
+function checkMemberUsage() {
+  const ids = memberUsage.map((row) => row.userId);
+  check(
+    new Set(ids).size === ids.length,
+    "memberUsage: at most one row per user",
+  );
+
+  for (const row of memberUsage) {
+    const user = userById.get(row.userId);
+    check(user, `memberUsage: unknown user ${row.userId}`);
+    if (!user) continue;
+
+    check(
+      user.status === "active",
+      `memberUsage: ${row.userId} is inactive, so it should have no usage row`,
+    );
+    check(
+      Array.isArray(row.dailyQueries) &&
+        row.dailyQueries.length === USAGE_DAYS &&
+        row.dailyQueries.every((n) => Number.isInteger(n) && n >= 0),
+      `memberUsage: ${row.userId} needs ${USAGE_DAYS} daily counts, each a whole number of 0 or more`,
+    );
+    check(
+      Number.isInteger(row.searches) && row.searches >= 0,
+      `memberUsage: ${row.userId} searches must be a whole number of 0 or more`,
+    );
+
+    const lastActive = Date.parse(row.lastActiveAt);
+    check(
+      !Number.isNaN(lastActive) &&
+        lastActive <= Date.now() &&
+        row.lastActiveAt >= user.createdAt,
+      `memberUsage: ${row.userId} lastActiveAt must be a past date after the user was created`,
+    );
+  }
+}
+
 // ── run everything and report ───────────────────────────────────────
 checkUniqueIds();
 checkUsersAndDepartments();
@@ -620,6 +664,7 @@ checkSectionsAndInsights();
 checkIngestion();
 checkBookmarksAndRelated();
 checkEventsAndFindings();
+checkMemberUsage();
 
 if (problems.length > 0) {
   console.error(`FAIL: ${problems.length} problem(s) in the mock data`);
@@ -631,6 +676,6 @@ if (problems.length > 0) {
     `departments ${departments.length} | users ${users.length} | documents ${documents.length} | sections ${sections.length} | insights ${insights.length}`,
   );
   console.log(
-    `ingestion ${ingestion.length} | bookmarks ${bookmarks.length} | related ${related.length} | events ${activityEvents.length} | findings ${findings.length}`,
+    `ingestion ${ingestion.length} | bookmarks ${bookmarks.length} | related ${related.length} | events ${activityEvents.length} | findings ${findings.length} | memberUsage ${memberUsage.length}`,
   );
 }
