@@ -115,8 +115,8 @@ export default function AnalyticsPage() {
   } = view;
 // Render the AnalyticsPage component with various sections and modals for knowledge analytics
   return (
-    <div className="analytics-page mx-auto w-full max-w-6xl space-y-6">
-            <div className="anl-rise">
+     <div className="analytics-page w-full min-w-0 space-y-6">
+      <div className="anl-rise">
         <PageHero
           eyebrow={meta.eyebrow}
           title={meta.title}

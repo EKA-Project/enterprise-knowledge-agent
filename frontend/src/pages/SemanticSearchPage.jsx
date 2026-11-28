@@ -164,7 +164,7 @@ export default function SemanticSearchPage() {
   const closeCitation = useCallback(() => setCitationResult(null), []);
 
   return (
-    <div ref={pageTopRef} className="semantic-search-page mx-auto w-full max-w-6xl space-y-6">
+    <div ref={pageTopRef} className="semantic-search-page w-full min-w-0 space-y-6">
       <div className="ssp-rise">
         <PageHero
           eyebrow={meta.eyebrow}
