@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, ClockIcon, MessageIcon, PlusIcon, TrashIcon } from './ChatIcons';
+import TrashLidIcon from '../icons/TrashLidIcon';
 import { MONO } from './ChatUtils';
 
 /**
@@ -44,7 +45,7 @@ export default function ChatSidebar({ open, conversations, activeConversationId,
             return (
               <div
                 key={c.id}
-                className={`group relative mb-2 rounded-xl border px-2.5 py-2.5 transition-all duration-150 ${
+                className={`relative mb-2 rounded-xl border px-2.5 py-2.5 transition-all duration-150 ${
                   isActive
                     ? 'border-[var(--primary)] bg-[var(--primary-light)]'
                     : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--border-medium)] hover:bg-[var(--bg-surface-subtle)]'
@@ -65,9 +66,9 @@ export default function ChatSidebar({ open, conversations, activeConversationId,
                   onClick={() => onDelete(c.id)}
                   aria-label={`Delete ${c.title}`}
                   title="Delete thread"
-                  className="absolute right-2 top-2.5 grid h-6 w-6 cursor-pointer place-items-center rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)] transition-all duration-150 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)]"
+                  className="group bin-group absolute right-2 top-2.5 grid h-6 w-6 cursor-pointer place-items-center rounded-full border border-[var(--badge-border)] bg-[var(--primary-light)] text-[var(--primary)] transition-all duration-150 hover:scale-105 hover:border-[var(--status-danger-border)] hover:bg-[var(--status-danger-bg)] hover:text-[var(--status-danger)]"
                 >
-                  <TrashIcon size={12} />
+                <TrashLidIcon size={12} />
                 </button>
               </div>
             );

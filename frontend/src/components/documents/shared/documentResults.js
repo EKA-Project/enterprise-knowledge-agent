@@ -1,10 +1,10 @@
-import { useSyncExternalStore } from 'react';
-import { documents as initialDocuments } from './DocumentData';
-import { getDocuments, setDocumentFlag } from './documentService.js';
+// src/components/documents/shared/documentResults.js  (REPLACEMENT)
+//
+// Only UI state is left here: the count shown in the page hero and the status picked in the
+// Document Health Overview. The documents themselves are no longer stored in this file;
+// they come from roleDocuments.js, which calls the services.
 
-// Small shared stores so the page hero, the health overview and the document
-// list can talk to each other without prop-drilling through three role pages.
-// Replace with context / props / API state when the backend arrives.
+import { useSyncExternalStore } from 'react';
 
 function createStore(initial) {
   let value = initial;
@@ -22,41 +22,6 @@ function createStore(initial) {
   };
 }
 
-// ---- The documents themselves (pin / bookmark flags live here) ----
-// Loaded through documentService, and shared so an admin's pin or bookmark is
-// still there after switching role, like in the reference video.
-const docsStore = createStore({ items: [], loading: true });
-let loadStarted = false;
-
-// Fetch the list once (safe to call from every page that shows documents)
-export function loadDocuments() {
-  if (loadStarted) return;
-  loadStarted = true;
-  getDocuments().then((items) => docsStore.set({ items, loading: false }));
-}
-
-// Optimistic update: flip the flag right away, roll back if the "request" fails
-export function toggleDocumentFlag(id, flag) {
-  const doc = docsStore.get().items.find((item) => item.id === id);
-  if (!doc) return;
-  const next = !doc[flag];
-
-  const apply = (value) => {
-    const { items } = docsStore.get();
-    docsStore.set({
-      loading: false,
-      items: items.map((item) => (item.id === id ? { ...item, [flag]: value } : item)),
-    });
-  };
-
-  apply(next);
-  setDocumentFlag(id, flag, next).catch(() => apply(!next));
-}
-
-// Returns { items, loading }
-export function useDocuments() {
-  return useSyncExternalStore(docsStore.subscribe, docsStore.get);
-}
 // ---- How many documents the current filter shows (read by the page hero) ----
 const resultsStore = createStore({ count: null, filterLabel: '' });
 
@@ -83,3 +48,7 @@ export function setStatusFilter(status) {
 export function useStatusFilter() {
   return useSyncExternalStore(statusStore.subscribe, statusStore.get);
 }
+
+// ---- Compatibility with the old file. Delete these once `grep -rn "documentResults" src`
+// shows nobody imports them. ----
+export { useRoleDocuments as useDocuments, refreshDocuments as loadDocuments } from './roleDocuments.js';

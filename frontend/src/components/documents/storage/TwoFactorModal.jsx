@@ -1,0 +1,157 @@
+import { useEffect, useRef, useState } from 'react';
+import { RefreshCw, Shield, Smartphone } from 'lucide-react';
+import { TypeTile } from './StorageBits';
+// EKA-EDIT: challenge/verify through twoFactorService (blueprint-external, backend later)
+import { createChallenge, verifyChallenge } from '../../../services/twoFactorService.js';
+import { formatFileSize } from '../../../utils/formatFileSize.js';
+import '../../../styles/Document.css';
+import Modal from '../../common/Modal.jsx';
+import { CancelButton } from '../../common/ActionButtons.jsx';
+
+// Admin 2FA number matching: tap the same number that is shown above.
+// Sizes measured on the real-size screenshot (modal 610 wide, ~788 tall).
+// Body/footer content keeps those measured px sizes through [zoom:0.8] (125% display scaling).
+// EKA-EDIT: onVerified now receives the verificationToken
+// EKA-EDIT: departmentName passed by the page
+function TwoFactorModal({ file, departmentName, onClose, onVerified }) {
+  const [challenge, setChallenge] = useState(null); // { challengeId, code, options }
+  const [status, setStatus] = useState('waiting'); // waiting | ok | wrong
+  const [picked, setPicked] = useState(null);
+  const timer = useRef(null);
+  const { code = '', options = [] } = challenge ?? {};
+
+  const load = async () => {
+    setStatus('waiting');
+    setPicked(null);
+    setChallenge(await createChallenge());
+  };
+
+  // Esc / click-outside are handled by the common Modal
+  useEffect(() => {
+    load();
+    return () => clearTimeout(timer.current);
+  }, []);
+
+  const pick = async (n) => {
+    if (status === 'ok' || !challenge) return;
+    setPicked(n);
+    try {
+      const { verificationToken } = await verifyChallenge(challenge.challengeId, n);
+      setStatus('ok');
+      timer.current = setTimeout(() => onVerified(verificationToken), 1000);
+    } catch {
+      setStatus('wrong');
+    }
+  };
+  const resend = load;
+
+  return (
+    <Modal
+      size="md"
+      onClose={onClose}
+      headerClassName="bg-(--bg-surface) border-t-[3px] border-t-[#e5484d]"
+      icon={
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#f6c4c3] bg-[#ffe2e1] text-[#e5484d]">
+          <Smartphone size={18} />
+        </span>
+      }
+      eyebrow={
+        <>
+          <span className="doc-mono inline-flex h-[18px] items-center rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-[9px] text-[9px] font-bold uppercase tracking-[0.06em] text-[#d92d2d]">
+            Admin 2FA
+          </span>
+          <span className="doc-mono text-[9px] font-bold uppercase tracking-[0.1em] text-[#6f8aa3]">
+            Two-factor authentication
+          </span>
+        </>
+      }
+      title={<span className="doc-heading font-black">Verify via Mobile App</span>}
+      footer={(close) => (
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={resend}
+            className="inline-flex cursor-pointer items-center gap-2 pl-3 text-[11px] font-semibold text-[#6f8aa3] transition-colors hover:text-[#10283f]"
+          >
+            <RefreshCw size={12} /> Send new number
+          </button>
+          <CancelButton type="button" onClick={close} />
+        </div>
+      )}
+    >
+      <div className="[zoom:0.8]">
+        {/* File card (550 x 85) */}
+        <div className="flex h-[85px] items-center gap-3.5 rounded-2xl border border-[#b9d6ec] bg-[#e1f0fa] px-[19px]">
+          {/* EKA-EDIT: document fields; department name comes from the page via departmentName */}
+          <TypeTile format={file.format} />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[16px] font-bold leading-6 text-[#10283f]">{file.title}</p>
+            <p className="doc-mono truncate text-[12px] text-[#7c949a]">
+              {file.fileName} • {formatFileSize(file.sizeBytes)}
+              {departmentName ? ` • ${departmentName}` : ''}
+            </p>
+          </div>
+          <span className="doc-mono inline-flex h-6 shrink-0 items-center rounded-full border border-[#f6c4c3] bg-[#fff0ef] px-3 text-[11px] font-bold uppercase tracking-[0.06em] text-[#d92d2d]">
+            Permanent purge
+          </span>
+        </div>
+
+        {/* Auth box (550 x 389) */}
+        <div className="mt-10 rounded-[18px] border border-[#b9d6ec] bg-[#e1f0fa] p-[22px] text-center">
+          <p className="text-[15.5px] leading-[23px] text-[#44596a]">
+            Open <strong className="font-semibold text-[#10283f]">GitHub Mobile / EKA Authenticator</strong> on your phone and tap the number shown below:
+          </p>
+
+          <div className="mx-auto mt-3.5 flex h-[75px] w-[136px] items-center justify-center rounded-[18px] border border-[#b9d6ec] bg-white shadow-[0_4px_14px_rgba(11,111,164,0.12)]">
+            <span className="doc-mono text-[54px] font-bold leading-none text-[#10283f]">{code}</span>
+          </div>
+
+          <p
+            className={`mt-3.5 flex items-center justify-center gap-2.5 text-[13px] leading-5 ${status === 'ok' ? 'text-[#0f8f63]' : status === 'wrong' ? 'text-[#d9373f]' : 'text-[#7c9bb5]'
+              }`}
+          >
+            <span className={`h-2 w-2 rounded-full ${status === 'waiting' ? 'animate-[dot-blink_1.6s_ease-in-out_infinite] bg-[#17b97f]' : 'bg-current'}`} />
+            {status === 'ok'
+              ? '2FA Approved via EKA Authenticator'
+              : status === 'wrong'
+                ? 'Wrong number. Tap the number shown above.'
+                : 'Waiting for mobile authorization on iPhone...'}
+          </p>
+
+          {/* Phone push (505 x 155) */}
+          <div className="mt-5 rounded-2xl bg-white px-[19px] pb-[15px] pt-[17px] text-left">
+            <div className="flex items-center justify-between border-b border-[#e3eef7] pb-2.5">
+              <span className="flex items-center gap-2 text-[13px] font-semibold text-[#44596a]">
+                <Shield size={13} className="text-[#7c949a]" /> EKA Authenticator
+              </span>
+              <span className="text-[12px] text-[#8ea3b5]">Push received just now</span>
+            </div>
+            <p className="mt-3.5 text-[14px] font-semibold leading-5 text-[#10283f]">Tap the number shown on your desktop screen:</p>
+            <div className="mx-auto mt-2.5 grid max-w-[399px] grid-cols-3 gap-3">
+              {options.map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => pick(n)}
+                  className={`doc-mono h-[49px] cursor-pointer rounded-[10px] border text-[18px] font-bold transition-all duration-200 ${picked === n
+                    ? n === code
+                      ? 'border-[#17b97f] bg-[#17b97f] text-white shadow-[0_6px_14px_rgba(23,185,127,0.35)]'
+                      : 'border-[#e5484d] bg-[#e5484d] text-white shadow-[0_6px_14px_rgba(229,72,77,0.3)]'
+                    : 'border-[#b9d6ec] bg-[#dcebf8] text-[#10283f] hover:-translate-y-px hover:bg-[#cfe3f4]'
+                    }`}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+            {status === 'ok' && (
+              <p className="mt-3 text-[12px] font-semibold text-[#0f8f63]">✓ Mobile verified: Code {code} approved on iPhone. Purging...</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+export default TwoFactorModal;

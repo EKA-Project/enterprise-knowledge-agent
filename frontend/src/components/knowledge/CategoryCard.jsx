@@ -1,42 +1,70 @@
-import { ArrowUpRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+// EKA-EDIT: theme now comes from the department's colorKey/iconKey, not KnowledgeData
+import { getDepartmentTheme } from '../../config/departmentTheme.js';
+import { Zap, MessageSquare } from 'lucide-react';
 
-// Maps each category's iconTheme (from KnowledgeData.js) to its exact
-// badge background + icon color, measured directly from the reference design.
-const themeStyles = {
-  mint: 'bg-green-100 text-green-700',
-  lavender: 'bg-purple-100 text-purple-800',
-  gold: 'bg-amber-100 text-amber-700',
-  pink: 'bg-rose-100 text-rose-600',
-  blue: 'bg-sky-100 text-sky-600',
-  tan: 'bg-[#f2eadf] text-stone-600',
-};
+function CategoryCard({ category, onOpenInsights }) {
+  const { title, documentCount, memberCount, colorKey, iconKey } = category;
+  const { Icon, color, softBg } = getDepartmentTheme(colorKey, iconKey);
+  const navigate = useNavigate();
 
-export default function CategoryCard({ category }) {
-  const Icon = category.icon;
+  // Documents page, pre-filtered by department name
+  const browseUrl = `/documents?category=${encodeURIComponent(title)}`;
 
   return (
-    <div className="rounded-3xl bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition-shadow duration-200 hover:shadow-(--shadow-md)">
-      <div className="mb-6 flex items-start justify-between">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${themeStyles[category.iconTheme]}`}>
-          <Icon size={22} />
-        </div>
-        {/* Static "open topic" indicator — not an edit action */}
-        <ArrowUpRight size={18} className="text-(--text-primary)" />
+    <article
+      onClick={() => navigate(browseUrl)}
+      // EKA-EDIT: top accent colour is inline now
+      style={{ borderTopColor: color }}
+      className="cursor-pointer rounded-3xl border border-t-2 border-(--border-subtle) bg-(--bg-surface) p-5 shadow-(--shadow-sm) transition-shadow hover:shadow-(--shadow-md)"
+    >
+      <div className="flex items-start justify-between">
+        {/* EKA-EDIT: icon chip colours inline */}
+        <span style={{ color, background: softBg }} className="flex h-10 w-10 items-center justify-center rounded-xl">
+          <Icon size={18} />
+        </span>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onOpenInsights(category);
+          }}
+          className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-surface) px-3 py-1 text-[11px] font-semibold text-(--primary) transition-colors hover:border-(--primary-hover) hover:bg-(--primary-hover) hover:text-(--primary-contrast)"
+        >
+          <Zap size={11} className="fill-current text-[#e8801a]" />
+          Collection Insights
+        </button>
       </div>
 
-      <h3 className="kb-hero-heading text-xl font-bold text-(--text-primary)">
-        {category.title}
-      </h3>
-      <p className="mt-1 text-sm text-(--text-secondary)">
-        {category.docCount} documents • {category.updatedLabel}
-      </p>
+      <h3 className="kb-serif mt-4 text-lg font-bold text-(--text-primary)">{title}</h3>
 
-      <button
-        type="button"
-        className="mt-6 text-sm text-(--text-secondary) hover:text-(--text-primary)"
-      >
-        Explore topic ›
-      </button>
-    </div>
+      <div className="mt-2 flex items-center gap-2 text-xs text-(--text-secondary)">
+        <span className="kb-mono rounded-full border border-(--border-subtle) bg-(--primary-light) px-2.5 py-0.5 text-[10px]">
+          {documentCount} documents
+        </span>
+        {/* EKA-EDIT: "verified sources" removed (blueprint), members count instead */}
+        <span>• {memberCount} members</span>
+      </div>
+
+      <div className="mt-5 flex items-center justify-between border-t border-(--border-subtle) pt-4">
+        <Link
+          to={browseUrl}
+          onClick={(event) => event.stopPropagation()}
+          className="text-sm font-semibold text-(--text-primary)"
+        >
+          Browse collection <span className="text-(--primary)">→</span>
+        </Link>
+        <button
+          type="button"
+          aria-label={`Ask EKA about ${title}`}
+          onClick={(event) => event.stopPropagation()}
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-(--primary-light) text-(--primary)"
+        >
+          <MessageSquare size={14} />
+        </button>
+      </div>
+    </article>
   );
 }
+
+export default CategoryCard;

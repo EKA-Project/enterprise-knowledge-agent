@@ -1,41 +1,25 @@
-import { useCallback, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Download, Plus } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Plus } from "lucide-react";
 import "../styles/organization.css";
+import pageMetadata from "../config/pageMetadata";
 import PageHero from "../components/common/PageHero";
 import Button from "../components/common/Button";
 import Tooltip from "../components/common/Tooltip";
 import useToast from "../hooks/useToast.js";
+import { ExportAuditButton } from "../components/common/ActionButtons";
 import OrganizationTabs from "../components/organization/OrganizationTabs";
-import DepartmentManagementTab from "../components/organization/DepartmentManagementTab";
-import DepartmentCreateModal from "../components/organization/DepartmentCreateModal";
-import DepartmentEditModal from "../components/organization/DepartmentEditModal";
-import DepartmentAssignLeadModal from "../components/organization/DepartmentAssignLeadModal";
-import DepartmentDeleteModal from "../components/organization/DepartmentDeleteModal";
-import UserManagementTab from "../components/organization/UserManagementTab";
-import UserInviteModal from "../components/organization/UserInviteModal";
-import UserViewModal from "../components/organization/UserViewModal";
-import UserEditModal from "../components/organization/UserEditModal";
-import UserTerminateModal from "../components/organization/UserTerminateModal";
-import {
-  INITIAL_DEPARTMENTS, INITIAL_USERS, TEAM_MEMBERS,
-  buildStructureCsv, buildUsersCsv, getMember,
-} from "../components/organization/OrganizationData";
+import DepartmentPage from "../components/organization/Department/DepartmentPage.jsx";
+import TeamDirectoryPage from "../components/organization/TeamDirectory/TeamDirectoryPage.jsx";
+import { buildStructureCsv, buildUsersCsv, toUserRow } from "../components/organization/OrganizationData";
+import useApi from "../hooks/useApi.js";
+import { getDepartments } from "../services/departmentService.js";
+import { getUsers } from "../services/userService.js";
 
 const HEADERS = {
-  departments: {
-    eyebrow: "Organization structure & units",
-    title: "Department Management",
-    description: "Configure enterprise departments, designated Lead Managers, and scoped document ingestion authority.",
-  },
-  directory: {
-    eyebrow: "Organization directory",
-    title: "User Management",
-    description: "Manage team roles, access levels (Basic, Restricted, Admin), and account statuses.",
-  },
+  departments: pageMetadata.organizationDepartments,
+  directory: pageMetadata.organizationDirectory.admin,
 };
-
-const todayLabel = () => new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 
 function download(text, filename) {
   const url = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
@@ -47,18 +31,22 @@ function download(text, filename) {
 }
 
 export default function OrganizationPage() {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") === "directory" ? "directory" : "departments";
-  // ↑ The tab lives in the URL (?tab=directory), so the Topbar can read it too.
 
-  const [departments, setDepartments] = useState(INITIAL_DEPARTMENTS);
-  const [users, setUsers] = useState(INITIAL_USERS);
-  // modal: { type: "create" | "edit" | "assign" | "delete" | "invite" | "view" | "user-edit" | "terminate", dept?, user? }
+  const { data, loading, error, reload } = useApi(async () => {
+    const [departments, users] = await Promise.all([getDepartments(), getUsers()]);
+    return { departments, users };
+  });
+  const departments = data?.departments ?? [];
+  const rawUsers = data?.users ?? [];
+  const users = useMemo(() => rawUsers.map((u) => toUserRow(u, departments)), [rawUsers, departments]);
+  const getLead = (id) => rawUsers.find((u) => u.id === id) ?? null;
+
   const [modal, setModal] = useState(null);
+  const closeModal = useCallback(() => setModal(null), []);
 
   const toast = useToast();
-  // Keeps the old pushToast(message, tone) calls working with the shared toast.
   const pushToast = useCallback(
     (message, tone = "success") => {
       const type = tone === "error" || tone === "info" ? tone : "success";
@@ -66,71 +54,31 @@ export default function OrganizationPage() {
     },
     [toast],
   );
-  const closeModal = useCallback(() => setModal(null), []);
 
-  // Dialogs keep their own copy, so they stay on screen while their exit animation plays.
-  const openDeptModal = (type, id) => setModal({ type, dept: departments.find((d) => d.id === id) });
-  const openUserModal = (type, id) => setModal({ type, user: users.find((u) => u.id === id) });
+  // After a successful write: close any dialog, re-read from the services, say so.
+  const finish = (message, tone) => {
+    closeModal();
+    reload();
+    pushToast(message, tone);
+  };
+  const fail = (e) => pushToast(e.message, "error");
 
   const changeTab = (id) => setSearchParams(id === "departments" ? {} : { tab: id }, { replace: true });
 
-  // ---------- Departments ----------
-  const handleCreate = (data) => {
-    const dept = { id: `dept-${Date.now()}`, ...data, icon: "briefcase", tone: "indigo", members: data.leadId ? 1 : 0, docs: 0 };
-    setDepartments((prev) => [...prev, dept]);
-    pushToast(`🏢 Department "${data.name}" created successfully!`);
-  };
-  const handleEdit = (id, data) => {
-    setDepartments((prev) => prev.map((d) => (d.id === id ? { ...d, ...data, leadId: d.leadId } : d)));
-    pushToast(`✏️ Updated department "${data.name}"`);
-  };
-  const handleAssign = (dept, memberId) => {
-    setDepartments((prev) => prev.map((d) => (d.id === dept.id ? { ...d, leadId: memberId } : d)));
-    pushToast(`👤 Assigned Manager to ${dept.name}`);
-  };
-  const handleDelete = (dept) => {
-    setDepartments((prev) => prev.filter((d) => d.id !== dept.id));
-    pushToast(`🗑️ Deleted department "${dept.name}"`, "info");
-  };
   const exportStructureCsv = () => {
-    download(buildStructureCsv(departments), "eka-department-structure.csv");
+    download(buildStructureCsv(departments, getLead), "eka-department-structure.csv");
     pushToast("📥 Structure exported as eka-department-structure.csv");
-  };
-
-  // ---------- Team directory ----------
-  const handleInvite = (data) => {
-    const user = { id: `user-${Date.now()}`, ...data, status: "Active", lastActive: "Just now", joined: todayLabel(), leadOf: null, telemetry: null };
-    setUsers((prev) => [...prev, user]);
-    pushToast(`📨 Invitation sent to ${data.email}`);
-  };
-  const handleUserEdit = (id, patch) => {
-    setUsers((prev) =>
-      prev.map((u) => {
-        if (u.id !== id) return u;
-        const next = { ...u, ...patch };
-        if (next.role !== "Manager" || next.department !== u.department) next.leadOf = null;
-        return next;
-      }),
-    );
-    pushToast("User settings & access level updated successfully");
-  };
-  const handleTerminate = (user) => {
-    setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, status: "Terminated" } : u)));
-    pushToast(`🚫 Terminated ${user.name}'s account`, "info");
-  };
-  const handleReactivate = (id) => {
-    const user = users.find((u) => u.id === id);
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, status: "Active" } : u)));
-    pushToast(`✅ Re-activated ${user.name}`);
   };
   const exportUsersCsv = () => {
     download(buildUsersCsv(users), `eka_team_directory_${new Date().toISOString().slice(0, 10)}.csv`);
     pushToast("📥 Exported Team Directory CSV");
   };
 
+  if (loading) return <p className="p-6 text-(--text-muted)">Loading organization…</p>;
+  if (error) return <p className="p-6 text-(--status-danger)">Could not load: {error.message}</p>;
+
   const header = HEADERS[tab];
-  const { dept: activeDept, user: activeUser } = modal ?? {};
-  const departmentNames = departments.map((d) => d.name);
+  const shared = { modal, setModal, closeModal, finish, fail };
 
   return (
     <div className="organization-page mx-auto w-full max-w-[1400px] space-y-5">
@@ -144,9 +92,9 @@ export default function OrganizationPage() {
               <OrganizationTabs value={tab} onChange={changeTab} />
               {tab === "departments" ? (
                 <>
-                  <Button variant="light" size="sm" icon={Download} onClick={exportStructureCsv}>
+                  <ExportAuditButton onClick={exportStructureCsv} title="Export department structure (CSV)">
                     Export Structure CSV
-                  </Button>
+                  </ExportAuditButton>
                   <Button variant="solid" size="sm" icon={Plus} iconChip onClick={() => setModal({ type: "create" })}>
                     Create Department
                   </Button>
@@ -154,9 +102,9 @@ export default function OrganizationPage() {
               ) : (
                 <>
                   <Tooltip label="Export Directory to CSV format">
-                    <Button variant="light" size="sm" icon={Download} onClick={exportUsersCsv}>
+                    <ExportAuditButton onClick={exportUsersCsv} title="">
                       Export Directory CSV
-                    </Button>
+                    </ExportAuditButton>
                   </Tooltip>
                   <Button variant="solid" size="sm" icon={Plus} iconChip onClick={() => setModal({ type: "invite" })}>
                     Invite New Member
@@ -169,61 +117,9 @@ export default function OrganizationPage() {
       </div>
 
       {tab === "departments" ? (
-        <DepartmentManagementTab
-          departments={departments}
-          getLead={getMember}
-          onCreate={() => setModal({ type: "create" })}
-          onEdit={(id) => openDeptModal("edit", id)}
-          onDelete={(id) => openDeptModal("delete", id)}
-          onReassign={(id) => openDeptModal("assign", id)}
-          onViewDocs={(dept) => navigate("/documents", { state: { department: dept.name } })}
-        />
+        <DepartmentPage departments={departments} rawUsers={rawUsers} getLead={getLead} {...shared} />
       ) : (
-        <UserManagementTab
-          users={users}
-          departments={departments}
-          onView={(id) => openUserModal("view", id)}
-          onEdit={(id) => openUserModal("user-edit", id)}
-          onTerminate={(id) => openUserModal("terminate", id)}
-          onReactivate={handleReactivate}
-        />
-      )}
-
-      {/* ----- Department dialogs ----- */}
-      {modal?.type === "create" && <DepartmentCreateModal members={TEAM_MEMBERS} onClose={closeModal} onSubmit={handleCreate} />}
-      {modal?.type === "edit" && activeDept && (
-        <DepartmentEditModal initial={activeDept} onClose={closeModal} onSubmit={(data) => handleEdit(activeDept.id, data)} />
-      )}
-      {modal?.type === "assign" && activeDept && (
-        <DepartmentAssignLeadModal
-          dept={activeDept}
-          currentLead={getMember(activeDept.leadId)}
-          members={TEAM_MEMBERS}
-          onClose={closeModal}
-          onConfirm={(memberId) => handleAssign(activeDept, memberId)}
-        />
-      )}
-      {modal?.type === "delete" && activeDept && (
-        <DepartmentDeleteModal dept={activeDept} lead={getMember(activeDept.leadId)} onClose={closeModal} onConfirm={() => handleDelete(activeDept)} />
-      )}
-
-      {/* ----- User dialogs ----- */}
-      {modal?.type === "invite" && (
-        <UserInviteModal
-          departmentNames={departmentNames}
-          existingEmails={users.map((u) => u.email.toLowerCase())}
-          onClose={closeModal}
-          onSubmit={handleInvite}
-        />
-      )}
-      {modal?.type === "view" && activeUser && (
-        <UserViewModal user={activeUser} onClose={closeModal} onEdit={() => setModal({ type: "user-edit", user: activeUser })} />
-      )}
-      {modal?.type === "user-edit" && activeUser && (
-        <UserEditModal user={activeUser} departmentNames={departmentNames} onClose={closeModal} onSubmit={(patch) => handleUserEdit(activeUser.id, patch)} />
-      )}
-      {modal?.type === "terminate" && activeUser && (
-        <UserTerminateModal user={activeUser} onClose={closeModal} onConfirm={() => handleTerminate(activeUser)} />
+        <TeamDirectoryPage users={users} departments={departments} {...shared} />
       )}
     </div>
   );

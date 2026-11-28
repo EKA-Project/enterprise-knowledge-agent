@@ -1,0 +1,102 @@
+import { SquarePen} from "lucide-react";
+import TrashLidIcon from "../../icons/TrashLidIcon";
+import { getInitials } from "../OrganizationData.js";
+import { getDepartmentTheme } from "../../../config/departmentTheme.js";
+// Tailwind class for the monospace font used in badges and labels
+
+  // DepartmentCard
+export default function DepartmentCard({ dept, lead, delay = 0, onEdit, onDelete, onReassign, onViewDocs }) {
+const { Icon, color, softBg, border } = getDepartmentTheme(dept.colorKey, dept.iconKey);
+// Tailwind class for the monospace font used in badges and labels
+  return (
+    <article
+      style={{ animationDelay: `${delay}ms` }}
+      className="org-rise group/card flex flex-col rounded-[20px] border border-(--border-subtle) bg-(--bg-surface) p-6 shadow-(--shadow-sm) transition duration-300 hover:-translate-y-1.5 hover:border-(--border-medium) hover:shadow-(--shadow-lg)">
+        <div className="flex items-start gap-4">
+          <span
+            style={{ color, background: softBg, borderColor: border }}
+            className="grid size-12 shrink-0 place-items-center rounded-xl border transition duration-300 group-hover/card:scale-110 group-hover/card:shadow-(--shadow-md)">
+            <Icon size={20} aria-hidden="true" />
+          </span>
+        <div className="min-w-0 flex-1">
+      <h3
+  title={dept.name}
+  className="truncate text-[16px] font-bold leading-snug text-(--text-primary)"
+>
+  {dept.name}
+</h3>
+          <span className="mt-1 inline-block rounded-xl border border-(--badge-border) bg-(--badge-bg) px-2 py-0.5 font-(family-name:--font-mono) text-[10px] font-bold uppercase tracking-wider text-(--text-secondary)">
+            {dept.code}
+          </span>
+        </div>
+        <div className="flex shrink-0 gap-0.5">
+         <button
+  type="button"
+  onClick={() => onEdit(dept.id)}
+  aria-label={`Edit ${dept.name}`}
+  title="Edit department"
+  className="grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--primary-light) hover:text-(--primary) active:scale-95"
+>
+  <SquarePen size={17} />
+</button>
+<button
+  type="button"
+  onClick={() => onDelete(dept.id)}
+  aria-label={`Delete ${dept.name}`}
+  title="Delete department"
+  className="group bin-group grid size-8 cursor-pointer place-items-center rounded-full text-(--text-muted) transition-all duration-200 hover:scale-110 hover:bg-(--status-danger-bg) hover:text-(--status-danger) active:scale-95"
+>
+  <TrashLidIcon size={17} />
+</button>
+        </div>
+      </div>
+
+<p className="mt-5 min-h-[2.75rem] line-clamp-2 text-[13px] leading-relaxed text-(--text-secondary)">
+  {dept.description || "No description yet."}
+</p>
+
+<div className="group/lead mt-5 flex items-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-surface-subtle) p-3 transition-colors duration-200 hover:border-(--border-medium) hover:bg-white">
+          {lead ? (
+          <>
+            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-(--primary) text-[11px] font-bold text-(--primary-contrast)">
+              {getInitials(lead.name)}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="flex flex-wrap items-center gap-1.5 text-[13.5px] font-bold text-(--text-primary)">
+                <span className="truncate">{lead.name}</span>
+                <span className="inline-flex items-center gap-1 rounded-md border border-(--status-warning) bg-(--status-warning-bg) px-1.5 py-0.5 text-[9.5px] font-bold text-[#b45309]">
+                  <span aria-hidden="true">👔</span> Lead
+                </span>
+              </p>
+              <p className="truncate text-[11.5px] text-(--text-muted)">{lead.email}</p>
+            </div>
+          </>
+        ) : (
+          <p className="flex-1 text-[12.5px] italic text-(--text-muted)">No lead assigned</p>
+        )}
+        <button
+          type="button"
+          onClick={onReassign}
+          className="shrink-0 rounded-full border border-(--border-medium) bg-white px-3 py-1 text-[12px] font-bold text-(--text-primary) transition-all duration-200 group-hover/lead:border-(--primary) group-hover/lead:bg-(--primary-light) group-hover/lead:text-(--primary) hover:-translate-y-0.5 hover:shadow-(--shadow-sm) active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--border-focus)"        >
+          {lead ? "Reassign" : "Assign"}
+        </button>
+      </div>
+
+      <div className="mt-auto pt-8">
+          <div className="flex items-center justify-between gap-3 border-t border-(--border-subtle) pt-5 text-[12px] text-(--text-muted)">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span><span aria-hidden="true">👥</span> <b className="text-(--text-primary)">{dept.memberCount}</b> members</span>
+            <span><span aria-hidden="true">📄</span> <b className="text-(--text-primary)">{dept.documentCount}</b> scoped docs</span>
+          </div>
+          <button
+            type="button"
+            onClick={onViewDocs}
+            className="shrink-0 font-bold text-(--primary) transition hover:translate-x-0.5 hover:text-(--primary-hover) focus-visible:outline-2 focus-visible:outline-(--border-focus)"
+          >
+            View Docs →
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
