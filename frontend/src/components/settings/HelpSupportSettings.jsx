@@ -9,7 +9,7 @@ const GUIDES = [
   ["⚡", "Keyboard Shortcuts & FAQs", <>Press <code className="rounded bg-(--bg-surface-subtle) px-1.5 py-0.5 font-mono text-[11px]">Ctrl+K</code> to quick-search or ask questions from any page.</>, "Opening FAQs and Keyboard Shortcuts…"],
 ];
 const ADMINS = [
-  ["Maya Narang", "Workspace Creator • Primary Admin", "maya@northstar.studio"],
+  ["Raza", "Workspace Creator • Primary Admin", "raza@northstar.studio"],
   ["Elena Rostova", "IT & Security Lead", "elena.r@northstar.studio"],
 ];
 

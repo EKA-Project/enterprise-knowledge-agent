@@ -19,7 +19,7 @@ export const bookmarks = [
   { userId: "usr_002", documentId: "doc_001", createdAt: "2026-10-12T09:00:00Z" },
   { userId: "usr_002", documentId: "doc_015", createdAt: "2026-10-09T09:00:00Z" },
   { userId: "usr_002", documentId: "doc_003", createdAt: "2026-09-03T09:00:00Z" },
-  // Maya Narang (admin)
+  // Raza (admin)
   { userId: "usr_001", documentId: "doc_001", createdAt: "2026-10-18T09:00:00Z" },
   { userId: "usr_001", documentId: "doc_012", createdAt: "2026-10-02T09:00:00Z" },
   // Tom Reyes (HR employee)
